@@ -17,10 +17,20 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
+          flutter-version: 3.47.8
           channel: stable
+          cache: true
 
       - name: Get dependencies
         run: flutter pub get
+
+      # drift 的 .g.dart 不进仓库，由 build_runner 在 CI 里现场生成
+      - name: Generate drift code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      # 验证 local.properties 已被 flutter 自动生成（无则报错暴露问题）
+      - name: Verify flutter.sdk path
+        run: test -f android/local.properties && cat android/local.properties
 
       - name: Build release APK
         run: flutter build apk --release

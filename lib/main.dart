@@ -73,7 +73,7 @@ final GoRouter _router = GoRouter(
     if (state.uri.path == '/today') return '/';
     return null;
   },
-)
+);
 
 GoRoute _route(String path, Widget page) {
   return GoRoute(path: path, builder: (context, state) => page);
