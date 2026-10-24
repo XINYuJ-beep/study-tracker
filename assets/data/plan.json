@@ -1,0 +1,5978 @@
+{
+ "meta": {
+  "startDate": "2026-10-26",
+  "weeks": 92,
+  "hoursPerWeek": 40,
+  "note": "每天不固定任务量，按条目打卡；周目标时长可在设置中调整。"
+ },
+ "modules": [
+  {
+   "id": "01",
+   "title": "W1–W12｜编程与 Web 基础",
+   "sub": "计算机通识 · 操作系统 · 命令行 · Python · 数据结构入门 · HTML/CSS · JavaScript",
+   "color": "#1F3864",
+   "goal": "从只会用电脑，到能独立写出带交互的网页和小程序；建立命令行、Git、调试的基本功。",
+   "accept": "能不看教程写出一个 300 行左右的网页应用，并用 Git 管理、部署上线。",
+   "weeks": [
+    {
+     "week": 1,
+     "title": "计算机组成 / 操作系统 / 命令行 / 文件系统",
+     "goal": "知道电脑里有什么、程序怎么跑起来、会用命令行操作文件。",
+     "review": "闭卷写出 10 条本周命令；画一张「组成 + OS」导图。",
+     "items": [
+      {
+       "id": "w1d1",
+       "day": "周一",
+       "watch": "Crash Course 计算机科学 1–7 集",
+       "practice": "进制换算 20 题，拆解自己的电脑",
+       "output": "换算表 + 配置清单",
+       "minutes": 60
+      },
+      {
+       "id": "w1d2",
+       "day": "周二",
+       "watch": "王道·操作系统 第 1 章 1–5 集（只看概念）",
+       "practice": "任务管理器看进程、服务、启动项",
+       "output": "OS 四大功能图",
+       "minutes": 60
+      },
+      {
+       "id": "w1d3",
+       "day": "周三",
+       "watch": "Linux 命令入门 前 8 集，装 WSL2",
+       "practice": "15 个基础命令：pwd/ls/cd/mkdir/cp/mv/rm",
+       "output": "命令速查表",
+       "minutes": 60
+      },
+      {
+       "id": "w1d4",
+       "day": "周四",
+       "watch": "同上 9–14 集",
+       "practice": "建目录树、chmod、ln -s、tar 打包",
+       "output": "Linux 目录结构图",
+       "minutes": 60
+      },
+      {
+       "id": "w1d5",
+       "day": "周五",
+       "watch": "王道·操作系统 进程 1–3 集",
+       "practice": "ps/top/kill/后台运行",
+       "output": "进程排查笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w1d6",
+       "day": "周六",
+       "watch": "Git 教程 黑马 前 6 集",
+       "practice": "init/add/commit/log，推送到 GitHub",
+       "output": "第一个仓库",
+       "minutes": 90
+      },
+      {
+       "id": "w1d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷重写命令 + Anki",
+       "output": "导图一张",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "title": "Git 进阶 / HTTP / 开发者工具",
+     "goal": "会用分支和 PR，理解一次网页请求发生了什么。",
+     "review": "默写 HTTP 请求与响应的结构。",
+     "items": [
+      {
+       "id": "w2d1",
+       "day": "周一",
+       "watch": "黑马 Git 7–10 集",
+       "practice": "分支、合并、制造并解决一次冲突",
+       "output": "冲突解决记录",
+       "minutes": 60
+      },
+      {
+       "id": "w2d2",
+       "day": "周二",
+       "watch": "黑马 Git 11–14 集",
+       "practice": "远程仓库、PR 流程、.gitignore",
+       "output": "一个 PR",
+       "minutes": 60
+      },
+      {
+       "id": "w2d3",
+       "day": "周三",
+       "watch": "Markdown 教程 1 集 + Obsidian 安装",
+       "practice": "建笔记库与模板",
+       "output": "Obsidian 库",
+       "minutes": 60
+      },
+      {
+       "id": "w2d4",
+       "day": "周四",
+       "watch": "HTTP 入门 前 3 集",
+       "practice": "Network 面板看一次请求",
+       "output": "请求结构笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w2d5",
+       "day": "周五",
+       "watch": "Chrome 开发者工具 前 4 集",
+       "practice": "改元素、看接口、看性能",
+       "output": "工具截图笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w2d6",
+       "day": "周六",
+       "watch": "综合",
+       "practice": "把 W1 笔记整理进 Obsidian 并推送",
+       "output": "笔记库上线",
+       "minutes": 90
+      },
+      {
+       "id": "w2d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写 HTTP 请求结构 + Anki",
+       "output": "导图一张",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "title": "Python 基础（一）",
+     "goal": "掌握变量、判断、循环、列表，能写几十行的小脚本。",
+     "review": "闭卷写出通讯录的增删查改。",
+     "items": [
+      {
+       "id": "w3d1",
+       "day": "周一",
+       "watch": "黑马 Python 1–10 集",
+       "practice": "装环境、跑通 hello.py",
+       "output": "hello.py",
+       "minutes": 60
+      },
+      {
+       "id": "w3d2",
+       "day": "周二",
+       "watch": "黑马 Python 11–20 集",
+       "practice": "变量、输入输出、f-string",
+       "output": "10 个小程序",
+       "minutes": 60
+      },
+      {
+       "id": "w3d3",
+       "day": "周三",
+       "watch": "黑马 Python 21–30 集",
+       "practice": "条件、循环、range",
+       "output": "九九乘法表 + 猜数字",
+       "minutes": 60
+      },
+      {
+       "id": "w3d4",
+       "day": "周四",
+       "watch": "黑马 Python 31–40 集",
+       "practice": "列表增删改查、切片、排序",
+       "output": "成绩统计器",
+       "minutes": 60
+      },
+      {
+       "id": "w3d5",
+       "day": "周五",
+       "watch": "黑马 Python 41–50 集",
+       "practice": "字典、集合、遍历",
+       "output": "词频统计",
+       "minutes": 45
+      },
+      {
+       "id": "w3d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "命令行通讯录：增删查改",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w3d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷重写通讯录 + Anki",
+       "output": "笔记",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "title": "Python 基础（二）",
+     "goal": "掌握函数、文件、异常、模块、类。",
+     "review": "闭卷写出 JSON 记账本。",
+     "items": [
+      {
+       "id": "w4d1",
+       "day": "周一",
+       "watch": "黑马 Python 51–60 集",
+       "practice": "函数参数、返回值、作用域",
+       "output": "10 个工具函数",
+       "minutes": 60
+      },
+      {
+       "id": "w4d2",
+       "day": "周二",
+       "watch": "黑马 Python 61–70 集",
+       "practice": "文件读写、with、编码",
+       "output": "读写 CSV",
+       "minutes": 60
+      },
+      {
+       "id": "w4d3",
+       "day": "周三",
+       "watch": "黑马 Python 71–80 集",
+       "practice": "异常捕获、自定义异常",
+       "output": "健壮的输入程序",
+       "minutes": 60
+      },
+      {
+       "id": "w4d4",
+       "day": "周四",
+       "watch": "黑马 Python 81–90 集",
+       "practice": "模块、包、pip、venv",
+       "output": "自己的模块",
+       "minutes": 60
+      },
+      {
+       "id": "w4d5",
+       "day": "周五",
+       "watch": "黑马 Python 91–100 集",
+       "practice": "类、属性、方法、继承",
+       "output": "用类重写通讯录",
+       "minutes": 45
+      },
+      {
+       "id": "w4d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "JSON 记账本（持久化）",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w4d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷重写记账本 + 导图",
+       "output": "笔记",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "title": "Python 进阶与工具",
+     "goal": "会调 API、写命令行工具、会调试。",
+     "review": "闭卷写一个 requests 封装。",
+     "items": [
+      {
+       "id": "w5d1",
+       "day": "周一",
+       "watch": "Python 进阶 列表推导/lambda 1 集",
+       "practice": "改写 5 个 for 循环",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w5d2",
+       "day": "周二",
+       "watch": "datetime/os/pathlib 1–2 集",
+       "practice": "批量重命名文件",
+       "output": "脚本",
+       "minutes": 60
+      },
+      {
+       "id": "w5d3",
+       "day": "周三",
+       "watch": "requests 1–2 集",
+       "practice": "调 2 个公开 API",
+       "output": "天气脚本",
+       "minutes": 60
+      },
+      {
+       "id": "w5d4",
+       "day": "周四",
+       "watch": "argparse 1 集",
+       "practice": "写一个带参数的命令行工具",
+       "output": "CLI 工具",
+       "minutes": 60
+      },
+      {
+       "id": "w5d5",
+       "day": "周五",
+       "watch": "调试与日志 1–2 集",
+       "practice": "用断点定位一个 bug",
+       "output": "调试笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w5d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "命令行天气查询",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w5d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷写 requests 封装 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "title": "数据结构入门",
+     "goal": "理解数组、链表、栈、队列、哈希、树、排序。",
+     "review": "手写链表与快排，不看资料。",
+     "items": [
+      {
+       "id": "w6d1",
+       "day": "周一",
+       "watch": "王道·数据结构 线性表 1–5 集",
+       "practice": "手写单链表",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w6d2",
+       "day": "周二",
+       "watch": "王道 栈与队列 1–4 集",
+       "practice": "用列表实现栈和队列",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w6d3",
+       "day": "周三",
+       "watch": "王道 哈希表 1–3 集",
+       "practice": "统计词频",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w6d4",
+       "day": "周四",
+       "watch": "王道 树 1–5 集",
+       "practice": "二叉树三种遍历",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w6d5",
+       "day": "周五",
+       "watch": "王道 排序 1–4 集",
+       "practice": "手写快排、归并",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w6d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "代码随想录 20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w6d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "手写链表 + 快排 + 导图",
+       "output": "笔记",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "title": "HTML",
+     "goal": "能写结构清晰、语义化的页面。",
+     "review": "默写常用标签及用途。",
+     "items": [
+      {
+       "id": "w7d1",
+       "day": "周一",
+       "watch": "黑马 HTML 1–15 集",
+       "practice": "3 个静态页面",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w7d2",
+       "day": "周二",
+       "watch": "黑马 HTML 16–30 集",
+       "practice": "表单、输入校验",
+       "output": "表单页",
+       "minutes": 60
+      },
+      {
+       "id": "w7d3",
+       "day": "周三",
+       "watch": "黑马 HTML 31–45 集",
+       "practice": "语义化标签重构旧页面",
+       "output": "重构稿",
+       "minutes": 60
+      },
+      {
+       "id": "w7d4",
+       "day": "周四",
+       "watch": "黑马 HTML 46–60 集",
+       "practice": "表格、图片、多媒体",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w7d5",
+       "day": "周五",
+       "watch": "黑马 HTML 61–70 集",
+       "practice": "无障碍与 SEO 基础",
+       "output": "检查清单",
+       "minutes": 45
+      },
+      {
+       "id": "w7d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "个人主页（3 页）",
+       "output": "上线",
+       "minutes": 90
+      },
+      {
+       "id": "w7d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写标签 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "title": "CSS",
+     "goal": "掌握盒模型、Flex、定位、响应式。",
+     "review": "默写 Flex 常用属性。",
+     "items": [
+      {
+       "id": "w8d1",
+       "day": "周一",
+       "watch": "黑马 CSS 1–15 集",
+       "practice": "选择器、盒模型",
+       "output": "样式页",
+       "minutes": 60
+      },
+      {
+       "id": "w8d2",
+       "day": "周二",
+       "watch": "黑马 CSS 16–30 集",
+       "practice": "Flex 布局",
+       "output": "三栏布局",
+       "minutes": 60
+      },
+      {
+       "id": "w8d3",
+       "day": "周三",
+       "watch": "黑马 CSS 31–45 集",
+       "practice": "定位、层叠、优先级",
+       "output": "弹窗与导航",
+       "minutes": 60
+      },
+      {
+       "id": "w8d4",
+       "day": "周四",
+       "watch": "黑马 CSS 46–60 集",
+       "practice": "响应式、媒体查询",
+       "output": "三端适配",
+       "minutes": 60
+      },
+      {
+       "id": "w8d5",
+       "day": "周五",
+       "watch": "黑马 CSS 61–70 集",
+       "practice": "CSS 变量、过渡动画",
+       "output": "动效",
+       "minutes": 45
+      },
+      {
+       "id": "w8d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "还原一张设计稿",
+       "output": "页面",
+       "minutes": 90
+      },
+      {
+       "id": "w8d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写 Flex + 导图",
+       "output": "笔记",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "title": "JavaScript 基础",
+     "goal": "掌握变量、函数、数组、对象、闭包。",
+     "review": "闭卷写 5 个工具函数。",
+     "items": [
+      {
+       "id": "w9d1",
+       "day": "周一",
+       "watch": "黑马 JS 1–15 集",
+       "practice": "变量、类型、运算符",
+       "output": "练习 10 题",
+       "minutes": 60
+      },
+      {
+       "id": "w9d2",
+       "day": "周二",
+       "watch": "黑马 JS 16–30 集",
+       "practice": "函数、作用域、闭包",
+       "output": "练习 10 题",
+       "minutes": 60
+      },
+      {
+       "id": "w9d3",
+       "day": "周三",
+       "watch": "黑马 JS 31–45 集",
+       "practice": "数组、对象常用方法",
+       "output": "练习 10 题",
+       "minutes": 60
+      },
+      {
+       "id": "w9d4",
+       "day": "周四",
+       "watch": "黑马 JS 46–60 集",
+       "practice": "条件、循环、异常",
+       "output": "练习 10 题",
+       "minutes": 60
+      },
+      {
+       "id": "w9d5",
+       "day": "周五",
+       "watch": "黑马 JS 61–70 集",
+       "practice": "ES6 解构、展开、模板字符串",
+       "output": "改写旧代码",
+       "minutes": 45
+      },
+      {
+       "id": "w9d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "30 道基础题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w9d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷写工具函数 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "title": "JavaScript DOM 与事件",
+     "goal": "会用 JS 操作页面、处理交互、存本地数据。",
+     "review": "闭卷写待办清单。",
+     "items": [
+      {
+       "id": "w10d1",
+       "day": "周一",
+       "watch": "黑马 JS DOM 1–10 集",
+       "practice": "查询、修改元素",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w10d2",
+       "day": "周二",
+       "watch": "黑马 JS DOM 11–20 集",
+       "practice": "事件、冒泡、委托",
+       "output": "交互页",
+       "minutes": 60
+      },
+      {
+       "id": "w10d3",
+       "day": "周三",
+       "watch": "黑马 JS DOM 21–30 集",
+       "practice": "表单校验",
+       "output": "表单",
+       "minutes": 60
+      },
+      {
+       "id": "w10d4",
+       "day": "周四",
+       "watch": "黑马 JS DOM 31–40 集",
+       "practice": "localStorage",
+       "output": "本地存储",
+       "minutes": 60
+      },
+      {
+       "id": "w10d5",
+       "day": "周五",
+       "watch": "黑马 JS DOM 41–50 集",
+       "practice": "模块化 import/export",
+       "output": "拆分代码",
+       "minutes": 45
+      },
+      {
+       "id": "w10d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "待办清单（原生 JS）",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w10d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷重写待办 + 导图",
+       "output": "笔记",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "title": "异步与网络",
+     "goal": "理解回调、Promise、async/await，会调接口。",
+     "review": "闭卷写 fetch 封装。",
+     "items": [
+      {
+       "id": "w11d1",
+       "day": "周一",
+       "watch": "异步 回调与 Promise 1–3 集",
+       "practice": "3 个 Promise 练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w11d2",
+       "day": "周二",
+       "watch": "async/await 1–2 集",
+       "practice": "把回调改写成 async",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w11d3",
+       "day": "周三",
+       "watch": "fetch 1–2 集",
+       "practice": "调公开 API 渲染列表",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w11d4",
+       "day": "周四",
+       "watch": "错误处理 1 集",
+       "practice": "超时、重试、兜底",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w11d5",
+       "day": "周五",
+       "watch": "JSON 与接口调试 1 集",
+       "practice": "用 Postman/curl 调接口",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w11d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "天气页（接 API）",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w11d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷写 fetch 封装 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 12,
+     "title": "综合项目与上线",
+     "goal": "把前 11 周的知识拼成一个完整应用。",
+     "review": "白板讲 10 个概念，讲不出记红。",
+     "items": [
+      {
+       "id": "w12d1",
+       "day": "周一",
+       "watch": "需求与原型 1 集",
+       "practice": "画线框图、列功能",
+       "output": "原型",
+       "minutes": 60
+      },
+      {
+       "id": "w12d2",
+       "day": "周二",
+       "watch": "页面结构",
+       "practice": "搭 3 个页面",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w12d3",
+       "day": "周三",
+       "watch": "交互逻辑",
+       "practice": "增删改查 + 过滤",
+       "output": "功能",
+       "minutes": 60
+      },
+      {
+       "id": "w12d4",
+       "day": "周四",
+       "watch": "数据持久化",
+       "practice": "localStorage 或 JSON",
+       "output": "功能",
+       "minutes": 60
+      },
+      {
+       "id": "w12d5",
+       "day": "周五",
+       "watch": "响应式适配",
+       "practice": "手机/平板/桌面",
+       "output": "页面",
+       "minutes": 45
+      },
+      {
+       "id": "w12d6",
+       "day": "周六",
+       "watch": "部署",
+       "practice": "GitHub Pages 或 Vercel",
+       "output": "线上地址",
+       "minutes": 90
+      },
+      {
+       "id": "w12d7",
+       "day": "周日",
+       "watch": "阶段复习",
+       "practice": "闭卷重写核心功能 + 导图",
+       "output": "阶段总结",
+       "minutes": 90
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "02",
+   "title": "W13–W24｜TypeScript 与前端框架",
+   "sub": "类型系统 · 工程化 · Vue/React · 路由与状态 · 测试 · 性能 · 后台管理项目",
+   "color": "#0B4F6C",
+   "goal": "从「会写页面」升级到「会做工程」：类型、框架、工程化、测试、性能、部署。",
+   "accept": "独立完成一个带登录、权限、列表、表单的后台管理应用并上线。",
+   "weeks": [
+    {
+     "week": 13,
+     "title": "TypeScript 基础",
+     "goal": "掌握类型、接口、函数、泛型。",
+     "review": "默写 10 个内置工具类型。",
+     "items": [
+      {
+       "id": "w13d1",
+       "day": "周一",
+       "watch": "尚硅谷 TS 1–10 集",
+       "practice": "类型注解、编译配置",
+       "output": "练习",
+       "minutes": 60
+      },
+      {
+       "id": "w13d2",
+       "day": "周二",
+       "watch": "尚硅谷 TS 11–20 集",
+       "practice": "接口、对象、可选属性",
+       "output": "练习",
+       "minutes": 60
+      },
+      {
+       "id": "w13d3",
+       "day": "周三",
+       "watch": "尚硅谷 TS 21–30 集",
+       "practice": "函数重载、泛型",
+       "output": "练习",
+       "minutes": 60
+      },
+      {
+       "id": "w13d4",
+       "day": "周四",
+       "watch": "尚硅谷 TS 31–40 集",
+       "practice": "联合类型、类型收窄",
+       "output": "练习",
+       "minutes": 60
+      },
+      {
+       "id": "w13d5",
+       "day": "周五",
+       "watch": "尚硅谷 TS 41–50 集",
+       "practice": "模块、声明文件",
+       "output": "配置",
+       "minutes": 45
+      },
+      {
+       "id": "w13d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "把 W12 的 JS 项目改成 TS",
+       "output": "改造完成",
+       "minutes": 90
+      },
+      {
+       "id": "w13d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写类型工具 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 14,
+     "title": "TypeScript 进阶",
+     "goal": "掌握泛型约束、映射类型、条件类型。",
+     "review": "闭卷写一个泛型工具函数。",
+     "items": [
+      {
+       "id": "w14d1",
+       "day": "周一",
+       "watch": "TS 泛型约束 1–2 集",
+       "practice": "写 5 个泛型函数",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w14d2",
+       "day": "周二",
+       "watch": "映射类型/条件类型 1–2 集",
+       "practice": "实现 Partial/Pick 等",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w14d3",
+       "day": "周三",
+       "watch": "装饰器与元数据 1 集",
+       "practice": "了解用途",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w14d4",
+       "day": "周四",
+       "watch": "类型声明 .d.ts 1–2 集",
+       "practice": "给第三方库写声明",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w14d5",
+       "day": "周五",
+       "watch": "严格模式与迁移 1 集",
+       "practice": "开启 strict 并修复",
+       "output": "迁移记录",
+       "minutes": 45
+      },
+      {
+       "id": "w14d6",
+       "day": "周六",
+       "watch": "综合",
+       "practice": "类型体操 10 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w14d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷写泛型 + 导图",
+       "output": "笔记",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 15,
+     "title": "前端工程化",
+     "goal": "会用 Vite、npm、Lint、构建、单测。",
+     "review": "默写 Vite 配置的关键项。",
+     "items": [
+      {
+       "id": "w15d1",
+       "day": "周一",
+       "watch": "Vite 1–10 集",
+       "practice": "新建项目、目录结构",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w15d2",
+       "day": "周二",
+       "watch": "npm 与包管理 1–2 集",
+       "practice": "发布一个自己的包",
+       "output": "包",
+       "minutes": 60
+      },
+      {
+       "id": "w15d3",
+       "day": "周三",
+       "watch": "ESLint/Prettier 1–2 集",
+       "practice": "配置并修复全项目",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w15d4",
+       "day": "周四",
+       "watch": "环境变量与构建 1–2 集",
+       "practice": "打包生产产物",
+       "output": "dist",
+       "minutes": 60
+      },
+      {
+       "id": "w15d5",
+       "day": "周五",
+       "watch": "Vitest 单元测试 1–2 集",
+       "practice": "写 10 个测试",
+       "output": "测试",
+       "minutes": 45
+      },
+      {
+       "id": "w15d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "自己的项目模板",
+       "output": "模板仓库",
+       "minutes": 90
+      },
+      {
+       "id": "w15d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写配置 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 16,
+     "title": "框架基础（Vue 或 React 二选一）",
+     "goal": "理解组件、Props、状态、生命周期。",
+     "review": "默写一个组件的完整结构。",
+     "items": [
+      {
+       "id": "w16d1",
+       "day": "周一",
+       "watch": "黑马 Vue 1–10 集（或尚硅谷 React）",
+       "practice": "组件、模板语法",
+       "output": "组件",
+       "minutes": 60
+      },
+      {
+       "id": "w16d2",
+       "day": "周二",
+       "watch": "黑马 Vue 11–20 集",
+       "practice": "响应式、Props、事件",
+       "output": "组件",
+       "minutes": 60
+      },
+      {
+       "id": "w16d3",
+       "day": "周三",
+       "watch": "黑马 Vue 21–30 集",
+       "practice": "表单、条件渲染、列表",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w16d4",
+       "day": "周四",
+       "watch": "黑马 Vue 31–40 集",
+       "practice": "生命周期、侦听器",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w16d5",
+       "day": "周五",
+       "watch": "黑马 Vue 41–50 集",
+       "practice": "组合式 API / Hooks",
+       "output": "重构",
+       "minutes": 45
+      },
+      {
+       "id": "w16d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "5 个可复用组件",
+       "output": "组件库雏形",
+       "minutes": 90
+      },
+      {
+       "id": "w16d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写组件结构 + 导图",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 17,
+     "title": "组件通信与状态",
+     "goal": "掌握父子/跨层通信、状态管理。",
+     "review": "画一张数据流向图。",
+     "items": [
+      {
+       "id": "w17d1",
+       "day": "周一",
+       "watch": "组件通信 1–2 集",
+       "practice": "父子、兄弟通信",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w17d2",
+       "day": "周二",
+       "watch": "插槽与作用域插槽 1 集",
+       "practice": "封装一个弹窗",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w17d3",
+       "day": "周三",
+       "watch": "Pinia / Redux 1–3 集",
+       "practice": "接入全局状态",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w17d4",
+       "day": "周四",
+       "watch": "计算属性与侦听 1 集",
+       "practice": "派生状态",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w17d5",
+       "day": "周五",
+       "watch": "表单校验 1–2 集",
+       "practice": "封装校验规则",
+       "output": "页面",
+       "minutes": 45
+      },
+      {
+       "id": "w17d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "待办升级版（带状态管理）",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w17d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画数据流图 + Anki",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 18,
+     "title": "路由与请求",
+     "goal": "掌握路由、守卫、请求封装。",
+     "review": "默写路由配置与守卫。",
+     "items": [
+      {
+       "id": "w18d1",
+       "day": "周一",
+       "watch": "路由基础 1–2 集",
+       "practice": "多页面、动态路由",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w18d2",
+       "day": "周二",
+       "watch": "路由守卫 1 集",
+       "practice": "登录拦截",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w18d3",
+       "day": "周三",
+       "watch": "axios 封装 1–2 集",
+       "practice": "拦截器、统一错误",
+       "output": "工具",
+       "minutes": 60
+      },
+      {
+       "id": "w18d4",
+       "day": "周四",
+       "watch": "加载态与错误态 1 集",
+       "practice": "骨架屏、重试",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w18d5",
+       "day": "周五",
+       "watch": "Mock 与联调 1 集",
+       "practice": "本地 mock 数据",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w18d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "列表 + 详情 + 搜索",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w18d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写路由 + 卡片",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 19,
+     "title": "状态管理进阶",
+     "goal": "会设计全局状态、持久化、异步 action。",
+     "review": "画状态流转图。",
+     "items": [
+      {
+       "id": "w19d1",
+       "day": "周一",
+       "watch": "状态设计 1–2 集",
+       "practice": "拆分 store 模块",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w19d2",
+       "day": "周二",
+       "watch": "持久化 1 集",
+       "practice": "localStorage 同步",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w19d3",
+       "day": "周三",
+       "watch": "异步 action 1 集",
+       "practice": "请求 + loading",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w19d4",
+       "day": "周四",
+       "watch": "性能：避免重渲染 1–2 集",
+       "practice": "优化列表更新",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w19d5",
+       "day": "周五",
+       "watch": "调试工具 1 集",
+       "practice": "DevTools 看状态",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w19d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "购物车",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w19d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "状态流转图 + Anki",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 20,
+     "title": "组件库与样式方案",
+     "goal": "会接组件库、定制主题、做响应式。",
+     "review": "整理自己的组件清单。",
+     "items": [
+      {
+       "id": "w20d1",
+       "day": "周一",
+       "watch": "Element Plus / Ant Design 1–3 集",
+       "practice": "接入并跑通",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w20d2",
+       "day": "周二",
+       "watch": "主题定制 1 集",
+       "practice": "换主色、暗色模式",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w20d3",
+       "day": "周三",
+       "watch": "Tailwind / CSS Modules 1–2 集",
+       "practice": "重构样式",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w20d4",
+       "day": "周四",
+       "watch": "响应式布局 1–2 集",
+       "practice": "移动端适配",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w20d5",
+       "day": "周五",
+       "watch": "图标与字体 1 集",
+       "practice": "接入图标库",
+       "output": "页面",
+       "minutes": 45
+      },
+      {
+       "id": "w20d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "后台管理界面",
+       "output": "页面",
+       "minutes": 90
+      },
+      {
+       "id": "w20d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "组件清单 + 卡片",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 21,
+     "title": "测试",
+     "goal": "会写单元测试和 E2E 测试。",
+     "review": "默写测试用例结构。",
+     "items": [
+      {
+       "id": "w21d1",
+       "day": "周一",
+       "watch": "单测概念 1 集",
+       "practice": "写 5 个用例",
+       "output": "测试",
+       "minutes": 60
+      },
+      {
+       "id": "w21d2",
+       "day": "周二",
+       "watch": "Vitest 组件测试 1–2 集",
+       "practice": "测 3 个组件",
+       "output": "测试",
+       "minutes": 60
+      },
+      {
+       "id": "w21d3",
+       "day": "周三",
+       "watch": "Playwright E2E 1–2 集",
+       "practice": "登录流程脚本",
+       "output": "脚本",
+       "minutes": 60
+      },
+      {
+       "id": "w21d4",
+       "day": "周四",
+       "watch": "覆盖率 1 集",
+       "practice": "生成报告",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w21d5",
+       "day": "周五",
+       "watch": "CI 跑测试 1 集",
+       "practice": "GitHub Actions",
+       "output": "流水线",
+       "minutes": 45
+      },
+      {
+       "id": "w21d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "给项目补测试到 60%",
+       "output": "覆盖率",
+       "minutes": 90
+      },
+      {
+       "id": "w21d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写测试结构 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 22,
+     "title": "前端性能优化",
+     "goal": "会测量、会定位、会优化。",
+     "review": "画出性能优化清单。",
+     "items": [
+      {
+       "id": "w22d1",
+       "day": "周一",
+       "watch": "性能指标 1–2 集",
+       "practice": "Lighthouse 跑分",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w22d2",
+       "day": "周二",
+       "watch": "加载优化 1–2 集",
+       "practice": "懒加载、分包",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w22d3",
+       "day": "周三",
+       "watch": "渲染优化 1–2 集",
+       "practice": "虚拟列表",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w22d4",
+       "day": "周四",
+       "watch": "缓存策略 1 集",
+       "practice": "HTTP 缓存",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w22d5",
+       "day": "周五",
+       "watch": "打包分析 1 集",
+       "practice": "体积优化",
+       "output": "报告",
+       "minutes": 45
+      },
+      {
+       "id": "w22d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "优化前后对比",
+       "output": "报告",
+       "minutes": 90
+      },
+      {
+       "id": "w22d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "优化清单 + 导图",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 23,
+     "title": "后台管理项目（一）",
+     "goal": "从 0 搭一个带权限的后台。",
+     "review": "复盘项目架构。",
+     "items": [
+      {
+       "id": "w23d1",
+       "day": "周一",
+       "watch": "需求与路由 1 集",
+       "practice": "骨架 + 菜单",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w23d2",
+       "day": "周二",
+       "watch": "登录与权限",
+       "practice": "登录、token、路由守卫",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w23d3",
+       "day": "周三",
+       "watch": "列表/搜索/分页",
+       "practice": "通用表格组件",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w23d4",
+       "day": "周四",
+       "watch": "表单/弹窗/校验",
+       "practice": "通用表单组件",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w23d5",
+       "day": "周五",
+       "watch": "图表与导出",
+       "practice": "接 ECharts、导出 CSV",
+       "output": "项目",
+       "minutes": 45
+      },
+      {
+       "id": "w23d6",
+       "day": "周六",
+       "watch": "联调与修复",
+       "practice": "跑通全流程",
+       "output": "项目",
+       "minutes": 90
+      },
+      {
+       "id": "w23d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "架构复盘 + 笔记",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 24,
+     "title": "部署与阶段复盘",
+     "goal": "把项目部署上线并沉淀成作品。",
+     "review": "白板讲清项目架构。",
+     "items": [
+      {
+       "id": "w24d1",
+       "day": "周一",
+       "watch": "构建与环境变量",
+       "practice": "打包生产版本",
+       "output": "dist",
+       "minutes": 60
+      },
+      {
+       "id": "w24d2",
+       "day": "周二",
+       "watch": "部署 Vercel / Nginx",
+       "practice": "上线",
+       "output": "线上地址",
+       "minutes": 60
+      },
+      {
+       "id": "w24d3",
+       "day": "周三",
+       "watch": "域名与 HTTPS",
+       "practice": "配置证书",
+       "output": "线上",
+       "minutes": 60
+      },
+      {
+       "id": "w24d4",
+       "day": "周四",
+       "watch": "错误上报与监控",
+       "practice": "接入 Sentry",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w24d5",
+       "day": "周五",
+       "watch": "文档与 README",
+       "practice": "写清启动方式",
+       "output": "仓库",
+       "minutes": 45
+      },
+      {
+       "id": "w24d6",
+       "day": "周六",
+       "watch": "复盘",
+       "practice": "录 3 分钟演示视频",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w24d7",
+       "day": "周日",
+       "watch": "阶段复习",
+       "practice": "白板讲架构 + 导图",
+       "output": "阶段总结",
+       "minutes": 90
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "03",
+   "title": "W25–W36｜后端 · 数据库 · 服务端项目",
+   "sub": "Node.js · Express · REST · MySQL · ORM · 认证 · Redis · 文件存储 · 消息队列 · 项目交付",
+   "color": "#4A148C",
+   "goal": "从「只会前端」变成「能独立交付前后端」，掌握数据存储与服务端开发。",
+   "accept": "独立开发一套带认证、数据库、缓存的 API，完成前端联调并部署上线。",
+   "weeks": [
+    {
+     "week": 25,
+     "title": "Node.js 基础",
+     "goal": "理解事件循环、模块、文件、HTTP。",
+     "review": "手写一个静态文件服务器。",
+     "items": [
+      {
+       "id": "w25d1",
+       "day": "周一",
+       "watch": "黑马 Node 1–10 集",
+       "practice": "跑通脚本、理解 CommonJS",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w25d2",
+       "day": "周二",
+       "watch": "黑马 Node 11–20 集",
+       "practice": "fs、path、模块化",
+       "output": "文件工具",
+       "minutes": 60
+      },
+      {
+       "id": "w25d3",
+       "day": "周三",
+       "watch": "黑马 Node 21–30 集",
+       "practice": "事件循环、Buffer、流",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w25d4",
+       "day": "周四",
+       "watch": "黑马 Node 31–40 集",
+       "practice": "http 模块写服务",
+       "output": "服务",
+       "minutes": 60
+      },
+      {
+       "id": "w25d5",
+       "day": "周五",
+       "watch": "黑马 Node 41–50 集",
+       "practice": "npm 包管理、发布",
+       "output": "包",
+       "minutes": 45
+      },
+      {
+       "id": "w25d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "静态文件服务器",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w25d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷写 HTTP 服务",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 26,
+     "title": "Express 与分层",
+     "goal": "会写路由、中间件、分层架构。",
+     "review": "默写一个完整路由文件。",
+     "items": [
+      {
+       "id": "w26d1",
+       "day": "周一",
+       "watch": "Express 路由 1–3 集",
+       "practice": "5 个接口",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w26d2",
+       "day": "周二",
+       "watch": "中间件 1–2 集",
+       "practice": "日志、错误处理",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w26d3",
+       "day": "周三",
+       "watch": "参数校验 1–2 集",
+       "practice": "zod/joi 校验",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w26d4",
+       "day": "周四",
+       "watch": "分层 controller/service/repo",
+       "practice": "重构目录",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w26d5",
+       "day": "周五",
+       "watch": "热更新与调试 1 集",
+       "practice": "nodemon、断点",
+       "output": "配置",
+       "minutes": 45
+      },
+      {
+       "id": "w26d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "10 个接口的用户服务",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w26d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写路由 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 27,
+     "title": "REST API 设计",
+     "goal": "会设计规范、可维护的接口。",
+     "review": "默写 REST 设计检查清单。",
+     "items": [
+      {
+       "id": "w27d1",
+       "day": "周一",
+       "watch": "REST 原则 1–2 集",
+       "practice": "写接口设计文档",
+       "output": "文档",
+       "minutes": 60
+      },
+      {
+       "id": "w27d2",
+       "day": "周二",
+       "watch": "状态码与错误码 1 集",
+       "practice": "统一响应格式",
+       "output": "规范",
+       "minutes": 60
+      },
+      {
+       "id": "w27d3",
+       "day": "周三",
+       "watch": "分页/过滤/排序 1–2 集",
+       "practice": "实现通用查询",
+       "output": "接口",
+       "minutes": 60
+      },
+      {
+       "id": "w27d4",
+       "day": "周四",
+       "watch": "版本与幂等 1 集",
+       "practice": "实现幂等接口",
+       "output": "接口",
+       "minutes": 60
+      },
+      {
+       "id": "w27d5",
+       "day": "周五",
+       "watch": "OpenAPI/Swagger 1–2 集",
+       "practice": "生成文档页",
+       "output": "页面",
+       "minutes": 45
+      },
+      {
+       "id": "w27d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "完整 API + 文档",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w27d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写设计规范",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 28,
+     "title": "MySQL 基础",
+     "goal": "会建库建表、写查询、联表。",
+     "review": "手写 10 条常用 SQL。",
+     "items": [
+      {
+       "id": "w28d1",
+       "day": "周一",
+       "watch": "黑马 MySQL 1–15 集",
+       "practice": "装库、建表、数据类型",
+       "output": "库",
+       "minutes": 60
+      },
+      {
+       "id": "w28d2",
+       "day": "周二",
+       "watch": "黑马 MySQL 16–30 集",
+       "practice": "增删改查",
+       "output": "SQL",
+       "minutes": 60
+      },
+      {
+       "id": "w28d3",
+       "day": "周三",
+       "watch": "黑马 MySQL 31–45 集",
+       "practice": "联表、子查询",
+       "output": "SQL",
+       "minutes": 60
+      },
+      {
+       "id": "w28d4",
+       "day": "周四",
+       "watch": "黑马 MySQL 46–60 集",
+       "practice": "聚合、分组、窗口函数",
+       "output": "SQL",
+       "minutes": 60
+      },
+      {
+       "id": "w28d5",
+       "day": "周五",
+       "watch": "黑马 MySQL 61–70 集",
+       "practice": "视图、存储过程",
+       "output": "了解",
+       "minutes": 45
+      },
+      {
+       "id": "w28d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "设计 5 张表 + ER 图",
+       "output": "ER 图",
+       "minutes": 90
+      },
+      {
+       "id": "w28d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "手写 SQL + 卡片",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 29,
+     "title": "SQL 进阶与优化",
+     "goal": "理解索引、执行计划、事务。",
+     "review": "解释一条慢 SQL 为什么慢。",
+     "items": [
+      {
+       "id": "w29d1",
+       "day": "周一",
+       "watch": "索引原理 1–2 集",
+       "practice": "建索引并对比",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w29d2",
+       "day": "周二",
+       "watch": "执行计划 1–2 集",
+       "practice": "EXPLAIN 分析",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w29d3",
+       "day": "周三",
+       "watch": "慢查询优化 1–2 集",
+       "practice": "优化 3 条 SQL",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w29d4",
+       "day": "周四",
+       "watch": "事务与隔离级别 1–2 集",
+       "practice": "实验验证",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w29d5",
+       "day": "周五",
+       "watch": "锁 1 集",
+       "practice": "行锁/表锁实验",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w29d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "优化 5 条 SQL",
+       "output": "报告",
+       "minutes": 90
+      },
+      {
+       "id": "w29d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写索引原则",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 30,
+     "title": "ORM 与数据层",
+     "goal": "会用 Prisma/TypeORM 建模与查询。",
+     "review": "画一张数据模型图。",
+     "items": [
+      {
+       "id": "w30d1",
+       "day": "周一",
+       "watch": "Prisma/TypeORM 1–3 集",
+       "practice": "建模、生成客户端",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w30d2",
+       "day": "周二",
+       "watch": "关联查询 1–2 集",
+       "practice": "一对多、多对多",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w30d3",
+       "day": "周三",
+       "watch": "迁移 migration 1 集",
+       "practice": "改表结构",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w30d4",
+       "day": "周四",
+       "watch": "事务 1 集",
+       "practice": "转账场景",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w30d5",
+       "day": "周五",
+       "watch": "N+1 问题 1 集",
+       "practice": "优化查询",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w30d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "数据层重构",
+       "output": "代码",
+       "minutes": 90
+      },
+      {
+       "id": "w30d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "数据模型图 + Anki",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 31,
+     "title": "认证与权限",
+     "goal": "会做注册登录、JWT、RBAC。",
+     "review": "默写 JWT 登录流程。",
+     "items": [
+      {
+       "id": "w31d1",
+       "day": "周一",
+       "watch": "密码哈希 1 集",
+       "practice": "bcrypt 加密",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w31d2",
+       "day": "周二",
+       "watch": "JWT 1–2 集",
+       "practice": "签发与校验",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w31d3",
+       "day": "周三",
+       "watch": "刷新 token 1 集",
+       "practice": "双 token 方案",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w31d4",
+       "day": "周四",
+       "watch": "RBAC 1–2 集",
+       "practice": "角色权限中间件",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w31d5",
+       "day": "周五",
+       "watch": "安全 CSRF/XSS 1–2 集",
+       "practice": "防护",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w31d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "登录注册闭环",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w31d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写登录流程",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 32,
+     "title": "Redis 与缓存",
+     "goal": "会用缓存提升接口性能。",
+     "review": "画缓存读写流程。",
+     "items": [
+      {
+       "id": "w32d1",
+       "day": "周一",
+       "watch": "Redis 基础 1–2 集",
+       "practice": "装 Redis、常用命令",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w32d2",
+       "day": "周二",
+       "watch": "缓存模式 1–2 集",
+       "practice": "旁路缓存实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w32d3",
+       "day": "周三",
+       "watch": "穿透/雪崩 1 集",
+       "practice": "空值缓存、随机过期",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w32d4",
+       "day": "周四",
+       "watch": "分布式锁 1 集",
+       "practice": "SETNX 实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w32d5",
+       "day": "周五",
+       "watch": "限流 1 集",
+       "practice": "令牌桶",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w32d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "热点接口加缓存",
+       "output": "报告",
+       "minutes": 90
+      },
+      {
+       "id": "w32d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "缓存流程图 + Anki",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 33,
+     "title": "文件与对象存储",
+     "goal": "会做上传、存储、图片处理。",
+     "review": "默写上传接口的安全检查项。",
+     "items": [
+      {
+       "id": "w33d1",
+       "day": "周一",
+       "watch": "文件上传 1–2 集",
+       "practice": "multipart 上传",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w33d2",
+       "day": "周二",
+       "watch": "对象存储 1–2 集",
+       "practice": "接 OSS/S3",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w33d3",
+       "day": "周三",
+       "watch": "图片处理 1 集",
+       "practice": "压缩、裁剪",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w33d4",
+       "day": "周四",
+       "watch": "断点续传 1 集",
+       "practice": "了解分片",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w33d5",
+       "day": "周五",
+       "watch": "安全校验 1 集",
+       "practice": "类型、大小、病毒",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w33d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "头像上传",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w33d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "安全检查清单",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 34,
+     "title": "消息队列与异步任务",
+     "goal": "理解异步解耦，会跑通 MQ。",
+     "review": "画一条异步任务链路。",
+     "items": [
+      {
+       "id": "w34d1",
+       "day": "周一",
+       "watch": "MQ 概念 1 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w34d2",
+       "day": "周二",
+       "watch": "RabbitMQ/Kafka 1–2 集",
+       "practice": "跑通生产消费",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w34d3",
+       "day": "周三",
+       "watch": "生产者/消费者 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w34d4",
+       "day": "周四",
+       "watch": "重试与死信 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w34d5",
+       "day": "周五",
+       "watch": "异步任务 1 集",
+       "practice": "邮件异步发送",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w34d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "异步通知系统",
+       "output": "可运行",
+       "minutes": 90
+      },
+      {
+       "id": "w34d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "链路图 + Anki",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 35,
+     "title": "后端项目（一）",
+     "goal": "从 0 设计并实现一套业务 API。",
+     "review": "复盘数据库设计。",
+     "items": [
+      {
+       "id": "w35d1",
+       "day": "周一",
+       "watch": "需求与建模 1 集",
+       "practice": "需求文档、ER 图",
+       "output": "文档",
+       "minutes": 60
+      },
+      {
+       "id": "w35d2",
+       "day": "周二",
+       "watch": "骨架与分层",
+       "practice": "搭项目结构",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w35d3",
+       "day": "周三",
+       "watch": "核心接口",
+       "practice": "增删改查",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w35d4",
+       "day": "周四",
+       "watch": "认证与权限",
+       "practice": "接入",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w35d5",
+       "day": "周五",
+       "watch": "测试",
+       "practice": "接口测试",
+       "output": "测试",
+       "minutes": 45
+      },
+      {
+       "id": "w35d6",
+       "day": "周六",
+       "watch": "联调",
+       "practice": "跑通全流程",
+       "output": "项目",
+       "minutes": 90
+      },
+      {
+       "id": "w35d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "复盘建模",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 36,
+     "title": "后端项目（二）与交付",
+     "goal": "把项目做到可部署、可维护。",
+     "review": "白板讲清服务架构。",
+     "items": [
+      {
+       "id": "w36d1",
+       "day": "周一",
+       "watch": "缓存与队列",
+       "practice": "接入",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w36d2",
+       "day": "周二",
+       "watch": "日志与监控",
+       "practice": "接入",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w36d3",
+       "day": "周三",
+       "watch": "OpenAPI 文档",
+       "practice": "生成",
+       "output": "文档",
+       "minutes": 60
+      },
+      {
+       "id": "w36d4",
+       "day": "周四",
+       "watch": "Docker 化",
+       "practice": "写 Dockerfile",
+       "output": "镜像",
+       "minutes": 60
+      },
+      {
+       "id": "w36d5",
+       "day": "周五",
+       "watch": "部署",
+       "practice": "上线",
+       "output": "线上",
+       "minutes": 45
+      },
+      {
+       "id": "w36d6",
+       "day": "周六",
+       "watch": "复盘",
+       "practice": "录演示视频",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w36d7",
+       "day": "周日",
+       "watch": "阶段复习",
+       "practice": "白板讲架构",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "04",
+   "title": "W37–W48｜部署 · 网络 · 安全 · 全栈项目",
+   "sub": "Linux 服务器 · Nginx · Docker · CI/CD · HTTPS · TCP/IP · OWASP · 监控 · 全栈上线",
+   "color": "#0B6E4F",
+   "goal": "从「本地能跑」到「线上能用」：部署、网络、安全、监控、全栈交付。",
+   "accept": "把一个全栈项目部署到自己的域名，配好 HTTPS、监控与自动发布。",
+   "weeks": [
+    {
+     "week": 37,
+     "title": "Linux 服务器",
+     "goal": "会用云服务器、SSH、权限、服务管理。",
+     "review": "默写 20 条服务器命令。",
+     "items": [
+      {
+       "id": "w37d1",
+       "day": "周一",
+       "watch": "云服务器与 SSH 1–2 集",
+       "practice": "买服务器、登录",
+       "output": "服务器",
+       "minutes": 60
+      },
+      {
+       "id": "w37d2",
+       "day": "周二",
+       "watch": "用户与权限 1 集",
+       "practice": "建用户、配 sudo",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w37d3",
+       "day": "周三",
+       "watch": "软件安装与 systemd 1–2 集",
+       "practice": "部署一个服务",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w37d4",
+       "day": "周四",
+       "watch": "防火墙与端口 1 集",
+       "practice": "开放端口",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w37d5",
+       "day": "周五",
+       "watch": "日志与排错 1–2 集",
+       "practice": "journalctl、tail",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w37d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "部署静态站",
+       "output": "线上",
+       "minutes": 90
+      },
+      {
+       "id": "w37d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写命令 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 38,
+     "title": "Nginx",
+     "goal": "会配置反向代理、负载均衡、静态资源。",
+     "review": "默写一份 Nginx 配置。",
+     "items": [
+      {
+       "id": "w38d1",
+       "day": "周一",
+       "watch": "安装与配置 1–2 集",
+       "practice": "跑通默认页",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w38d2",
+       "day": "周二",
+       "watch": "反向代理 1–2 集",
+       "practice": "代理 API",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w38d3",
+       "day": "周三",
+       "watch": "负载均衡 1 集",
+       "practice": "双实例",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w38d4",
+       "day": "周四",
+       "watch": "静态资源与缓存 1 集",
+       "practice": "配缓存头",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w38d5",
+       "day": "周五",
+       "watch": "HTTPS 1 集",
+       "practice": "配证书",
+       "output": "配置",
+       "minutes": 45
+      },
+      {
+       "id": "w38d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "域名访问",
+       "output": "线上",
+       "minutes": 90
+      },
+      {
+       "id": "w38d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写配置 + 卡片",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 39,
+     "title": "Docker",
+     "goal": "会写 Dockerfile、管理镜像与容器。",
+     "review": "手写一个多阶段构建 Dockerfile。",
+     "items": [
+      {
+       "id": "w39d1",
+       "day": "周一",
+       "watch": "镜像与容器 1–2 集",
+       "practice": "跑通 hello",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w39d2",
+       "day": "周二",
+       "watch": "Dockerfile 1–2 集",
+       "practice": "容器化 API",
+       "output": "镜像",
+       "minutes": 60
+      },
+      {
+       "id": "w39d3",
+       "day": "周三",
+       "watch": "数据卷与网络 1 集",
+       "practice": "持久化数据库",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w39d4",
+       "day": "周四",
+       "watch": "多阶段构建 1 集",
+       "practice": "减小镜像",
+       "output": "镜像",
+       "minutes": 60
+      },
+      {
+       "id": "w39d5",
+       "day": "周五",
+       "watch": "私有仓库 1 集",
+       "practice": "推送到 registry",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w39d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "容器化 API",
+       "output": "镜像",
+       "minutes": 90
+      },
+      {
+       "id": "w39d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写 Dockerfile",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 40,
+     "title": "Docker Compose",
+     "goal": "会用 Compose 编排多服务。",
+     "review": "画一张服务编排图。",
+     "items": [
+      {
+       "id": "w40d1",
+       "day": "周一",
+       "watch": "compose 文件 1–2 集",
+       "practice": "写第一个",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w40d2",
+       "day": "周二",
+       "watch": "多服务编排 1–2 集",
+       "practice": "API+DB+Redis",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w40d3",
+       "day": "周三",
+       "watch": "环境变量与密钥 1 集",
+       "practice": "区分环境",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w40d4",
+       "day": "周四",
+       "watch": "健康检查与重启 1 集",
+       "practice": "配置",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w40d5",
+       "day": "周五",
+       "watch": "一键部署 1 集",
+       "practice": "写脚本",
+       "output": "脚本",
+       "minutes": 45
+      },
+      {
+       "id": "w40d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "全栈编排",
+       "output": "线上",
+       "minutes": 90
+      },
+      {
+       "id": "w40d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "编排图 + Anki",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 41,
+     "title": "CI/CD",
+     "goal": "会用 GitHub Actions 自动构建与部署。",
+     "review": "画一条流水线。",
+     "items": [
+      {
+       "id": "w41d1",
+       "day": "周一",
+       "watch": "Actions 基础 1–2 集",
+       "practice": "跑通 hello workflow",
+       "output": "流水线",
+       "minutes": 60
+      },
+      {
+       "id": "w41d2",
+       "day": "周二",
+       "watch": "构建与测试 1–2 集",
+       "practice": "接入",
+       "output": "流水线",
+       "minutes": 60
+      },
+      {
+       "id": "w41d3",
+       "day": "周三",
+       "watch": "自动部署 1–2 集",
+       "practice": "SSH 部署",
+       "output": "流水线",
+       "minutes": 60
+      },
+      {
+       "id": "w41d4",
+       "day": "周四",
+       "watch": "环境区分 1 集",
+       "practice": "dev/prod",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w41d5",
+       "day": "周五",
+       "watch": "回滚 1 集",
+       "practice": "脚本回滚",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w41d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "提交即发布",
+       "output": "流水线",
+       "minutes": 90
+      },
+      {
+       "id": "w41d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "流水线图",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 42,
+     "title": "域名、HTTPS 与 CDN",
+     "goal": "会配解析、证书、CDN、安全头。",
+     "review": "默写 HTTPS 建立过程。",
+     "items": [
+      {
+       "id": "w42d1",
+       "day": "周一",
+       "watch": "DNS 解析 1 集",
+       "practice": "配置 A/CNAME",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w42d2",
+       "day": "周二",
+       "watch": "证书申请 1 集",
+       "practice": "Let's Encrypt",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w42d3",
+       "day": "周三",
+       "watch": "强制 HTTPS 1 集",
+       "practice": "配置跳转",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w42d4",
+       "day": "周四",
+       "watch": "CDN 1–2 集",
+       "practice": "接入静态资源",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w42d5",
+       "day": "周五",
+       "watch": "安全响应头 1 集",
+       "practice": "CSP/HSTS",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w42d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "全站 HTTPS",
+       "output": "线上",
+       "minutes": 90
+      },
+      {
+       "id": "w42d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写握手过程",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 43,
+     "title": "网络基础",
+     "goal": "掌握分层、IP、TCP。",
+     "review": "默写 TCP 三次握手与四次挥手。",
+     "items": [
+      {
+       "id": "w43d1",
+       "day": "周一",
+       "watch": "王道 网络 1–10 集",
+       "practice": "分层模型",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w43d2",
+       "day": "周二",
+       "watch": "王道 网络 11–20 集",
+       "practice": "IP、子网划分",
+       "output": "练习",
+       "minutes": 60
+      },
+      {
+       "id": "w43d3",
+       "day": "周三",
+       "watch": "王道 网络 21–30 集",
+       "practice": "TCP 连接管理",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w43d4",
+       "day": "周四",
+       "watch": "王道 网络 31–40 集",
+       "practice": "拥塞控制、重传",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w43d5",
+       "day": "周五",
+       "watch": "UDP 与 QUIC 1 集",
+       "practice": "对比",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w43d6",
+       "day": "周六",
+       "watch": "练习",
+       "practice": "子网划分 10 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w43d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写握手 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 44,
+     "title": "HTTP 深入与抓包",
+     "goal": "理解 HTTP/2、缓存、TLS。",
+     "review": "用 Wireshark 分析一次请求。",
+     "items": [
+      {
+       "id": "w44d1",
+       "day": "周一",
+       "watch": "HTTP/1.1 1–2 集",
+       "practice": "报文结构",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w44d2",
+       "day": "周二",
+       "watch": "HTTP/2 1–2 集",
+       "practice": "多路复用",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w44d3",
+       "day": "周三",
+       "watch": "HTTP/3 与 QUIC 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w44d4",
+       "day": "周四",
+       "watch": "缓存与协商 1–2 集",
+       "practice": "实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w44d5",
+       "day": "周五",
+       "watch": "Wireshark 1–2 集",
+       "practice": "抓包分析",
+       "output": "报告",
+       "minutes": 45
+      },
+      {
+       "id": "w44d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "分析一次完整请求",
+       "output": "报告",
+       "minutes": 90
+      },
+      {
+       "id": "w44d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写报文结构",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 45,
+     "title": "Web 安全",
+     "goal": "理解 OWASP Top 10 与防护。",
+     "review": "默写常见漏洞与防护。",
+     "items": [
+      {
+       "id": "w45d1",
+       "day": "周一",
+       "watch": "OWASP Top10 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w45d2",
+       "day": "周二",
+       "watch": "SQL 注入 1–2 集",
+       "practice": "复现与防护",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w45d3",
+       "day": "周三",
+       "watch": "XSS/CSRF 1–2 集",
+       "practice": "复现与防护",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w45d4",
+       "day": "周四",
+       "watch": "越权与文件上传 1 集",
+       "practice": "复现与防护",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w45d5",
+       "day": "周五",
+       "watch": "密钥管理 1 集",
+       "practice": "环境变量方案",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w45d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "安全自查表",
+       "output": "文档",
+       "minutes": 90
+      },
+      {
+       "id": "w45d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "漏洞清单",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 46,
+     "title": "监控与日志",
+     "goal": "会做日志规范、指标、告警、错误追踪。",
+     "review": "画一张监控体系图。",
+     "items": [
+      {
+       "id": "w46d1",
+       "day": "周一",
+       "watch": "日志规范 1 集",
+       "practice": "改造日志",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w46d2",
+       "day": "周二",
+       "watch": "ELK/Loki 1–2 集",
+       "practice": "接入",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w46d3",
+       "day": "周三",
+       "watch": "Prometheus 1–2 集",
+       "practice": "暴露指标",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w46d4",
+       "day": "周四",
+       "watch": "告警 1 集",
+       "practice": "配一条告警",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w46d5",
+       "day": "周五",
+       "watch": "Sentry 1 集",
+       "practice": "接入错误追踪",
+       "output": "配置",
+       "minutes": 45
+      },
+      {
+       "id": "w46d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "监控面板",
+       "output": "截图",
+       "minutes": 90
+      },
+      {
+       "id": "w46d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "监控图 + Anki",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 47,
+     "title": "全栈项目（一）",
+     "goal": "把前后端串成一个完整产品。",
+     "review": "复盘架构与接口。",
+     "items": [
+      {
+       "id": "w47d1",
+       "day": "周一",
+       "watch": "需求与架构 1 集",
+       "practice": "画架构图",
+       "output": "文档",
+       "minutes": 60
+      },
+      {
+       "id": "w47d2",
+       "day": "周二",
+       "watch": "前端骨架",
+       "practice": "路由、布局",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w47d3",
+       "day": "周三",
+       "watch": "后端接口",
+       "practice": "核心 API",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w47d4",
+       "day": "周四",
+       "watch": "联调",
+       "practice": "打通主流程",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w47d5",
+       "day": "周五",
+       "watch": "认证与权限",
+       "practice": "接入",
+       "output": "项目",
+       "minutes": 45
+      },
+      {
+       "id": "w47d6",
+       "day": "周六",
+       "watch": "测试与修复",
+       "practice": "跑通",
+       "output": "项目",
+       "minutes": 90
+      },
+      {
+       "id": "w47d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "架构复盘",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 48,
+     "title": "全栈项目（二）与上线",
+     "goal": "优化、部署、监控、沉淀作品。",
+     "review": "白板讲清全栈架构。",
+     "items": [
+      {
+       "id": "w48d1",
+       "day": "周一",
+       "watch": "性能优化",
+       "practice": "缓存、索引",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w48d2",
+       "day": "周二",
+       "watch": "队列与异步",
+       "practice": "接入",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w48d3",
+       "day": "周三",
+       "watch": "部署上线",
+       "practice": "Compose + Nginx",
+       "output": "线上",
+       "minutes": 60
+      },
+      {
+       "id": "w48d4",
+       "day": "周四",
+       "watch": "监控接入",
+       "practice": "日志与告警",
+       "output": "配置",
+       "minutes": 60
+      },
+      {
+       "id": "w48d5",
+       "day": "周五",
+       "watch": "文档与演示",
+       "practice": "README + 视频",
+       "output": "作品",
+       "minutes": 45
+      },
+      {
+       "id": "w48d6",
+       "day": "周六",
+       "watch": "复盘",
+       "practice": "写项目总结",
+       "output": "文档",
+       "minutes": 90
+      },
+      {
+       "id": "w48d7",
+       "day": "周日",
+       "watch": "阶段复习",
+       "practice": "白板讲架构",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "05",
+   "title": "W49–W60｜计算机科学核心",
+   "sub": "数据结构 · 算法 · 操作系统 · 数据库原理 · 系统设计入门",
+   "color": "#8A4B08",
+   "goal": "补上科班底子：能手写常见数据结构，解释一次请求从网卡到数据库的全过程。",
+   "accept": "手写 8 种数据结构，刷题 200 道，能白板讲清 TCP、进程、索引。",
+   "weeks": [
+    {
+     "week": 49,
+     "title": "复杂度与线性结构",
+     "goal": "会分析复杂度，能手写数组、链表、栈、队列。",
+     "review": "手写动态数组与双向链表。",
+     "items": [
+      {
+       "id": "w49d1",
+       "day": "周一",
+       "watch": "复杂度分析 1–2 集",
+       "practice": "分析 5 段代码",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w49d2",
+       "day": "周二",
+       "watch": "数组 1–2 集",
+       "practice": "手写动态数组",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w49d3",
+       "day": "周三",
+       "watch": "链表 1–3 集",
+       "practice": "单链表、双链表",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w49d4",
+       "day": "周四",
+       "watch": "栈 1 集",
+       "practice": "用链表实现栈",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w49d5",
+       "day": "周五",
+       "watch": "队列与双端队列 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w49d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "代码随想录 20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w49d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "手写链表 + Anki",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 50,
+     "title": "哈希与树入门",
+     "goal": "理解哈希冲突、二叉树、堆。",
+     "review": "手写哈希表与堆。",
+     "items": [
+      {
+       "id": "w50d1",
+       "day": "周一",
+       "watch": "哈希表 1–2 集",
+       "practice": "实现哈希表",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w50d2",
+       "day": "周二",
+       "watch": "冲突处理 1 集",
+       "practice": "链地址法实验",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w50d3",
+       "day": "周三",
+       "watch": "二叉树遍历 1–2 集",
+       "practice": "递归与迭代",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w50d4",
+       "day": "周四",
+       "watch": "二叉搜索树 1–2 集",
+       "practice": "增删查",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w50d5",
+       "day": "周五",
+       "watch": "堆与优先队列 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w50d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w50d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "手写哈希 + 堆",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 51,
+     "title": "树进阶",
+     "goal": "理解平衡树、B+ 树、Trie、并查集。",
+     "review": "说清 B+ 树为什么适合做索引。",
+     "items": [
+      {
+       "id": "w51d1",
+       "day": "周一",
+       "watch": "AVL 1–2 集",
+       "practice": "旋转演示",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w51d2",
+       "day": "周二",
+       "watch": "红黑树 1–2 集",
+       "practice": "了解规则",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w51d3",
+       "day": "周三",
+       "watch": "B 树/B+ 树 1–2 集",
+       "practice": "画结构图",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w51d4",
+       "day": "周四",
+       "watch": "Trie 1 集",
+       "practice": "实现前缀树",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w51d5",
+       "day": "周五",
+       "watch": "并查集 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w51d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w51d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画 B+ 树 + Anki",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 52,
+     "title": "图",
+     "goal": "掌握图的表示、遍历、最短路、拓扑。",
+     "review": "手写 Dijkstra。",
+     "items": [
+      {
+       "id": "w52d1",
+       "day": "周一",
+       "watch": "图的表示 1 集",
+       "practice": "邻接表/矩阵",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w52d2",
+       "day": "周二",
+       "watch": "BFS/DFS 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w52d3",
+       "day": "周三",
+       "watch": "拓扑排序 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w52d4",
+       "day": "周四",
+       "watch": "Dijkstra 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w52d5",
+       "day": "周五",
+       "watch": "最小生成树 1 集",
+       "practice": "Prim/Kruskal",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w52d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w52d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "手写 Dijkstra",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 53,
+     "title": "排序",
+     "goal": "能手写 8 种排序并分析复杂度。",
+     "review": "默写快排与归并。",
+     "items": [
+      {
+       "id": "w53d1",
+       "day": "周一",
+       "watch": "冒泡/插入/选择 1–2 集",
+       "practice": "实现三种",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w53d2",
+       "day": "周二",
+       "watch": "归并排序 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w53d3",
+       "day": "周三",
+       "watch": "快速排序 1–2 集",
+       "practice": "实现 + 优化",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w53d4",
+       "day": "周四",
+       "watch": "堆排/计数/基数 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w53d5",
+       "day": "周五",
+       "watch": "稳定性与复杂度 1 集",
+       "practice": "对比表",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w53d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w53d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写快排",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 54,
+     "title": "查找、递归与回溯",
+     "goal": "掌握二分、递归、回溯、分治。",
+     "review": "手写二分三种变体。",
+     "items": [
+      {
+       "id": "w54d1",
+       "day": "周一",
+       "watch": "二分查找 1–2 集",
+       "practice": "三种变体",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w54d2",
+       "day": "周二",
+       "watch": "递归思想 1–2 集",
+       "practice": "10 题",
+       "output": "题解",
+       "minutes": 60
+      },
+      {
+       "id": "w54d3",
+       "day": "周三",
+       "watch": "回溯 1–2 集",
+       "practice": "全排列、组合",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w54d4",
+       "day": "周四",
+       "watch": "分治 1 集",
+       "practice": "归并与快排",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w54d5",
+       "day": "周五",
+       "watch": "剪枝 1 集",
+       "practice": "练习",
+       "output": "题解",
+       "minutes": 45
+      },
+      {
+       "id": "w54d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w54d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "手写二分",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 55,
+     "title": "动态规划",
+     "goal": "掌握背包、序列 DP。",
+     "review": "手写 01 背包。",
+     "items": [
+      {
+       "id": "w55d1",
+       "day": "周一",
+       "watch": "DP 入门 1–2 集",
+       "practice": "爬楼梯、斐波那契",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w55d2",
+       "day": "周二",
+       "watch": "01 背包 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w55d3",
+       "day": "周三",
+       "watch": "完全背包 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w55d4",
+       "day": "周四",
+       "watch": "序列 DP 1–2 集",
+       "practice": "LIS/LCS",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w55d5",
+       "day": "周五",
+       "watch": "区间/树形 DP 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w55d6",
+       "day": "周六",
+       "watch": "刷题",
+       "practice": "25 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w55d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "手写背包",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 56,
+     "title": "贪心与综合训练",
+     "goal": "掌握贪心，完成第一轮刷题。",
+     "review": "做一次 3 题模拟面试。",
+     "items": [
+      {
+       "id": "w56d1",
+       "day": "周一",
+       "watch": "贪心 1–2 集",
+       "practice": "区间调度",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w56d2",
+       "day": "周二",
+       "watch": "综合题 1 集",
+       "practice": "10 题",
+       "output": "题解",
+       "minutes": 60
+      },
+      {
+       "id": "w56d3",
+       "day": "周三",
+       "watch": "周赛",
+       "practice": "LeetCode 周赛",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w56d4",
+       "day": "周四",
+       "watch": "错题重做",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 60
+      },
+      {
+       "id": "w56d5",
+       "day": "周五",
+       "watch": "模板总结",
+       "practice": "写自己的模板库",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w56d6",
+       "day": "周六",
+       "watch": "模拟面试",
+       "practice": "3 题口述",
+       "output": "录音",
+       "minutes": 90
+      },
+      {
+       "id": "w56d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "错题复盘",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 57,
+     "title": "操作系统：进程与线程",
+     "goal": "理解进程、线程、调度、同步。",
+     "review": "默写进程状态转换。",
+     "items": [
+      {
+       "id": "w57d1",
+       "day": "周一",
+       "watch": "王道 OS 进程 1–5 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w57d2",
+       "day": "周二",
+       "watch": "线程与调度 1–5 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w57d3",
+       "day": "周三",
+       "watch": "同步与锁 1–4 集",
+       "practice": "生产者消费者实验",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w57d4",
+       "day": "周四",
+       "watch": "死锁 1–2 集",
+       "practice": "四个条件",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w57d5",
+       "day": "周五",
+       "watch": "IPC 1–2 集",
+       "practice": "管道/共享内存实验",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w57d6",
+       "day": "周六",
+       "watch": "面试题",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w57d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "状态转换图",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 58,
+     "title": "操作系统：内存与文件",
+     "goal": "理解虚拟内存、分页、文件系统、IO。",
+     "review": "画一张虚拟内存映射图。",
+     "items": [
+      {
+       "id": "w58d1",
+       "day": "周一",
+       "watch": "虚拟内存 1–3 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w58d2",
+       "day": "周二",
+       "watch": "分页与分段 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w58d3",
+       "day": "周三",
+       "watch": "页面置换 1–2 集",
+       "practice": "LRU 实验",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w58d4",
+       "day": "周四",
+       "watch": "文件系统 1–2 集",
+       "practice": "inode 结构",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w58d5",
+       "day": "周五",
+       "watch": "IO 模型 1–2 集",
+       "practice": "五种模型",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w58d6",
+       "day": "周六",
+       "watch": "面试题",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w58d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "内存映射图",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 59,
+     "title": "数据库原理",
+     "goal": "理解范式、索引、事务、MVCC。",
+     "review": "解释一条 SQL 的执行路径。",
+     "items": [
+      {
+       "id": "w59d1",
+       "day": "周一",
+       "watch": "范式 1 集",
+       "practice": "设计练习",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w59d2",
+       "day": "周二",
+       "watch": "B+ 树索引 1–2 集",
+       "practice": "画结构",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w59d3",
+       "day": "周三",
+       "watch": "事务与 MVCC 1–2 集",
+       "practice": "实验",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w59d4",
+       "day": "周四",
+       "watch": "隔离级别 1–2 集",
+       "practice": "四个级别实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w59d5",
+       "day": "周五",
+       "watch": "分库分表 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w59d6",
+       "day": "周六",
+       "watch": "面试题",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w59d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "SQL 执行路径",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 60,
+     "title": "阶段综合与模拟面试",
+     "goal": "把 CS 核心串起来，完成第一轮面试准备。",
+     "review": "50 题测试 ≥ 80 分。",
+     "items": [
+      {
+       "id": "w60d1",
+       "day": "周一",
+       "watch": "算法复盘",
+       "practice": "错题重做",
+       "output": "题解",
+       "minutes": 60
+      },
+      {
+       "id": "w60d2",
+       "day": "周二",
+       "watch": "系统设计入门 1–2 集",
+       "practice": "短链、限流",
+       "output": "设计文档",
+       "minutes": 60
+      },
+      {
+       "id": "w60d3",
+       "day": "周三",
+       "watch": "模拟面试",
+       "practice": "5 题",
+       "output": "录音",
+       "minutes": 60
+      },
+      {
+       "id": "w60d4",
+       "day": "周四",
+       "watch": "项目",
+       "practice": "算法可视化",
+       "output": "作品",
+       "minutes": 60
+      },
+      {
+       "id": "w60d5",
+       "day": "周五",
+       "watch": "知识总结",
+       "practice": "画 CS 全景图",
+       "output": "导图",
+       "minutes": 45
+      },
+      {
+       "id": "w60d6",
+       "day": "周六",
+       "watch": "测试",
+       "practice": "50 题",
+       "output": "分数",
+       "minutes": 90
+      },
+      {
+       "id": "w60d7",
+       "day": "周日",
+       "watch": "阶段复习",
+       "practice": "白板讲 10 个概念",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "06",
+   "title": "W61–W72｜编译原理 · 移动原生 · 鸿蒙",
+   "sub": "词法/语法/AST · 解释器 · Kotlin/Android · Swift/SwiftUI · ArkTS/ArkUI · 三端上架",
+   "color": "#C0392B",
+   "goal": "理解语言是怎么被执行的，并能把应用写到手机上去——安卓、iOS、鸿蒙各一个。",
+   "accept": "写一个 100 行解释器，三端各有一个能安装的 App。",
+   "weeks": [
+    {
+     "week": 61,
+     "title": "编译原理：词法分析",
+     "goal": "理解编译流程，手写 tokenizer。",
+     "review": "手写表达式分词器。",
+     "items": [
+      {
+       "id": "w61d1",
+       "day": "周一",
+       "watch": "编译流程 1–2 集",
+       "practice": "画流程图",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w61d2",
+       "day": "周二",
+       "watch": "词法、正则、NFA 1–3 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w61d3",
+       "day": "周三",
+       "watch": "手写 tokenizer 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w61d4",
+       "day": "周四",
+       "watch": "数字/标识符/符号 1 集",
+       "practice": "扩展",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w61d5",
+       "day": "周五",
+       "watch": "错误处理 1 集",
+       "practice": "加异常",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w61d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "表达式分词器",
+       "output": "代码",
+       "minutes": 90
+      },
+      {
+       "id": "w61d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "闭卷写 tokenizer",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 62,
+     "title": "语法分析与 AST",
+     "goal": "理解文法、递归下降、AST。",
+     "review": "手写完整 parser。",
+     "items": [
+      {
+       "id": "w62d1",
+       "day": "周一",
+       "watch": "文法与递归下降 1–3 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w62d2",
+       "day": "周二",
+       "watch": "表达式优先级 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w62d3",
+       "day": "周三",
+       "watch": "AST 设计 1 集",
+       "practice": "定义节点",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w62d4",
+       "day": "周四",
+       "watch": "语句解析 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w62d5",
+       "day": "周五",
+       "watch": "错误恢复 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w62d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "完整 parser",
+       "output": "代码",
+       "minutes": 90
+      },
+      {
+       "id": "w62d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画 AST",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 63,
+     "title": "解释器实战",
+     "goal": "把 AST 跑起来。",
+     "review": "100 行解释器能算四则与变量。",
+     "items": [
+      {
+       "id": "w63d1",
+       "day": "周一",
+       "watch": "求值器 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w63d2",
+       "day": "周二",
+       "watch": "变量与作用域 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w63d3",
+       "day": "周三",
+       "watch": "函数与闭包 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w63d4",
+       "day": "周四",
+       "watch": "控制流 1 集",
+       "practice": "if/while",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w63d5",
+       "day": "周五",
+       "watch": "测试 1 集",
+       "practice": "写用例",
+       "output": "测试",
+       "minutes": 45
+      },
+      {
+       "id": "w63d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "100 行解释器",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w63d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "讲清执行流程",
+       "output": "录音",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 64,
+     "title": "Kotlin 基础",
+     "goal": "掌握 Kotlin 语法与协程。",
+     "review": "闭卷写一个 Kotlin 类。",
+     "items": [
+      {
+       "id": "w64d1",
+       "day": "周一",
+       "watch": "Kotlin 语法 1–3 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w64d2",
+       "day": "周二",
+       "watch": "类/继承/接口 1–2 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w64d3",
+       "day": "周三",
+       "watch": "集合与 lambda 1–2 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w64d4",
+       "day": "周四",
+       "watch": "协程入门 1–2 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w64d5",
+       "day": "周五",
+       "watch": "空安全 1 集",
+       "practice": "练习",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w64d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "命令行工具",
+       "output": "代码",
+       "minutes": 90
+      },
+      {
+       "id": "w64d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写语法",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 65,
+     "title": "Android 基础",
+     "goal": "会建工程、写页面、调接口。",
+     "review": "3 页面 App 能跑。",
+     "items": [
+      {
+       "id": "w65d1",
+       "day": "周一",
+       "watch": "环境与项目结构 1–2 集",
+       "practice": "跑通",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w65d2",
+       "day": "周二",
+       "watch": "Activity 与生命周期 1–2 集",
+       "practice": "页面",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w65d3",
+       "day": "周三",
+       "watch": "布局与 Compose 1–3 集",
+       "practice": "页面",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w65d4",
+       "day": "周四",
+       "watch": "列表与导航 1–2 集",
+       "practice": "页面",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w65d5",
+       "day": "周五",
+       "watch": "网络请求 1–2 集",
+       "practice": "接接口",
+       "output": "项目",
+       "minutes": 45
+      },
+      {
+       "id": "w65d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "3 页面 App",
+       "output": "APK",
+       "minutes": 90
+      },
+      {
+       "id": "w65d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画生命周期",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 66,
+     "title": "Android 项目与打包",
+     "goal": "完成一个可安装的安卓 App。",
+     "review": "打出签名 APK。",
+     "items": [
+      {
+       "id": "w66d1",
+       "day": "周一",
+       "watch": "数据存储 1 集",
+       "practice": "实现",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w66d2",
+       "day": "周二",
+       "watch": "权限 1 集",
+       "practice": "实现",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w66d3",
+       "day": "周三",
+       "watch": "图片加载 1 集",
+       "practice": "实现",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w66d4",
+       "day": "周四",
+       "watch": "打包签名 1 集",
+       "practice": "出 APK",
+       "output": "APK",
+       "minutes": 60
+      },
+      {
+       "id": "w66d5",
+       "day": "周五",
+       "watch": "上架流程 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w66d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "完整 App",
+       "output": "APK",
+       "minutes": 90
+      },
+      {
+       "id": "w66d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "复盘项目",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 67,
+     "title": "Swift 基础",
+     "goal": "掌握 Swift 语法与并发。",
+     "review": "闭卷写一个 Swift 结构体。",
+     "items": [
+      {
+       "id": "w67d1",
+       "day": "周一",
+       "watch": "Swift 语法 1–3 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w67d2",
+       "day": "周二",
+       "watch": "可选类型与协议 1–2 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w67d3",
+       "day": "周三",
+       "watch": "集合与闭包 1–2 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w67d4",
+       "day": "周四",
+       "watch": "async/await 1–2 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w67d5",
+       "day": "周五",
+       "watch": "错误处理 1 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w67d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "命令行工具",
+       "output": "代码",
+       "minutes": 90
+      },
+      {
+       "id": "w67d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "默写语法",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 68,
+     "title": "SwiftUI",
+     "goal": "会写声明式界面。",
+     "review": "3 页面 App 能跑。",
+     "items": [
+      {
+       "id": "w68d1",
+       "day": "周一",
+       "watch": "视图与修饰符 1–2 集",
+       "practice": "页面",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w68d2",
+       "day": "周二",
+       "watch": "状态管理 1–2 集",
+       "practice": "页面",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w68d3",
+       "day": "周三",
+       "watch": "列表与导航 1–2 集",
+       "practice": "页面",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w68d4",
+       "day": "周四",
+       "watch": "网络请求 1–2 集",
+       "practice": "接接口",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w68d5",
+       "day": "周五",
+       "watch": "动画 1 集",
+       "practice": "效果",
+       "output": "项目",
+       "minutes": 45
+      },
+      {
+       "id": "w68d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "3 页面 App",
+       "output": "模拟器",
+       "minutes": 90
+      },
+      {
+       "id": "w68d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画视图树",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 69,
+     "title": "iOS 项目与打包",
+     "goal": "完成一个可安装的 iOS App。",
+     "review": "归档并跑通 TestFlight。",
+     "items": [
+      {
+       "id": "w69d1",
+       "day": "周一",
+       "watch": "数据持久化 1 集",
+       "practice": "实现",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w69d2",
+       "day": "周二",
+       "watch": "权限 1 集",
+       "practice": "实现",
+       "output": "项目",
+       "minutes": 60
+      },
+      {
+       "id": "w69d3",
+       "day": "周三",
+       "watch": "打包归档 1 集",
+       "practice": "出包",
+       "output": "包",
+       "minutes": 60
+      },
+      {
+       "id": "w69d4",
+       "day": "周四",
+       "watch": "TestFlight 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w69d5",
+       "day": "周五",
+       "watch": "上架流程 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w69d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "完整 App",
+       "output": "包",
+       "minutes": 90
+      },
+      {
+       "id": "w69d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "复盘项目",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 70,
+     "title": "鸿蒙 ArkTS",
+     "goal": "会建鸿蒙工程、写页面。",
+     "review": "3 页面鸿蒙 App。",
+     "items": [
+      {
+       "id": "w70d1",
+       "day": "周一",
+       "watch": "DevEco 安装 1–2 集",
+       "practice": "跑通 Hello",
+       "output": "工程",
+       "minutes": 60
+      },
+      {
+       "id": "w70d2",
+       "day": "周二",
+       "watch": "ArkTS 语法 1–2 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w70d3",
+       "day": "周三",
+       "watch": "组件与布局 1–2 集",
+       "practice": "页面",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w70d4",
+       "day": "周四",
+       "watch": "状态管理 1–2 集",
+       "practice": "页面",
+       "output": "页面",
+       "minutes": 60
+      },
+      {
+       "id": "w70d5",
+       "day": "周五",
+       "watch": "路由 1 集",
+       "practice": "页面",
+       "output": "页面",
+       "minutes": 45
+      },
+      {
+       "id": "w70d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "3 页面 App",
+       "output": "工程",
+       "minutes": 90
+      },
+      {
+       "id": "w70d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "对比 ArkTS 与 TS",
+       "output": "笔记",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 71,
+     "title": "鸿蒙 Stage 模型",
+     "goal": "理解生命周期与应用能力。",
+     "review": "完整 App 能跑。",
+     "items": [
+      {
+       "id": "w71d1",
+       "day": "周一",
+       "watch": "Stage 模型 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w71d2",
+       "day": "周二",
+       "watch": "UIAbility 与生命周期 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w71d3",
+       "day": "周三",
+       "watch": "数据管理 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w71d4",
+       "day": "周四",
+       "watch": "网络 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w71d5",
+       "day": "周五",
+       "watch": "服务卡片 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w71d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "完整 App",
+       "output": "工程",
+       "minutes": 90
+      },
+      {
+       "id": "w71d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画生命周期",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 72,
+     "title": "三端对比与上架",
+     "goal": "把三端项目打包、对比、沉淀。",
+     "review": "三端包齐全，写对比文档。",
+     "items": [
+      {
+       "id": "w72d1",
+       "day": "周一",
+       "watch": "三端对比 1 集",
+       "practice": "写对比表",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w72d2",
+       "day": "周二",
+       "watch": "打包签名",
+       "practice": "三端各出包",
+       "output": "包",
+       "minutes": 60
+      },
+      {
+       "id": "w72d3",
+       "day": "周三",
+       "watch": "上架材料",
+       "practice": "准备",
+       "output": "材料",
+       "minutes": 60
+      },
+      {
+       "id": "w72d4",
+       "day": "周四",
+       "watch": "兼容性测试",
+       "practice": "测试",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w72d5",
+       "day": "周五",
+       "watch": "发布",
+       "practice": "提交",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w72d6",
+       "day": "周六",
+       "watch": "复盘",
+       "practice": "写总结",
+       "output": "文档",
+       "minutes": 90
+      },
+      {
+       "id": "w72d7",
+       "day": "周日",
+       "watch": "阶段复习",
+       "practice": "白板讲三端差异",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "07",
+   "title": "W73–W84｜数学 · 机器学习 · 深度学习",
+   "sub": "线代 · 概率 · 微积分 · ML · 神经网络 · CNN · RNN · Transformer · PyTorch",
+   "color": "#1B5E20",
+   "goal": "补上 AI 的数学与模型基础，能训练模型、读懂论文、看懂 AI 生成的训练代码。",
+   "accept": "从零训练一个图像分类模型和一个文本模型，并能解释每一步在干什么。",
+   "weeks": [
+    {
+     "week": 73,
+     "title": "线性代数",
+     "goal": "建立向量、矩阵、特征值的直觉。",
+     "review": "手推一次矩阵乘法与投影。",
+     "items": [
+      {
+       "id": "w73d1",
+       "day": "周一",
+       "watch": "3Blue1Brown 线代 1–4 集",
+       "practice": "看动画建立直觉",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w73d2",
+       "day": "周二",
+       "watch": "向量与矩阵运算 1–2 集",
+       "practice": "手算 10 题",
+       "output": "练习",
+       "minutes": 60
+      },
+      {
+       "id": "w73d3",
+       "day": "周三",
+       "watch": "矩阵乘法与变换 1–2 集",
+       "practice": "numpy 实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w73d4",
+       "day": "周四",
+       "watch": "特征值与 SVD 1–2 集",
+       "practice": "理解用途",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w73d5",
+       "day": "周五",
+       "watch": "用 numpy 实现 1 集",
+       "practice": "矩阵分解实验",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w73d6",
+       "day": "周六",
+       "watch": "练习",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w73d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "白板讲线代",
+       "output": "录音",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 74,
+     "title": "概率与统计",
+     "goal": "理解分布、期望、贝叶斯、最大似然。",
+     "review": "手推最大似然估计。",
+     "items": [
+      {
+       "id": "w74d1",
+       "day": "周一",
+       "watch": "概率基础 1–3 集",
+       "practice": "练习",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w74d2",
+       "day": "周二",
+       "watch": "常见分布 1–2 集",
+       "practice": "画分布图",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w74d3",
+       "day": "周三",
+       "watch": "期望与方差 1 集",
+       "practice": "练习",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w74d4",
+       "day": "周四",
+       "watch": "贝叶斯 1–2 集",
+       "practice": "垃圾邮件例子",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w74d5",
+       "day": "周五",
+       "watch": "最大似然 1–2 集",
+       "practice": "推导",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w74d6",
+       "day": "周六",
+       "watch": "练习",
+       "practice": "20 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w74d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "贝叶斯推导",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 75,
+     "title": "微积分与优化",
+     "goal": "理解导数、链式法则、梯度下降。",
+     "review": "手推反向传播。",
+     "items": [
+      {
+       "id": "w75d1",
+       "day": "周一",
+       "watch": "导数与偏导 1–2 集",
+       "practice": "练习",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w75d2",
+       "day": "周二",
+       "watch": "链式法则 1–2 集",
+       "practice": "推导",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w75d3",
+       "day": "周三",
+       "watch": "梯度下降 1–2 集",
+       "practice": "手写实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w75d4",
+       "day": "周四",
+       "watch": "凸优化 1 集",
+       "practice": "概念",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w75d5",
+       "day": "周五",
+       "watch": "反向传播 1–2 集",
+       "practice": "手推两层网络",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w75d6",
+       "day": "周六",
+       "watch": "练习",
+       "practice": "10 题",
+       "output": "题解",
+       "minutes": 90
+      },
+      {
+       "id": "w75d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "白板推梯度",
+       "output": "录音",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 76,
+     "title": "机器学习基础",
+     "goal": "理解监督学习流程与线性模型。",
+     "review": "手写线性回归。",
+     "items": [
+      {
+       "id": "w76d1",
+       "day": "周一",
+       "watch": "吴恩达 ML 第 1 周",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w76d2",
+       "day": "周二",
+       "watch": "吴恩达 ML 第 2 周",
+       "practice": "线性回归",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w76d3",
+       "day": "周三",
+       "watch": "逻辑回归 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w76d4",
+       "day": "周四",
+       "watch": "正则化 1 集",
+       "practice": "实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w76d5",
+       "day": "周五",
+       "watch": "sklearn 1–2 集",
+       "practice": "跑通",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w76d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "房价预测",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w76d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画 ML 流程",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 77,
+     "title": "监督学习算法",
+     "goal": "掌握树模型、SVM、KNN、集成。",
+     "review": "对比 5 种模型。",
+     "items": [
+      {
+       "id": "w77d1",
+       "day": "周一",
+       "watch": "决策树 1–2 集",
+       "practice": "实现/调包",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w77d2",
+       "day": "周二",
+       "watch": "随机森林 1–2 集",
+       "practice": "调参",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w77d3",
+       "day": "周三",
+       "watch": "SVM 1–2 集",
+       "practice": "理解核函数",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w77d4",
+       "day": "周四",
+       "watch": "KNN/朴素贝叶斯 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w77d5",
+       "day": "周五",
+       "watch": "集成学习 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w77d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "分类任务",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w77d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "模型对比表",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 78,
+     "title": "评估与特征工程",
+     "goal": "会评估模型、做特征、调参。",
+     "review": "画一张评估指标选择图。",
+     "items": [
+      {
+       "id": "w78d1",
+       "day": "周一",
+       "watch": "评估指标 1–2 集",
+       "practice": "实验",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w78d2",
+       "day": "周二",
+       "watch": "交叉验证 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w78d3",
+       "day": "周三",
+       "watch": "特征工程 1–2 集",
+       "practice": "练习",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w78d4",
+       "day": "周四",
+       "watch": "过拟合与欠拟合 1 集",
+       "practice": "实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w78d5",
+       "day": "周五",
+       "watch": "GridSearch 1 集",
+       "practice": "调参",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w78d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "Kaggle 入门赛",
+       "output": "提交",
+       "minutes": 90
+      },
+      {
+       "id": "w78d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "指标选择图",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 79,
+     "title": "神经网络",
+     "goal": "理解 MLP、激活、损失、反向传播。",
+     "review": "手写两层网络。",
+     "items": [
+      {
+       "id": "w79d1",
+       "day": "周一",
+       "watch": "感知机与 MLP 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w79d2",
+       "day": "周二",
+       "watch": "激活函数 1 集",
+       "practice": "实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w79d3",
+       "day": "周三",
+       "watch": "损失函数 1 集",
+       "practice": "对比",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w79d4",
+       "day": "周四",
+       "watch": "反向传播 1–2 集",
+       "practice": "手写实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w79d5",
+       "day": "周五",
+       "watch": "PyTorch 基础 1–2 集",
+       "practice": "跑通",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w79d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "MNIST",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w79d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "白板讲反向传播",
+       "output": "录音",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 80,
+     "title": "卷积神经网络",
+     "goal": "理解卷积、池化、经典网络。",
+     "review": "手写一个 CNN。",
+     "items": [
+      {
+       "id": "w80d1",
+       "day": "周一",
+       "watch": "卷积原理 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w80d2",
+       "day": "周二",
+       "watch": "池化与感受野 1 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w80d3",
+       "day": "周三",
+       "watch": "经典网络 1–2 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w80d4",
+       "day": "周四",
+       "watch": "训练技巧 1 集",
+       "practice": "实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w80d5",
+       "day": "周五",
+       "watch": "迁移学习 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w80d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "图像分类",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w80d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画 CNN 结构",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 81,
+     "title": "序列模型",
+     "goal": "理解 RNN、LSTM、注意力。",
+     "review": "手写一个 LSTM 单元。",
+     "items": [
+      {
+       "id": "w81d1",
+       "day": "周一",
+       "watch": "RNN/LSTM 1–3 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w81d2",
+       "day": "周二",
+       "watch": "梯度消失 1 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w81d3",
+       "day": "周三",
+       "watch": "文本预处理 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w81d4",
+       "day": "周四",
+       "watch": "情感分类 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w81d5",
+       "day": "周五",
+       "watch": "Attention 入门 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w81d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "文本分类",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w81d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画 LSTM",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 82,
+     "title": "Transformer",
+     "goal": "理解注意力机制与 Transformer 结构。",
+     "review": "手写 mini Transformer。",
+     "items": [
+      {
+       "id": "w82d1",
+       "day": "周一",
+       "watch": "注意力机制 1–2 集",
+       "practice": "手推",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w82d2",
+       "day": "周二",
+       "watch": "多头注意力 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w82d3",
+       "day": "周三",
+       "watch": "位置编码 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w82d4",
+       "day": "周四",
+       "watch": "Encoder/Decoder 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w82d5",
+       "day": "周五",
+       "watch": "手写 mini Transformer",
+       "practice": "代码",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w82d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "翻译小模型",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w82d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "白板讲注意力",
+       "output": "录音",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 83,
+     "title": "PyTorch 实战",
+     "goal": "掌握训练全流程与工程化。",
+     "review": "写出可复用的训练脚本。",
+     "items": [
+      {
+       "id": "w83d1",
+       "day": "周一",
+       "watch": "数据加载 1–2 集",
+       "practice": "Dataset/DataLoader",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w83d2",
+       "day": "周二",
+       "watch": "训练循环 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w83d3",
+       "day": "周三",
+       "watch": "保存与加载 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w83d4",
+       "day": "周四",
+       "watch": "GPU 训练 1 集",
+       "practice": "配置",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w83d5",
+       "day": "周五",
+       "watch": "实验管理 1 集",
+       "practice": "wandb/tensorboard",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w83d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "训练 pipeline",
+       "output": "代码",
+       "minutes": 90
+      },
+      {
+       "id": "w83d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "复盘训练流程",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 84,
+     "title": "机器学习项目",
+     "goal": "完整做一个可部署的模型项目。",
+     "review": "模型能通过 API 调用。",
+     "items": [
+      {
+       "id": "w84d1",
+       "day": "周一",
+       "watch": "选题与数据 1 集",
+       "practice": "文档",
+       "output": "文档",
+       "minutes": 60
+      },
+      {
+       "id": "w84d2",
+       "day": "周二",
+       "watch": "基线模型",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w84d3",
+       "day": "周三",
+       "watch": "改进实验",
+       "practice": "对比",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w84d4",
+       "day": "周四",
+       "watch": "评估与可视化",
+       "practice": "报告",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w84d5",
+       "day": "周五",
+       "watch": "部署 API",
+       "practice": "FastAPI",
+       "output": "服务",
+       "minutes": 45
+      },
+      {
+       "id": "w84d6",
+       "day": "周六",
+       "watch": "复盘",
+       "practice": "写文档",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w84d7",
+       "day": "周日",
+       "watch": "阶段复习",
+       "practice": "白板讲项目",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "08",
+   "title": "W85–W92｜LLM · RAG · Agent · 架构 · 求职",
+   "sub": "大模型原理 · 本地部署 · Prompt · RAG · 向量库 · Agent · 多智能体 · 系统设计",
+   "color": "#4527A0",
+   "goal": "从「会用 AI」到「能造 AI 应用」：看懂模型代码，做出 RAG 与 Agent，并完成求职/接单准备。",
+   "accept": "上线一个带知识库与工具调用的 AI 应用，并具备投递/接单的作品集。",
+   "weeks": [
+    {
+     "week": 85,
+     "title": "大模型原理",
+     "goal": "理解 Token、预训练、微调、量化、幻觉。",
+     "review": "讲清一次生成的全过程。",
+     "items": [
+      {
+       "id": "w85d1",
+       "day": "周一",
+       "watch": "Token 与词表 1–2 集",
+       "practice": "分词实验",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w85d2",
+       "day": "周二",
+       "watch": "预训练与微调 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w85d3",
+       "day": "周三",
+       "watch": "采样与温度 1 集",
+       "practice": "实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w85d4",
+       "day": "周四",
+       "watch": "量化 1–2 集",
+       "practice": "实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w85d5",
+       "day": "周五",
+       "watch": "幻觉与评估 1 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w85d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "本地跑 7B",
+       "output": "环境",
+       "minutes": 90
+      },
+      {
+       "id": "w85d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "白板讲生成流程",
+       "output": "录音",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 86,
+     "title": "本地部署与调用",
+     "goal": "会部署模型、调 API、算成本。",
+     "review": "本地助手可对话。",
+     "items": [
+      {
+       "id": "w86d1",
+       "day": "周一",
+       "watch": "Ollama/vLLM 1–2 集",
+       "practice": "跑通",
+       "output": "服务",
+       "minutes": 60
+      },
+      {
+       "id": "w86d2",
+       "day": "周二",
+       "watch": "模型选择 1 集",
+       "practice": "对比",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w86d3",
+       "day": "周三",
+       "watch": "API 调用 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w86d4",
+       "day": "周四",
+       "watch": "Embedding 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w86d5",
+       "day": "周五",
+       "watch": "成本与显存 1 集",
+       "practice": "测算",
+       "output": "报告",
+       "minutes": 45
+      },
+      {
+       "id": "w86d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "本地助手",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w86d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "算一次成本",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 87,
+     "title": "Prompt 工程",
+     "goal": "会写稳定可控的提示词。",
+     "review": "沉淀 10 个可复用模板。",
+     "items": [
+      {
+       "id": "w87d1",
+       "day": "周一",
+       "watch": "结构化提示 1–2 集",
+       "practice": "练习",
+       "output": "模板",
+       "minutes": 60
+      },
+      {
+       "id": "w87d2",
+       "day": "周二",
+       "watch": "few-shot 与 CoT 1–2 集",
+       "practice": "实验",
+       "output": "记录",
+       "minutes": 60
+      },
+      {
+       "id": "w87d3",
+       "day": "周三",
+       "watch": "输出格式约束 1 集",
+       "practice": "JSON 输出",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w87d4",
+       "day": "周四",
+       "watch": "评估与迭代 1–2 集",
+       "practice": "实验",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w87d5",
+       "day": "周五",
+       "watch": "提示注入 1 集",
+       "practice": "了解",
+       "output": "笔记",
+       "minutes": 45
+      },
+      {
+       "id": "w87d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "提示词库",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w87d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "改写 3 个提示",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 88,
+     "title": "RAG 检索增强",
+     "goal": "会做知识库问答。",
+     "review": "知识库答对率 ≥ 80%。",
+     "items": [
+      {
+       "id": "w88d1",
+       "day": "周一",
+       "watch": "RAG 架构 1–2 集",
+       "practice": "画架构",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w88d2",
+       "day": "周二",
+       "watch": "文档切分 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w88d3",
+       "day": "周三",
+       "watch": "检索与重排 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w88d4",
+       "day": "周四",
+       "watch": "生成与引用 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w88d5",
+       "day": "周五",
+       "watch": "评估 1 集",
+       "practice": "实现",
+       "output": "报告",
+       "minutes": 45
+      },
+      {
+       "id": "w88d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "知识库问答",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w88d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画 RAG 流程",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 89,
+     "title": "向量数据库",
+     "goal": "会选型、建索引、做混合检索。",
+     "review": "百万级检索跑通。",
+     "items": [
+      {
+       "id": "w89d1",
+       "day": "周一",
+       "watch": "向量索引 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w89d2",
+       "day": "周二",
+       "watch": "Milvus/pgvector 1–2 集",
+       "practice": "跑通",
+       "output": "服务",
+       "minutes": 60
+      },
+      {
+       "id": "w89d3",
+       "day": "周三",
+       "watch": "混合检索 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w89d4",
+       "day": "周四",
+       "watch": "增量更新 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w89d5",
+       "day": "周五",
+       "watch": "性能测试 1 集",
+       "practice": "压测",
+       "output": "报告",
+       "minutes": 45
+      },
+      {
+       "id": "w89d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "百万级检索",
+       "output": "报告",
+       "minutes": 90
+      },
+      {
+       "id": "w89d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "索引选型表",
+       "output": "卡片",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 90,
+     "title": "Agent 基础",
+     "goal": "理解工具调用、规划、记忆。",
+     "review": "做一个会查资料的 Agent。",
+     "items": [
+      {
+       "id": "w90d1",
+       "day": "周一",
+       "watch": "Agent 概念 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w90d2",
+       "day": "周二",
+       "watch": "工具调用 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w90d3",
+       "day": "周三",
+       "watch": "规划与反思 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w90d4",
+       "day": "周四",
+       "watch": "记忆 1 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w90d5",
+       "day": "周五",
+       "watch": "LangGraph 1–2 集",
+       "practice": "跑通",
+       "output": "代码",
+       "minutes": 45
+      },
+      {
+       "id": "w90d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "会查资料的 Agent",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w90d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "画 Agent 循环",
+       "output": "导图",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 91,
+     "title": "多智能体与评估",
+     "goal": "会设计多 Agent 协作并评估。",
+     "review": "多 Agent 系统跑通。",
+     "items": [
+      {
+       "id": "w91d1",
+       "day": "周一",
+       "watch": "多 Agent 模式 1–2 集",
+       "practice": "笔记",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w91d2",
+       "day": "周二",
+       "watch": "角色分工 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w91d3",
+       "day": "周三",
+       "watch": "协作与辩论 1–2 集",
+       "practice": "实现",
+       "output": "代码",
+       "minutes": 60
+      },
+      {
+       "id": "w91d4",
+       "day": "周四",
+       "watch": "评估 1 集",
+       "practice": "实现",
+       "output": "报告",
+       "minutes": 60
+      },
+      {
+       "id": "w91d5",
+       "day": "周五",
+       "watch": "成本控制 1 集",
+       "practice": "实现",
+       "output": "记录",
+       "minutes": 45
+      },
+      {
+       "id": "w91d6",
+       "day": "周六",
+       "watch": "项目",
+       "practice": "多 Agent 系统",
+       "output": "作品",
+       "minutes": 90
+      },
+      {
+       "id": "w91d7",
+       "day": "周日",
+       "watch": "周复习",
+       "practice": "复盘协作流程",
+       "output": "总结",
+       "minutes": 90
+      }
+     ]
+    },
+    {
+     "week": 92,
+     "title": "综合项目与求职",
+     "goal": "把 92 周沉淀成作品、简历和 offer。",
+     "review": "投递 30 家并复盘。",
+     "items": [
+      {
+       "id": "w92d1",
+       "day": "周一",
+       "watch": "系统设计复习 1 集",
+       "practice": "画架构图",
+       "output": "笔记",
+       "minutes": 60
+      },
+      {
+       "id": "w92d2",
+       "day": "周二",
+       "watch": "简历",
+       "practice": "写 1 页",
+       "output": "简历",
+       "minutes": 60
+      },
+      {
+       "id": "w92d3",
+       "day": "周三",
+       "watch": "作品集",
+       "practice": "3 个项目",
+       "output": "作品集",
+       "minutes": 60
+      },
+      {
+       "id": "w92d4",
+       "day": "周四",
+       "watch": "面试题",
+       "practice": "50 题",
+       "output": "题解",
+       "minutes": 60
+      },
+      {
+       "id": "w92d5",
+       "day": "周五",
+       "watch": "模拟面试",
+       "practice": "3 轮",
+       "output": "录音",
+       "minutes": 45
+      },
+      {
+       "id": "w92d6",
+       "day": "周六",
+       "watch": "投递",
+       "practice": "30 家",
+       "output": "记录",
+       "minutes": 90
+      },
+      {
+       "id": "w92d7",
+       "day": "周日",
+       "watch": "总复盘",
+       "practice": "写 92 周总结",
+       "output": "文档",
+       "minutes": 90
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

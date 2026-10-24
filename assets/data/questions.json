@@ -1,0 +1,9758 @@
+{
+ "recall": [
+  {
+   "id": "r-w1",
+   "week": 1,
+   "module": "01",
+   "front": "第 1 周回顾：闭卷写出 10 条本周命令；画一张「组成 + OS」导图。",
+   "back": "本周目标：知道电脑里有什么、程序怎么跑起来、会用命令行操作文件。",
+   "type": "review"
+  },
+  {
+   "id": "r-w1d1",
+   "week": 1,
+   "module": "01",
+   "front": "不看资料，你能完成吗：进制换算 20 题，拆解自己的电脑",
+   "back": "看：Crash Course 计算机科学 1–7 集 ｜ 产出：换算表 + 配置清单",
+   "type": "item"
+  },
+  {
+   "id": "r-w1d2",
+   "week": 1,
+   "module": "01",
+   "front": "不看资料，你能完成吗：任务管理器看进程、服务、启动项",
+   "back": "看：王道·操作系统 第 1 章 1–5 集（只看概念） ｜ 产出：OS 四大功能图",
+   "type": "item"
+  },
+  {
+   "id": "r-w1d3",
+   "week": 1,
+   "module": "01",
+   "front": "不看资料，你能完成吗：15 个基础命令：pwd/ls/cd/mkdir/cp/mv/rm",
+   "back": "看：Linux 命令入门 前 8 集，装 WSL2 ｜ 产出：命令速查表",
+   "type": "item"
+  },
+  {
+   "id": "r-w1d4",
+   "week": 1,
+   "module": "01",
+   "front": "不看资料，你能完成吗：建目录树、chmod、ln -s、tar 打包",
+   "back": "看：同上 9–14 集 ｜ 产出：Linux 目录结构图",
+   "type": "item"
+  },
+  {
+   "id": "r-w1d5",
+   "week": 1,
+   "module": "01",
+   "front": "不看资料，你能完成吗：ps/top/kill/后台运行",
+   "back": "看：王道·操作系统 进程 1–3 集 ｜ 产出：进程排查笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w1d6",
+   "week": 1,
+   "module": "01",
+   "front": "不看资料，你能完成吗：init/add/commit/log，推送到 GitHub",
+   "back": "看：Git 教程 黑马 前 6 集 ｜ 产出：第一个仓库",
+   "type": "item"
+  },
+  {
+   "id": "r-w1d7",
+   "week": 1,
+   "module": "01",
+   "front": "不看资料，你能完成吗：闭卷重写命令 + Anki",
+   "back": "看：周复习 ｜ 产出：导图一张",
+   "type": "item"
+  },
+  {
+   "id": "r-w2",
+   "week": 2,
+   "module": "01",
+   "front": "第 2 周回顾：默写 HTTP 请求与响应的结构。",
+   "back": "本周目标：会用分支和 PR，理解一次网页请求发生了什么。",
+   "type": "review"
+  },
+  {
+   "id": "r-w2d1",
+   "week": 2,
+   "module": "01",
+   "front": "不看资料，你能完成吗：分支、合并、制造并解决一次冲突",
+   "back": "看：黑马 Git 7–10 集 ｜ 产出：冲突解决记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w2d2",
+   "week": 2,
+   "module": "01",
+   "front": "不看资料，你能完成吗：远程仓库、PR 流程、.gitignore",
+   "back": "看：黑马 Git 11–14 集 ｜ 产出：一个 PR",
+   "type": "item"
+  },
+  {
+   "id": "r-w2d3",
+   "week": 2,
+   "module": "01",
+   "front": "不看资料，你能完成吗：建笔记库与模板",
+   "back": "看：Markdown 教程 1 集 + Obsidian 安装 ｜ 产出：Obsidian 库",
+   "type": "item"
+  },
+  {
+   "id": "r-w2d4",
+   "week": 2,
+   "module": "01",
+   "front": "不看资料，你能完成吗：Network 面板看一次请求",
+   "back": "看：HTTP 入门 前 3 集 ｜ 产出：请求结构笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w2d5",
+   "week": 2,
+   "module": "01",
+   "front": "不看资料，你能完成吗：改元素、看接口、看性能",
+   "back": "看：Chrome 开发者工具 前 4 集 ｜ 产出：工具截图笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w2d6",
+   "week": 2,
+   "module": "01",
+   "front": "不看资料，你能完成吗：把 W1 笔记整理进 Obsidian 并推送",
+   "back": "看：综合 ｜ 产出：笔记库上线",
+   "type": "item"
+  },
+  {
+   "id": "r-w2d7",
+   "week": 2,
+   "module": "01",
+   "front": "不看资料，你能完成吗：默写 HTTP 请求结构 + Anki",
+   "back": "看：周复习 ｜ 产出：导图一张",
+   "type": "item"
+  },
+  {
+   "id": "r-w3",
+   "week": 3,
+   "module": "01",
+   "front": "第 3 周回顾：闭卷写出通讯录的增删查改。",
+   "back": "本周目标：掌握变量、判断、循环、列表，能写几十行的小脚本。",
+   "type": "review"
+  },
+  {
+   "id": "r-w3d1",
+   "week": 3,
+   "module": "01",
+   "front": "不看资料，你能完成吗：装环境、跑通 hello.py",
+   "back": "看：黑马 Python 1–10 集 ｜ 产出：hello.py",
+   "type": "item"
+  },
+  {
+   "id": "r-w3d2",
+   "week": 3,
+   "module": "01",
+   "front": "不看资料，你能完成吗：变量、输入输出、f-string",
+   "back": "看：黑马 Python 11–20 集 ｜ 产出：10 个小程序",
+   "type": "item"
+  },
+  {
+   "id": "r-w3d3",
+   "week": 3,
+   "module": "01",
+   "front": "不看资料，你能完成吗：条件、循环、range",
+   "back": "看：黑马 Python 21–30 集 ｜ 产出：九九乘法表 + 猜数字",
+   "type": "item"
+  },
+  {
+   "id": "r-w3d4",
+   "week": 3,
+   "module": "01",
+   "front": "不看资料，你能完成吗：列表增删改查、切片、排序",
+   "back": "看：黑马 Python 31–40 集 ｜ 产出：成绩统计器",
+   "type": "item"
+  },
+  {
+   "id": "r-w3d5",
+   "week": 3,
+   "module": "01",
+   "front": "不看资料，你能完成吗：字典、集合、遍历",
+   "back": "看：黑马 Python 41–50 集 ｜ 产出：词频统计",
+   "type": "item"
+  },
+  {
+   "id": "r-w3d6",
+   "week": 3,
+   "module": "01",
+   "front": "不看资料，你能完成吗：命令行通讯录：增删查改",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w3d7",
+   "week": 3,
+   "module": "01",
+   "front": "不看资料，你能完成吗：闭卷重写通讯录 + Anki",
+   "back": "看：周复习 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w4",
+   "week": 4,
+   "module": "01",
+   "front": "第 4 周回顾：闭卷写出 JSON 记账本。",
+   "back": "本周目标：掌握函数、文件、异常、模块、类。",
+   "type": "review"
+  },
+  {
+   "id": "r-w4d1",
+   "week": 4,
+   "module": "01",
+   "front": "不看资料，你能完成吗：函数参数、返回值、作用域",
+   "back": "看：黑马 Python 51–60 集 ｜ 产出：10 个工具函数",
+   "type": "item"
+  },
+  {
+   "id": "r-w4d2",
+   "week": 4,
+   "module": "01",
+   "front": "不看资料，你能完成吗：文件读写、with、编码",
+   "back": "看：黑马 Python 61–70 集 ｜ 产出：读写 CSV",
+   "type": "item"
+  },
+  {
+   "id": "r-w4d3",
+   "week": 4,
+   "module": "01",
+   "front": "不看资料，你能完成吗：异常捕获、自定义异常",
+   "back": "看：黑马 Python 71–80 集 ｜ 产出：健壮的输入程序",
+   "type": "item"
+  },
+  {
+   "id": "r-w4d4",
+   "week": 4,
+   "module": "01",
+   "front": "不看资料，你能完成吗：模块、包、pip、venv",
+   "back": "看：黑马 Python 81–90 集 ｜ 产出：自己的模块",
+   "type": "item"
+  },
+  {
+   "id": "r-w4d5",
+   "week": 4,
+   "module": "01",
+   "front": "不看资料，你能完成吗：类、属性、方法、继承",
+   "back": "看：黑马 Python 91–100 集 ｜ 产出：用类重写通讯录",
+   "type": "item"
+  },
+  {
+   "id": "r-w4d6",
+   "week": 4,
+   "module": "01",
+   "front": "不看资料，你能完成吗：JSON 记账本（持久化）",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w4d7",
+   "week": 4,
+   "module": "01",
+   "front": "不看资料，你能完成吗：闭卷重写记账本 + 导图",
+   "back": "看：周复习 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w5",
+   "week": 5,
+   "module": "01",
+   "front": "第 5 周回顾：闭卷写一个 requests 封装。",
+   "back": "本周目标：会调 API、写命令行工具、会调试。",
+   "type": "review"
+  },
+  {
+   "id": "r-w5d1",
+   "week": 5,
+   "module": "01",
+   "front": "不看资料，你能完成吗：改写 5 个 for 循环",
+   "back": "看：Python 进阶 列表推导/lambda 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w5d2",
+   "week": 5,
+   "module": "01",
+   "front": "不看资料，你能完成吗：批量重命名文件",
+   "back": "看：datetime/os/pathlib 1–2 集 ｜ 产出：脚本",
+   "type": "item"
+  },
+  {
+   "id": "r-w5d3",
+   "week": 5,
+   "module": "01",
+   "front": "不看资料，你能完成吗：调 2 个公开 API",
+   "back": "看：requests 1–2 集 ｜ 产出：天气脚本",
+   "type": "item"
+  },
+  {
+   "id": "r-w5d4",
+   "week": 5,
+   "module": "01",
+   "front": "不看资料，你能完成吗：写一个带参数的命令行工具",
+   "back": "看：argparse 1 集 ｜ 产出：CLI 工具",
+   "type": "item"
+  },
+  {
+   "id": "r-w5d5",
+   "week": 5,
+   "module": "01",
+   "front": "不看资料，你能完成吗：用断点定位一个 bug",
+   "back": "看：调试与日志 1–2 集 ｜ 产出：调试笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w5d6",
+   "week": 5,
+   "module": "01",
+   "front": "不看资料，你能完成吗：命令行天气查询",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w5d7",
+   "week": 5,
+   "module": "01",
+   "front": "不看资料，你能完成吗：闭卷写 requests 封装 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w6",
+   "week": 6,
+   "module": "01",
+   "front": "第 6 周回顾：手写链表与快排，不看资料。",
+   "back": "本周目标：理解数组、链表、栈、队列、哈希、树、排序。",
+   "type": "review"
+  },
+  {
+   "id": "r-w6d1",
+   "week": 6,
+   "module": "01",
+   "front": "不看资料，你能完成吗：手写单链表",
+   "back": "看：王道·数据结构 线性表 1–5 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w6d2",
+   "week": 6,
+   "module": "01",
+   "front": "不看资料，你能完成吗：用列表实现栈和队列",
+   "back": "看：王道 栈与队列 1–4 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w6d3",
+   "week": 6,
+   "module": "01",
+   "front": "不看资料，你能完成吗：统计词频",
+   "back": "看：王道 哈希表 1–3 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w6d4",
+   "week": 6,
+   "module": "01",
+   "front": "不看资料，你能完成吗：二叉树三种遍历",
+   "back": "看：王道 树 1–5 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w6d5",
+   "week": 6,
+   "module": "01",
+   "front": "不看资料，你能完成吗：手写快排、归并",
+   "back": "看：王道 排序 1–4 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w6d6",
+   "week": 6,
+   "module": "01",
+   "front": "不看资料，你能完成吗：代码随想录 20 题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w6d7",
+   "week": 6,
+   "module": "01",
+   "front": "不看资料，你能完成吗：手写链表 + 快排 + 导图",
+   "back": "看：周复习 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w7",
+   "week": 7,
+   "module": "01",
+   "front": "第 7 周回顾：默写常用标签及用途。",
+   "back": "本周目标：能写结构清晰、语义化的页面。",
+   "type": "review"
+  },
+  {
+   "id": "r-w7d1",
+   "week": 7,
+   "module": "01",
+   "front": "不看资料，你能完成吗：3 个静态页面",
+   "back": "看：黑马 HTML 1–15 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w7d2",
+   "week": 7,
+   "module": "01",
+   "front": "不看资料，你能完成吗：表单、输入校验",
+   "back": "看：黑马 HTML 16–30 集 ｜ 产出：表单页",
+   "type": "item"
+  },
+  {
+   "id": "r-w7d3",
+   "week": 7,
+   "module": "01",
+   "front": "不看资料，你能完成吗：语义化标签重构旧页面",
+   "back": "看：黑马 HTML 31–45 集 ｜ 产出：重构稿",
+   "type": "item"
+  },
+  {
+   "id": "r-w7d4",
+   "week": 7,
+   "module": "01",
+   "front": "不看资料，你能完成吗：表格、图片、多媒体",
+   "back": "看：黑马 HTML 46–60 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w7d5",
+   "week": 7,
+   "module": "01",
+   "front": "不看资料，你能完成吗：无障碍与 SEO 基础",
+   "back": "看：黑马 HTML 61–70 集 ｜ 产出：检查清单",
+   "type": "item"
+  },
+  {
+   "id": "r-w7d6",
+   "week": 7,
+   "module": "01",
+   "front": "不看资料，你能完成吗：个人主页（3 页）",
+   "back": "看：项目 ｜ 产出：上线",
+   "type": "item"
+  },
+  {
+   "id": "r-w7d7",
+   "week": 7,
+   "module": "01",
+   "front": "不看资料，你能完成吗：默写标签 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w8",
+   "week": 8,
+   "module": "01",
+   "front": "第 8 周回顾：默写 Flex 常用属性。",
+   "back": "本周目标：掌握盒模型、Flex、定位、响应式。",
+   "type": "review"
+  },
+  {
+   "id": "r-w8d1",
+   "week": 8,
+   "module": "01",
+   "front": "不看资料，你能完成吗：选择器、盒模型",
+   "back": "看：黑马 CSS 1–15 集 ｜ 产出：样式页",
+   "type": "item"
+  },
+  {
+   "id": "r-w8d2",
+   "week": 8,
+   "module": "01",
+   "front": "不看资料，你能完成吗：Flex 布局",
+   "back": "看：黑马 CSS 16–30 集 ｜ 产出：三栏布局",
+   "type": "item"
+  },
+  {
+   "id": "r-w8d3",
+   "week": 8,
+   "module": "01",
+   "front": "不看资料，你能完成吗：定位、层叠、优先级",
+   "back": "看：黑马 CSS 31–45 集 ｜ 产出：弹窗与导航",
+   "type": "item"
+  },
+  {
+   "id": "r-w8d4",
+   "week": 8,
+   "module": "01",
+   "front": "不看资料，你能完成吗：响应式、媒体查询",
+   "back": "看：黑马 CSS 46–60 集 ｜ 产出：三端适配",
+   "type": "item"
+  },
+  {
+   "id": "r-w8d5",
+   "week": 8,
+   "module": "01",
+   "front": "不看资料，你能完成吗：CSS 变量、过渡动画",
+   "back": "看：黑马 CSS 61–70 集 ｜ 产出：动效",
+   "type": "item"
+  },
+  {
+   "id": "r-w8d6",
+   "week": 8,
+   "module": "01",
+   "front": "不看资料，你能完成吗：还原一张设计稿",
+   "back": "看：项目 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w8d7",
+   "week": 8,
+   "module": "01",
+   "front": "不看资料，你能完成吗：默写 Flex + 导图",
+   "back": "看：周复习 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w9",
+   "week": 9,
+   "module": "01",
+   "front": "第 9 周回顾：闭卷写 5 个工具函数。",
+   "back": "本周目标：掌握变量、函数、数组、对象、闭包。",
+   "type": "review"
+  },
+  {
+   "id": "r-w9d1",
+   "week": 9,
+   "module": "01",
+   "front": "不看资料，你能完成吗：变量、类型、运算符",
+   "back": "看：黑马 JS 1–15 集 ｜ 产出：练习 10 题",
+   "type": "item"
+  },
+  {
+   "id": "r-w9d2",
+   "week": 9,
+   "module": "01",
+   "front": "不看资料，你能完成吗：函数、作用域、闭包",
+   "back": "看：黑马 JS 16–30 集 ｜ 产出：练习 10 题",
+   "type": "item"
+  },
+  {
+   "id": "r-w9d3",
+   "week": 9,
+   "module": "01",
+   "front": "不看资料，你能完成吗：数组、对象常用方法",
+   "back": "看：黑马 JS 31–45 集 ｜ 产出：练习 10 题",
+   "type": "item"
+  },
+  {
+   "id": "r-w9d4",
+   "week": 9,
+   "module": "01",
+   "front": "不看资料，你能完成吗：条件、循环、异常",
+   "back": "看：黑马 JS 46–60 集 ｜ 产出：练习 10 题",
+   "type": "item"
+  },
+  {
+   "id": "r-w9d5",
+   "week": 9,
+   "module": "01",
+   "front": "不看资料，你能完成吗：ES6 解构、展开、模板字符串",
+   "back": "看：黑马 JS 61–70 集 ｜ 产出：改写旧代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w9d6",
+   "week": 9,
+   "module": "01",
+   "front": "不看资料，你能完成吗：30 道基础题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w9d7",
+   "week": 9,
+   "module": "01",
+   "front": "不看资料，你能完成吗：闭卷写工具函数 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w10",
+   "week": 10,
+   "module": "01",
+   "front": "第 10 周回顾：闭卷写待办清单。",
+   "back": "本周目标：会用 JS 操作页面、处理交互、存本地数据。",
+   "type": "review"
+  },
+  {
+   "id": "r-w10d1",
+   "week": 10,
+   "module": "01",
+   "front": "不看资料，你能完成吗：查询、修改元素",
+   "back": "看：黑马 JS DOM 1–10 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w10d2",
+   "week": 10,
+   "module": "01",
+   "front": "不看资料，你能完成吗：事件、冒泡、委托",
+   "back": "看：黑马 JS DOM 11–20 集 ｜ 产出：交互页",
+   "type": "item"
+  },
+  {
+   "id": "r-w10d3",
+   "week": 10,
+   "module": "01",
+   "front": "不看资料，你能完成吗：表单校验",
+   "back": "看：黑马 JS DOM 21–30 集 ｜ 产出：表单",
+   "type": "item"
+  },
+  {
+   "id": "r-w10d4",
+   "week": 10,
+   "module": "01",
+   "front": "不看资料，你能完成吗：localStorage",
+   "back": "看：黑马 JS DOM 31–40 集 ｜ 产出：本地存储",
+   "type": "item"
+  },
+  {
+   "id": "r-w10d5",
+   "week": 10,
+   "module": "01",
+   "front": "不看资料，你能完成吗：模块化 import/export",
+   "back": "看：黑马 JS DOM 41–50 集 ｜ 产出：拆分代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w10d6",
+   "week": 10,
+   "module": "01",
+   "front": "不看资料，你能完成吗：待办清单（原生 JS）",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w10d7",
+   "week": 10,
+   "module": "01",
+   "front": "不看资料，你能完成吗：闭卷重写待办 + 导图",
+   "back": "看：周复习 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w11",
+   "week": 11,
+   "module": "01",
+   "front": "第 11 周回顾：闭卷写 fetch 封装。",
+   "back": "本周目标：理解回调、Promise、async/await，会调接口。",
+   "type": "review"
+  },
+  {
+   "id": "r-w11d1",
+   "week": 11,
+   "module": "01",
+   "front": "不看资料，你能完成吗：3 个 Promise 练习",
+   "back": "看：异步 回调与 Promise 1–3 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w11d2",
+   "week": 11,
+   "module": "01",
+   "front": "不看资料，你能完成吗：把回调改写成 async",
+   "back": "看：async/await 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w11d3",
+   "week": 11,
+   "module": "01",
+   "front": "不看资料，你能完成吗：调公开 API 渲染列表",
+   "back": "看：fetch 1–2 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w11d4",
+   "week": 11,
+   "module": "01",
+   "front": "不看资料，你能完成吗：超时、重试、兜底",
+   "back": "看：错误处理 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w11d5",
+   "week": 11,
+   "module": "01",
+   "front": "不看资料，你能完成吗：用 Postman/curl 调接口",
+   "back": "看：JSON 与接口调试 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w11d6",
+   "week": 11,
+   "module": "01",
+   "front": "不看资料，你能完成吗：天气页（接 API）",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w11d7",
+   "week": 11,
+   "module": "01",
+   "front": "不看资料，你能完成吗：闭卷写 fetch 封装 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w12",
+   "week": 12,
+   "module": "01",
+   "front": "第 12 周回顾：白板讲 10 个概念，讲不出记红。",
+   "back": "本周目标：把前 11 周的知识拼成一个完整应用。",
+   "type": "review"
+  },
+  {
+   "id": "r-w12d1",
+   "week": 12,
+   "module": "01",
+   "front": "不看资料，你能完成吗：画线框图、列功能",
+   "back": "看：需求与原型 1 集 ｜ 产出：原型",
+   "type": "item"
+  },
+  {
+   "id": "r-w12d2",
+   "week": 12,
+   "module": "01",
+   "front": "不看资料，你能完成吗：搭 3 个页面",
+   "back": "看：页面结构 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w12d3",
+   "week": 12,
+   "module": "01",
+   "front": "不看资料，你能完成吗：增删改查 + 过滤",
+   "back": "看：交互逻辑 ｜ 产出：功能",
+   "type": "item"
+  },
+  {
+   "id": "r-w12d4",
+   "week": 12,
+   "module": "01",
+   "front": "不看资料，你能完成吗：localStorage 或 JSON",
+   "back": "看：数据持久化 ｜ 产出：功能",
+   "type": "item"
+  },
+  {
+   "id": "r-w12d5",
+   "week": 12,
+   "module": "01",
+   "front": "不看资料，你能完成吗：手机/平板/桌面",
+   "back": "看：响应式适配 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w12d6",
+   "week": 12,
+   "module": "01",
+   "front": "不看资料，你能完成吗：GitHub Pages 或 Vercel",
+   "back": "看：部署 ｜ 产出：线上地址",
+   "type": "item"
+  },
+  {
+   "id": "r-w12d7",
+   "week": 12,
+   "module": "01",
+   "front": "不看资料，你能完成吗：闭卷重写核心功能 + 导图",
+   "back": "看：阶段复习 ｜ 产出：阶段总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w13",
+   "week": 13,
+   "module": "02",
+   "front": "第 13 周回顾：默写 10 个内置工具类型。",
+   "back": "本周目标：掌握类型、接口、函数、泛型。",
+   "type": "review"
+  },
+  {
+   "id": "r-w13d1",
+   "week": 13,
+   "module": "02",
+   "front": "不看资料，你能完成吗：类型注解、编译配置",
+   "back": "看：尚硅谷 TS 1–10 集 ｜ 产出：练习",
+   "type": "item"
+  },
+  {
+   "id": "r-w13d2",
+   "week": 13,
+   "module": "02",
+   "front": "不看资料，你能完成吗：接口、对象、可选属性",
+   "back": "看：尚硅谷 TS 11–20 集 ｜ 产出：练习",
+   "type": "item"
+  },
+  {
+   "id": "r-w13d3",
+   "week": 13,
+   "module": "02",
+   "front": "不看资料，你能完成吗：函数重载、泛型",
+   "back": "看：尚硅谷 TS 21–30 集 ｜ 产出：练习",
+   "type": "item"
+  },
+  {
+   "id": "r-w13d4",
+   "week": 13,
+   "module": "02",
+   "front": "不看资料，你能完成吗：联合类型、类型收窄",
+   "back": "看：尚硅谷 TS 31–40 集 ｜ 产出：练习",
+   "type": "item"
+  },
+  {
+   "id": "r-w13d5",
+   "week": 13,
+   "module": "02",
+   "front": "不看资料，你能完成吗：模块、声明文件",
+   "back": "看：尚硅谷 TS 41–50 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w13d6",
+   "week": 13,
+   "module": "02",
+   "front": "不看资料，你能完成吗：把 W12 的 JS 项目改成 TS",
+   "back": "看：项目 ｜ 产出：改造完成",
+   "type": "item"
+  },
+  {
+   "id": "r-w13d7",
+   "week": 13,
+   "module": "02",
+   "front": "不看资料，你能完成吗：默写类型工具 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w14",
+   "week": 14,
+   "module": "02",
+   "front": "第 14 周回顾：闭卷写一个泛型工具函数。",
+   "back": "本周目标：掌握泛型约束、映射类型、条件类型。",
+   "type": "review"
+  },
+  {
+   "id": "r-w14d1",
+   "week": 14,
+   "module": "02",
+   "front": "不看资料，你能完成吗：写 5 个泛型函数",
+   "back": "看：TS 泛型约束 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w14d2",
+   "week": 14,
+   "module": "02",
+   "front": "不看资料，你能完成吗：实现 Partial/Pick 等",
+   "back": "看：映射类型/条件类型 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w14d3",
+   "week": 14,
+   "module": "02",
+   "front": "不看资料，你能完成吗：了解用途",
+   "back": "看：装饰器与元数据 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w14d4",
+   "week": 14,
+   "module": "02",
+   "front": "不看资料，你能完成吗：给第三方库写声明",
+   "back": "看：类型声明 .d.ts 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w14d5",
+   "week": 14,
+   "module": "02",
+   "front": "不看资料，你能完成吗：开启 strict 并修复",
+   "back": "看：严格模式与迁移 1 集 ｜ 产出：迁移记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w14d6",
+   "week": 14,
+   "module": "02",
+   "front": "不看资料，你能完成吗：类型体操 10 题",
+   "back": "看：综合 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w14d7",
+   "week": 14,
+   "module": "02",
+   "front": "不看资料，你能完成吗：闭卷写泛型 + 导图",
+   "back": "看：周复习 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w15",
+   "week": 15,
+   "module": "02",
+   "front": "第 15 周回顾：默写 Vite 配置的关键项。",
+   "back": "本周目标：会用 Vite、npm、Lint、构建、单测。",
+   "type": "review"
+  },
+  {
+   "id": "r-w15d1",
+   "week": 15,
+   "module": "02",
+   "front": "不看资料，你能完成吗：新建项目、目录结构",
+   "back": "看：Vite 1–10 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w15d2",
+   "week": 15,
+   "module": "02",
+   "front": "不看资料，你能完成吗：发布一个自己的包",
+   "back": "看：npm 与包管理 1–2 集 ｜ 产出：包",
+   "type": "item"
+  },
+  {
+   "id": "r-w15d3",
+   "week": 15,
+   "module": "02",
+   "front": "不看资料，你能完成吗：配置并修复全项目",
+   "back": "看：ESLint/Prettier 1–2 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w15d4",
+   "week": 15,
+   "module": "02",
+   "front": "不看资料，你能完成吗：打包生产产物",
+   "back": "看：环境变量与构建 1–2 集 ｜ 产出：dist",
+   "type": "item"
+  },
+  {
+   "id": "r-w15d5",
+   "week": 15,
+   "module": "02",
+   "front": "不看资料，你能完成吗：写 10 个测试",
+   "back": "看：Vitest 单元测试 1–2 集 ｜ 产出：测试",
+   "type": "item"
+  },
+  {
+   "id": "r-w15d6",
+   "week": 15,
+   "module": "02",
+   "front": "不看资料，你能完成吗：自己的项目模板",
+   "back": "看：项目 ｜ 产出：模板仓库",
+   "type": "item"
+  },
+  {
+   "id": "r-w15d7",
+   "week": 15,
+   "module": "02",
+   "front": "不看资料，你能完成吗：默写配置 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w16",
+   "week": 16,
+   "module": "02",
+   "front": "第 16 周回顾：默写一个组件的完整结构。",
+   "back": "本周目标：理解组件、Props、状态、生命周期。",
+   "type": "review"
+  },
+  {
+   "id": "r-w16d1",
+   "week": 16,
+   "module": "02",
+   "front": "不看资料，你能完成吗：组件、模板语法",
+   "back": "看：黑马 Vue 1–10 集（或尚硅谷 React） ｜ 产出：组件",
+   "type": "item"
+  },
+  {
+   "id": "r-w16d2",
+   "week": 16,
+   "module": "02",
+   "front": "不看资料，你能完成吗：响应式、Props、事件",
+   "back": "看：黑马 Vue 11–20 集 ｜ 产出：组件",
+   "type": "item"
+  },
+  {
+   "id": "r-w16d3",
+   "week": 16,
+   "module": "02",
+   "front": "不看资料，你能完成吗：表单、条件渲染、列表",
+   "back": "看：黑马 Vue 21–30 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w16d4",
+   "week": 16,
+   "module": "02",
+   "front": "不看资料，你能完成吗：生命周期、侦听器",
+   "back": "看：黑马 Vue 31–40 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w16d5",
+   "week": 16,
+   "module": "02",
+   "front": "不看资料，你能完成吗：组合式 API / Hooks",
+   "back": "看：黑马 Vue 41–50 集 ｜ 产出：重构",
+   "type": "item"
+  },
+  {
+   "id": "r-w16d6",
+   "week": 16,
+   "module": "02",
+   "front": "不看资料，你能完成吗：5 个可复用组件",
+   "back": "看：项目 ｜ 产出：组件库雏形",
+   "type": "item"
+  },
+  {
+   "id": "r-w16d7",
+   "week": 16,
+   "module": "02",
+   "front": "不看资料，你能完成吗：默写组件结构 + 导图",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w17",
+   "week": 17,
+   "module": "02",
+   "front": "第 17 周回顾：画一张数据流向图。",
+   "back": "本周目标：掌握父子/跨层通信、状态管理。",
+   "type": "review"
+  },
+  {
+   "id": "r-w17d1",
+   "week": 17,
+   "module": "02",
+   "front": "不看资料，你能完成吗：父子、兄弟通信",
+   "back": "看：组件通信 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w17d2",
+   "week": 17,
+   "module": "02",
+   "front": "不看资料，你能完成吗：封装一个弹窗",
+   "back": "看：插槽与作用域插槽 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w17d3",
+   "week": 17,
+   "module": "02",
+   "front": "不看资料，你能完成吗：接入全局状态",
+   "back": "看：Pinia / Redux 1–3 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w17d4",
+   "week": 17,
+   "module": "02",
+   "front": "不看资料，你能完成吗：派生状态",
+   "back": "看：计算属性与侦听 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w17d5",
+   "week": 17,
+   "module": "02",
+   "front": "不看资料，你能完成吗：封装校验规则",
+   "back": "看：表单校验 1–2 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w17d6",
+   "week": 17,
+   "module": "02",
+   "front": "不看资料，你能完成吗：待办升级版（带状态管理）",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w17d7",
+   "week": 17,
+   "module": "02",
+   "front": "不看资料，你能完成吗：画数据流图 + Anki",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w18",
+   "week": 18,
+   "module": "02",
+   "front": "第 18 周回顾：默写路由配置与守卫。",
+   "back": "本周目标：掌握路由、守卫、请求封装。",
+   "type": "review"
+  },
+  {
+   "id": "r-w18d1",
+   "week": 18,
+   "module": "02",
+   "front": "不看资料，你能完成吗：多页面、动态路由",
+   "back": "看：路由基础 1–2 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w18d2",
+   "week": 18,
+   "module": "02",
+   "front": "不看资料，你能完成吗：登录拦截",
+   "back": "看：路由守卫 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w18d3",
+   "week": 18,
+   "module": "02",
+   "front": "不看资料，你能完成吗：拦截器、统一错误",
+   "back": "看：axios 封装 1–2 集 ｜ 产出：工具",
+   "type": "item"
+  },
+  {
+   "id": "r-w18d4",
+   "week": 18,
+   "module": "02",
+   "front": "不看资料，你能完成吗：骨架屏、重试",
+   "back": "看：加载态与错误态 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w18d5",
+   "week": 18,
+   "module": "02",
+   "front": "不看资料，你能完成吗：本地 mock 数据",
+   "back": "看：Mock 与联调 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w18d6",
+   "week": 18,
+   "module": "02",
+   "front": "不看资料，你能完成吗：列表 + 详情 + 搜索",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w18d7",
+   "week": 18,
+   "module": "02",
+   "front": "不看资料，你能完成吗：默写路由 + 卡片",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w19",
+   "week": 19,
+   "module": "02",
+   "front": "第 19 周回顾：画状态流转图。",
+   "back": "本周目标：会设计全局状态、持久化、异步 action。",
+   "type": "review"
+  },
+  {
+   "id": "r-w19d1",
+   "week": 19,
+   "module": "02",
+   "front": "不看资料，你能完成吗：拆分 store 模块",
+   "back": "看：状态设计 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w19d2",
+   "week": 19,
+   "module": "02",
+   "front": "不看资料，你能完成吗：localStorage 同步",
+   "back": "看：持久化 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w19d3",
+   "week": 19,
+   "module": "02",
+   "front": "不看资料，你能完成吗：请求 + loading",
+   "back": "看：异步 action 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w19d4",
+   "week": 19,
+   "module": "02",
+   "front": "不看资料，你能完成吗：优化列表更新",
+   "back": "看：性能：避免重渲染 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w19d5",
+   "week": 19,
+   "module": "02",
+   "front": "不看资料，你能完成吗：DevTools 看状态",
+   "back": "看：调试工具 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w19d6",
+   "week": 19,
+   "module": "02",
+   "front": "不看资料，你能完成吗：购物车",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w19d7",
+   "week": 19,
+   "module": "02",
+   "front": "不看资料，你能完成吗：状态流转图 + Anki",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w20",
+   "week": 20,
+   "module": "02",
+   "front": "第 20 周回顾：整理自己的组件清单。",
+   "back": "本周目标：会接组件库、定制主题、做响应式。",
+   "type": "review"
+  },
+  {
+   "id": "r-w20d1",
+   "week": 20,
+   "module": "02",
+   "front": "不看资料，你能完成吗：接入并跑通",
+   "back": "看：Element Plus / Ant Design 1–3 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w20d2",
+   "week": 20,
+   "module": "02",
+   "front": "不看资料，你能完成吗：换主色、暗色模式",
+   "back": "看：主题定制 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w20d3",
+   "week": 20,
+   "module": "02",
+   "front": "不看资料，你能完成吗：重构样式",
+   "back": "看：Tailwind / CSS Modules 1–2 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w20d4",
+   "week": 20,
+   "module": "02",
+   "front": "不看资料，你能完成吗：移动端适配",
+   "back": "看：响应式布局 1–2 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w20d5",
+   "week": 20,
+   "module": "02",
+   "front": "不看资料，你能完成吗：接入图标库",
+   "back": "看：图标与字体 1 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w20d6",
+   "week": 20,
+   "module": "02",
+   "front": "不看资料，你能完成吗：后台管理界面",
+   "back": "看：项目 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w20d7",
+   "week": 20,
+   "module": "02",
+   "front": "不看资料，你能完成吗：组件清单 + 卡片",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w21",
+   "week": 21,
+   "module": "02",
+   "front": "第 21 周回顾：默写测试用例结构。",
+   "back": "本周目标：会写单元测试和 E2E 测试。",
+   "type": "review"
+  },
+  {
+   "id": "r-w21d1",
+   "week": 21,
+   "module": "02",
+   "front": "不看资料，你能完成吗：写 5 个用例",
+   "back": "看：单测概念 1 集 ｜ 产出：测试",
+   "type": "item"
+  },
+  {
+   "id": "r-w21d2",
+   "week": 21,
+   "module": "02",
+   "front": "不看资料，你能完成吗：测 3 个组件",
+   "back": "看：Vitest 组件测试 1–2 集 ｜ 产出：测试",
+   "type": "item"
+  },
+  {
+   "id": "r-w21d3",
+   "week": 21,
+   "module": "02",
+   "front": "不看资料，你能完成吗：登录流程脚本",
+   "back": "看：Playwright E2E 1–2 集 ｜ 产出：脚本",
+   "type": "item"
+  },
+  {
+   "id": "r-w21d4",
+   "week": 21,
+   "module": "02",
+   "front": "不看资料，你能完成吗：生成报告",
+   "back": "看：覆盖率 1 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w21d5",
+   "week": 21,
+   "module": "02",
+   "front": "不看资料，你能完成吗：GitHub Actions",
+   "back": "看：CI 跑测试 1 集 ｜ 产出：流水线",
+   "type": "item"
+  },
+  {
+   "id": "r-w21d6",
+   "week": 21,
+   "module": "02",
+   "front": "不看资料，你能完成吗：给项目补测试到 60%",
+   "back": "看：项目 ｜ 产出：覆盖率",
+   "type": "item"
+  },
+  {
+   "id": "r-w21d7",
+   "week": 21,
+   "module": "02",
+   "front": "不看资料，你能完成吗：默写测试结构 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w22",
+   "week": 22,
+   "module": "02",
+   "front": "第 22 周回顾：画出性能优化清单。",
+   "back": "本周目标：会测量、会定位、会优化。",
+   "type": "review"
+  },
+  {
+   "id": "r-w22d1",
+   "week": 22,
+   "module": "02",
+   "front": "不看资料，你能完成吗：Lighthouse 跑分",
+   "back": "看：性能指标 1–2 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w22d2",
+   "week": 22,
+   "module": "02",
+   "front": "不看资料，你能完成吗：懒加载、分包",
+   "back": "看：加载优化 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w22d3",
+   "week": 22,
+   "module": "02",
+   "front": "不看资料，你能完成吗：虚拟列表",
+   "back": "看：渲染优化 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w22d4",
+   "week": 22,
+   "module": "02",
+   "front": "不看资料，你能完成吗：HTTP 缓存",
+   "back": "看：缓存策略 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w22d5",
+   "week": 22,
+   "module": "02",
+   "front": "不看资料，你能完成吗：体积优化",
+   "back": "看：打包分析 1 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w22d6",
+   "week": 22,
+   "module": "02",
+   "front": "不看资料，你能完成吗：优化前后对比",
+   "back": "看：项目 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w22d7",
+   "week": 22,
+   "module": "02",
+   "front": "不看资料，你能完成吗：优化清单 + 导图",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w23",
+   "week": 23,
+   "module": "02",
+   "front": "第 23 周回顾：复盘项目架构。",
+   "back": "本周目标：从 0 搭一个带权限的后台。",
+   "type": "review"
+  },
+  {
+   "id": "r-w23d1",
+   "week": 23,
+   "module": "02",
+   "front": "不看资料，你能完成吗：骨架 + 菜单",
+   "back": "看：需求与路由 1 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w23d2",
+   "week": 23,
+   "module": "02",
+   "front": "不看资料，你能完成吗：登录、token、路由守卫",
+   "back": "看：登录与权限 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w23d3",
+   "week": 23,
+   "module": "02",
+   "front": "不看资料，你能完成吗：通用表格组件",
+   "back": "看：列表/搜索/分页 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w23d4",
+   "week": 23,
+   "module": "02",
+   "front": "不看资料，你能完成吗：通用表单组件",
+   "back": "看：表单/弹窗/校验 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w23d5",
+   "week": 23,
+   "module": "02",
+   "front": "不看资料，你能完成吗：接 ECharts、导出 CSV",
+   "back": "看：图表与导出 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w23d6",
+   "week": 23,
+   "module": "02",
+   "front": "不看资料，你能完成吗：跑通全流程",
+   "back": "看：联调与修复 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w23d7",
+   "week": 23,
+   "module": "02",
+   "front": "不看资料，你能完成吗：架构复盘 + 笔记",
+   "back": "看：周复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w24",
+   "week": 24,
+   "module": "02",
+   "front": "第 24 周回顾：白板讲清项目架构。",
+   "back": "本周目标：把项目部署上线并沉淀成作品。",
+   "type": "review"
+  },
+  {
+   "id": "r-w24d1",
+   "week": 24,
+   "module": "02",
+   "front": "不看资料，你能完成吗：打包生产版本",
+   "back": "看：构建与环境变量 ｜ 产出：dist",
+   "type": "item"
+  },
+  {
+   "id": "r-w24d2",
+   "week": 24,
+   "module": "02",
+   "front": "不看资料，你能完成吗：上线",
+   "back": "看：部署 Vercel / Nginx ｜ 产出：线上地址",
+   "type": "item"
+  },
+  {
+   "id": "r-w24d3",
+   "week": 24,
+   "module": "02",
+   "front": "不看资料，你能完成吗：配置证书",
+   "back": "看：域名与 HTTPS ｜ 产出：线上",
+   "type": "item"
+  },
+  {
+   "id": "r-w24d4",
+   "week": 24,
+   "module": "02",
+   "front": "不看资料，你能完成吗：接入 Sentry",
+   "back": "看：错误上报与监控 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w24d5",
+   "week": 24,
+   "module": "02",
+   "front": "不看资料，你能完成吗：写清启动方式",
+   "back": "看：文档与 README ｜ 产出：仓库",
+   "type": "item"
+  },
+  {
+   "id": "r-w24d6",
+   "week": 24,
+   "module": "02",
+   "front": "不看资料，你能完成吗：录 3 分钟演示视频",
+   "back": "看：复盘 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w24d7",
+   "week": 24,
+   "module": "02",
+   "front": "不看资料，你能完成吗：白板讲架构 + 导图",
+   "back": "看：阶段复习 ｜ 产出：阶段总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w25",
+   "week": 25,
+   "module": "03",
+   "front": "第 25 周回顾：手写一个静态文件服务器。",
+   "back": "本周目标：理解事件循环、模块、文件、HTTP。",
+   "type": "review"
+  },
+  {
+   "id": "r-w25d1",
+   "week": 25,
+   "module": "03",
+   "front": "不看资料，你能完成吗：跑通脚本、理解 CommonJS",
+   "back": "看：黑马 Node 1–10 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w25d2",
+   "week": 25,
+   "module": "03",
+   "front": "不看资料，你能完成吗：fs、path、模块化",
+   "back": "看：黑马 Node 11–20 集 ｜ 产出：文件工具",
+   "type": "item"
+  },
+  {
+   "id": "r-w25d3",
+   "week": 25,
+   "module": "03",
+   "front": "不看资料，你能完成吗：事件循环、Buffer、流",
+   "back": "看：黑马 Node 21–30 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w25d4",
+   "week": 25,
+   "module": "03",
+   "front": "不看资料，你能完成吗：http 模块写服务",
+   "back": "看：黑马 Node 31–40 集 ｜ 产出：服务",
+   "type": "item"
+  },
+  {
+   "id": "r-w25d5",
+   "week": 25,
+   "module": "03",
+   "front": "不看资料，你能完成吗：npm 包管理、发布",
+   "back": "看：黑马 Node 41–50 集 ｜ 产出：包",
+   "type": "item"
+  },
+  {
+   "id": "r-w25d6",
+   "week": 25,
+   "module": "03",
+   "front": "不看资料，你能完成吗：静态文件服务器",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w25d7",
+   "week": 25,
+   "module": "03",
+   "front": "不看资料，你能完成吗：闭卷写 HTTP 服务",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w26",
+   "week": 26,
+   "module": "03",
+   "front": "第 26 周回顾：默写一个完整路由文件。",
+   "back": "本周目标：会写路由、中间件、分层架构。",
+   "type": "review"
+  },
+  {
+   "id": "r-w26d1",
+   "week": 26,
+   "module": "03",
+   "front": "不看资料，你能完成吗：5 个接口",
+   "back": "看：Express 路由 1–3 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w26d2",
+   "week": 26,
+   "module": "03",
+   "front": "不看资料，你能完成吗：日志、错误处理",
+   "back": "看：中间件 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w26d3",
+   "week": 26,
+   "module": "03",
+   "front": "不看资料，你能完成吗：zod/joi 校验",
+   "back": "看：参数校验 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w26d4",
+   "week": 26,
+   "module": "03",
+   "front": "不看资料，你能完成吗：重构目录",
+   "back": "看：分层 controller/service/repo ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w26d5",
+   "week": 26,
+   "module": "03",
+   "front": "不看资料，你能完成吗：nodemon、断点",
+   "back": "看：热更新与调试 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w26d6",
+   "week": 26,
+   "module": "03",
+   "front": "不看资料，你能完成吗：10 个接口的用户服务",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w26d7",
+   "week": 26,
+   "module": "03",
+   "front": "不看资料，你能完成吗：默写路由 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w27",
+   "week": 27,
+   "module": "03",
+   "front": "第 27 周回顾：默写 REST 设计检查清单。",
+   "back": "本周目标：会设计规范、可维护的接口。",
+   "type": "review"
+  },
+  {
+   "id": "r-w27d1",
+   "week": 27,
+   "module": "03",
+   "front": "不看资料，你能完成吗：写接口设计文档",
+   "back": "看：REST 原则 1–2 集 ｜ 产出：文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w27d2",
+   "week": 27,
+   "module": "03",
+   "front": "不看资料，你能完成吗：统一响应格式",
+   "back": "看：状态码与错误码 1 集 ｜ 产出：规范",
+   "type": "item"
+  },
+  {
+   "id": "r-w27d3",
+   "week": 27,
+   "module": "03",
+   "front": "不看资料，你能完成吗：实现通用查询",
+   "back": "看：分页/过滤/排序 1–2 集 ｜ 产出：接口",
+   "type": "item"
+  },
+  {
+   "id": "r-w27d4",
+   "week": 27,
+   "module": "03",
+   "front": "不看资料，你能完成吗：实现幂等接口",
+   "back": "看：版本与幂等 1 集 ｜ 产出：接口",
+   "type": "item"
+  },
+  {
+   "id": "r-w27d5",
+   "week": 27,
+   "module": "03",
+   "front": "不看资料，你能完成吗：生成文档页",
+   "back": "看：OpenAPI/Swagger 1–2 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w27d6",
+   "week": 27,
+   "module": "03",
+   "front": "不看资料，你能完成吗：完整 API + 文档",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w27d7",
+   "week": 27,
+   "module": "03",
+   "front": "不看资料，你能完成吗：默写设计规范",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w28",
+   "week": 28,
+   "module": "03",
+   "front": "第 28 周回顾：手写 10 条常用 SQL。",
+   "back": "本周目标：会建库建表、写查询、联表。",
+   "type": "review"
+  },
+  {
+   "id": "r-w28d1",
+   "week": 28,
+   "module": "03",
+   "front": "不看资料，你能完成吗：装库、建表、数据类型",
+   "back": "看：黑马 MySQL 1–15 集 ｜ 产出：库",
+   "type": "item"
+  },
+  {
+   "id": "r-w28d2",
+   "week": 28,
+   "module": "03",
+   "front": "不看资料，你能完成吗：增删改查",
+   "back": "看：黑马 MySQL 16–30 集 ｜ 产出：SQL",
+   "type": "item"
+  },
+  {
+   "id": "r-w28d3",
+   "week": 28,
+   "module": "03",
+   "front": "不看资料，你能完成吗：联表、子查询",
+   "back": "看：黑马 MySQL 31–45 集 ｜ 产出：SQL",
+   "type": "item"
+  },
+  {
+   "id": "r-w28d4",
+   "week": 28,
+   "module": "03",
+   "front": "不看资料，你能完成吗：聚合、分组、窗口函数",
+   "back": "看：黑马 MySQL 46–60 集 ｜ 产出：SQL",
+   "type": "item"
+  },
+  {
+   "id": "r-w28d5",
+   "week": 28,
+   "module": "03",
+   "front": "不看资料，你能完成吗：视图、存储过程",
+   "back": "看：黑马 MySQL 61–70 集 ｜ 产出：了解",
+   "type": "item"
+  },
+  {
+   "id": "r-w28d6",
+   "week": 28,
+   "module": "03",
+   "front": "不看资料，你能完成吗：设计 5 张表 + ER 图",
+   "back": "看：项目 ｜ 产出：ER 图",
+   "type": "item"
+  },
+  {
+   "id": "r-w28d7",
+   "week": 28,
+   "module": "03",
+   "front": "不看资料，你能完成吗：手写 SQL + 卡片",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w29",
+   "week": 29,
+   "module": "03",
+   "front": "第 29 周回顾：解释一条慢 SQL 为什么慢。",
+   "back": "本周目标：理解索引、执行计划、事务。",
+   "type": "review"
+  },
+  {
+   "id": "r-w29d1",
+   "week": 29,
+   "module": "03",
+   "front": "不看资料，你能完成吗：建索引并对比",
+   "back": "看：索引原理 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w29d2",
+   "week": 29,
+   "module": "03",
+   "front": "不看资料，你能完成吗：EXPLAIN 分析",
+   "back": "看：执行计划 1–2 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w29d3",
+   "week": 29,
+   "module": "03",
+   "front": "不看资料，你能完成吗：优化 3 条 SQL",
+   "back": "看：慢查询优化 1–2 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w29d4",
+   "week": 29,
+   "module": "03",
+   "front": "不看资料，你能完成吗：实验验证",
+   "back": "看：事务与隔离级别 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w29d5",
+   "week": 29,
+   "module": "03",
+   "front": "不看资料，你能完成吗：行锁/表锁实验",
+   "back": "看：锁 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w29d6",
+   "week": 29,
+   "module": "03",
+   "front": "不看资料，你能完成吗：优化 5 条 SQL",
+   "back": "看：项目 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w29d7",
+   "week": 29,
+   "module": "03",
+   "front": "不看资料，你能完成吗：默写索引原则",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w30",
+   "week": 30,
+   "module": "03",
+   "front": "第 30 周回顾：画一张数据模型图。",
+   "back": "本周目标：会用 Prisma/TypeORM 建模与查询。",
+   "type": "review"
+  },
+  {
+   "id": "r-w30d1",
+   "week": 30,
+   "module": "03",
+   "front": "不看资料，你能完成吗：建模、生成客户端",
+   "back": "看：Prisma/TypeORM 1–3 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w30d2",
+   "week": 30,
+   "module": "03",
+   "front": "不看资料，你能完成吗：一对多、多对多",
+   "back": "看：关联查询 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w30d3",
+   "week": 30,
+   "module": "03",
+   "front": "不看资料，你能完成吗：改表结构",
+   "back": "看：迁移 migration 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w30d4",
+   "week": 30,
+   "module": "03",
+   "front": "不看资料，你能完成吗：转账场景",
+   "back": "看：事务 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w30d5",
+   "week": 30,
+   "module": "03",
+   "front": "不看资料，你能完成吗：优化查询",
+   "back": "看：N+1 问题 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w30d6",
+   "week": 30,
+   "module": "03",
+   "front": "不看资料，你能完成吗：数据层重构",
+   "back": "看：项目 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w30d7",
+   "week": 30,
+   "module": "03",
+   "front": "不看资料，你能完成吗：数据模型图 + Anki",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w31",
+   "week": 31,
+   "module": "03",
+   "front": "第 31 周回顾：默写 JWT 登录流程。",
+   "back": "本周目标：会做注册登录、JWT、RBAC。",
+   "type": "review"
+  },
+  {
+   "id": "r-w31d1",
+   "week": 31,
+   "module": "03",
+   "front": "不看资料，你能完成吗：bcrypt 加密",
+   "back": "看：密码哈希 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w31d2",
+   "week": 31,
+   "module": "03",
+   "front": "不看资料，你能完成吗：签发与校验",
+   "back": "看：JWT 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w31d3",
+   "week": 31,
+   "module": "03",
+   "front": "不看资料，你能完成吗：双 token 方案",
+   "back": "看：刷新 token 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w31d4",
+   "week": 31,
+   "module": "03",
+   "front": "不看资料，你能完成吗：角色权限中间件",
+   "back": "看：RBAC 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w31d5",
+   "week": 31,
+   "module": "03",
+   "front": "不看资料，你能完成吗：防护",
+   "back": "看：安全 CSRF/XSS 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w31d6",
+   "week": 31,
+   "module": "03",
+   "front": "不看资料，你能完成吗：登录注册闭环",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w31d7",
+   "week": 31,
+   "module": "03",
+   "front": "不看资料，你能完成吗：默写登录流程",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w32",
+   "week": 32,
+   "module": "03",
+   "front": "第 32 周回顾：画缓存读写流程。",
+   "back": "本周目标：会用缓存提升接口性能。",
+   "type": "review"
+  },
+  {
+   "id": "r-w32d1",
+   "week": 32,
+   "module": "03",
+   "front": "不看资料，你能完成吗：装 Redis、常用命令",
+   "back": "看：Redis 基础 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w32d2",
+   "week": 32,
+   "module": "03",
+   "front": "不看资料，你能完成吗：旁路缓存实现",
+   "back": "看：缓存模式 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w32d3",
+   "week": 32,
+   "module": "03",
+   "front": "不看资料，你能完成吗：空值缓存、随机过期",
+   "back": "看：穿透/雪崩 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w32d4",
+   "week": 32,
+   "module": "03",
+   "front": "不看资料，你能完成吗：SETNX 实现",
+   "back": "看：分布式锁 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w32d5",
+   "week": 32,
+   "module": "03",
+   "front": "不看资料，你能完成吗：令牌桶",
+   "back": "看：限流 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w32d6",
+   "week": 32,
+   "module": "03",
+   "front": "不看资料，你能完成吗：热点接口加缓存",
+   "back": "看：项目 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w32d7",
+   "week": 32,
+   "module": "03",
+   "front": "不看资料，你能完成吗：缓存流程图 + Anki",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w33",
+   "week": 33,
+   "module": "03",
+   "front": "第 33 周回顾：默写上传接口的安全检查项。",
+   "back": "本周目标：会做上传、存储、图片处理。",
+   "type": "review"
+  },
+  {
+   "id": "r-w33d1",
+   "week": 33,
+   "module": "03",
+   "front": "不看资料，你能完成吗：multipart 上传",
+   "back": "看：文件上传 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w33d2",
+   "week": 33,
+   "module": "03",
+   "front": "不看资料，你能完成吗：接 OSS/S3",
+   "back": "看：对象存储 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w33d3",
+   "week": 33,
+   "module": "03",
+   "front": "不看资料，你能完成吗：压缩、裁剪",
+   "back": "看：图片处理 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w33d4",
+   "week": 33,
+   "module": "03",
+   "front": "不看资料，你能完成吗：了解分片",
+   "back": "看：断点续传 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w33d5",
+   "week": 33,
+   "module": "03",
+   "front": "不看资料，你能完成吗：类型、大小、病毒",
+   "back": "看：安全校验 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w33d6",
+   "week": 33,
+   "module": "03",
+   "front": "不看资料，你能完成吗：头像上传",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w33d7",
+   "week": 33,
+   "module": "03",
+   "front": "不看资料，你能完成吗：安全检查清单",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w34",
+   "week": 34,
+   "module": "03",
+   "front": "第 34 周回顾：画一条异步任务链路。",
+   "back": "本周目标：理解异步解耦，会跑通 MQ。",
+   "type": "review"
+  },
+  {
+   "id": "r-w34d1",
+   "week": 34,
+   "module": "03",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：MQ 概念 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w34d2",
+   "week": 34,
+   "module": "03",
+   "front": "不看资料，你能完成吗：跑通生产消费",
+   "back": "看：RabbitMQ/Kafka 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w34d3",
+   "week": 34,
+   "module": "03",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：生产者/消费者 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w34d4",
+   "week": 34,
+   "module": "03",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：重试与死信 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w34d5",
+   "week": 34,
+   "module": "03",
+   "front": "不看资料，你能完成吗：邮件异步发送",
+   "back": "看：异步任务 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w34d6",
+   "week": 34,
+   "module": "03",
+   "front": "不看资料，你能完成吗：异步通知系统",
+   "back": "看：项目 ｜ 产出：可运行",
+   "type": "item"
+  },
+  {
+   "id": "r-w34d7",
+   "week": 34,
+   "module": "03",
+   "front": "不看资料，你能完成吗：链路图 + Anki",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w35",
+   "week": 35,
+   "module": "03",
+   "front": "第 35 周回顾：复盘数据库设计。",
+   "back": "本周目标：从 0 设计并实现一套业务 API。",
+   "type": "review"
+  },
+  {
+   "id": "r-w35d1",
+   "week": 35,
+   "module": "03",
+   "front": "不看资料，你能完成吗：需求文档、ER 图",
+   "back": "看：需求与建模 1 集 ｜ 产出：文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w35d2",
+   "week": 35,
+   "module": "03",
+   "front": "不看资料，你能完成吗：搭项目结构",
+   "back": "看：骨架与分层 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w35d3",
+   "week": 35,
+   "module": "03",
+   "front": "不看资料，你能完成吗：增删改查",
+   "back": "看：核心接口 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w35d4",
+   "week": 35,
+   "module": "03",
+   "front": "不看资料，你能完成吗：接入",
+   "back": "看：认证与权限 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w35d5",
+   "week": 35,
+   "module": "03",
+   "front": "不看资料，你能完成吗：接口测试",
+   "back": "看：测试 ｜ 产出：测试",
+   "type": "item"
+  },
+  {
+   "id": "r-w35d6",
+   "week": 35,
+   "module": "03",
+   "front": "不看资料，你能完成吗：跑通全流程",
+   "back": "看：联调 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w35d7",
+   "week": 35,
+   "module": "03",
+   "front": "不看资料，你能完成吗：复盘建模",
+   "back": "看：周复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w36",
+   "week": 36,
+   "module": "03",
+   "front": "第 36 周回顾：白板讲清服务架构。",
+   "back": "本周目标：把项目做到可部署、可维护。",
+   "type": "review"
+  },
+  {
+   "id": "r-w36d1",
+   "week": 36,
+   "module": "03",
+   "front": "不看资料，你能完成吗：接入",
+   "back": "看：缓存与队列 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w36d2",
+   "week": 36,
+   "module": "03",
+   "front": "不看资料，你能完成吗：接入",
+   "back": "看：日志与监控 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w36d3",
+   "week": 36,
+   "module": "03",
+   "front": "不看资料，你能完成吗：生成",
+   "back": "看：OpenAPI 文档 ｜ 产出：文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w36d4",
+   "week": 36,
+   "module": "03",
+   "front": "不看资料，你能完成吗：写 Dockerfile",
+   "back": "看：Docker 化 ｜ 产出：镜像",
+   "type": "item"
+  },
+  {
+   "id": "r-w36d5",
+   "week": 36,
+   "module": "03",
+   "front": "不看资料，你能完成吗：上线",
+   "back": "看：部署 ｜ 产出：线上",
+   "type": "item"
+  },
+  {
+   "id": "r-w36d6",
+   "week": 36,
+   "module": "03",
+   "front": "不看资料，你能完成吗：录演示视频",
+   "back": "看：复盘 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w36d7",
+   "week": 36,
+   "module": "03",
+   "front": "不看资料，你能完成吗：白板讲架构",
+   "back": "看：阶段复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w37",
+   "week": 37,
+   "module": "04",
+   "front": "第 37 周回顾：默写 20 条服务器命令。",
+   "back": "本周目标：会用云服务器、SSH、权限、服务管理。",
+   "type": "review"
+  },
+  {
+   "id": "r-w37d1",
+   "week": 37,
+   "module": "04",
+   "front": "不看资料，你能完成吗：买服务器、登录",
+   "back": "看：云服务器与 SSH 1–2 集 ｜ 产出：服务器",
+   "type": "item"
+  },
+  {
+   "id": "r-w37d2",
+   "week": 37,
+   "module": "04",
+   "front": "不看资料，你能完成吗：建用户、配 sudo",
+   "back": "看：用户与权限 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w37d3",
+   "week": 37,
+   "module": "04",
+   "front": "不看资料，你能完成吗：部署一个服务",
+   "back": "看：软件安装与 systemd 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w37d4",
+   "week": 37,
+   "module": "04",
+   "front": "不看资料，你能完成吗：开放端口",
+   "back": "看：防火墙与端口 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w37d5",
+   "week": 37,
+   "module": "04",
+   "front": "不看资料，你能完成吗：journalctl、tail",
+   "back": "看：日志与排错 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w37d6",
+   "week": 37,
+   "module": "04",
+   "front": "不看资料，你能完成吗：部署静态站",
+   "back": "看：项目 ｜ 产出：线上",
+   "type": "item"
+  },
+  {
+   "id": "r-w37d7",
+   "week": 37,
+   "module": "04",
+   "front": "不看资料，你能完成吗：默写命令 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w38",
+   "week": 38,
+   "module": "04",
+   "front": "第 38 周回顾：默写一份 Nginx 配置。",
+   "back": "本周目标：会配置反向代理、负载均衡、静态资源。",
+   "type": "review"
+  },
+  {
+   "id": "r-w38d1",
+   "week": 38,
+   "module": "04",
+   "front": "不看资料，你能完成吗：跑通默认页",
+   "back": "看：安装与配置 1–2 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w38d2",
+   "week": 38,
+   "module": "04",
+   "front": "不看资料，你能完成吗：代理 API",
+   "back": "看：反向代理 1–2 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w38d3",
+   "week": 38,
+   "module": "04",
+   "front": "不看资料，你能完成吗：双实例",
+   "back": "看：负载均衡 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w38d4",
+   "week": 38,
+   "module": "04",
+   "front": "不看资料，你能完成吗：配缓存头",
+   "back": "看：静态资源与缓存 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w38d5",
+   "week": 38,
+   "module": "04",
+   "front": "不看资料，你能完成吗：配证书",
+   "back": "看：HTTPS 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w38d6",
+   "week": 38,
+   "module": "04",
+   "front": "不看资料，你能完成吗：域名访问",
+   "back": "看：项目 ｜ 产出：线上",
+   "type": "item"
+  },
+  {
+   "id": "r-w38d7",
+   "week": 38,
+   "module": "04",
+   "front": "不看资料，你能完成吗：默写配置 + 卡片",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w39",
+   "week": 39,
+   "module": "04",
+   "front": "第 39 周回顾：手写一个多阶段构建 Dockerfile。",
+   "back": "本周目标：会写 Dockerfile、管理镜像与容器。",
+   "type": "review"
+  },
+  {
+   "id": "r-w39d1",
+   "week": 39,
+   "module": "04",
+   "front": "不看资料，你能完成吗：跑通 hello",
+   "back": "看：镜像与容器 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w39d2",
+   "week": 39,
+   "module": "04",
+   "front": "不看资料，你能完成吗：容器化 API",
+   "back": "看：Dockerfile 1–2 集 ｜ 产出：镜像",
+   "type": "item"
+  },
+  {
+   "id": "r-w39d3",
+   "week": 39,
+   "module": "04",
+   "front": "不看资料，你能完成吗：持久化数据库",
+   "back": "看：数据卷与网络 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w39d4",
+   "week": 39,
+   "module": "04",
+   "front": "不看资料，你能完成吗：减小镜像",
+   "back": "看：多阶段构建 1 集 ｜ 产出：镜像",
+   "type": "item"
+  },
+  {
+   "id": "r-w39d5",
+   "week": 39,
+   "module": "04",
+   "front": "不看资料，你能完成吗：推送到 registry",
+   "back": "看：私有仓库 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w39d6",
+   "week": 39,
+   "module": "04",
+   "front": "不看资料，你能完成吗：容器化 API",
+   "back": "看：项目 ｜ 产出：镜像",
+   "type": "item"
+  },
+  {
+   "id": "r-w39d7",
+   "week": 39,
+   "module": "04",
+   "front": "不看资料，你能完成吗：默写 Dockerfile",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w40",
+   "week": 40,
+   "module": "04",
+   "front": "第 40 周回顾：画一张服务编排图。",
+   "back": "本周目标：会用 Compose 编排多服务。",
+   "type": "review"
+  },
+  {
+   "id": "r-w40d1",
+   "week": 40,
+   "module": "04",
+   "front": "不看资料，你能完成吗：写第一个",
+   "back": "看：compose 文件 1–2 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w40d2",
+   "week": 40,
+   "module": "04",
+   "front": "不看资料，你能完成吗：API+DB+Redis",
+   "back": "看：多服务编排 1–2 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w40d3",
+   "week": 40,
+   "module": "04",
+   "front": "不看资料，你能完成吗：区分环境",
+   "back": "看：环境变量与密钥 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w40d4",
+   "week": 40,
+   "module": "04",
+   "front": "不看资料，你能完成吗：配置",
+   "back": "看：健康检查与重启 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w40d5",
+   "week": 40,
+   "module": "04",
+   "front": "不看资料，你能完成吗：写脚本",
+   "back": "看：一键部署 1 集 ｜ 产出：脚本",
+   "type": "item"
+  },
+  {
+   "id": "r-w40d6",
+   "week": 40,
+   "module": "04",
+   "front": "不看资料，你能完成吗：全栈编排",
+   "back": "看：项目 ｜ 产出：线上",
+   "type": "item"
+  },
+  {
+   "id": "r-w40d7",
+   "week": 40,
+   "module": "04",
+   "front": "不看资料，你能完成吗：编排图 + Anki",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w41",
+   "week": 41,
+   "module": "04",
+   "front": "第 41 周回顾：画一条流水线。",
+   "back": "本周目标：会用 GitHub Actions 自动构建与部署。",
+   "type": "review"
+  },
+  {
+   "id": "r-w41d1",
+   "week": 41,
+   "module": "04",
+   "front": "不看资料，你能完成吗：跑通 hello workflow",
+   "back": "看：Actions 基础 1–2 集 ｜ 产出：流水线",
+   "type": "item"
+  },
+  {
+   "id": "r-w41d2",
+   "week": 41,
+   "module": "04",
+   "front": "不看资料，你能完成吗：接入",
+   "back": "看：构建与测试 1–2 集 ｜ 产出：流水线",
+   "type": "item"
+  },
+  {
+   "id": "r-w41d3",
+   "week": 41,
+   "module": "04",
+   "front": "不看资料，你能完成吗：SSH 部署",
+   "back": "看：自动部署 1–2 集 ｜ 产出：流水线",
+   "type": "item"
+  },
+  {
+   "id": "r-w41d4",
+   "week": 41,
+   "module": "04",
+   "front": "不看资料，你能完成吗：dev/prod",
+   "back": "看：环境区分 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w41d5",
+   "week": 41,
+   "module": "04",
+   "front": "不看资料，你能完成吗：脚本回滚",
+   "back": "看：回滚 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w41d6",
+   "week": 41,
+   "module": "04",
+   "front": "不看资料，你能完成吗：提交即发布",
+   "back": "看：项目 ｜ 产出：流水线",
+   "type": "item"
+  },
+  {
+   "id": "r-w41d7",
+   "week": 41,
+   "module": "04",
+   "front": "不看资料，你能完成吗：流水线图",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w42",
+   "week": 42,
+   "module": "04",
+   "front": "第 42 周回顾：默写 HTTPS 建立过程。",
+   "back": "本周目标：会配解析、证书、CDN、安全头。",
+   "type": "review"
+  },
+  {
+   "id": "r-w42d1",
+   "week": 42,
+   "module": "04",
+   "front": "不看资料，你能完成吗：配置 A/CNAME",
+   "back": "看：DNS 解析 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w42d2",
+   "week": 42,
+   "module": "04",
+   "front": "不看资料，你能完成吗：Let's Encrypt",
+   "back": "看：证书申请 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w42d3",
+   "week": 42,
+   "module": "04",
+   "front": "不看资料，你能完成吗：配置跳转",
+   "back": "看：强制 HTTPS 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w42d4",
+   "week": 42,
+   "module": "04",
+   "front": "不看资料，你能完成吗：接入静态资源",
+   "back": "看：CDN 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w42d5",
+   "week": 42,
+   "module": "04",
+   "front": "不看资料，你能完成吗：CSP/HSTS",
+   "back": "看：安全响应头 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w42d6",
+   "week": 42,
+   "module": "04",
+   "front": "不看资料，你能完成吗：全站 HTTPS",
+   "back": "看：项目 ｜ 产出：线上",
+   "type": "item"
+  },
+  {
+   "id": "r-w42d7",
+   "week": 42,
+   "module": "04",
+   "front": "不看资料，你能完成吗：默写握手过程",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w43",
+   "week": 43,
+   "module": "04",
+   "front": "第 43 周回顾：默写 TCP 三次握手与四次挥手。",
+   "back": "本周目标：掌握分层、IP、TCP。",
+   "type": "review"
+  },
+  {
+   "id": "r-w43d1",
+   "week": 43,
+   "module": "04",
+   "front": "不看资料，你能完成吗：分层模型",
+   "back": "看：王道 网络 1–10 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w43d2",
+   "week": 43,
+   "module": "04",
+   "front": "不看资料，你能完成吗：IP、子网划分",
+   "back": "看：王道 网络 11–20 集 ｜ 产出：练习",
+   "type": "item"
+  },
+  {
+   "id": "r-w43d3",
+   "week": 43,
+   "module": "04",
+   "front": "不看资料，你能完成吗：TCP 连接管理",
+   "back": "看：王道 网络 21–30 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w43d4",
+   "week": 43,
+   "module": "04",
+   "front": "不看资料，你能完成吗：拥塞控制、重传",
+   "back": "看：王道 网络 31–40 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w43d5",
+   "week": 43,
+   "module": "04",
+   "front": "不看资料，你能完成吗：对比",
+   "back": "看：UDP 与 QUIC 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w43d6",
+   "week": 43,
+   "module": "04",
+   "front": "不看资料，你能完成吗：子网划分 10 题",
+   "back": "看：练习 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w43d7",
+   "week": 43,
+   "module": "04",
+   "front": "不看资料，你能完成吗：默写握手 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w44",
+   "week": 44,
+   "module": "04",
+   "front": "第 44 周回顾：用 Wireshark 分析一次请求。",
+   "back": "本周目标：理解 HTTP/2、缓存、TLS。",
+   "type": "review"
+  },
+  {
+   "id": "r-w44d1",
+   "week": 44,
+   "module": "04",
+   "front": "不看资料，你能完成吗：报文结构",
+   "back": "看：HTTP/1.1 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w44d2",
+   "week": 44,
+   "module": "04",
+   "front": "不看资料，你能完成吗：多路复用",
+   "back": "看：HTTP/2 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w44d3",
+   "week": 44,
+   "module": "04",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：HTTP/3 与 QUIC 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w44d4",
+   "week": 44,
+   "module": "04",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：缓存与协商 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w44d5",
+   "week": 44,
+   "module": "04",
+   "front": "不看资料，你能完成吗：抓包分析",
+   "back": "看：Wireshark 1–2 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w44d6",
+   "week": 44,
+   "module": "04",
+   "front": "不看资料，你能完成吗：分析一次完整请求",
+   "back": "看：项目 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w44d7",
+   "week": 44,
+   "module": "04",
+   "front": "不看资料，你能完成吗：默写报文结构",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w45",
+   "week": 45,
+   "module": "04",
+   "front": "第 45 周回顾：默写常见漏洞与防护。",
+   "back": "本周目标：理解 OWASP Top 10 与防护。",
+   "type": "review"
+  },
+  {
+   "id": "r-w45d1",
+   "week": 45,
+   "module": "04",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：OWASP Top10 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w45d2",
+   "week": 45,
+   "module": "04",
+   "front": "不看资料，你能完成吗：复现与防护",
+   "back": "看：SQL 注入 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w45d3",
+   "week": 45,
+   "module": "04",
+   "front": "不看资料，你能完成吗：复现与防护",
+   "back": "看：XSS/CSRF 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w45d4",
+   "week": 45,
+   "module": "04",
+   "front": "不看资料，你能完成吗：复现与防护",
+   "back": "看：越权与文件上传 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w45d5",
+   "week": 45,
+   "module": "04",
+   "front": "不看资料，你能完成吗：环境变量方案",
+   "back": "看：密钥管理 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w45d6",
+   "week": 45,
+   "module": "04",
+   "front": "不看资料，你能完成吗：安全自查表",
+   "back": "看：项目 ｜ 产出：文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w45d7",
+   "week": 45,
+   "module": "04",
+   "front": "不看资料，你能完成吗：漏洞清单",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w46",
+   "week": 46,
+   "module": "04",
+   "front": "第 46 周回顾：画一张监控体系图。",
+   "back": "本周目标：会做日志规范、指标、告警、错误追踪。",
+   "type": "review"
+  },
+  {
+   "id": "r-w46d1",
+   "week": 46,
+   "module": "04",
+   "front": "不看资料，你能完成吗：改造日志",
+   "back": "看：日志规范 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w46d2",
+   "week": 46,
+   "module": "04",
+   "front": "不看资料，你能完成吗：接入",
+   "back": "看：ELK/Loki 1–2 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w46d3",
+   "week": 46,
+   "module": "04",
+   "front": "不看资料，你能完成吗：暴露指标",
+   "back": "看：Prometheus 1–2 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w46d4",
+   "week": 46,
+   "module": "04",
+   "front": "不看资料，你能完成吗：配一条告警",
+   "back": "看：告警 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w46d5",
+   "week": 46,
+   "module": "04",
+   "front": "不看资料，你能完成吗：接入错误追踪",
+   "back": "看：Sentry 1 集 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w46d6",
+   "week": 46,
+   "module": "04",
+   "front": "不看资料，你能完成吗：监控面板",
+   "back": "看：项目 ｜ 产出：截图",
+   "type": "item"
+  },
+  {
+   "id": "r-w46d7",
+   "week": 46,
+   "module": "04",
+   "front": "不看资料，你能完成吗：监控图 + Anki",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w47",
+   "week": 47,
+   "module": "04",
+   "front": "第 47 周回顾：复盘架构与接口。",
+   "back": "本周目标：把前后端串成一个完整产品。",
+   "type": "review"
+  },
+  {
+   "id": "r-w47d1",
+   "week": 47,
+   "module": "04",
+   "front": "不看资料，你能完成吗：画架构图",
+   "back": "看：需求与架构 1 集 ｜ 产出：文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w47d2",
+   "week": 47,
+   "module": "04",
+   "front": "不看资料，你能完成吗：路由、布局",
+   "back": "看：前端骨架 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w47d3",
+   "week": 47,
+   "module": "04",
+   "front": "不看资料，你能完成吗：核心 API",
+   "back": "看：后端接口 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w47d4",
+   "week": 47,
+   "module": "04",
+   "front": "不看资料，你能完成吗：打通主流程",
+   "back": "看：联调 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w47d5",
+   "week": 47,
+   "module": "04",
+   "front": "不看资料，你能完成吗：接入",
+   "back": "看：认证与权限 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w47d6",
+   "week": 47,
+   "module": "04",
+   "front": "不看资料，你能完成吗：跑通",
+   "back": "看：测试与修复 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w47d7",
+   "week": 47,
+   "module": "04",
+   "front": "不看资料，你能完成吗：架构复盘",
+   "back": "看：周复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w48",
+   "week": 48,
+   "module": "04",
+   "front": "第 48 周回顾：白板讲清全栈架构。",
+   "back": "本周目标：优化、部署、监控、沉淀作品。",
+   "type": "review"
+  },
+  {
+   "id": "r-w48d1",
+   "week": 48,
+   "module": "04",
+   "front": "不看资料，你能完成吗：缓存、索引",
+   "back": "看：性能优化 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w48d2",
+   "week": 48,
+   "module": "04",
+   "front": "不看资料，你能完成吗：接入",
+   "back": "看：队列与异步 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w48d3",
+   "week": 48,
+   "module": "04",
+   "front": "不看资料，你能完成吗：Compose + Nginx",
+   "back": "看：部署上线 ｜ 产出：线上",
+   "type": "item"
+  },
+  {
+   "id": "r-w48d4",
+   "week": 48,
+   "module": "04",
+   "front": "不看资料，你能完成吗：日志与告警",
+   "back": "看：监控接入 ｜ 产出：配置",
+   "type": "item"
+  },
+  {
+   "id": "r-w48d5",
+   "week": 48,
+   "module": "04",
+   "front": "不看资料，你能完成吗：README + 视频",
+   "back": "看：文档与演示 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w48d6",
+   "week": 48,
+   "module": "04",
+   "front": "不看资料，你能完成吗：写项目总结",
+   "back": "看：复盘 ｜ 产出：文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w48d7",
+   "week": 48,
+   "module": "04",
+   "front": "不看资料，你能完成吗：白板讲架构",
+   "back": "看：阶段复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w49",
+   "week": 49,
+   "module": "05",
+   "front": "第 49 周回顾：手写动态数组与双向链表。",
+   "back": "本周目标：会分析复杂度，能手写数组、链表、栈、队列。",
+   "type": "review"
+  },
+  {
+   "id": "r-w49d1",
+   "week": 49,
+   "module": "05",
+   "front": "不看资料，你能完成吗：分析 5 段代码",
+   "back": "看：复杂度分析 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w49d2",
+   "week": 49,
+   "module": "05",
+   "front": "不看资料，你能完成吗：手写动态数组",
+   "back": "看：数组 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w49d3",
+   "week": 49,
+   "module": "05",
+   "front": "不看资料，你能完成吗：单链表、双链表",
+   "back": "看：链表 1–3 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w49d4",
+   "week": 49,
+   "module": "05",
+   "front": "不看资料，你能完成吗：用链表实现栈",
+   "back": "看：栈 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w49d5",
+   "week": 49,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：队列与双端队列 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w49d6",
+   "week": 49,
+   "module": "05",
+   "front": "不看资料，你能完成吗：代码随想录 20 题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w49d7",
+   "week": 49,
+   "module": "05",
+   "front": "不看资料，你能完成吗：手写链表 + Anki",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w50",
+   "week": 50,
+   "module": "05",
+   "front": "第 50 周回顾：手写哈希表与堆。",
+   "back": "本周目标：理解哈希冲突、二叉树、堆。",
+   "type": "review"
+  },
+  {
+   "id": "r-w50d1",
+   "week": 50,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现哈希表",
+   "back": "看：哈希表 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w50d2",
+   "week": 50,
+   "module": "05",
+   "front": "不看资料，你能完成吗：链地址法实验",
+   "back": "看：冲突处理 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w50d3",
+   "week": 50,
+   "module": "05",
+   "front": "不看资料，你能完成吗：递归与迭代",
+   "back": "看：二叉树遍历 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w50d4",
+   "week": 50,
+   "module": "05",
+   "front": "不看资料，你能完成吗：增删查",
+   "back": "看：二叉搜索树 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w50d5",
+   "week": 50,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：堆与优先队列 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w50d6",
+   "week": 50,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w50d7",
+   "week": 50,
+   "module": "05",
+   "front": "不看资料，你能完成吗：手写哈希 + 堆",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w51",
+   "week": 51,
+   "module": "05",
+   "front": "第 51 周回顾：说清 B+ 树为什么适合做索引。",
+   "back": "本周目标：理解平衡树、B+ 树、Trie、并查集。",
+   "type": "review"
+  },
+  {
+   "id": "r-w51d1",
+   "week": 51,
+   "module": "05",
+   "front": "不看资料，你能完成吗：旋转演示",
+   "back": "看：AVL 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w51d2",
+   "week": 51,
+   "module": "05",
+   "front": "不看资料，你能完成吗：了解规则",
+   "back": "看：红黑树 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w51d3",
+   "week": 51,
+   "module": "05",
+   "front": "不看资料，你能完成吗：画结构图",
+   "back": "看：B 树/B+ 树 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w51d4",
+   "week": 51,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现前缀树",
+   "back": "看：Trie 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w51d5",
+   "week": 51,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：并查集 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w51d6",
+   "week": 51,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w51d7",
+   "week": 51,
+   "module": "05",
+   "front": "不看资料，你能完成吗：画 B+ 树 + Anki",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w52",
+   "week": 52,
+   "module": "05",
+   "front": "第 52 周回顾：手写 Dijkstra。",
+   "back": "本周目标：掌握图的表示、遍历、最短路、拓扑。",
+   "type": "review"
+  },
+  {
+   "id": "r-w52d1",
+   "week": 52,
+   "module": "05",
+   "front": "不看资料，你能完成吗：邻接表/矩阵",
+   "back": "看：图的表示 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w52d2",
+   "week": 52,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：BFS/DFS 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w52d3",
+   "week": 52,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：拓扑排序 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w52d4",
+   "week": 52,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：Dijkstra 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w52d5",
+   "week": 52,
+   "module": "05",
+   "front": "不看资料，你能完成吗：Prim/Kruskal",
+   "back": "看：最小生成树 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w52d6",
+   "week": 52,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w52d7",
+   "week": 52,
+   "module": "05",
+   "front": "不看资料，你能完成吗：手写 Dijkstra",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w53",
+   "week": 53,
+   "module": "05",
+   "front": "第 53 周回顾：默写快排与归并。",
+   "back": "本周目标：能手写 8 种排序并分析复杂度。",
+   "type": "review"
+  },
+  {
+   "id": "r-w53d1",
+   "week": 53,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现三种",
+   "back": "看：冒泡/插入/选择 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w53d2",
+   "week": 53,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：归并排序 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w53d3",
+   "week": 53,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现 + 优化",
+   "back": "看：快速排序 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w53d4",
+   "week": 53,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：堆排/计数/基数 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w53d5",
+   "week": 53,
+   "module": "05",
+   "front": "不看资料，你能完成吗：对比表",
+   "back": "看：稳定性与复杂度 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w53d6",
+   "week": 53,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w53d7",
+   "week": 53,
+   "module": "05",
+   "front": "不看资料，你能完成吗：默写快排",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w54",
+   "week": 54,
+   "module": "05",
+   "front": "第 54 周回顾：手写二分三种变体。",
+   "back": "本周目标：掌握二分、递归、回溯、分治。",
+   "type": "review"
+  },
+  {
+   "id": "r-w54d1",
+   "week": 54,
+   "module": "05",
+   "front": "不看资料，你能完成吗：三种变体",
+   "back": "看：二分查找 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w54d2",
+   "week": 54,
+   "module": "05",
+   "front": "不看资料，你能完成吗：10 题",
+   "back": "看：递归思想 1–2 集 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w54d3",
+   "week": 54,
+   "module": "05",
+   "front": "不看资料，你能完成吗：全排列、组合",
+   "back": "看：回溯 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w54d4",
+   "week": 54,
+   "module": "05",
+   "front": "不看资料，你能完成吗：归并与快排",
+   "back": "看：分治 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w54d5",
+   "week": 54,
+   "module": "05",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：剪枝 1 集 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w54d6",
+   "week": 54,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w54d7",
+   "week": 54,
+   "module": "05",
+   "front": "不看资料，你能完成吗：手写二分",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w55",
+   "week": 55,
+   "module": "05",
+   "front": "第 55 周回顾：手写 01 背包。",
+   "back": "本周目标：掌握背包、序列 DP。",
+   "type": "review"
+  },
+  {
+   "id": "r-w55d1",
+   "week": 55,
+   "module": "05",
+   "front": "不看资料，你能完成吗：爬楼梯、斐波那契",
+   "back": "看：DP 入门 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w55d2",
+   "week": 55,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：01 背包 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w55d3",
+   "week": 55,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：完全背包 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w55d4",
+   "week": 55,
+   "module": "05",
+   "front": "不看资料，你能完成吗：LIS/LCS",
+   "back": "看：序列 DP 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w55d5",
+   "week": 55,
+   "module": "05",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：区间/树形 DP 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w55d6",
+   "week": 55,
+   "module": "05",
+   "front": "不看资料，你能完成吗：25 题",
+   "back": "看：刷题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w55d7",
+   "week": 55,
+   "module": "05",
+   "front": "不看资料，你能完成吗：手写背包",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w56",
+   "week": 56,
+   "module": "05",
+   "front": "第 56 周回顾：做一次 3 题模拟面试。",
+   "back": "本周目标：掌握贪心，完成第一轮刷题。",
+   "type": "review"
+  },
+  {
+   "id": "r-w56d1",
+   "week": 56,
+   "module": "05",
+   "front": "不看资料，你能完成吗：区间调度",
+   "back": "看：贪心 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w56d2",
+   "week": 56,
+   "module": "05",
+   "front": "不看资料，你能完成吗：10 题",
+   "back": "看：综合题 1 集 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w56d3",
+   "week": 56,
+   "module": "05",
+   "front": "不看资料，你能完成吗：LeetCode 周赛",
+   "back": "看：周赛 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w56d4",
+   "week": 56,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：错题重做 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w56d5",
+   "week": 56,
+   "module": "05",
+   "front": "不看资料，你能完成吗：写自己的模板库",
+   "back": "看：模板总结 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w56d6",
+   "week": 56,
+   "module": "05",
+   "front": "不看资料，你能完成吗：3 题口述",
+   "back": "看：模拟面试 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w56d7",
+   "week": 56,
+   "module": "05",
+   "front": "不看资料，你能完成吗：错题复盘",
+   "back": "看：周复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w57",
+   "week": 57,
+   "module": "05",
+   "front": "第 57 周回顾：默写进程状态转换。",
+   "back": "本周目标：理解进程、线程、调度、同步。",
+   "type": "review"
+  },
+  {
+   "id": "r-w57d1",
+   "week": 57,
+   "module": "05",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：王道 OS 进程 1–5 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w57d2",
+   "week": 57,
+   "module": "05",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：线程与调度 1–5 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w57d3",
+   "week": 57,
+   "module": "05",
+   "front": "不看资料，你能完成吗：生产者消费者实验",
+   "back": "看：同步与锁 1–4 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w57d4",
+   "week": 57,
+   "module": "05",
+   "front": "不看资料，你能完成吗：四个条件",
+   "back": "看：死锁 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w57d5",
+   "week": 57,
+   "module": "05",
+   "front": "不看资料，你能完成吗：管道/共享内存实验",
+   "back": "看：IPC 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w57d6",
+   "week": 57,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：面试题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w57d7",
+   "week": 57,
+   "module": "05",
+   "front": "不看资料，你能完成吗：状态转换图",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w58",
+   "week": 58,
+   "module": "05",
+   "front": "第 58 周回顾：画一张虚拟内存映射图。",
+   "back": "本周目标：理解虚拟内存、分页、文件系统、IO。",
+   "type": "review"
+  },
+  {
+   "id": "r-w58d1",
+   "week": 58,
+   "module": "05",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：虚拟内存 1–3 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w58d2",
+   "week": 58,
+   "module": "05",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：分页与分段 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w58d3",
+   "week": 58,
+   "module": "05",
+   "front": "不看资料，你能完成吗：LRU 实验",
+   "back": "看：页面置换 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w58d4",
+   "week": 58,
+   "module": "05",
+   "front": "不看资料，你能完成吗：inode 结构",
+   "back": "看：文件系统 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w58d5",
+   "week": 58,
+   "module": "05",
+   "front": "不看资料，你能完成吗：五种模型",
+   "back": "看：IO 模型 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w58d6",
+   "week": 58,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：面试题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w58d7",
+   "week": 58,
+   "module": "05",
+   "front": "不看资料，你能完成吗：内存映射图",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w59",
+   "week": 59,
+   "module": "05",
+   "front": "第 59 周回顾：解释一条 SQL 的执行路径。",
+   "back": "本周目标：理解范式、索引、事务、MVCC。",
+   "type": "review"
+  },
+  {
+   "id": "r-w59d1",
+   "week": 59,
+   "module": "05",
+   "front": "不看资料，你能完成吗：设计练习",
+   "back": "看：范式 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w59d2",
+   "week": 59,
+   "module": "05",
+   "front": "不看资料，你能完成吗：画结构",
+   "back": "看：B+ 树索引 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w59d3",
+   "week": 59,
+   "module": "05",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：事务与 MVCC 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w59d4",
+   "week": 59,
+   "module": "05",
+   "front": "不看资料，你能完成吗：四个级别实验",
+   "back": "看：隔离级别 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w59d5",
+   "week": 59,
+   "module": "05",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：分库分表 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w59d6",
+   "week": 59,
+   "module": "05",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：面试题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w59d7",
+   "week": 59,
+   "module": "05",
+   "front": "不看资料，你能完成吗：SQL 执行路径",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w60",
+   "week": 60,
+   "module": "05",
+   "front": "第 60 周回顾：50 题测试 ≥ 80 分。",
+   "back": "本周目标：把 CS 核心串起来，完成第一轮面试准备。",
+   "type": "review"
+  },
+  {
+   "id": "r-w60d1",
+   "week": 60,
+   "module": "05",
+   "front": "不看资料，你能完成吗：错题重做",
+   "back": "看：算法复盘 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w60d2",
+   "week": 60,
+   "module": "05",
+   "front": "不看资料，你能完成吗：短链、限流",
+   "back": "看：系统设计入门 1–2 集 ｜ 产出：设计文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w60d3",
+   "week": 60,
+   "module": "05",
+   "front": "不看资料，你能完成吗：5 题",
+   "back": "看：模拟面试 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w60d4",
+   "week": 60,
+   "module": "05",
+   "front": "不看资料，你能完成吗：算法可视化",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w60d5",
+   "week": 60,
+   "module": "05",
+   "front": "不看资料，你能完成吗：画 CS 全景图",
+   "back": "看：知识总结 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w60d6",
+   "week": 60,
+   "module": "05",
+   "front": "不看资料，你能完成吗：50 题",
+   "back": "看：测试 ｜ 产出：分数",
+   "type": "item"
+  },
+  {
+   "id": "r-w60d7",
+   "week": 60,
+   "module": "05",
+   "front": "不看资料，你能完成吗：白板讲 10 个概念",
+   "back": "看：阶段复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w61",
+   "week": 61,
+   "module": "06",
+   "front": "第 61 周回顾：手写表达式分词器。",
+   "back": "本周目标：理解编译流程，手写 tokenizer。",
+   "type": "review"
+  },
+  {
+   "id": "r-w61d1",
+   "week": 61,
+   "module": "06",
+   "front": "不看资料，你能完成吗：画流程图",
+   "back": "看：编译流程 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w61d2",
+   "week": 61,
+   "module": "06",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：词法、正则、NFA 1–3 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w61d3",
+   "week": 61,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：手写 tokenizer 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w61d4",
+   "week": 61,
+   "module": "06",
+   "front": "不看资料，你能完成吗：扩展",
+   "back": "看：数字/标识符/符号 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w61d5",
+   "week": 61,
+   "module": "06",
+   "front": "不看资料，你能完成吗：加异常",
+   "back": "看：错误处理 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w61d6",
+   "week": 61,
+   "module": "06",
+   "front": "不看资料，你能完成吗：表达式分词器",
+   "back": "看：项目 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w61d7",
+   "week": 61,
+   "module": "06",
+   "front": "不看资料，你能完成吗：闭卷写 tokenizer",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w62",
+   "week": 62,
+   "module": "06",
+   "front": "第 62 周回顾：手写完整 parser。",
+   "back": "本周目标：理解文法、递归下降、AST。",
+   "type": "review"
+  },
+  {
+   "id": "r-w62d1",
+   "week": 62,
+   "module": "06",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：文法与递归下降 1–3 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w62d2",
+   "week": 62,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：表达式优先级 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w62d3",
+   "week": 62,
+   "module": "06",
+   "front": "不看资料，你能完成吗：定义节点",
+   "back": "看：AST 设计 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w62d4",
+   "week": 62,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：语句解析 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w62d5",
+   "week": 62,
+   "module": "06",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：错误恢复 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w62d6",
+   "week": 62,
+   "module": "06",
+   "front": "不看资料，你能完成吗：完整 parser",
+   "back": "看：项目 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w62d7",
+   "week": 62,
+   "module": "06",
+   "front": "不看资料，你能完成吗：画 AST",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w63",
+   "week": 63,
+   "module": "06",
+   "front": "第 63 周回顾：100 行解释器能算四则与变量。",
+   "back": "本周目标：把 AST 跑起来。",
+   "type": "review"
+  },
+  {
+   "id": "r-w63d1",
+   "week": 63,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：求值器 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w63d2",
+   "week": 63,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：变量与作用域 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w63d3",
+   "week": 63,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：函数与闭包 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w63d4",
+   "week": 63,
+   "module": "06",
+   "front": "不看资料，你能完成吗：if/while",
+   "back": "看：控制流 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w63d5",
+   "week": 63,
+   "module": "06",
+   "front": "不看资料，你能完成吗：写用例",
+   "back": "看：测试 1 集 ｜ 产出：测试",
+   "type": "item"
+  },
+  {
+   "id": "r-w63d6",
+   "week": 63,
+   "module": "06",
+   "front": "不看资料，你能完成吗：100 行解释器",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w63d7",
+   "week": 63,
+   "module": "06",
+   "front": "不看资料，你能完成吗：讲清执行流程",
+   "back": "看：周复习 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w64",
+   "week": 64,
+   "module": "06",
+   "front": "第 64 周回顾：闭卷写一个 Kotlin 类。",
+   "back": "本周目标：掌握 Kotlin 语法与协程。",
+   "type": "review"
+  },
+  {
+   "id": "r-w64d1",
+   "week": 64,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：Kotlin 语法 1–3 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w64d2",
+   "week": 64,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：类/继承/接口 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w64d3",
+   "week": 64,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：集合与 lambda 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w64d4",
+   "week": 64,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：协程入门 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w64d5",
+   "week": 64,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：空安全 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w64d6",
+   "week": 64,
+   "module": "06",
+   "front": "不看资料，你能完成吗：命令行工具",
+   "back": "看：项目 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w64d7",
+   "week": 64,
+   "module": "06",
+   "front": "不看资料，你能完成吗：默写语法",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w65",
+   "week": 65,
+   "module": "06",
+   "front": "第 65 周回顾：3 页面 App 能跑。",
+   "back": "本周目标：会建工程、写页面、调接口。",
+   "type": "review"
+  },
+  {
+   "id": "r-w65d1",
+   "week": 65,
+   "module": "06",
+   "front": "不看资料，你能完成吗：跑通",
+   "back": "看：环境与项目结构 1–2 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w65d2",
+   "week": 65,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：Activity 与生命周期 1–2 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w65d3",
+   "week": 65,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：布局与 Compose 1–3 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w65d4",
+   "week": 65,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：列表与导航 1–2 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w65d5",
+   "week": 65,
+   "module": "06",
+   "front": "不看资料，你能完成吗：接接口",
+   "back": "看：网络请求 1–2 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w65d6",
+   "week": 65,
+   "module": "06",
+   "front": "不看资料，你能完成吗：3 页面 App",
+   "back": "看：项目 ｜ 产出：APK",
+   "type": "item"
+  },
+  {
+   "id": "r-w65d7",
+   "week": 65,
+   "module": "06",
+   "front": "不看资料，你能完成吗：画生命周期",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w66",
+   "week": 66,
+   "module": "06",
+   "front": "第 66 周回顾：打出签名 APK。",
+   "back": "本周目标：完成一个可安装的安卓 App。",
+   "type": "review"
+  },
+  {
+   "id": "r-w66d1",
+   "week": 66,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：数据存储 1 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w66d2",
+   "week": 66,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：权限 1 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w66d3",
+   "week": 66,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：图片加载 1 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w66d4",
+   "week": 66,
+   "module": "06",
+   "front": "不看资料，你能完成吗：出 APK",
+   "back": "看：打包签名 1 集 ｜ 产出：APK",
+   "type": "item"
+  },
+  {
+   "id": "r-w66d5",
+   "week": 66,
+   "module": "06",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：上架流程 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w66d6",
+   "week": 66,
+   "module": "06",
+   "front": "不看资料，你能完成吗：完整 App",
+   "back": "看：项目 ｜ 产出：APK",
+   "type": "item"
+  },
+  {
+   "id": "r-w66d7",
+   "week": 66,
+   "module": "06",
+   "front": "不看资料，你能完成吗：复盘项目",
+   "back": "看：周复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w67",
+   "week": 67,
+   "module": "06",
+   "front": "第 67 周回顾：闭卷写一个 Swift 结构体。",
+   "back": "本周目标：掌握 Swift 语法与并发。",
+   "type": "review"
+  },
+  {
+   "id": "r-w67d1",
+   "week": 67,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：Swift 语法 1–3 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w67d2",
+   "week": 67,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：可选类型与协议 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w67d3",
+   "week": 67,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：集合与闭包 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w67d4",
+   "week": 67,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：async/await 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w67d5",
+   "week": 67,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：错误处理 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w67d6",
+   "week": 67,
+   "module": "06",
+   "front": "不看资料，你能完成吗：命令行工具",
+   "back": "看：项目 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w67d7",
+   "week": 67,
+   "module": "06",
+   "front": "不看资料，你能完成吗：默写语法",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w68",
+   "week": 68,
+   "module": "06",
+   "front": "第 68 周回顾：3 页面 App 能跑。",
+   "back": "本周目标：会写声明式界面。",
+   "type": "review"
+  },
+  {
+   "id": "r-w68d1",
+   "week": 68,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：视图与修饰符 1–2 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w68d2",
+   "week": 68,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：状态管理 1–2 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w68d3",
+   "week": 68,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：列表与导航 1–2 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w68d4",
+   "week": 68,
+   "module": "06",
+   "front": "不看资料，你能完成吗：接接口",
+   "back": "看：网络请求 1–2 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w68d5",
+   "week": 68,
+   "module": "06",
+   "front": "不看资料，你能完成吗：效果",
+   "back": "看：动画 1 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w68d6",
+   "week": 68,
+   "module": "06",
+   "front": "不看资料，你能完成吗：3 页面 App",
+   "back": "看：项目 ｜ 产出：模拟器",
+   "type": "item"
+  },
+  {
+   "id": "r-w68d7",
+   "week": 68,
+   "module": "06",
+   "front": "不看资料，你能完成吗：画视图树",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w69",
+   "week": 69,
+   "module": "06",
+   "front": "第 69 周回顾：归档并跑通 TestFlight。",
+   "back": "本周目标：完成一个可安装的 iOS App。",
+   "type": "review"
+  },
+  {
+   "id": "r-w69d1",
+   "week": 69,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：数据持久化 1 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w69d2",
+   "week": 69,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：权限 1 集 ｜ 产出：项目",
+   "type": "item"
+  },
+  {
+   "id": "r-w69d3",
+   "week": 69,
+   "module": "06",
+   "front": "不看资料，你能完成吗：出包",
+   "back": "看：打包归档 1 集 ｜ 产出：包",
+   "type": "item"
+  },
+  {
+   "id": "r-w69d4",
+   "week": 69,
+   "module": "06",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：TestFlight 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w69d5",
+   "week": 69,
+   "module": "06",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：上架流程 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w69d6",
+   "week": 69,
+   "module": "06",
+   "front": "不看资料，你能完成吗：完整 App",
+   "back": "看：项目 ｜ 产出：包",
+   "type": "item"
+  },
+  {
+   "id": "r-w69d7",
+   "week": 69,
+   "module": "06",
+   "front": "不看资料，你能完成吗：复盘项目",
+   "back": "看：周复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w70",
+   "week": 70,
+   "module": "06",
+   "front": "第 70 周回顾：3 页面鸿蒙 App。",
+   "back": "本周目标：会建鸿蒙工程、写页面。",
+   "type": "review"
+  },
+  {
+   "id": "r-w70d1",
+   "week": 70,
+   "module": "06",
+   "front": "不看资料，你能完成吗：跑通 Hello",
+   "back": "看：DevEco 安装 1–2 集 ｜ 产出：工程",
+   "type": "item"
+  },
+  {
+   "id": "r-w70d2",
+   "week": 70,
+   "module": "06",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：ArkTS 语法 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w70d3",
+   "week": 70,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：组件与布局 1–2 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w70d4",
+   "week": 70,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：状态管理 1–2 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w70d5",
+   "week": 70,
+   "module": "06",
+   "front": "不看资料，你能完成吗：页面",
+   "back": "看：路由 1 集 ｜ 产出：页面",
+   "type": "item"
+  },
+  {
+   "id": "r-w70d6",
+   "week": 70,
+   "module": "06",
+   "front": "不看资料，你能完成吗：3 页面 App",
+   "back": "看：项目 ｜ 产出：工程",
+   "type": "item"
+  },
+  {
+   "id": "r-w70d7",
+   "week": 70,
+   "module": "06",
+   "front": "不看资料，你能完成吗：对比 ArkTS 与 TS",
+   "back": "看：周复习 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w71",
+   "week": 71,
+   "module": "06",
+   "front": "第 71 周回顾：完整 App 能跑。",
+   "back": "本周目标：理解生命周期与应用能力。",
+   "type": "review"
+  },
+  {
+   "id": "r-w71d1",
+   "week": 71,
+   "module": "06",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：Stage 模型 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w71d2",
+   "week": 71,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：UIAbility 与生命周期 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w71d3",
+   "week": 71,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：数据管理 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w71d4",
+   "week": 71,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：网络 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w71d5",
+   "week": 71,
+   "module": "06",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：服务卡片 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w71d6",
+   "week": 71,
+   "module": "06",
+   "front": "不看资料，你能完成吗：完整 App",
+   "back": "看：项目 ｜ 产出：工程",
+   "type": "item"
+  },
+  {
+   "id": "r-w71d7",
+   "week": 71,
+   "module": "06",
+   "front": "不看资料，你能完成吗：画生命周期",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w72",
+   "week": 72,
+   "module": "06",
+   "front": "第 72 周回顾：三端包齐全，写对比文档。",
+   "back": "本周目标：把三端项目打包、对比、沉淀。",
+   "type": "review"
+  },
+  {
+   "id": "r-w72d1",
+   "week": 72,
+   "module": "06",
+   "front": "不看资料，你能完成吗：写对比表",
+   "back": "看：三端对比 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w72d2",
+   "week": 72,
+   "module": "06",
+   "front": "不看资料，你能完成吗：三端各出包",
+   "back": "看：打包签名 ｜ 产出：包",
+   "type": "item"
+  },
+  {
+   "id": "r-w72d3",
+   "week": 72,
+   "module": "06",
+   "front": "不看资料，你能完成吗：准备",
+   "back": "看：上架材料 ｜ 产出：材料",
+   "type": "item"
+  },
+  {
+   "id": "r-w72d4",
+   "week": 72,
+   "module": "06",
+   "front": "不看资料，你能完成吗：测试",
+   "back": "看：兼容性测试 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w72d5",
+   "week": 72,
+   "module": "06",
+   "front": "不看资料，你能完成吗：提交",
+   "back": "看：发布 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w72d6",
+   "week": 72,
+   "module": "06",
+   "front": "不看资料，你能完成吗：写总结",
+   "back": "看：复盘 ｜ 产出：文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w72d7",
+   "week": 72,
+   "module": "06",
+   "front": "不看资料，你能完成吗：白板讲三端差异",
+   "back": "看：阶段复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w73",
+   "week": 73,
+   "module": "07",
+   "front": "第 73 周回顾：手推一次矩阵乘法与投影。",
+   "back": "本周目标：建立向量、矩阵、特征值的直觉。",
+   "type": "review"
+  },
+  {
+   "id": "r-w73d1",
+   "week": 73,
+   "module": "07",
+   "front": "不看资料，你能完成吗：看动画建立直觉",
+   "back": "看：3Blue1Brown 线代 1–4 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w73d2",
+   "week": 73,
+   "module": "07",
+   "front": "不看资料，你能完成吗：手算 10 题",
+   "back": "看：向量与矩阵运算 1–2 集 ｜ 产出：练习",
+   "type": "item"
+  },
+  {
+   "id": "r-w73d3",
+   "week": 73,
+   "module": "07",
+   "front": "不看资料，你能完成吗：numpy 实现",
+   "back": "看：矩阵乘法与变换 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w73d4",
+   "week": 73,
+   "module": "07",
+   "front": "不看资料，你能完成吗：理解用途",
+   "back": "看：特征值与 SVD 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w73d5",
+   "week": 73,
+   "module": "07",
+   "front": "不看资料，你能完成吗：矩阵分解实验",
+   "back": "看：用 numpy 实现 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w73d6",
+   "week": 73,
+   "module": "07",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：练习 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w73d7",
+   "week": 73,
+   "module": "07",
+   "front": "不看资料，你能完成吗：白板讲线代",
+   "back": "看：周复习 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w74",
+   "week": 74,
+   "module": "07",
+   "front": "第 74 周回顾：手推最大似然估计。",
+   "back": "本周目标：理解分布、期望、贝叶斯、最大似然。",
+   "type": "review"
+  },
+  {
+   "id": "r-w74d1",
+   "week": 74,
+   "module": "07",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：概率基础 1–3 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w74d2",
+   "week": 74,
+   "module": "07",
+   "front": "不看资料，你能完成吗：画分布图",
+   "back": "看：常见分布 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w74d3",
+   "week": 74,
+   "module": "07",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：期望与方差 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w74d4",
+   "week": 74,
+   "module": "07",
+   "front": "不看资料，你能完成吗：垃圾邮件例子",
+   "back": "看：贝叶斯 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w74d5",
+   "week": 74,
+   "module": "07",
+   "front": "不看资料，你能完成吗：推导",
+   "back": "看：最大似然 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w74d6",
+   "week": 74,
+   "module": "07",
+   "front": "不看资料，你能完成吗：20 题",
+   "back": "看：练习 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w74d7",
+   "week": 74,
+   "module": "07",
+   "front": "不看资料，你能完成吗：贝叶斯推导",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w75",
+   "week": 75,
+   "module": "07",
+   "front": "第 75 周回顾：手推反向传播。",
+   "back": "本周目标：理解导数、链式法则、梯度下降。",
+   "type": "review"
+  },
+  {
+   "id": "r-w75d1",
+   "week": 75,
+   "module": "07",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：导数与偏导 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w75d2",
+   "week": 75,
+   "module": "07",
+   "front": "不看资料，你能完成吗：推导",
+   "back": "看：链式法则 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w75d3",
+   "week": 75,
+   "module": "07",
+   "front": "不看资料，你能完成吗：手写实现",
+   "back": "看：梯度下降 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w75d4",
+   "week": 75,
+   "module": "07",
+   "front": "不看资料，你能完成吗：概念",
+   "back": "看：凸优化 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w75d5",
+   "week": 75,
+   "module": "07",
+   "front": "不看资料，你能完成吗：手推两层网络",
+   "back": "看：反向传播 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w75d6",
+   "week": 75,
+   "module": "07",
+   "front": "不看资料，你能完成吗：10 题",
+   "back": "看：练习 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w75d7",
+   "week": 75,
+   "module": "07",
+   "front": "不看资料，你能完成吗：白板推梯度",
+   "back": "看：周复习 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w76",
+   "week": 76,
+   "module": "07",
+   "front": "第 76 周回顾：手写线性回归。",
+   "back": "本周目标：理解监督学习流程与线性模型。",
+   "type": "review"
+  },
+  {
+   "id": "r-w76d1",
+   "week": 76,
+   "module": "07",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：吴恩达 ML 第 1 周 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w76d2",
+   "week": 76,
+   "module": "07",
+   "front": "不看资料，你能完成吗：线性回归",
+   "back": "看：吴恩达 ML 第 2 周 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w76d3",
+   "week": 76,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：逻辑回归 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w76d4",
+   "week": 76,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：正则化 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w76d5",
+   "week": 76,
+   "module": "07",
+   "front": "不看资料，你能完成吗：跑通",
+   "back": "看：sklearn 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w76d6",
+   "week": 76,
+   "module": "07",
+   "front": "不看资料，你能完成吗：房价预测",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w76d7",
+   "week": 76,
+   "module": "07",
+   "front": "不看资料，你能完成吗：画 ML 流程",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w77",
+   "week": 77,
+   "module": "07",
+   "front": "第 77 周回顾：对比 5 种模型。",
+   "back": "本周目标：掌握树模型、SVM、KNN、集成。",
+   "type": "review"
+  },
+  {
+   "id": "r-w77d1",
+   "week": 77,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现/调包",
+   "back": "看：决策树 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w77d2",
+   "week": 77,
+   "module": "07",
+   "front": "不看资料，你能完成吗：调参",
+   "back": "看：随机森林 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w77d3",
+   "week": 77,
+   "module": "07",
+   "front": "不看资料，你能完成吗：理解核函数",
+   "back": "看：SVM 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w77d4",
+   "week": 77,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：KNN/朴素贝叶斯 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w77d5",
+   "week": 77,
+   "module": "07",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：集成学习 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w77d6",
+   "week": 77,
+   "module": "07",
+   "front": "不看资料，你能完成吗：分类任务",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w77d7",
+   "week": 77,
+   "module": "07",
+   "front": "不看资料，你能完成吗：模型对比表",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w78",
+   "week": 78,
+   "module": "07",
+   "front": "第 78 周回顾：画一张评估指标选择图。",
+   "back": "本周目标：会评估模型、做特征、调参。",
+   "type": "review"
+  },
+  {
+   "id": "r-w78d1",
+   "week": 78,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：评估指标 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w78d2",
+   "week": 78,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：交叉验证 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w78d3",
+   "week": 78,
+   "module": "07",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：特征工程 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w78d4",
+   "week": 78,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：过拟合与欠拟合 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w78d5",
+   "week": 78,
+   "module": "07",
+   "front": "不看资料，你能完成吗：调参",
+   "back": "看：GridSearch 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w78d6",
+   "week": 78,
+   "module": "07",
+   "front": "不看资料，你能完成吗：Kaggle 入门赛",
+   "back": "看：项目 ｜ 产出：提交",
+   "type": "item"
+  },
+  {
+   "id": "r-w78d7",
+   "week": 78,
+   "module": "07",
+   "front": "不看资料，你能完成吗：指标选择图",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w79",
+   "week": 79,
+   "module": "07",
+   "front": "第 79 周回顾：手写两层网络。",
+   "back": "本周目标：理解 MLP、激活、损失、反向传播。",
+   "type": "review"
+  },
+  {
+   "id": "r-w79d1",
+   "week": 79,
+   "module": "07",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：感知机与 MLP 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w79d2",
+   "week": 79,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：激活函数 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w79d3",
+   "week": 79,
+   "module": "07",
+   "front": "不看资料，你能完成吗：对比",
+   "back": "看：损失函数 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w79d4",
+   "week": 79,
+   "module": "07",
+   "front": "不看资料，你能完成吗：手写实现",
+   "back": "看：反向传播 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w79d5",
+   "week": 79,
+   "module": "07",
+   "front": "不看资料，你能完成吗：跑通",
+   "back": "看：PyTorch 基础 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w79d6",
+   "week": 79,
+   "module": "07",
+   "front": "不看资料，你能完成吗：MNIST",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w79d7",
+   "week": 79,
+   "module": "07",
+   "front": "不看资料，你能完成吗：白板讲反向传播",
+   "back": "看：周复习 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w80",
+   "week": 80,
+   "module": "07",
+   "front": "第 80 周回顾：手写一个 CNN。",
+   "back": "本周目标：理解卷积、池化、经典网络。",
+   "type": "review"
+  },
+  {
+   "id": "r-w80d1",
+   "week": 80,
+   "module": "07",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：卷积原理 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w80d2",
+   "week": 80,
+   "module": "07",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：池化与感受野 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w80d3",
+   "week": 80,
+   "module": "07",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：经典网络 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w80d4",
+   "week": 80,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：训练技巧 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w80d5",
+   "week": 80,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：迁移学习 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w80d6",
+   "week": 80,
+   "module": "07",
+   "front": "不看资料，你能完成吗：图像分类",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w80d7",
+   "week": 80,
+   "module": "07",
+   "front": "不看资料，你能完成吗：画 CNN 结构",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w81",
+   "week": 81,
+   "module": "07",
+   "front": "第 81 周回顾：手写一个 LSTM 单元。",
+   "back": "本周目标：理解 RNN、LSTM、注意力。",
+   "type": "review"
+  },
+  {
+   "id": "r-w81d1",
+   "week": 81,
+   "module": "07",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：RNN/LSTM 1–3 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w81d2",
+   "week": 81,
+   "module": "07",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：梯度消失 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w81d3",
+   "week": 81,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：文本预处理 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w81d4",
+   "week": 81,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：情感分类 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w81d5",
+   "week": 81,
+   "module": "07",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：Attention 入门 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w81d6",
+   "week": 81,
+   "module": "07",
+   "front": "不看资料，你能完成吗：文本分类",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w81d7",
+   "week": 81,
+   "module": "07",
+   "front": "不看资料，你能完成吗：画 LSTM",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w82",
+   "week": 82,
+   "module": "07",
+   "front": "第 82 周回顾：手写 mini Transformer。",
+   "back": "本周目标：理解注意力机制与 Transformer 结构。",
+   "type": "review"
+  },
+  {
+   "id": "r-w82d1",
+   "week": 82,
+   "module": "07",
+   "front": "不看资料，你能完成吗：手推",
+   "back": "看：注意力机制 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w82d2",
+   "week": 82,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：多头注意力 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w82d3",
+   "week": 82,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：位置编码 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w82d4",
+   "week": 82,
+   "module": "07",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：Encoder/Decoder 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w82d5",
+   "week": 82,
+   "module": "07",
+   "front": "不看资料，你能完成吗：代码",
+   "back": "看：手写 mini Transformer ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w82d6",
+   "week": 82,
+   "module": "07",
+   "front": "不看资料，你能完成吗：翻译小模型",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w82d7",
+   "week": 82,
+   "module": "07",
+   "front": "不看资料，你能完成吗：白板讲注意力",
+   "back": "看：周复习 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w83",
+   "week": 83,
+   "module": "07",
+   "front": "第 83 周回顾：写出可复用的训练脚本。",
+   "back": "本周目标：掌握训练全流程与工程化。",
+   "type": "review"
+  },
+  {
+   "id": "r-w83d1",
+   "week": 83,
+   "module": "07",
+   "front": "不看资料，你能完成吗：Dataset/DataLoader",
+   "back": "看：数据加载 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w83d2",
+   "week": 83,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：训练循环 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w83d3",
+   "week": 83,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：保存与加载 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w83d4",
+   "week": 83,
+   "module": "07",
+   "front": "不看资料，你能完成吗：配置",
+   "back": "看：GPU 训练 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w83d5",
+   "week": 83,
+   "module": "07",
+   "front": "不看资料，你能完成吗：wandb/tensorboard",
+   "back": "看：实验管理 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w83d6",
+   "week": 83,
+   "module": "07",
+   "front": "不看资料，你能完成吗：训练 pipeline",
+   "back": "看：项目 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w83d7",
+   "week": 83,
+   "module": "07",
+   "front": "不看资料，你能完成吗：复盘训练流程",
+   "back": "看：周复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w84",
+   "week": 84,
+   "module": "07",
+   "front": "第 84 周回顾：模型能通过 API 调用。",
+   "back": "本周目标：完整做一个可部署的模型项目。",
+   "type": "review"
+  },
+  {
+   "id": "r-w84d1",
+   "week": 84,
+   "module": "07",
+   "front": "不看资料，你能完成吗：文档",
+   "back": "看：选题与数据 1 集 ｜ 产出：文档",
+   "type": "item"
+  },
+  {
+   "id": "r-w84d2",
+   "week": 84,
+   "module": "07",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：基线模型 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w84d3",
+   "week": 84,
+   "module": "07",
+   "front": "不看资料，你能完成吗：对比",
+   "back": "看：改进实验 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w84d4",
+   "week": 84,
+   "module": "07",
+   "front": "不看资料，你能完成吗：报告",
+   "back": "看：评估与可视化 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w84d5",
+   "week": 84,
+   "module": "07",
+   "front": "不看资料，你能完成吗：FastAPI",
+   "back": "看：部署 API ｜ 产出：服务",
+   "type": "item"
+  },
+  {
+   "id": "r-w84d6",
+   "week": 84,
+   "module": "07",
+   "front": "不看资料，你能完成吗：写文档",
+   "back": "看：复盘 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w84d7",
+   "week": 84,
+   "module": "07",
+   "front": "不看资料，你能完成吗：白板讲项目",
+   "back": "看：阶段复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w85",
+   "week": 85,
+   "module": "08",
+   "front": "第 85 周回顾：讲清一次生成的全过程。",
+   "back": "本周目标：理解 Token、预训练、微调、量化、幻觉。",
+   "type": "review"
+  },
+  {
+   "id": "r-w85d1",
+   "week": 85,
+   "module": "08",
+   "front": "不看资料，你能完成吗：分词实验",
+   "back": "看：Token 与词表 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w85d2",
+   "week": 85,
+   "module": "08",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：预训练与微调 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w85d3",
+   "week": 85,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：采样与温度 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w85d4",
+   "week": 85,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：量化 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w85d5",
+   "week": 85,
+   "module": "08",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：幻觉与评估 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w85d6",
+   "week": 85,
+   "module": "08",
+   "front": "不看资料，你能完成吗：本地跑 7B",
+   "back": "看：项目 ｜ 产出：环境",
+   "type": "item"
+  },
+  {
+   "id": "r-w85d7",
+   "week": 85,
+   "module": "08",
+   "front": "不看资料，你能完成吗：白板讲生成流程",
+   "back": "看：周复习 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w86",
+   "week": 86,
+   "module": "08",
+   "front": "第 86 周回顾：本地助手可对话。",
+   "back": "本周目标：会部署模型、调 API、算成本。",
+   "type": "review"
+  },
+  {
+   "id": "r-w86d1",
+   "week": 86,
+   "module": "08",
+   "front": "不看资料，你能完成吗：跑通",
+   "back": "看：Ollama/vLLM 1–2 集 ｜ 产出：服务",
+   "type": "item"
+  },
+  {
+   "id": "r-w86d2",
+   "week": 86,
+   "module": "08",
+   "front": "不看资料，你能完成吗：对比",
+   "back": "看：模型选择 1 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w86d3",
+   "week": 86,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：API 调用 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w86d4",
+   "week": 86,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：Embedding 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w86d5",
+   "week": 86,
+   "module": "08",
+   "front": "不看资料，你能完成吗：测算",
+   "back": "看：成本与显存 1 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w86d6",
+   "week": 86,
+   "module": "08",
+   "front": "不看资料，你能完成吗：本地助手",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w86d7",
+   "week": 86,
+   "module": "08",
+   "front": "不看资料，你能完成吗：算一次成本",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w87",
+   "week": 87,
+   "module": "08",
+   "front": "第 87 周回顾：沉淀 10 个可复用模板。",
+   "back": "本周目标：会写稳定可控的提示词。",
+   "type": "review"
+  },
+  {
+   "id": "r-w87d1",
+   "week": 87,
+   "module": "08",
+   "front": "不看资料，你能完成吗：练习",
+   "back": "看：结构化提示 1–2 集 ｜ 产出：模板",
+   "type": "item"
+  },
+  {
+   "id": "r-w87d2",
+   "week": 87,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：few-shot 与 CoT 1–2 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w87d3",
+   "week": 87,
+   "module": "08",
+   "front": "不看资料，你能完成吗：JSON 输出",
+   "back": "看：输出格式约束 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w87d4",
+   "week": 87,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实验",
+   "back": "看：评估与迭代 1–2 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w87d5",
+   "week": 87,
+   "module": "08",
+   "front": "不看资料，你能完成吗：了解",
+   "back": "看：提示注入 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w87d6",
+   "week": 87,
+   "module": "08",
+   "front": "不看资料，你能完成吗：提示词库",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w87d7",
+   "week": 87,
+   "module": "08",
+   "front": "不看资料，你能完成吗：改写 3 个提示",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w88",
+   "week": 88,
+   "module": "08",
+   "front": "第 88 周回顾：知识库答对率 ≥ 80%。",
+   "back": "本周目标：会做知识库问答。",
+   "type": "review"
+  },
+  {
+   "id": "r-w88d1",
+   "week": 88,
+   "module": "08",
+   "front": "不看资料，你能完成吗：画架构",
+   "back": "看：RAG 架构 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w88d2",
+   "week": 88,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：文档切分 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w88d3",
+   "week": 88,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：检索与重排 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w88d4",
+   "week": 88,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：生成与引用 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w88d5",
+   "week": 88,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：评估 1 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w88d6",
+   "week": 88,
+   "module": "08",
+   "front": "不看资料，你能完成吗：知识库问答",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w88d7",
+   "week": 88,
+   "module": "08",
+   "front": "不看资料，你能完成吗：画 RAG 流程",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w89",
+   "week": 89,
+   "module": "08",
+   "front": "第 89 周回顾：百万级检索跑通。",
+   "back": "本周目标：会选型、建索引、做混合检索。",
+   "type": "review"
+  },
+  {
+   "id": "r-w89d1",
+   "week": 89,
+   "module": "08",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：向量索引 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w89d2",
+   "week": 89,
+   "module": "08",
+   "front": "不看资料，你能完成吗：跑通",
+   "back": "看：Milvus/pgvector 1–2 集 ｜ 产出：服务",
+   "type": "item"
+  },
+  {
+   "id": "r-w89d3",
+   "week": 89,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：混合检索 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w89d4",
+   "week": 89,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：增量更新 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w89d5",
+   "week": 89,
+   "module": "08",
+   "front": "不看资料，你能完成吗：压测",
+   "back": "看：性能测试 1 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w89d6",
+   "week": 89,
+   "module": "08",
+   "front": "不看资料，你能完成吗：百万级检索",
+   "back": "看：项目 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w89d7",
+   "week": 89,
+   "module": "08",
+   "front": "不看资料，你能完成吗：索引选型表",
+   "back": "看：周复习 ｜ 产出：卡片",
+   "type": "item"
+  },
+  {
+   "id": "r-w90",
+   "week": 90,
+   "module": "08",
+   "front": "第 90 周回顾：做一个会查资料的 Agent。",
+   "back": "本周目标：理解工具调用、规划、记忆。",
+   "type": "review"
+  },
+  {
+   "id": "r-w90d1",
+   "week": 90,
+   "module": "08",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：Agent 概念 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w90d2",
+   "week": 90,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：工具调用 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w90d3",
+   "week": 90,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：规划与反思 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w90d4",
+   "week": 90,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：记忆 1 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w90d5",
+   "week": 90,
+   "module": "08",
+   "front": "不看资料，你能完成吗：跑通",
+   "back": "看：LangGraph 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w90d6",
+   "week": 90,
+   "module": "08",
+   "front": "不看资料，你能完成吗：会查资料的 Agent",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w90d7",
+   "week": 90,
+   "module": "08",
+   "front": "不看资料，你能完成吗：画 Agent 循环",
+   "back": "看：周复习 ｜ 产出：导图",
+   "type": "item"
+  },
+  {
+   "id": "r-w91",
+   "week": 91,
+   "module": "08",
+   "front": "第 91 周回顾：多 Agent 系统跑通。",
+   "back": "本周目标：会设计多 Agent 协作并评估。",
+   "type": "review"
+  },
+  {
+   "id": "r-w91d1",
+   "week": 91,
+   "module": "08",
+   "front": "不看资料，你能完成吗：笔记",
+   "back": "看：多 Agent 模式 1–2 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w91d2",
+   "week": 91,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：角色分工 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w91d3",
+   "week": 91,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：协作与辩论 1–2 集 ｜ 产出：代码",
+   "type": "item"
+  },
+  {
+   "id": "r-w91d4",
+   "week": 91,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：评估 1 集 ｜ 产出：报告",
+   "type": "item"
+  },
+  {
+   "id": "r-w91d5",
+   "week": 91,
+   "module": "08",
+   "front": "不看资料，你能完成吗：实现",
+   "back": "看：成本控制 1 集 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w91d6",
+   "week": 91,
+   "module": "08",
+   "front": "不看资料，你能完成吗：多 Agent 系统",
+   "back": "看：项目 ｜ 产出：作品",
+   "type": "item"
+  },
+  {
+   "id": "r-w91d7",
+   "week": 91,
+   "module": "08",
+   "front": "不看资料，你能完成吗：复盘协作流程",
+   "back": "看：周复习 ｜ 产出：总结",
+   "type": "item"
+  },
+  {
+   "id": "r-w92",
+   "week": 92,
+   "module": "08",
+   "front": "第 92 周回顾：投递 30 家并复盘。",
+   "back": "本周目标：把 92 周沉淀成作品、简历和 offer。",
+   "type": "review"
+  },
+  {
+   "id": "r-w92d1",
+   "week": 92,
+   "module": "08",
+   "front": "不看资料，你能完成吗：画架构图",
+   "back": "看：系统设计复习 1 集 ｜ 产出：笔记",
+   "type": "item"
+  },
+  {
+   "id": "r-w92d2",
+   "week": 92,
+   "module": "08",
+   "front": "不看资料，你能完成吗：写 1 页",
+   "back": "看：简历 ｜ 产出：简历",
+   "type": "item"
+  },
+  {
+   "id": "r-w92d3",
+   "week": 92,
+   "module": "08",
+   "front": "不看资料，你能完成吗：3 个项目",
+   "back": "看：作品集 ｜ 产出：作品集",
+   "type": "item"
+  },
+  {
+   "id": "r-w92d4",
+   "week": 92,
+   "module": "08",
+   "front": "不看资料，你能完成吗：50 题",
+   "back": "看：面试题 ｜ 产出：题解",
+   "type": "item"
+  },
+  {
+   "id": "r-w92d5",
+   "week": 92,
+   "module": "08",
+   "front": "不看资料，你能完成吗：3 轮",
+   "back": "看：模拟面试 ｜ 产出：录音",
+   "type": "item"
+  },
+  {
+   "id": "r-w92d6",
+   "week": 92,
+   "module": "08",
+   "front": "不看资料，你能完成吗：30 家",
+   "back": "看：投递 ｜ 产出：记录",
+   "type": "item"
+  },
+  {
+   "id": "r-w92d7",
+   "week": 92,
+   "module": "08",
+   "front": "不看资料，你能完成吗：写 92 周总结",
+   "back": "看：总复盘 ｜ 产出：文档",
+   "type": "item"
+  }
+ ],
+ "mcq": [
+  {
+   "id": "q001",
+   "week": 1,
+   "module": "01",
+   "question": "CPU 的主要职责是什么？",
+   "options": [
+    "执行指令并做运算",
+    "长期存储文件",
+    "显示图像",
+    "连接网络"
+   ],
+   "answer": 0,
+   "explain": "CPU 负责取指、译码、执行，内存和硬盘负责存储。"
+  },
+  {
+   "id": "q002",
+   "week": 1,
+   "module": "01",
+   "question": "内存（RAM）断电后数据会怎样？",
+   "options": [
+    "全部丢失",
+    "永久保留",
+    "自动写入硬盘",
+    "自动加密"
+   ],
+   "answer": 0,
+   "explain": "RAM 是易失性存储，断电即失；硬盘才是持久化。"
+  },
+  {
+   "id": "q003",
+   "week": 1,
+   "module": "01",
+   "question": "Linux 中查看当前所在目录的命令是？",
+   "options": [
+    "pwd",
+    "ls",
+    "cd",
+    "rm"
+   ],
+   "answer": 0,
+   "explain": "pwd = print working directory；ls 是列出内容。"
+  },
+  {
+   "id": "q004",
+   "week": 2,
+   "module": "01",
+   "question": "`git add` 的作用是？",
+   "options": [
+    "把改动放入暂存区",
+    "提交到本地仓库",
+    "推送到远程",
+    "撤销所有修改"
+   ],
+   "answer": 0,
+   "explain": "add 暂存，commit 提交，push 推送。"
+  },
+  {
+   "id": "q005",
+   "week": 2,
+   "module": "01",
+   "question": "HTTP 的默认端口是？",
+   "options": [
+    "80",
+    "443",
+    "22",
+    "3306"
+   ],
+   "answer": 0,
+   "explain": "HTTP 80，HTTPS 443，SSH 22，MySQL 3306。"
+  },
+  {
+   "id": "q006",
+   "week": 2,
+   "module": "01",
+   "question": "状态码 404 表示？",
+   "options": [
+    "资源不存在",
+    "服务器内部错误",
+    "重定向",
+    "请求成功"
+   ],
+   "answer": 0,
+   "explain": "4xx 客户端错误，5xx 服务端错误。"
+  },
+  {
+   "id": "q007",
+   "week": 3,
+   "module": "01",
+   "question": "Python 中列表（list）的特点？",
+   "options": [
+    "可变、有序",
+    "不可变",
+    "只能存数字",
+    "无序"
+   ],
+   "answer": 0,
+   "explain": "list 可变有序；tuple 不可变。"
+  },
+  {
+   "id": "q008",
+   "week": 3,
+   "module": "01",
+   "question": "Python 用缩进表示什么？",
+   "options": [
+    "代码块层级",
+    "注释",
+    "变量类型",
+    "运算优先级"
+   ],
+   "answer": 0,
+   "explain": "缩进即语法，错缩进会直接报错。"
+  },
+  {
+   "id": "q009",
+   "week": 3,
+   "module": "01",
+   "question": "`len([1,2,3])` 的结果是？",
+   "options": [
+    "3",
+    "2",
+    "4",
+    "报错"
+   ],
+   "answer": 0,
+   "explain": "返回元素个数。"
+  },
+  {
+   "id": "q010",
+   "week": 4,
+   "module": "01",
+   "question": "`with open(...) as f` 的主要好处是？",
+   "options": [
+    "自动关闭文件",
+    "自动加密",
+    "自动压缩",
+    "自动备份"
+   ],
+   "answer": 0,
+   "explain": "上下文管理器保证异常时也关闭。"
+  },
+  {
+   "id": "q011",
+   "week": 4,
+   "module": "01",
+   "question": "定义类的关键字是？",
+   "options": [
+    "class",
+    "def",
+    "struct",
+    "type"
+   ],
+   "answer": 0,
+   "explain": "def 定义函数，class 定义类。"
+  },
+  {
+   "id": "q012",
+   "week": 4,
+   "module": "01",
+   "question": "`try/except` 的作用是？",
+   "options": [
+    "捕获并处理异常",
+    "定义函数",
+    "循环",
+    "导入模块"
+   ],
+   "answer": 0,
+   "explain": "避免程序因异常直接崩溃。"
+  },
+  {
+   "id": "q013",
+   "week": 5,
+   "module": "01",
+   "question": "[x*2 for x in range(3)] 的结果是？",
+   "options": [
+    "[0, 2, 4]",
+    "[0, 1, 2]",
+    "[2, 4, 6]",
+    "报错"
+   ],
+   "answer": 0,
+   "explain": "列表推导式，range(3) 是 0,1,2。"
+  },
+  {
+   "id": "q014",
+   "week": 5,
+   "module": "01",
+   "question": "虚拟环境 venv 的作用是？",
+   "options": [
+    "隔离项目依赖",
+    "虚拟一台电脑",
+    "加速 Python",
+    "在线编辑"
+   ],
+   "answer": 0,
+   "explain": "不同项目依赖版本互不干扰。"
+  },
+  {
+   "id": "q015",
+   "week": 5,
+   "module": "01",
+   "question": "requests 库主要用来？",
+   "options": [
+    "发 HTTP 请求",
+    "画图",
+    "操作数据库",
+    "编译代码"
+   ],
+   "answer": 0,
+   "explain": "最常用的 Python HTTP 客户端。"
+  },
+  {
+   "id": "q016",
+   "week": 6,
+   "module": "01",
+   "question": "栈的特点是？",
+   "options": [
+    "后进先出",
+    "先进先出",
+    "随机访问",
+    "只能存数字"
+   ],
+   "answer": 0,
+   "explain": "LIFO，函数调用栈就是典型。"
+  },
+  {
+   "id": "q017",
+   "week": 6,
+   "module": "01",
+   "question": "队列的特点是？",
+   "options": [
+    "先进先出",
+    "后进先出",
+    "无序",
+    "只能存字符串"
+   ],
+   "answer": 0,
+   "explain": "FIFO，任务队列常用。"
+  },
+  {
+   "id": "q018",
+   "week": 6,
+   "module": "01",
+   "question": "哈希表平均查找复杂度是？",
+   "options": [
+    "O(1)",
+    "O(log n)",
+    "O(n)",
+    "O(n²)"
+   ],
+   "answer": 0,
+   "explain": "平均常数，最坏 O(n)。"
+  },
+  {
+   "id": "q019",
+   "week": 7,
+   "module": "01",
+   "question": "语义化标签的主要好处是？",
+   "options": [
+    "让结构和含义更清晰，利于 SEO 与无障碍",
+    "让页面更快",
+    "让 CSS 失效",
+    "自动加密"
+   ],
+   "answer": 0,
+   "explain": "如 header/nav/main/article。"
+  },
+  {
+   "id": "q020",
+   "week": 7,
+   "module": "01",
+   "question": "`<a href=\"...\">` 的 href 表示？",
+   "options": [
+    "链接地址",
+    "标题",
+    "样式",
+    "图标"
+   ],
+   "answer": 0,
+   "explain": "超链接目标。"
+  },
+  {
+   "id": "q021",
+   "week": 7,
+   "module": "01",
+   "question": "`<img>` 的 alt 属性作用是？",
+   "options": [
+    "图片无法显示时的替代文字",
+    "图片宽度",
+    "图片格式",
+    "图片缓存"
+   ],
+   "answer": 0,
+   "explain": "也是无障碍读屏的依据。"
+  },
+  {
+   "id": "q022",
+   "week": 8,
+   "module": "01",
+   "question": "`box-sizing: border-box` 意味着？",
+   "options": [
+    "宽高包含 padding 和 border",
+    "宽高只含内容",
+    "没有边框",
+    "自动外边距"
+   ],
+   "answer": 0,
+   "explain": "布局更好算。"
+  },
+  {
+   "id": "q023",
+   "week": 8,
+   "module": "01",
+   "question": "Flex 布局中主轴方向由哪个属性决定？",
+   "options": [
+    "flex-direction",
+    "justify-content",
+    "align-items",
+    "flex-wrap"
+   ],
+   "answer": 0,
+   "explain": "justify-content 沿主轴对齐。"
+  },
+  {
+   "id": "q024",
+   "week": 8,
+   "module": "01",
+   "question": "选择器优先级最高的是？",
+   "options": [
+    "行内样式",
+    "id",
+    "class",
+    "标签"
+   ],
+   "answer": 0,
+   "explain": "行内 > id > class > 标签。"
+  },
+  {
+   "id": "q025",
+   "week": 9,
+   "module": "01",
+   "question": "`const` 和 `let` 的区别？",
+   "options": [
+    "const 声明后不能重新赋值",
+    "let 不能改值",
+    "没有区别",
+    "const 只能存数字"
+   ],
+   "answer": 0,
+   "explain": "const 是常量绑定，对象内容仍可改。"
+  },
+  {
+   "id": "q026",
+   "week": 9,
+   "module": "01",
+   "question": "`===` 和 `==` 的区别？",
+   "options": [
+    "=== 不做类型转换",
+    "== 更严格",
+    "没有区别",
+    "=== 只能比数字"
+   ],
+   "answer": 0,
+   "explain": "推荐一律用 ===。"
+  },
+  {
+   "id": "q027",
+   "week": 9,
+   "module": "01",
+   "question": "闭包指的是？",
+   "options": [
+    "函数记住并访问其定义时的作用域",
+    "一种循环",
+    "一种错误",
+    "一种数据类型"
+   ],
+   "answer": 0,
+   "explain": "常用于封装私有变量。"
+  },
+  {
+   "id": "q028",
+   "week": 10,
+   "module": "01",
+   "question": "`document.querySelector` 返回？",
+   "options": [
+    "第一个匹配的元素",
+    "所有匹配元素",
+    "字符串",
+    "布尔值"
+   ],
+   "answer": 0,
+   "explain": "querySelectorAll 才返回全部。"
+  },
+  {
+   "id": "q029",
+   "week": 10,
+   "module": "01",
+   "question": "`addEventListener` 的作用是？",
+   "options": [
+    "绑定事件处理函数",
+    "修改样式",
+    "创建元素",
+    "发送请求"
+   ],
+   "answer": 0,
+   "explain": "可绑定多个，不覆盖。"
+  },
+  {
+   "id": "q030",
+   "week": 10,
+   "module": "01",
+   "question": "localStorage 的数据？",
+   "options": [
+    "关闭浏览器后仍保留",
+    "关闭即清空",
+    "只能存对象",
+    "自动同步服务器"
+   ],
+   "answer": 0,
+   "explain": "需手动 JSON 序列化。"
+  },
+  {
+   "id": "q031",
+   "week": 11,
+   "module": "01",
+   "question": "Promise 的三种状态是？",
+   "options": [
+    "pending/fulfilled/rejected",
+    "start/run/end",
+    "open/close/error",
+    "init/done"
+   ],
+   "answer": 0,
+   "explain": "状态不可逆。"
+  },
+  {
+   "id": "q032",
+   "week": 11,
+   "module": "01",
+   "question": "`await` 的作用是？",
+   "options": [
+    "等待 Promise 完成并取结果",
+    "创建线程",
+    "终止程序",
+    "发送请求"
+   ],
+   "answer": 0,
+   "explain": "只能在 async 函数内使用。"
+  },
+  {
+   "id": "q033",
+   "week": 11,
+   "module": "01",
+   "question": "`fetch` 返回的是什么？",
+   "options": [
+    "Promise",
+    "字符串",
+    "JSON 对象",
+    "数组"
+   ],
+   "answer": 0,
+   "explain": "需要 await 后再 .json()。"
+  },
+  {
+   "id": "q034",
+   "week": 12,
+   "module": "01",
+   "question": "“部署”指的是？",
+   "options": [
+    "把代码放到服务器上供人访问",
+    "写代码",
+    "测试代码",
+    "备份代码"
+   ],
+   "answer": 0,
+   "explain": "常见有静态托管和服务器部署。"
+  },
+  {
+   "id": "q035",
+   "week": 12,
+   "module": "01",
+   "question": "响应式设计的核心是？",
+   "options": [
+    "同一套页面适配不同屏幕",
+    "只做手机端",
+    "只做桌面端",
+    "用图片代替文字"
+   ],
+   "answer": 0,
+   "explain": "媒体查询 + 弹性布局。"
+  },
+  {
+   "id": "q036",
+   "week": 12,
+   "module": "01",
+   "question": "README 的作用是？",
+   "options": [
+    "说明项目怎么用、怎么跑",
+    "存代码",
+    "存图片",
+    "存数据库"
+   ],
+   "answer": 0,
+   "explain": "别人（和未来的你）看的第一份文档。"
+  },
+  {
+   "id": "q037",
+   "week": 13,
+   "module": "02",
+   "question": "TypeScript 相比 JavaScript 增加了什么？",
+   "options": [
+    "静态类型系统",
+    "运行时",
+    "浏览器",
+    "数据库"
+   ],
+   "answer": 0,
+   "explain": "编译期检查类型。"
+  },
+  {
+   "id": "q038",
+   "week": 13,
+   "module": "02",
+   "question": "为什么通常禁用 `any`？",
+   "options": [
+    "它会让类型检查失效",
+    "它运行更慢",
+    "它不能被编译",
+    "它只能存字符串"
+   ],
+   "answer": 0,
+   "explain": "等于放弃类型安全。"
+  },
+  {
+   "id": "q039",
+   "week": 13,
+   "module": "02",
+   "question": "interface 用来描述什么？",
+   "options": [
+    "对象的结构",
+    "循环",
+    "函数调用栈",
+    "网络协议"
+   ],
+   "answer": 0,
+   "explain": "也可描述函数、类。"
+  },
+  {
+   "id": "q040",
+   "week": 14,
+   "module": "02",
+   "question": "泛型的主要作用是？",
+   "options": [
+    "让类型参数化，复用逻辑且保类型",
+    "提高运行速度",
+    "替代接口",
+    "自动生成文档"
+   ],
+   "answer": 0,
+   "explain": "如 Array<T>。"
+  },
+  {
+   "id": "q041",
+   "week": 14,
+   "module": "02",
+   "question": "联合类型 `string | number` 表示？",
+   "options": [
+    "二者之一",
+    "二者同时",
+    "既不是 string 也不是 number",
+    "任意类型"
+   ],
+   "answer": 0,
+   "explain": "需要用类型收窄来区分。"
+  },
+  {
+   "id": "q042",
+   "week": 14,
+   "module": "02",
+   "question": "类型收窄常见手段是？",
+   "options": [
+    "typeof / in / instanceof 判断",
+    "强制转换",
+    "注释",
+    "删除类型"
+   ],
+   "answer": 0,
+   "explain": "让联合类型缩小到具体分支。"
+  },
+  {
+   "id": "q043",
+   "week": 15,
+   "module": "02",
+   "question": "Vite 开发启动快的主要原因是？",
+   "options": [
+    "利用浏览器原生 ESM，按需编译",
+    "用 C++ 重写",
+    "不打包",
+    "CDN 加速"
+   ],
+   "answer": 0,
+   "explain": "生产构建仍用 Rollup。"
+  },
+  {
+   "id": "q044",
+   "week": 15,
+   "module": "02",
+   "question": "package.json 的作用是？",
+   "options": [
+    "声明依赖与脚本",
+    "存源码",
+    "存图片",
+    "配置文件服务器"
+   ],
+   "answer": 0,
+   "explain": "npm 生态的核心清单。"
+  },
+  {
+   "id": "q045",
+   "week": 15,
+   "module": "02",
+   "question": "环境变量常用于？",
+   "options": [
+    "区分开发/生产配置",
+    "存源码",
+    "加密代码",
+    "压缩图片"
+   ],
+   "answer": 0,
+   "explain": "不要把密钥提交进仓库。"
+  },
+  {
+   "id": "q046",
+   "week": 16,
+   "module": "02",
+   "question": "组件的核心思想是？",
+   "options": [
+    "把 UI 拆成可复用单元",
+    "把所有代码写一个文件",
+    "减少 HTTP 请求",
+    "替代数据库"
+   ],
+   "answer": 0,
+   "explain": "组件 = 结构 + 样式 + 逻辑。"
+  },
+  {
+   "id": "q047",
+   "week": 16,
+   "module": "02",
+   "question": "Props 通常是？",
+   "options": [
+    "父传子的只读数据",
+    "子改父的数据",
+    "全局变量",
+    "数据库字段"
+   ],
+   "answer": 0,
+   "explain": "单向数据流的基础。"
+  },
+  {
+   "id": "q048",
+   "week": 16,
+   "module": "02",
+   "question": "生命周期钩子用来？",
+   "options": [
+    "在特定时机执行代码",
+    "定义样式",
+    "发请求的替代",
+    "编译代码"
+   ],
+   "answer": 0,
+   "explain": "如挂载后请求数据。"
+  },
+  {
+   "id": "q049",
+   "week": 17,
+   "module": "02",
+   "question": "状态管理解决的问题是？",
+   "options": [
+    "跨组件共享与同步数据",
+    "提高网速",
+    "压缩图片",
+    "管理数据库"
+   ],
+   "answer": 0,
+   "explain": "避免层层传 props。"
+  },
+  {
+   "id": "q050",
+   "week": 17,
+   "module": "02",
+   "question": "单向数据流的好处是？",
+   "options": [
+    "数据流向清晰、易调试",
+    "写得更少",
+    "运行更快",
+    "不用状态"
+   ],
+   "answer": 0,
+   "explain": "状态变化可追踪。"
+  },
+  {
+   "id": "q051",
+   "week": 17,
+   "module": "02",
+   "question": "计算属性（computed）的特点是？",
+   "options": [
+    "依赖变化时自动重算并缓存",
+    "每次渲染都重算",
+    "只能存字符串",
+    "不能返回值"
+   ],
+   "answer": 0,
+   "explain": "派生状态，避免重复计算。"
+  },
+  {
+   "id": "q052",
+   "week": 18,
+   "module": "02",
+   "question": "前端路由的本质是？",
+   "options": [
+    "根据 URL 渲染不同组件",
+    "向服务器请求新页面",
+    "修改数据库",
+    "压缩资源"
+   ],
+   "answer": 0,
+   "explain": "不刷新页面切换视图。"
+  },
+  {
+   "id": "q053",
+   "week": 18,
+   "module": "02",
+   "question": "路由守卫常用于？",
+   "options": [
+    "登录鉴权与权限控制",
+    "压缩图片",
+    "缓存接口",
+    "生成文档"
+   ],
+   "answer": 0,
+   "explain": "跳转前拦截判断。"
+  },
+  {
+   "id": "q054",
+   "week": 18,
+   "module": "02",
+   "question": "axios 拦截器可以做什么？",
+   "options": [
+    "统一加 token、处理错误",
+    "编译代码",
+    "画图",
+    "建表"
+   ],
+   "answer": 0,
+   "explain": "请求/响应两侧都能拦截。"
+  },
+  {
+   "id": "q055",
+   "week": 19,
+   "module": "02",
+   "question": "全局状态适合放什么？",
+   "options": [
+    "用户信息、主题、权限等跨页数据",
+    "组件内部临时变量",
+    "样式",
+    "静态图片"
+   ],
+   "answer": 0,
+   "explain": "局部状态不要上升为全局。"
+  },
+  {
+   "id": "q056",
+   "week": 19,
+   "module": "02",
+   "question": "状态持久化通常借助？",
+   "options": [
+    "localStorage / 数据库",
+    "内存",
+    "CPU 缓存",
+    "Cookie 以外的网络"
+   ],
+   "answer": 0,
+   "explain": "刷新不丢。"
+  },
+  {
+   "id": "q057",
+   "week": 19,
+   "module": "02",
+   "question": "避免不必要的重渲染，常见做法是？",
+   "options": [
+    "细化状态粒度、使用 memo",
+    "把所有状态放一起",
+    "多用全局变量",
+    "关闭 diff"
+   ],
+   "answer": 0,
+   "explain": "状态越集中，影响面越大。"
+  },
+  {
+   "id": "q058",
+   "week": 20,
+   "module": "02",
+   "question": "组件库的主要价值是？",
+   "options": [
+    "统一交互与视觉，提升开发效率",
+    "减少代码体积",
+    "替代框架",
+    "自动测试"
+   ],
+   "answer": 0,
+   "explain": "如 Element、Ant Design。"
+  },
+  {
+   "id": "q059",
+   "week": 20,
+   "module": "02",
+   "question": "主题定制一般通过什么实现？",
+   "options": [
+    "CSS 变量 / 设计 token",
+    "改源码",
+    "换浏览器",
+    "改数据库"
+   ],
+   "answer": 0,
+   "explain": "便于暗色模式和品牌色。"
+  },
+  {
+   "id": "q060",
+   "week": 20,
+   "module": "02",
+   "question": "常见响应式断点大约是？",
+   "options": [
+    "768 / 1024 / 1280",
+    "100 / 200",
+    "5000",
+    "没有断点"
+   ],
+   "answer": 0,
+   "explain": "按内容需要定，不必照搬。"
+  },
+  {
+   "id": "q061",
+   "week": 21,
+   "module": "02",
+   "question": "单元测试主要测什么？",
+   "options": [
+    "单个函数或组件的逻辑",
+    "整个系统",
+    "网络",
+    "数据库"
+   ],
+   "answer": 0,
+   "explain": "快、隔离、可重复。"
+  },
+  {
+   "id": "q062",
+   "week": 21,
+   "module": "02",
+   "question": "E2E 测试的特点是？",
+   "options": [
+    "从用户视角走完整流程",
+    "只测函数",
+    "不需要浏览器",
+    "只测样式"
+   ],
+   "answer": 0,
+   "explain": "慢但接近真实使用。"
+  },
+  {
+   "id": "q063",
+   "week": 21,
+   "module": "02",
+   "question": "测试覆盖率说明什么？",
+   "options": [
+    "代码被测试执行的比例",
+    "代码质量",
+    "性能",
+    "安全性"
+   ],
+   "answer": 0,
+   "explain": "高覆盖率不等于高质量。"
+  },
+  {
+   "id": "q064",
+   "week": 22,
+   "module": "02",
+   "question": "代码分割的主要目的是？",
+   "options": [
+    "减小首屏加载体积",
+    "减少代码行数",
+    "加快编译",
+    "减少请求数"
+   ],
+   "answer": 0,
+   "explain": "按路由/组件懒加载。"
+  },
+  {
+   "id": "q065",
+   "week": 22,
+   "module": "02",
+   "question": "虚拟列表解决什么问题？",
+   "options": [
+    "长列表只渲染可视区域",
+    "图片压缩",
+    "网络加速",
+    "缓存接口"
+   ],
+   "answer": 0,
+   "explain": "大幅减少 DOM 数量。"
+  },
+  {
+   "id": "q066",
+   "week": 22,
+   "module": "02",
+   "question": "HTTP 缓存常见的两个头是？",
+   "options": [
+    "Cache-Control / ETag",
+    "Cookie / Session",
+    "Host / Origin",
+    "Token / JWT"
+   ],
+   "answer": 0,
+   "explain": "强缓存与协商缓存。"
+  },
+  {
+   "id": "q067",
+   "week": 23,
+   "module": "02",
+   "question": "后台管理最常见的权限模型是？",
+   "options": [
+    "RBAC 基于角色",
+    "MAC",
+    "DAC",
+    "无权限"
+   ],
+   "answer": 0,
+   "explain": "用户-角色-权限三层。"
+  },
+  {
+   "id": "q068",
+   "week": 23,
+   "module": "02",
+   "question": "通用表格组件通常要支持？",
+   "options": [
+    "分页、排序、筛选",
+    "只展示",
+    "只导出",
+    "只编辑"
+   ],
+   "answer": 0,
+   "explain": "封装后复用性最高。"
+  },
+  {
+   "id": "q069",
+   "week": 23,
+   "module": "02",
+   "question": "表单校验应该放在？",
+   "options": [
+    "前端即时校验 + 后端强校验",
+    "只前端",
+    "只后端",
+    "不校验"
+   ],
+   "answer": 0,
+   "explain": "前端体验，后端安全。"
+  },
+  {
+   "id": "q070",
+   "week": 24,
+   "module": "02",
+   "question": "构建产物通常放在哪？",
+   "options": [
+    "dist / build 目录",
+    "src 目录",
+    "node_modules",
+    "桌面"
+   ],
+   "answer": 0,
+   "explain": "部署的是产物不是源码。"
+  },
+  {
+   "id": "q071",
+   "week": 24,
+   "module": "02",
+   "question": "HTTPS 相比 HTTP 多了什么？",
+   "options": [
+    "TLS 加密与身份验证",
+    "更快",
+    "更省流量",
+    "不需要域名"
+   ],
+   "answer": 0,
+   "explain": "防窃听、防篡改。"
+  },
+  {
+   "id": "q072",
+   "week": 24,
+   "module": "02",
+   "question": "CI 的作用是？",
+   "options": [
+    "每次提交自动构建和测试",
+    "自动写代码",
+    "自动部署数据库",
+    "自动设计 UI"
+   ],
+   "answer": 0,
+   "explain": "尽早发现集成问题。"
+  },
+  {
+   "id": "q073",
+   "week": 25,
+   "module": "03",
+   "question": "Node.js 适合哪类场景？",
+   "options": [
+    "I/O 密集型高并发",
+    "CPU 密集型计算",
+    "图形渲染",
+    "驱动开发"
+   ],
+   "answer": 0,
+   "explain": "单线程事件循环。"
+  },
+  {
+   "id": "q074",
+   "week": 25,
+   "module": "03",
+   "question": "Node 的事件循环作用？",
+   "options": [
+    "非阻塞地调度回调",
+    "多核并行",
+    "内存回收",
+    "编译代码"
+   ],
+   "answer": 0,
+   "explain": "把 I/O 交给系统。"
+  },
+  {
+   "id": "q075",
+   "week": 25,
+   "module": "03",
+   "question": "npm 的作用是？",
+   "options": [
+    "管理依赖与脚本",
+    "运行数据库",
+    "编译 C++",
+    "画图"
+   ],
+   "answer": 0,
+   "explain": "package.json + node_modules。"
+  },
+  {
+   "id": "q076",
+   "week": 26,
+   "module": "03",
+   "question": "Express 中间件的 next() 作用是？",
+   "options": [
+    "交给下一个中间件",
+    "结束请求",
+    "抛错",
+    "重启服务"
+   ],
+   "answer": 0,
+   "explain": "不调用会挂起。"
+  },
+  {
+   "id": "q077",
+   "week": 26,
+   "module": "03",
+   "question": "错误处理中间件的参数个数是？",
+   "options": [
+    "4 个（err, req, res, next）",
+    "2 个",
+    "3 个",
+    "任意"
+   ],
+   "answer": 0,
+   "explain": "Express 靠参数个数识别。"
+  },
+  {
+   "id": "q078",
+   "week": 26,
+   "module": "03",
+   "question": "路由参数 `:id` 通过什么获取？",
+   "options": [
+    "req.params.id",
+    "req.body.id",
+    "req.query.id",
+    "req.header.id"
+   ],
+   "answer": 0,
+   "explain": "query 用 req.query。"
+  },
+  {
+   "id": "q079",
+   "week": 27,
+   "module": "03",
+   "question": "PUT 和 PATCH 的区别？",
+   "options": [
+    "PUT 整体替换，PATCH 局部更新",
+    "PUT 局部，PATCH 整体",
+    "完全一样",
+    "都不能更新"
+   ],
+   "answer": 0,
+   "explain": "PUT 幂等整体替换。"
+  },
+  {
+   "id": "q080",
+   "week": 27,
+   "module": "03",
+   "question": "幂等指的是？",
+   "options": [
+    "执行多次结果与一次相同",
+    "执行很快",
+    "必须登录",
+    "不能重复"
+   ],
+   "answer": 0,
+   "explain": "GET/PUT/DELETE 幂等，POST 不幂等。"
+  },
+  {
+   "id": "q081",
+   "week": 27,
+   "module": "03",
+   "question": "创建资源成功通常返回？",
+   "options": [
+    "201 Created",
+    "200 OK",
+    "404",
+    "500"
+   ],
+   "answer": 0,
+   "explain": "配合 Location 头。"
+  },
+  {
+   "id": "q082",
+   "week": 28,
+   "module": "03",
+   "question": "主键的作用是？",
+   "options": [
+    "唯一标识一行且非空",
+    "加速所有查询",
+    "存索引",
+    "外键"
+   ],
+   "answer": 0,
+   "explain": "InnoDB 主键即聚簇索引。"
+  },
+  {
+   "id": "q083",
+   "week": 28,
+   "module": "03",
+   "question": "外键的作用是？",
+   "options": [
+    "保证引用完整性",
+    "加速查询",
+    "加密数据",
+    "分表"
+   ],
+   "answer": 0,
+   "explain": "也可用应用层保证。"
+  },
+  {
+   "id": "q084",
+   "week": 28,
+   "module": "03",
+   "question": "索引的本质是？",
+   "options": [
+    "额外的数据结构加速查找",
+    "数据副本",
+    "缓存",
+    "日志"
+   ],
+   "answer": 0,
+   "explain": "代价是写入变慢、占空间。"
+  },
+  {
+   "id": "q085",
+   "week": 29,
+   "module": "03",
+   "question": "以下哪种写法会让索引失效？",
+   "options": [
+    "WHERE YEAR(created_at)=2026",
+    "WHERE id=1",
+    "WHERE age>18",
+    "ORDER BY id"
+   ],
+   "answer": 0,
+   "explain": "对列用函数会失效。"
+  },
+  {
+   "id": "q086",
+   "week": 29,
+   "module": "03",
+   "question": "事务隔离级别最高的是？",
+   "options": [
+    "Serializable",
+    "Read Committed",
+    "Repeatable Read",
+    "Read Uncommitted"
+   ],
+   "answer": 0,
+   "explain": "最高但并发最低。"
+  },
+  {
+   "id": "q087",
+   "week": 29,
+   "module": "03",
+   "question": "EXPLAIN 主要看什么？",
+   "options": [
+    "是否走索引、扫描行数",
+    "SQL 长度",
+    "表名",
+    "字段类型"
+   ],
+   "answer": 0,
+   "explain": "type/key/rows 是关键。"
+  },
+  {
+   "id": "q088",
+   "week": 30,
+   "module": "03",
+   "question": "ORM 的作用是？",
+   "options": [
+    "用对象操作数据库表",
+    "压缩数据",
+    "加密数据",
+    "建索引"
+   ],
+   "answer": 0,
+   "explain": "减少手写 SQL。"
+  },
+  {
+   "id": "q089",
+   "week": 30,
+   "module": "03",
+   "question": "N+1 查询问题指？",
+   "options": [
+    "一次列表后又逐条查关联",
+    "查询 0 次",
+    "索引过多",
+    "连接池过大"
+   ],
+   "answer": 0,
+   "explain": "用 join 或批量查询解决。"
+  },
+  {
+   "id": "q090",
+   "week": 30,
+   "module": "03",
+   "question": "数据库迁移（migration）用来？",
+   "options": [
+    "版本化管理表结构变更",
+    "迁移服务器",
+    "备份数据",
+    "分库"
+   ],
+   "answer": 0,
+   "explain": "可回滚、可协作。"
+  },
+  {
+   "id": "q091",
+   "week": 31,
+   "module": "03",
+   "question": "密码存储应该？",
+   "options": [
+    "加盐哈希，不存明文",
+    "明文存储",
+    "Base64",
+    "加密可逆"
+   ],
+   "answer": 0,
+   "explain": "bcrypt/argon2。"
+  },
+  {
+   "id": "q092",
+   "week": 31,
+   "module": "03",
+   "question": "JWT 由哪三部分组成？",
+   "options": [
+    "Header.Payload.Signature",
+    "账号.密码.盐",
+    "URL.Method.Body",
+    "ID.Token.Key"
+   ],
+   "answer": 0,
+   "explain": "Payload 可解码，不能放敏感信息。"
+  },
+  {
+   "id": "q093",
+   "week": 31,
+   "module": "03",
+   "question": "RBAC 的核心是？",
+   "options": [
+    "用户绑角色，角色绑权限",
+    "每个用户单独配权限",
+    "只分管理员",
+    "按 IP 授权"
+   ],
+   "answer": 0,
+   "explain": "易维护。"
+  },
+  {
+   "id": "q094",
+   "week": 32,
+   "module": "03",
+   "question": "缓存穿透指？",
+   "options": [
+    "查不存在的数据，绕过缓存打库",
+    "缓存雪崩",
+    "缓存击穿",
+    "缓存预热"
+   ],
+   "answer": 0,
+   "explain": "布隆过滤器或缓存空值。"
+  },
+  {
+   "id": "q095",
+   "week": 32,
+   "module": "03",
+   "question": "缓存雪崩指？",
+   "options": [
+    "大量 key 同时过期",
+    "单个热点 key 过期",
+    "缓存命中率高",
+    "缓存容量大"
+   ],
+   "answer": 0,
+   "explain": "过期时间加随机值。"
+  },
+  {
+   "id": "q096",
+   "week": 32,
+   "module": "03",
+   "question": "分布式锁常用什么实现？",
+   "options": [
+    "Redis SETNX + 过期时间",
+    "数据库主键",
+    "文件锁",
+    "线程锁"
+   ],
+   "answer": 0,
+   "explain": "注意锁续期与误删。"
+  },
+  {
+   "id": "q097",
+   "week": 33,
+   "module": "03",
+   "question": "文件上传必须校验？",
+   "options": [
+    "类型、大小、内容",
+    "文件名长度",
+    "上传时间",
+    "用户等级"
+   ],
+   "answer": 0,
+   "explain": "防 webshell 与超大文件。"
+  },
+  {
+   "id": "q098",
+   "week": 33,
+   "module": "03",
+   "question": "对象存储适合存什么？",
+   "options": [
+    "图片、视频等静态资源",
+    "数据库表",
+    "代码",
+    "日志索引"
+   ],
+   "answer": 0,
+   "explain": "如 OSS/S3。"
+  },
+  {
+   "id": "q099",
+   "week": 33,
+   "module": "03",
+   "question": "断点续传的核心是？",
+   "options": [
+    "分片 + 记录已传分片",
+    "一次传完",
+    "压缩后传",
+    "加密后传"
+   ],
+   "answer": 0,
+   "explain": "大文件常用。"
+  },
+  {
+   "id": "q100",
+   "week": 34,
+   "module": "03",
+   "question": "消息队列的主要作用是？",
+   "options": [
+    "异步解耦、削峰",
+    "加速数据库",
+    "压缩数据",
+    "替代缓存"
+   ],
+   "answer": 0,
+   "explain": "生产者与消费者解耦。"
+  },
+  {
+   "id": "q101",
+   "week": 34,
+   "module": "03",
+   "question": "死信队列用来？",
+   "options": [
+    "存放无法消费的消息",
+    "存正常消息",
+    "存日志",
+    "存配置"
+   ],
+   "answer": 0,
+   "explain": "便于排查与补偿。"
+  },
+  {
+   "id": "q102",
+   "week": 34,
+   "module": "03",
+   "question": "消息重复消费时应该？",
+   "options": [
+    "业务保证幂等",
+    "忽略",
+    "删库",
+    "重启"
+   ],
+   "answer": 0,
+   "explain": "用唯一键或状态机。"
+  },
+  {
+   "id": "q103",
+   "week": 35,
+   "module": "03",
+   "question": "后端分层的常见结构是？",
+   "options": [
+    "Controller-Service-Repository",
+    "View-Model",
+    "A-B-C",
+    "无分层"
+   ],
+   "answer": 0,
+   "explain": "职责清晰、易测试。"
+  },
+  {
+   "id": "q104",
+   "week": 35,
+   "module": "03",
+   "question": "接口文档的作用是？",
+   "options": [
+    "约定前后端契约",
+    "存代码",
+    "存数据库",
+    "美化界面"
+   ],
+   "answer": 0,
+   "explain": "OpenAPI/Swagger。"
+  },
+  {
+   "id": "q105",
+   "week": 35,
+   "module": "03",
+   "question": "单元测试应该覆盖？",
+   "options": [
+    "核心业务逻辑",
+    "所有 UI",
+    "所有配置",
+    "第三方库"
+   ],
+   "answer": 0,
+   "explain": "优先覆盖易错分支。"
+  },
+  {
+   "id": "q106",
+   "week": 36,
+   "module": "03",
+   "question": "Dockerfile 的作用是？",
+   "options": [
+    "定义镜像构建步骤",
+    "运行容器",
+    "编排多容器",
+    "监控容器"
+   ],
+   "answer": 0,
+   "explain": "Compose 才负责编排。"
+  },
+  {
+   "id": "q107",
+   "week": 36,
+   "module": "03",
+   "question": "日志应该记录什么？",
+   "options": [
+    "时间、级别、请求 ID、关键上下文",
+    "只记错误",
+    "只记成功",
+    "不记"
+   ],
+   "answer": 0,
+   "explain": "便于排查链路。"
+  },
+  {
+   "id": "q108",
+   "week": 36,
+   "module": "03",
+   "question": "上线前必须做的是？",
+   "options": [
+    "备份与回滚方案",
+    "删日志",
+    "关监控",
+    "改端口"
+   ],
+   "answer": 0,
+   "explain": "出问题能退回去。"
+  },
+  {
+   "id": "q109",
+   "week": 37,
+   "module": "04",
+   "question": "`chmod 755` 表示？",
+   "options": [
+    "所有者 rwx，组和其他 r-x",
+    "所有人 rwx",
+    "只有所有者可读",
+    "无权限"
+   ],
+   "answer": 0,
+   "explain": "7=rwx，5=r-x。"
+  },
+  {
+   "id": "q110",
+   "week": 37,
+   "module": "04",
+   "question": "SSH 默认端口是？",
+   "options": [
+    "22",
+    "80",
+    "443",
+    "3306"
+   ],
+   "answer": 0,
+   "explain": "改端口可减少扫描。"
+  },
+  {
+   "id": "q111",
+   "week": 37,
+   "module": "04",
+   "question": "systemctl 用来？",
+   "options": [
+    "管理服务启停与开机自启",
+    "管理文件",
+    "管理用户",
+    "管理网络"
+   ],
+   "answer": 0,
+   "explain": "systemctl status/start/enable。"
+  },
+  {
+   "id": "q112",
+   "week": 38,
+   "module": "04",
+   "question": "反向代理的作用是？",
+   "options": [
+    "接收请求转发给后端",
+    "执行后端代码",
+    "编译代码",
+    "管理数据库"
+   ],
+   "answer": 0,
+   "explain": "隐藏后端、做 TLS 终止。"
+  },
+  {
+   "id": "q113",
+   "week": 38,
+   "module": "04",
+   "question": "负载均衡的常见策略是？",
+   "options": [
+    "轮询、加权、最少连接",
+    "随机删库",
+    "只连一台",
+    "按文件名"
+   ],
+   "answer": 0,
+   "explain": "upstream 配置。"
+  },
+  {
+   "id": "q114",
+   "week": 38,
+   "module": "04",
+   "question": "Nginx 处理静态资源的优势是？",
+   "options": [
+    "高并发、低内存",
+    "能跑 Java",
+    "能建表",
+    "能编译"
+   ],
+   "answer": 0,
+   "explain": "常配合缓存头。"
+  },
+  {
+   "id": "q115",
+   "week": 39,
+   "module": "04",
+   "question": "镜像和容器的关系是？",
+   "options": [
+    "镜像是模板，容器是运行实例",
+    "容器是模板",
+    "完全相同",
+    "镜像运行在容器里"
+   ],
+   "answer": 0,
+   "explain": "容器 = 镜像 + 可写层。"
+  },
+  {
+   "id": "q116",
+   "week": 39,
+   "module": "04",
+   "question": "多阶段构建的目的是？",
+   "options": [
+    "减小最终镜像体积",
+    "加快启动",
+    "加密镜像",
+    "增加层数"
+   ],
+   "answer": 0,
+   "explain": "构建阶段与运行阶段分离。"
+  },
+  {
+   "id": "q117",
+   "week": 39,
+   "module": "04",
+   "question": "数据卷（volume）用来？",
+   "options": [
+    "持久化容器数据",
+    "加速网络",
+    "加密数据",
+    "压缩镜像"
+   ],
+   "answer": 0,
+   "explain": "容器删了数据还在。"
+  },
+  {
+   "id": "q118",
+   "week": 40,
+   "module": "04",
+   "question": "Compose 的作用是？",
+   "options": [
+    "用一个 yaml 编排多容器",
+    "编译镜像",
+    "监控容器",
+    "压缩镜像"
+   ],
+   "answer": 0,
+   "explain": "适合本地与小型部署。"
+  },
+  {
+   "id": "q119",
+   "week": 40,
+   "module": "04",
+   "question": "服务依赖用哪个字段声明？",
+   "options": [
+    "depends_on",
+    "links",
+    "volumes",
+    "ports"
+   ],
+   "answer": 0,
+   "explain": "注意 readiness 仍需健康检查。"
+  },
+  {
+   "id": "q120",
+   "week": 40,
+   "module": "04",
+   "question": "环境变量一般放在哪？",
+   "options": [
+    ".env 文件 + compose 引用",
+    "Dockerfile 注释",
+    "README",
+    "数据库"
+   ],
+   "answer": 0,
+   "explain": "密钥不要提交。"
+  },
+  {
+   "id": "q121",
+   "week": 41,
+   "module": "04",
+   "question": "CI 的核心是？",
+   "options": [
+    "频繁集成并自动构建测试",
+    "自动写代码",
+    "自动设计",
+    "自动运维"
+   ],
+   "answer": 0,
+   "explain": "早发现集成问题。"
+  },
+  {
+   "id": "q122",
+   "week": 41,
+   "module": "04",
+   "question": "CD 指？",
+   "options": [
+    "持续交付/部署",
+    "持续开发",
+    "持续设计",
+    "持续调试"
+   ],
+   "answer": 0,
+   "explain": "交付=可随时发布，部署=自动上线。"
+  },
+  {
+   "id": "q123",
+   "week": 41,
+   "module": "04",
+   "question": "流水线失败后应该？",
+   "options": [
+    "修复后重跑，必要时回滚",
+    "忽略",
+    "删仓库",
+    "改测试"
+   ],
+   "answer": 0,
+   "explain": "红即停。"
+  },
+  {
+   "id": "q124",
+   "week": 42,
+   "module": "04",
+   "question": "A 记录指向什么？",
+   "options": [
+    "IPv4 地址",
+    "域名",
+    "邮箱",
+    "端口"
+   ],
+   "answer": 0,
+   "explain": "AAAA 指 IPv6，CNAME 指域名。"
+  },
+  {
+   "id": "q125",
+   "week": 42,
+   "module": "04",
+   "question": "证书的作用是？",
+   "options": [
+    "证明身份并加密传输",
+    "加速网站",
+    "压缩图片",
+    "备份数据"
+   ],
+   "answer": 0,
+   "explain": "Let's Encrypt 免费。"
+  },
+  {
+   "id": "q126",
+   "week": 42,
+   "module": "04",
+   "question": "CDN 的核心是？",
+   "options": [
+    "就近缓存静态资源",
+    "执行后端代码",
+    "存数据库",
+    "编译代码"
+   ],
+   "answer": 0,
+   "explain": "降低延迟、分担源站。"
+  },
+  {
+   "id": "q127",
+   "week": 43,
+   "module": "04",
+   "question": "TCP 三次握手的顺序是？",
+   "options": [
+    "SYN → SYN+ACK → ACK",
+    "ACK → SYN → ACK",
+    "SYN → ACK → FIN",
+    "FIN → ACK"
+   ],
+   "answer": 0,
+   "explain": "确认双方收发能力。"
+  },
+  {
+   "id": "q128",
+   "week": 43,
+   "module": "04",
+   "question": "UDP 的特点是？",
+   "options": [
+    "无连接、不保证可靠、低延迟",
+    "可靠有序",
+    "必须握手",
+    "有拥塞控制"
+   ],
+   "answer": 0,
+   "explain": "适合音视频、游戏。"
+  },
+  {
+   "id": "q129",
+   "week": 43,
+   "module": "04",
+   "question": "子网掩码的作用是？",
+   "options": [
+    "划分网络号与主机号",
+    "加密",
+    "压缩",
+    "路由"
+   ],
+   "answer": 0,
+   "explain": "决定网段范围。"
+  },
+  {
+   "id": "q130",
+   "week": 44,
+   "module": "04",
+   "question": "HTTP/2 的关键改进是？",
+   "options": [
+    "多路复用",
+    "明文传输",
+    "更长头部",
+    "单连接单请求"
+   ],
+   "answer": 0,
+   "explain": "一个连接并行多流。"
+  },
+  {
+   "id": "q131",
+   "week": 44,
+   "module": "04",
+   "question": "协商缓存依赖哪组头？",
+   "options": [
+    "ETag / If-None-Match",
+    "Cookie / Set-Cookie",
+    "Host / Origin",
+    "Token / JWT"
+   ],
+   "answer": 0,
+   "explain": "304 表示未修改。"
+  },
+  {
+   "id": "q132",
+   "week": 44,
+   "module": "04",
+   "question": "HTTPS 握手的主要目的是？",
+   "options": [
+    "协商密钥并验证证书",
+    "压缩数据",
+    "分配 IP",
+    "建表"
+   ],
+   "answer": 0,
+   "explain": "之后用对称加密传输。"
+  },
+  {
+   "id": "q133",
+   "week": 45,
+   "module": "04",
+   "question": "XSS 的本质是？",
+   "options": [
+    "把脚本注入页面执行",
+    "窃取数据库",
+    "伪造 DNS",
+    "暴力破解"
+   ],
+   "answer": 0,
+   "explain": "转义输入 + CSP。"
+  },
+  {
+   "id": "q134",
+   "week": 45,
+   "module": "04",
+   "question": "CSRF 利用的是？",
+   "options": [
+    "浏览器自动携带 Cookie",
+    "服务器漏洞",
+    "DNS 劫持",
+    "弱密码"
+   ],
+   "answer": 0,
+   "explain": "SameSite + Token + Referer 校验。"
+  },
+  {
+   "id": "q135",
+   "week": 45,
+   "module": "04",
+   "question": "防 SQL 注入最有效的是？",
+   "options": [
+    "参数化查询",
+    "拼接字符串",
+    "转义引号",
+    "隐藏报错"
+   ],
+   "answer": 0,
+   "explain": "预编译语句。"
+  },
+  {
+   "id": "q136",
+   "week": 46,
+   "module": "04",
+   "question": "日志级别从高到低通常是？",
+   "options": [
+    "ERROR > WARN > INFO > DEBUG",
+    "DEBUG 最高",
+    "INFO 最高",
+    "没有级别"
+   ],
+   "answer": 0,
+   "explain": "生产一般 INFO 以上。"
+  },
+  {
+   "id": "q137",
+   "week": 46,
+   "module": "04",
+   "question": "监控指标四黄金信号是？",
+   "options": [
+    "延迟、流量、错误、饱和度",
+    "CPU、内存、磁盘、网络",
+    "QPS、TPS、RT、PV",
+    "日活、留存、转化、GMV"
+   ],
+   "answer": 0,
+   "explain": "Google SRE 提法。"
+  },
+  {
+   "id": "q138",
+   "week": 46,
+   "module": "04",
+   "question": "告警设计的关键是？",
+   "options": [
+    "可行动、不噪音",
+    "越多越好",
+    "只发邮件",
+    "关掉"
+   ],
+   "answer": 0,
+   "explain": "每条告警都应对应动作。"
+  },
+  {
+   "id": "q139",
+   "week": 47,
+   "module": "04",
+   "question": "全栈项目联调时最常见的错误来源是？",
+   "options": [
+    "前后端字段名/类型不一致",
+    "浏览器版本",
+    "字体",
+    "屏幕尺寸"
+   ],
+   "answer": 0,
+   "explain": "先对齐接口契约。"
+  },
+  {
+   "id": "q140",
+   "week": 47,
+   "module": "04",
+   "question": "接口返回统一结构的好处是？",
+   "options": [
+    "前端处理一致、易排查",
+    "更安全",
+    "更快",
+    "更省流量"
+   ],
+   "answer": 0,
+   "explain": "如 code/data/message。"
+  },
+  {
+   "id": "q141",
+   "week": 47,
+   "module": "04",
+   "question": "鉴权信息一般放在哪？",
+   "options": [
+    "请求头 Authorization",
+    "URL 参数",
+    "请求体",
+    "Cookie 之外的文件"
+   ],
+   "answer": 0,
+   "explain": "Bearer token。"
+  },
+  {
+   "id": "q142",
+   "week": 48,
+   "module": "04",
+   "question": "上线前压测的目的是？",
+   "options": [
+    "找出容量瓶颈",
+    "美化界面",
+    "减少代码",
+    "增加功能"
+   ],
+   "answer": 0,
+   "explain": "关注 QPS、RT、错误率。"
+  },
+  {
+   "id": "q143",
+   "week": 48,
+   "module": "04",
+   "question": "回滚方案的核心是？",
+   "options": [
+    "能快速恢复到上一版本",
+    "删日志",
+    "改数据库",
+    "重启网络"
+   ],
+   "answer": 0,
+   "explain": "镜像/版本保留。"
+  },
+  {
+   "id": "q144",
+   "week": 48,
+   "module": "04",
+   "question": "线上问题排查第一步是？",
+   "options": [
+    "看日志和监控定位范围",
+    "改代码",
+    "重启",
+    "回滚"
+   ],
+   "answer": 0,
+   "explain": "先定位再动手。"
+  },
+  {
+   "id": "q145",
+   "week": 49,
+   "module": "05",
+   "question": "数组随机访问的时间复杂度是？",
+   "options": [
+    "O(1)",
+    "O(n)",
+    "O(log n)",
+    "O(n²)"
+   ],
+   "answer": 0,
+   "explain": "连续内存 + 下标计算。"
+  },
+  {
+   "id": "q146",
+   "week": 49,
+   "module": "05",
+   "question": "链表在头部插入的时间复杂度是？",
+   "options": [
+    "O(1)",
+    "O(n)",
+    "O(log n)",
+    "O(n²)"
+   ],
+   "answer": 0,
+   "explain": "改指针即可。"
+  },
+  {
+   "id": "q147",
+   "week": 49,
+   "module": "05",
+   "question": "时间复杂度 O(n²) 通常出现在？",
+   "options": [
+    "双重循环",
+    "一次遍历",
+    "二分",
+    "哈希查找"
+   ],
+   "answer": 0,
+   "explain": "如冒泡排序。"
+  },
+  {
+   "id": "q148",
+   "week": 50,
+   "module": "05",
+   "question": "哈希冲突的常见解决方式是？",
+   "options": [
+    "链地址法、开放寻址",
+    "排序",
+    "二分",
+    "递归"
+   ],
+   "answer": 0,
+   "explain": "Java HashMap 用链表+红黑树。"
+  },
+  {
+   "id": "q149",
+   "week": 50,
+   "module": "05",
+   "question": "二叉搜索树中序遍历的结果是？",
+   "options": [
+    "升序",
+    "降序",
+    "随机",
+    "层序"
+   ],
+   "answer": 0,
+   "explain": "左-根-右。"
+  },
+  {
+   "id": "q150",
+   "week": 50,
+   "module": "05",
+   "question": "堆常用于实现？",
+   "options": [
+    "优先队列",
+    "哈希表",
+    "图",
+    "链表"
+   ],
+   "answer": 0,
+   "explain": "取最大/最小 O(log n)。"
+  },
+  {
+   "id": "q151",
+   "week": 51,
+   "module": "05",
+   "question": "B+ 树适合做索引的原因是？",
+   "options": [
+    "矮胖、范围查询友好",
+    "节点只存数据",
+    "不需要磁盘",
+    "支持哈希"
+   ],
+   "answer": 0,
+   "explain": "减少磁盘 IO。"
+  },
+  {
+   "id": "q152",
+   "week": 51,
+   "module": "05",
+   "question": "Trie 适合什么场景？",
+   "options": [
+    "前缀匹配、自动补全",
+    "排序",
+    "最短路径",
+    "事务"
+   ],
+   "answer": 0,
+   "explain": "按字符分层。"
+  },
+  {
+   "id": "q153",
+   "week": 51,
+   "module": "05",
+   "question": "并查集适合解决？",
+   "options": [
+    "连通性问题",
+    "排序",
+    "哈希",
+    "加密"
+   ],
+   "answer": 0,
+   "explain": "路径压缩 + 按秩合并。"
+  },
+  {
+   "id": "q154",
+   "week": 52,
+   "module": "05",
+   "question": "BFS 通常借助什么结构？",
+   "options": [
+    "队列",
+    "栈",
+    "堆",
+    "哈希"
+   ],
+   "answer": 0,
+   "explain": "层序遍历。"
+  },
+  {
+   "id": "q155",
+   "week": 52,
+   "module": "05",
+   "question": "Dijkstra 不能处理？",
+   "options": [
+    "负权边",
+    "正权边",
+    "有向图",
+    "无向图"
+   ],
+   "answer": 0,
+   "explain": "负权用 Bellman-Ford。"
+  },
+  {
+   "id": "q156",
+   "week": 52,
+   "module": "05",
+   "question": "拓扑排序要求图是？",
+   "options": [
+    "有向无环图",
+    "无向图",
+    "完全图",
+    "二分图"
+   ],
+   "answer": 0,
+   "explain": "有环则无拓扑序。"
+  },
+  {
+   "id": "q157",
+   "week": 53,
+   "module": "05",
+   "question": "快速排序平均时间复杂度是？",
+   "options": [
+    "O(n log n)",
+    "O(n)",
+    "O(n²)",
+    "O(log n)"
+   ],
+   "answer": 0,
+   "explain": "最坏 O(n²)。"
+  },
+  {
+   "id": "q158",
+   "week": 53,
+   "module": "05",
+   "question": "归并排序的特点是？",
+   "options": [
+    "稳定，额外 O(n) 空间",
+    "不稳定",
+    "原地排序",
+    "最坏 O(n)"
+   ],
+   "answer": 0,
+   "explain": "分治 + 合并。"
+  },
+  {
+   "id": "q159",
+   "week": 53,
+   "module": "05",
+   "question": "冒泡排序最坏复杂度是？",
+   "options": [
+    "O(n²)",
+    "O(n)",
+    "O(n log n)",
+    "O(1)"
+   ],
+   "answer": 0,
+   "explain": "相邻交换。"
+  },
+  {
+   "id": "q160",
+   "week": 54,
+   "module": "05",
+   "question": "二分查找的前提是？",
+   "options": [
+    "数据有序",
+    "数据无序",
+    "数据是链表",
+    "数据是树"
+   ],
+   "answer": 0,
+   "explain": "无序需先排序。"
+  },
+  {
+   "id": "q161",
+   "week": 54,
+   "module": "05",
+   "question": "递归必须有？",
+   "options": [
+    "终止条件",
+    "循环",
+    "数组",
+    "指针"
+   ],
+   "answer": 0,
+   "explain": "否则栈溢出。"
+  },
+  {
+   "id": "q162",
+   "week": 54,
+   "module": "05",
+   "question": "回溯的本质是？",
+   "options": [
+    "深度优先 + 撤销选择",
+    "广度优先",
+    "动态规划",
+    "贪心"
+   ],
+   "answer": 0,
+   "explain": "走不通就回退。"
+  },
+  {
+   "id": "q163",
+   "week": 55,
+   "module": "05",
+   "question": "动态规划的两个前提是？",
+   "options": [
+    "最优子结构 + 重叠子问题",
+    "贪心 + 分治",
+    "递归 + 迭代",
+    "排序 + 查找"
+   ],
+   "answer": 0,
+   "explain": "状态转移 + 记忆化。"
+  },
+  {
+   "id": "q164",
+   "week": 55,
+   "module": "05",
+   "question": "01 背包中每个物品？",
+   "options": [
+    "只能选 0 或 1 次",
+    "可选无限次",
+    "必须选",
+    "按重量排序"
+   ],
+   "answer": 0,
+   "explain": "完全背包才是无限次。"
+  },
+  {
+   "id": "q165",
+   "week": 55,
+   "module": "05",
+   "question": "状态转移方程的作用是？",
+   "options": [
+    "描述子问题之间如何推导",
+    "排序",
+    "加密",
+    "建表"
+   ],
+   "answer": 0,
+   "explain": "DP 的核心。"
+  },
+  {
+   "id": "q166",
+   "week": 56,
+   "module": "05",
+   "question": "贪心算法要求？",
+   "options": [
+    "局部最优能推出全局最优",
+    "一定最优",
+    "必须排序",
+    "必须递归"
+   ],
+   "answer": 0,
+   "explain": "需证明或找反例。"
+  },
+  {
+   "id": "q167",
+   "week": 56,
+   "module": "05",
+   "question": "区间调度通常按什么排序？",
+   "options": [
+    "结束时间",
+    "开始时间",
+    "长度",
+    "随机"
+   ],
+   "answer": 0,
+   "explain": "结束早的优先。"
+  },
+  {
+   "id": "q168",
+   "week": 56,
+   "module": "05",
+   "question": "贪心失效的典型场景是？",
+   "options": [
+    "0-1 背包",
+    "找零（特定面额）",
+    "区间调度",
+    "霍夫曼编码"
+   ],
+   "answer": 0,
+   "explain": "0-1 背包要用 DP。"
+  },
+  {
+   "id": "q169",
+   "week": 57,
+   "module": "05",
+   "question": "进程和线程的区别是？",
+   "options": [
+    "进程有独立地址空间，线程共享",
+    "线程独立地址空间",
+    "没有区别",
+    "进程更轻"
+   ],
+   "answer": 0,
+   "explain": "线程是调度单位。"
+  },
+  {
+   "id": "q170",
+   "week": 57,
+   "module": "05",
+   "question": "死锁的四个必要条件不包括？",
+   "options": [
+    "可剥夺",
+    "互斥",
+    "请求并保持",
+    "循环等待"
+   ],
+   "answer": 0,
+   "explain": "四条件：互斥、请求保持、不可剥夺、循环等待。"
+  },
+  {
+   "id": "q171",
+   "week": 57,
+   "module": "05",
+   "question": "时间片轮转属于？",
+   "options": [
+    "抢占式调度",
+    "非抢占",
+    "静态优先级",
+    "批处理"
+   ],
+   "answer": 0,
+   "explain": "轮流执行固定时间片。"
+  },
+  {
+   "id": "q172",
+   "week": 58,
+   "module": "05",
+   "question": "虚拟内存的作用是？",
+   "options": [
+    "让进程以为自己有连续大内存",
+    "加快 CPU",
+    "增加硬盘",
+    "压缩数据"
+   ],
+   "answer": 0,
+   "explain": "分页映射 + 换出。"
+  },
+  {
+   "id": "q173",
+   "week": 58,
+   "module": "05",
+   "question": "分页的好处是？",
+   "options": [
+    "消除外部碎片",
+    "消除所有碎片",
+    "加快 CPU",
+    "减少内存"
+   ],
+   "answer": 0,
+   "explain": "内部碎片仍存在。"
+  },
+  {
+   "id": "q174",
+   "week": 58,
+   "module": "05",
+   "question": "LRU 淘汰的是？",
+   "options": [
+    "最久未使用的页",
+    "最近使用的页",
+    "随机页",
+    "最大页"
+   ],
+   "answer": 0,
+   "explain": "最近最少使用。"
+  },
+  {
+   "id": "q175",
+   "week": 59,
+   "module": "05",
+   "question": "第三范式主要消除？",
+   "options": [
+    "传递依赖",
+    "部分依赖",
+    "所有依赖",
+    "索引"
+   ],
+   "answer": 0,
+   "explain": "2NF 消除部分依赖。"
+  },
+  {
+   "id": "q176",
+   "week": 59,
+   "module": "05",
+   "question": "MVCC 解决什么问题？",
+   "options": [
+    "读写不阻塞",
+    "加速索引",
+    "压缩数据",
+    "分布式事务"
+   ],
+   "answer": 0,
+   "explain": "快照读。"
+  },
+  {
+   "id": "q177",
+   "week": 59,
+   "module": "05",
+   "question": "可重复读隔离级别能避免？",
+   "options": [
+    "不可重复读",
+    "幻读（InnoDB 大部分）",
+    "脏读",
+    "所有问题"
+   ],
+   "answer": 0,
+   "explain": "脏读在 RC 就已避免。"
+  },
+  {
+   "id": "q178",
+   "week": 60,
+   "module": "05",
+   "question": "限流算法不包括？",
+   "options": [
+    "快速排序",
+    "令牌桶",
+    "漏桶",
+    "滑动窗口"
+   ],
+   "answer": 0,
+   "explain": "排序不是限流。"
+  },
+  {
+   "id": "q179",
+   "week": 60,
+   "module": "05",
+   "question": "缓存与数据库一致性常见策略是？",
+   "options": [
+    "先更新库再删缓存",
+    "先删库",
+    "不处理",
+    "只写缓存"
+   ],
+   "answer": 0,
+   "explain": "延迟双删可缓解。"
+  },
+  {
+   "id": "q180",
+   "week": 60,
+   "module": "05",
+   "question": "短链系统的核心是？",
+   "options": [
+    "ID 生成 + 映射存储 + 跳转",
+    "加密",
+    "压缩",
+    "排序"
+   ],
+   "answer": 0,
+   "explain": "Base62 编码。"
+  },
+  {
+   "id": "q181",
+   "week": 61,
+   "module": "06",
+   "question": "词法分析的输出是？",
+   "options": [
+    "token 流",
+    "语法树",
+    "机器码",
+    "字节码"
+   ],
+   "answer": 0,
+   "explain": "字符流 → token。"
+  },
+  {
+   "id": "q182",
+   "week": 61,
+   "module": "06",
+   "question": "正则表达式常用于？",
+   "options": [
+    "描述词法规则",
+    "语法分析",
+    "代码生成",
+    "链接"
+   ],
+   "answer": 0,
+   "explain": "也可手写状态机。"
+  },
+  {
+   "id": "q183",
+   "week": 61,
+   "module": "06",
+   "question": "有限自动机的作用是？",
+   "options": [
+    "识别字符串是否符合规则",
+    "排序",
+    "加密",
+    "压缩"
+   ],
+   "answer": 0,
+   "explain": "DFA/NFA。"
+  },
+  {
+   "id": "q184",
+   "week": 62,
+   "module": "06",
+   "question": "语法分析的输出是？",
+   "options": [
+    "抽象语法树 AST",
+    "token 流",
+    "机器码",
+    "符号表"
+   ],
+   "answer": 0,
+   "explain": "递归下降或 LR。"
+  },
+  {
+   "id": "q185",
+   "week": 62,
+   "module": "06",
+   "question": "递归下降适合什么文法？",
+   "options": [
+    "LL(1)",
+    "LR(1)",
+    "二义文法",
+    "正则文法"
+   ],
+   "answer": 0,
+   "explain": "自顶向下。"
+  },
+  {
+   "id": "q186",
+   "week": 62,
+   "module": "06",
+   "question": "AST 的作用是？",
+   "options": [
+    "表示程序结构，供后续处理",
+    "存字符串",
+    "存字节",
+    "存路径"
+   ],
+   "answer": 0,
+   "explain": "解释器/编译器都基于它。"
+  },
+  {
+   "id": "q187",
+   "week": 63,
+   "module": "06",
+   "question": "解释器执行的是？",
+   "options": [
+    "直接遍历 AST 或字节码",
+    "机器码",
+    "汇编",
+    "链接产物"
+   ],
+   "answer": 0,
+   "explain": "无需生成目标文件。"
+  },
+  {
+   "id": "q188",
+   "week": 63,
+   "module": "06",
+   "question": "作用域决定什么？",
+   "options": [
+    "变量在哪里可见",
+    "代码运行速度",
+    "文件大小",
+    "网络端口"
+   ],
+   "answer": 0,
+   "explain": "词法作用域为主。"
+  },
+  {
+   "id": "q189",
+   "week": 63,
+   "module": "06",
+   "question": "闭包在解释器里需要保存？",
+   "options": [
+    "定义时的环境",
+    "全局变量",
+    "栈指针",
+    "机器码"
+   ],
+   "answer": 0,
+   "explain": "环境链。"
+  },
+  {
+   "id": "q190",
+   "week": 64,
+   "module": "06",
+   "question": "Kotlin 空安全的体现是？",
+   "options": [
+    "类型区分可空与非空",
+    "自动判空",
+    "禁止 null",
+    "运行时检查"
+   ],
+   "answer": 0,
+   "explain": "String? 需 ?. 或 !!。"
+  },
+  {
+   "id": "q191",
+   "week": 64,
+   "module": "06",
+   "question": "协程相比线程的优势是？",
+   "options": [
+    "更轻量、可挂起不阻塞",
+    "更快 CPU",
+    "更安全",
+    "更省内存以外无优势"
+   ],
+   "answer": 0,
+   "explain": "结构化并发。"
+  },
+  {
+   "id": "q192",
+   "week": 64,
+   "module": "06",
+   "question": "data class 自动生成？",
+   "options": [
+    "equals/hashCode/toString/copy",
+    "网络请求",
+    "布局",
+    "权限"
+   ],
+   "answer": 0,
+   "explain": "省样板代码。"
+  },
+  {
+   "id": "q193",
+   "week": 65,
+   "module": "06",
+   "question": "Activity 生命周期中可见但不可交互的是？",
+   "options": [
+    "onStart 之后 onResume 之前",
+    "onCreate",
+    "onDestroy",
+    "onStop"
+   ],
+   "answer": 0,
+   "explain": "onPause 后仍部分可见。"
+  },
+  {
+   "id": "q194",
+   "week": 65,
+   "module": "06",
+   "question": "Intent 的作用是？",
+   "options": [
+    "组件间通信与跳转",
+    "存数据",
+    "画界面",
+    "发网络"
+   ],
+   "answer": 0,
+   "explain": "显式/隐式。"
+  },
+  {
+   "id": "q195",
+   "week": 65,
+   "module": "06",
+   "question": "Jetpack Compose 的特点是？",
+   "options": [
+    "声明式 UI",
+    "命令式",
+    "XML 布局",
+    "WebView"
+   ],
+   "answer": 0,
+   "explain": "可组合函数。"
+  },
+  {
+   "id": "q196",
+   "week": 66,
+   "module": "06",
+   "question": "Android 签名的作用是？",
+   "options": [
+    "标识开发者、保证完整性",
+    "加密数据",
+    "压缩 APK",
+    "加速安装"
+   ],
+   "answer": 0,
+   "explain": "丢了签名无法覆盖升级。"
+  },
+  {
+   "id": "q197",
+   "week": 66,
+   "module": "06",
+   "question": "危险权限需要？",
+   "options": [
+    "运行时动态申请",
+    "只写清单",
+    "不用申请",
+    "只写代码"
+   ],
+   "answer": 0,
+   "explain": "Android 6.0 起。"
+  },
+  {
+   "id": "q198",
+   "week": 66,
+   "module": "06",
+   "question": "APK 打包前要改？",
+   "options": [
+    "versionCode / versionName",
+    "包名不能改",
+    "图标不能改",
+    "权限不能改"
+   ],
+   "answer": 0,
+   "explain": "versionCode 必须递增。"
+  },
+  {
+   "id": "q199",
+   "week": 67,
+   "module": "06",
+   "question": "Swift 可选类型表示？",
+   "options": [
+    "值可能存在也可能为 nil",
+    "一定存在",
+    "一定是 0",
+    "一定是字符串"
+   ],
+   "answer": 0,
+   "explain": "Optional<T>。"
+  },
+  {
+   "id": "q200",
+   "week": 67,
+   "module": "06",
+   "question": "协议（protocol）类似？",
+   "options": [
+    "接口",
+    "类",
+    "枚举",
+    "结构体"
+   ],
+   "answer": 0,
+   "explain": "可被类/结构体实现。"
+  },
+  {
+   "id": "q201",
+   "week": 67,
+   "module": "06",
+   "question": "结构体是值类型意味着？",
+   "options": [
+    "赋值时复制",
+    "引用共享",
+    "不能有方法",
+    "不能有属性"
+   ],
+   "answer": 0,
+   "explain": "类是引用类型。"
+  },
+  {
+   "id": "q202",
+   "week": 68,
+   "module": "06",
+   "question": "SwiftUI 的编程范式是？",
+   "options": [
+    "声明式",
+    "命令式",
+    "面向过程",
+    "函数式以外都不是"
+   ],
+   "answer": 0,
+   "explain": "描述 UI 状态。"
+  },
+  {
+   "id": "q203",
+   "week": 68,
+   "module": "06",
+   "question": "@State 用于？",
+   "options": [
+    "视图内部可变状态",
+    "全局状态",
+    "网络请求",
+    "持久化"
+   ],
+   "answer": 0,
+   "explain": "变化触发重绘。"
+  },
+  {
+   "id": "q204",
+   "week": 68,
+   "module": "06",
+   "question": "视图组合的方式是？",
+   "options": [
+    "嵌套 View 与修饰符",
+    "继承",
+    "XML",
+    "字符串拼接"
+   ],
+   "answer": 0,
+   "explain": "小视图拼大视图。"
+  },
+  {
+   "id": "q205",
+   "week": 69,
+   "module": "06",
+   "question": "iOS 应用沙盒意味着？",
+   "options": [
+    "只能访问自己容器内的文件",
+    "能访问任意文件",
+    "不能存文件",
+    "只能联网"
+   ],
+   "answer": 0,
+   "explain": "Documents/Library/tmp。"
+  },
+  {
+   "id": "q206",
+   "week": 69,
+   "module": "06",
+   "question": "TestFlight 用于？",
+   "options": [
+    "分发测试版本",
+    "上架审核",
+    "崩溃分析",
+    "代码签名"
+   ],
+   "answer": 0,
+   "explain": "内部/外部测试。"
+  },
+  {
+   "id": "q207",
+   "week": 69,
+   "module": "06",
+   "question": "归档（Archive）的作用是？",
+   "options": [
+    "生成可分发的构建",
+    "清理缓存",
+    "备份代码",
+    "压缩图片"
+   ],
+   "answer": 0,
+   "explain": "上传 App Store。"
+  },
+  {
+   "id": "q208",
+   "week": 70,
+   "module": "06",
+   "question": "ArkTS 与 TypeScript 的关系是？",
+   "options": [
+    "基于 TS 扩展",
+    "完全不同",
+    "ArkTS 是 Java",
+    "TS 基于 ArkTS"
+   ],
+   "answer": 0,
+   "explain": "保留类型系统并加约束。"
+  },
+  {
+   "id": "q209",
+   "week": 70,
+   "module": "06",
+   "question": "鸿蒙 UI 的写法是？",
+   "options": [
+    "声明式",
+    "命令式",
+    "XML",
+    "HTML"
+   ],
+   "answer": 0,
+   "explain": "build() 里描述 UI。"
+  },
+  {
+   "id": "q210",
+   "week": 70,
+   "module": "06",
+   "question": "鸿蒙状态装饰器 @State 的作用是？",
+   "options": [
+    "驱动 UI 更新",
+    "发请求",
+    "存数据库",
+    "路由"
+   ],
+   "answer": 0,
+   "explain": "类似其他框架的响应式状态。"
+  },
+  {
+   "id": "q211",
+   "week": 71,
+   "module": "06",
+   "question": "UIAbility 的作用是？",
+   "options": [
+    "承载页面与生命周期",
+    "数据库",
+    "网络库",
+    "编译器"
+   ],
+   "answer": 0,
+   "explain": "一个 Ability 对应窗口。"
+  },
+  {
+   "id": "q212",
+   "week": 71,
+   "module": "06",
+   "question": "Stage 模型相比 FA 的优势是？",
+   "options": [
+    "更清晰的组件化与生命周期",
+    "更快",
+    "更省电",
+    "不用代码"
+   ],
+   "answer": 0,
+   "explain": "官方主推。"
+  },
+  {
+   "id": "q213",
+   "week": 71,
+   "module": "06",
+   "question": "服务卡片由哪个扩展能力实现？",
+   "options": [
+    "FormExtensionAbility",
+    "ServiceExtensionAbility",
+    "DataShareExtensionAbility",
+    "UIAbility"
+   ],
+   "answer": 0,
+   "explain": "桌面卡片。"
+  },
+  {
+   "id": "q214",
+   "week": 72,
+   "module": "06",
+   "question": "三端打包的共同点是？",
+   "options": [
+    "都需要签名与版本号",
+    "都不需要签名",
+    "都用同一套代码",
+    "都只能上架一个市场"
+   ],
+   "answer": 0,
+   "explain": "签名体系各异。"
+  },
+  {
+   "id": "q215",
+   "week": 72,
+   "module": "06",
+   "question": "跨端方案的主要取舍是？",
+   "options": [
+    "开发效率 vs 原生体验",
+    "安全 vs 速度",
+    "成本 vs 内存",
+    "没有取舍"
+   ],
+   "answer": 0,
+   "explain": "按业务选。"
+  },
+  {
+   "id": "q216",
+   "week": 72,
+   "module": "06",
+   "question": "兼容性测试主要覆盖？",
+   "options": [
+    "不同屏幕、系统版本、权限",
+    "只看一款机型",
+    "只看最新系统",
+    "不测"
+   ],
+   "answer": 0,
+   "explain": "折叠屏也要覆盖。"
+  },
+  {
+   "id": "q217",
+   "week": 73,
+   "module": "07",
+   "question": "矩阵乘法 (m×n)·(n×p) 的结果是？",
+   "options": [
+    "m×p",
+    "n×n",
+    "m×n",
+    "p×p"
+   ],
+   "answer": 0,
+   "explain": "左列数等于右行数。"
+  },
+  {
+   "id": "q218",
+   "week": 73,
+   "module": "07",
+   "question": "特征值描述的是？",
+   "options": [
+    "变换中方向不变的缩放因子",
+    "矩阵大小",
+    "行列式",
+    "秩"
+   ],
+   "answer": 0,
+   "explain": "Av=λv。"
+  },
+  {
+   "id": "q219",
+   "week": 73,
+   "module": "07",
+   "question": "矩阵的秩反映？",
+   "options": [
+    "线性无关的行/列数",
+    "元素个数",
+    "行列式",
+    "逆矩阵"
+   ],
+   "answer": 0,
+   "explain": "秩 = 有效维度。"
+  },
+  {
+   "id": "q220",
+   "week": 74,
+   "module": "07",
+   "question": "条件概率 P(A|B) 表示？",
+   "options": [
+    "B 发生下 A 的概率",
+    "A 与 B 同时发生",
+    "A 或 B",
+    "A 的补集"
+   ],
+   "answer": 0,
+   "explain": "P(AB)/P(B)。"
+  },
+  {
+   "id": "q221",
+   "week": 74,
+   "module": "07",
+   "question": "贝叶斯定理用于？",
+   "options": [
+    "用先验与似然更新后验",
+    "排序",
+    "加密",
+    "压缩"
+   ],
+   "answer": 0,
+   "explain": "P(A|B) ∝ P(B|A)P(A)。"
+  },
+  {
+   "id": "q222",
+   "week": 74,
+   "module": "07",
+   "question": "期望描述的是？",
+   "options": [
+    "随机变量的平均取值",
+    "最大取值",
+    "最小取值",
+    "方差"
+   ],
+   "answer": 0,
+   "explain": "加权平均。"
+  },
+  {
+   "id": "q223",
+   "week": 75,
+   "module": "07",
+   "question": "梯度指向？",
+   "options": [
+    "函数增长最快的方向",
+    "下降最快方向",
+    "不变方向",
+    "随机方向"
+   ],
+   "answer": 0,
+   "explain": "所以下降用负梯度。"
+  },
+  {
+   "id": "q224",
+   "week": 75,
+   "module": "07",
+   "question": "链式法则用于？",
+   "options": [
+    "复合函数求导",
+    "积分",
+    "矩阵乘法",
+    "概率"
+   ],
+   "answer": 0,
+   "explain": "反向传播的基础。"
+  },
+  {
+   "id": "q225",
+   "week": 75,
+   "module": "07",
+   "question": "学习率过大可能导致？",
+   "options": [
+    "震荡不收敛",
+    "收敛更快且稳定",
+    "梯度消失",
+    "过拟合"
+   ],
+   "answer": 0,
+   "explain": "过小则收敛慢。"
+  },
+  {
+   "id": "q226",
+   "week": 76,
+   "module": "07",
+   "question": "监督学习的特点是？",
+   "options": [
+    "有标签",
+    "无标签",
+    "无数据",
+    "无模型"
+   ],
+   "answer": 0,
+   "explain": "学 x→y 映射。"
+  },
+  {
+   "id": "q227",
+   "week": 76,
+   "module": "07",
+   "question": "线性回归的损失通常是？",
+   "options": [
+    "均方误差",
+    "交叉熵",
+    "Hinge",
+    "KL"
+   ],
+   "answer": 0,
+   "explain": "MSE。"
+  },
+  {
+   "id": "q228",
+   "week": 76,
+   "module": "07",
+   "question": "过拟合的表现是？",
+   "options": [
+    "训练好、验证差",
+    "都差",
+    "都好",
+    "训练不动"
+   ],
+   "answer": 0,
+   "explain": "正则化/早停。"
+  },
+  {
+   "id": "q229",
+   "week": 77,
+   "module": "07",
+   "question": "决策树划分的依据通常是？",
+   "options": [
+    "信息增益/基尼指数",
+    "随机",
+    "距离",
+    "梯度"
+   ],
+   "answer": 0,
+   "explain": "选择使纯度提升最大的特征。"
+  },
+  {
+   "id": "q230",
+   "week": 77,
+   "module": "07",
+   "question": "随机森林的「随机」体现在？",
+   "options": [
+    "样本采样与特征采样",
+    "随机初始化",
+    "随机学习率",
+    "随机损失"
+   ],
+   "answer": 0,
+   "explain": "Bagging + 特征子集。"
+  },
+  {
+   "id": "q231",
+   "week": 77,
+   "module": "07",
+   "question": "SVM 的核心思想是？",
+   "options": [
+    "最大化分类间隔",
+    "最小化损失",
+    "聚类",
+    "降维"
+   ],
+   "answer": 0,
+   "explain": "支持向量决定边界。"
+  },
+  {
+   "id": "q232",
+   "week": 78,
+   "module": "07",
+   "question": "类别不平衡时更适合看？",
+   "options": [
+    "F1 / AUC",
+    "准确率",
+    "MSE",
+    "R²"
+   ],
+   "answer": 0,
+   "explain": "准确率会被多数类带偏。"
+  },
+  {
+   "id": "q233",
+   "week": 78,
+   "module": "07",
+   "question": "交叉验证的作用是？",
+   "options": [
+    "更稳地评估泛化能力",
+    "加速训练",
+    "减少数据",
+    "增加特征"
+   ],
+   "answer": 0,
+   "explain": "K 折轮流验证。"
+  },
+  {
+   "id": "q234",
+   "week": 78,
+   "module": "07",
+   "question": "精确率和召回率的权衡体现在？",
+   "options": [
+    "提高阈值精确率升、召回率降",
+    "同时升",
+    "同时降",
+    "无关"
+   ],
+   "answer": 0,
+   "explain": "PR 曲线。"
+  },
+  {
+   "id": "q235",
+   "week": 79,
+   "module": "07",
+   "question": "激活函数的作用是？",
+   "options": [
+    "引入非线性",
+    "加速收敛",
+    "减少参数",
+    "正则化"
+   ],
+   "answer": 0,
+   "explain": "否则多层等价于一层。"
+  },
+  {
+   "id": "q236",
+   "week": 79,
+   "module": "07",
+   "question": "反向传播基于？",
+   "options": [
+    "链式法则",
+    "随机搜索",
+    "贪心",
+    "排序"
+   ],
+   "answer": 0,
+   "explain": "逐层求梯度。"
+  },
+  {
+   "id": "q237",
+   "week": 79,
+   "module": "07",
+   "question": "交叉熵常用于？",
+   "options": [
+    "分类任务",
+    "回归任务",
+    "聚类",
+    "降维"
+   ],
+   "answer": 0,
+   "explain": "配合 softmax。"
+  },
+  {
+   "id": "q238",
+   "week": 80,
+   "module": "07",
+   "question": "卷积层提取的是？",
+   "options": [
+    "局部特征",
+    "全局统计",
+    "类别",
+    "概率"
+   ],
+   "answer": 0,
+   "explain": "边缘、纹理。"
+  },
+  {
+   "id": "q239",
+   "week": 80,
+   "module": "07",
+   "question": "池化的作用是？",
+   "options": [
+    "降维并保留主要信息",
+    "增加参数",
+    "分类",
+    "归一化"
+   ],
+   "answer": 0,
+   "explain": "最大/平均池化。"
+  },
+  {
+   "id": "q240",
+   "week": 80,
+   "module": "07",
+   "question": "迁移学习适合？",
+   "options": [
+    "数据少时复用预训练模型",
+    "数据无限时",
+    "无标签时",
+    "只做回归"
+   ],
+   "answer": 0,
+   "explain": "冻结 backbone 微调。"
+  },
+  {
+   "id": "q241",
+   "week": 81,
+   "module": "07",
+   "question": "RNN 适合处理？",
+   "options": [
+    "序列数据",
+    "图像",
+    "表格",
+    "图"
+   ],
+   "answer": 0,
+   "explain": "文本、语音、时序。"
+  },
+  {
+   "id": "q242",
+   "week": 81,
+   "module": "07",
+   "question": "LSTM 解决什么问题？",
+   "options": [
+    "长依赖与梯度消失",
+    "过拟合",
+    "欠拟合",
+    "数据不平衡"
+   ],
+   "answer": 0,
+   "explain": "门控机制。"
+  },
+  {
+   "id": "q243",
+   "week": 81,
+   "module": "07",
+   "question": "梯度消失的后果是？",
+   "options": [
+    "远处信息学不到",
+    "训练太快",
+    "参数爆炸",
+    "内存溢出"
+   ],
+   "answer": 0,
+   "explain": "长序列难建模。"
+  },
+  {
+   "id": "q244",
+   "week": 82,
+   "module": "07",
+   "question": "自注意力的核心是？",
+   "options": [
+    "计算 Q 与 K 的相似度加权 V",
+    "卷积",
+    "循环",
+    "池化"
+   ],
+   "answer": 0,
+   "explain": "全局依赖。"
+  },
+  {
+   "id": "q245",
+   "week": 82,
+   "module": "07",
+   "question": "多头注意力的作用是？",
+   "options": [
+    "从多个子空间捕捉关系",
+    "增加层数",
+    "减少参数",
+    "加速"
+   ],
+   "answer": 0,
+   "explain": "并行多组注意力。"
+  },
+  {
+   "id": "q246",
+   "week": 82,
+   "module": "07",
+   "question": "位置编码解决？",
+   "options": [
+    "注意力本身无序",
+    "过拟合",
+    "梯度消失",
+    "显存"
+   ],
+   "answer": 0,
+   "explain": "注入位置信息。"
+  },
+  {
+   "id": "q247",
+   "week": 83,
+   "module": "07",
+   "question": "Dataset 与 DataLoader 的分工是？",
+   "options": [
+    "Dataset 取样本，DataLoader 组 batch",
+    "反过来",
+    "都一样",
+    "都不用"
+   ],
+   "answer": 0,
+   "explain": "支持打乱与并行。"
+  },
+  {
+   "id": "q248",
+   "week": 83,
+   "module": "07",
+   "question": "优化器的作用是？",
+   "options": [
+    "按梯度更新参数",
+    "计算损失",
+    "加载数据",
+    "保存模型"
+   ],
+   "answer": 0,
+   "explain": "SGD/Adam。"
+  },
+  {
+   "id": "q249",
+   "week": 83,
+   "module": "07",
+   "question": "保存模型通常保存？",
+   "options": [
+    "state_dict",
+    "源码",
+    "数据集",
+    "日志"
+   ],
+   "answer": 0,
+   "explain": "加载时先建结构。"
+  },
+  {
+   "id": "q250",
+   "week": 84,
+   "module": "07",
+   "question": "建模第一步通常是？",
+   "options": [
+    "建立简单基线",
+    "上最复杂模型",
+    "调参",
+    "部署"
+   ],
+   "answer": 0,
+   "explain": "先跑通再优化。"
+  },
+  {
+   "id": "q251",
+   "week": 84,
+   "module": "07",
+   "question": "模型评估应使用？",
+   "options": [
+    "独立测试集",
+    "训练集",
+    "验证集当测试",
+    "全部数据"
+   ],
+   "answer": 0,
+   "explain": "避免数据泄漏。"
+  },
+  {
+   "id": "q252",
+   "week": 84,
+   "module": "07",
+   "question": "模型部署为 API 的常见框架是？",
+   "options": [
+    "FastAPI",
+    "React",
+    "Vue",
+    "Nginx"
+   ],
+   "answer": 0,
+   "explain": "轻量、自带文档。"
+  },
+  {
+   "id": "q253",
+   "week": 85,
+   "module": "08",
+   "question": "Token 是？",
+   "options": [
+    "模型处理的最小文本单位",
+    "一种货币",
+    "密码",
+    "缓存"
+   ],
+   "answer": 0,
+   "explain": "分词后的片段。"
+  },
+  {
+   "id": "q254",
+   "week": 85,
+   "module": "08",
+   "question": "温度调高会？",
+   "options": [
+    "输出更随机",
+    "更确定",
+    "更短",
+    "更快"
+   ],
+   "answer": 0,
+   "explain": "低温度趋近贪心。"
+  },
+  {
+   "id": "q255",
+   "week": 85,
+   "module": "08",
+   "question": "幻觉指？",
+   "options": [
+    "生成看似合理但错误的内容",
+    "模型崩溃",
+    "显存不足",
+    "训练失败"
+   ],
+   "answer": 0,
+   "explain": "用 RAG 与校验缓解。"
+  },
+  {
+   "id": "q256",
+   "week": 86,
+   "module": "08",
+   "question": "量化（4bit）的主要目的是？",
+   "options": [
+    "降低显存占用",
+    "提高精度",
+    "加快训练",
+    "增加参数"
+   ],
+   "answer": 0,
+   "explain": "牺牲少量精度。"
+  },
+  {
+   "id": "q257",
+   "week": 86,
+   "module": "08",
+   "question": "Embedding 的作用是？",
+   "options": [
+    "把文本映射成向量",
+    "压缩图片",
+    "加密",
+    "分词"
+   ],
+   "answer": 0,
+   "explain": "用于检索与聚类。"
+  },
+  {
+   "id": "q258",
+   "week": 86,
+   "module": "08",
+   "question": "显存不足时优先考虑？",
+   "options": [
+    "量化或换更小模型",
+    "加大 batch",
+    "增加层数",
+    "提高精度"
+   ],
+   "answer": 0,
+   "explain": "也可用 CPU offload。"
+  },
+  {
+   "id": "q259",
+   "week": 87,
+   "module": "08",
+   "question": "Few-shot 指的是？",
+   "options": [
+    "给几个示例再让模型回答",
+    "零样本",
+    "微调",
+    "蒸馏"
+   ],
+   "answer": 0,
+   "explain": "示例提升稳定性。"
+  },
+  {
+   "id": "q260",
+   "week": 87,
+   "module": "08",
+   "question": "CoT（思维链）的作用是？",
+   "options": [
+    "让模型分步推理",
+    "减少 token",
+    "加速",
+    "降低成本"
+   ],
+   "answer": 0,
+   "explain": "适合多步问题。"
+  },
+  {
+   "id": "q261",
+   "week": 87,
+   "module": "08",
+   "question": "结构化输出通常要求？",
+   "options": [
+    "JSON 等固定格式",
+    "自由文本",
+    "图片",
+    "音频"
+   ],
+   "answer": 0,
+   "explain": "便于程序解析。"
+  },
+  {
+   "id": "q262",
+   "week": 88,
+   "module": "08",
+   "question": "RAG 的核心流程是？",
+   "options": [
+    "检索相关文档再生成",
+    "微调模型",
+    "压缩模型",
+    "强化学习"
+   ],
+   "answer": 0,
+   "explain": "检索 + 生成。"
+  },
+  {
+   "id": "q263",
+   "week": 88,
+   "module": "08",
+   "question": "文档切分过大会导致？",
+   "options": [
+    "噪声多、检索不准",
+    "没有影响",
+    "更快",
+    "更省 token"
+   ],
+   "answer": 0,
+   "explain": "按语义边界切。"
+  },
+  {
+   "id": "q264",
+   "week": 88,
+   "module": "08",
+   "question": "RAG 中「引用」的作用是？",
+   "options": [
+    "让回答可追溯",
+    "加速",
+    "压缩",
+    "加密"
+   ],
+   "answer": 0,
+   "explain": "降低幻觉。"
+  },
+  {
+   "id": "q265",
+   "week": 89,
+   "module": "08",
+   "question": "向量检索的相似度常用？",
+   "options": [
+    "余弦相似度",
+    "编辑距离",
+    "哈希",
+    "正则"
+   ],
+   "answer": 0,
+   "explain": "也可用内积。"
+  },
+  {
+   "id": "q266",
+   "week": 89,
+   "module": "08",
+   "question": "ANN 索引的作用是？",
+   "options": [
+    "近似最近邻，加速检索",
+    "精确匹配",
+    "压缩",
+    "加密"
+   ],
+   "answer": 0,
+   "explain": "HNSW/IVF。"
+  },
+  {
+   "id": "q267",
+   "week": 89,
+   "module": "08",
+   "question": "混合检索通常结合？",
+   "options": [
+    "向量 + 关键词",
+    "图片 + 音频",
+    "表格 + 图",
+    "无"
+   ],
+   "answer": 0,
+   "explain": "BM25 + 向量。"
+  },
+  {
+   "id": "q268",
+   "week": 90,
+   "module": "08",
+   "question": "Agent 与普通对话模型的区别是？",
+   "options": [
+    "能调用工具并多步规划",
+    "参数更多",
+    "速度更快",
+    "不需要提示"
+   ],
+   "answer": 0,
+   "explain": "工具 + 规划 + 记忆。"
+  },
+  {
+   "id": "q269",
+   "week": 90,
+   "module": "08",
+   "question": "工具调用通常需要模型输出？",
+   "options": [
+    "结构化参数",
+    "自然语言",
+    "图片",
+    "音频"
+   ],
+   "answer": 0,
+   "explain": "function calling。"
+  },
+  {
+   "id": "q270",
+   "week": 90,
+   "module": "08",
+   "question": "Agent 的记忆一般分为？",
+   "options": [
+    "短期对话与长期存储",
+    "内存与硬盘",
+    "训练与推理",
+    "输入与输出"
+   ],
+   "answer": 0,
+   "explain": "向量库常做长期记忆。"
+  },
+  {
+   "id": "q271",
+   "week": 91,
+   "module": "08",
+   "question": "多智能体的常见模式是？",
+   "options": [
+    "角色分工 + 协作",
+    "单模型重复调用",
+    "随机",
+    "只做分类"
+   ],
+   "answer": 0,
+   "explain": "规划者/执行者/评审者。"
+  },
+  {
+   "id": "q272",
+   "week": 91,
+   "module": "08",
+   "question": "多 Agent 系统的主要成本是？",
+   "options": [
+    "token 与调用次数",
+    "内存",
+    "磁盘",
+    "网络带宽"
+   ],
+   "answer": 0,
+   "explain": "需控制轮次。"
+  },
+  {
+   "id": "q273",
+   "week": 91,
+   "module": "08",
+   "question": "评估 Agent 效果常用？",
+   "options": [
+    "任务成功率 + 人工评分",
+    "只看 token",
+    "只看延迟",
+    "只看成本"
+   ],
+   "answer": 0,
+   "explain": "端到端评测。"
+  },
+  {
+   "id": "q274",
+   "week": 92,
+   "module": "08",
+   "question": "系统设计中缓存的主要作用是？",
+   "options": [
+    "降延迟、降后端压力",
+    "提高一致性",
+    "减少代码",
+    "加密"
+   ],
+   "answer": 0,
+   "explain": "空间换时间。"
+  },
+  {
+   "id": "q275",
+   "week": 92,
+   "module": "08",
+   "question": "简历中项目描述推荐用？",
+   "options": [
+    "STAR：背景/任务/行动/结果",
+    "流水账",
+    "只写技术栈",
+    "只写公司"
+   ],
+   "answer": 0,
+   "explain": "结果要量化。"
+  },
+  {
+   "id": "q276",
+   "week": 92,
+   "module": "08",
+   "question": "面试被问不会的问题，较好的做法是？",
+   "options": [
+    "说出思路与已知边界",
+    "沉默",
+    "编造",
+    "转移话题"
+   ],
+   "answer": 0,
+   "explain": "展示思考过程。"
+  }
+ ]
+}
