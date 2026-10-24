@@ -1,0 +1,33 @@
+# Flutter / Dart
+dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# 生成文件（由 build_runner 产出，不入库）
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# Android
+android/local.properties
+android/.gradle/
+**/android/**/gradle-wrapper.jar
+**/android/app/debug
+**/android/app/profile
+**/android/app/release
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# 系统
+.DS_Store
+*.log
+
+# 中间产物
+assets/spec/x/

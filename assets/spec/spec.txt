@@ -1,0 +1,556 @@
+STUDY TRACKER  ·  BUILD SPEC
+学习打卡 App
+开发规格书
+
+平台：Flutter · Android APK · 纯本地离线
+适配：Samsung Galaxy Z Fold 3（内外屏双布局）
+内容：92 周 / 644 个学习项 / 736 张自检卡 / 129 个概念 / 276 道选择题
+版本：v1.0 · 2026 年 10 月
+
+0　这份文档怎么用
+这是一份可以直接交给 AI 编码工具（Claude Code、Cursor、Codex 等）执行的产品规格书。按顺序阅读即可理解全部需求；第 10 章是给 AI 的分步构建指令，可以逐条粘贴执行。
+三条硬约束
+纯本地：不联网、不登录、不依赖后端，数据全部存在手机里。
+内容内置：92 周计划、题目、概念、测试全部随 App 打包，首次启动导入本地数据库。
+界面优先：干净、克制、有质感；宁可少一个功能，也不能让界面显得廉价。
+
+1　产品定义
+1.1　一句话
+一个把 92 周学习计划拆成「可打勾的小条目」，并按遗忘曲线自动安排复习、测试和抽查的本地打卡 App。
+1.2　用户与场景
+用户是零基础、时间不固定、需要长期坚持的单个学习者。典型场景：
+•  晚上有 40 分钟，打开 App，看到今天推荐的 2–6 个条目，做完打勾。
+•  周末有 3 小时，连续打勾十几个条目，把落后的一周补上。
+•  突然想测试自己，进入「测试」，做 10 道选择题或抽 10 个概念白板复述。
+•  打开统计，看到连续天数、本周时长、各模块完成度。
+1.3　不做什么
+•  不做账号、不做云同步、不做社交、不做排行榜。
+•  不做课程播放器，视频通过搜索名引导到 B 站。
+•  不做复杂 AI 功能，所有题目与解析本地内置。
+2　平台与技术栈
+项目
+选型
+说明
+框架
+Flutter 3.24+ / Dart 3
+单代码库，直接出 Android APK
+最低版本
+Android 8.0（API 26）
+覆盖绝大多数设备
+目标版本
+Android 14（API 34）
+满足应用市场要求
+状态管理
+Riverpod 2.x
+轻量、可测试
+路由
+go_router
+声明式路由，易扩展
+本地数据库
+drift（SQLite）
+类型安全，支持迁移
+图表
+fl_chart
+统计页图表
+字体
+Noto Sans SC + Inter
+中文正文 + 数字标题
+图标
+Material Symbols Rounded
+线性、克制
+
+3　信息架构与页面
+底部四个 Tab：今日、计划、测试、统计；设置放在「今日」右上角。
+页面
+核心内容
+关键交互
+今日
+问候 + 今日进度环 + 推荐条目列表 + 待复习提示
+勾选、记录用时、写备注
+计划
+模块 → 周 → 条目 三级列表；条目详情
+展开、筛选、跳转打卡
+测试
+自检卡、选择题、概念抽背、阶段听力测试
+开始测试、看解析、加入错题
+统计
+连续天数、本周时长、热力图、模块完成度
+切换周/月、查看明细
+设置
+每周目标时长、提醒时间、深色模式、导出/导入
+开关、选择、确认
+
+3.1　今日页
+•  顶部：日期、问候语、当前模块名。
+•  进度环：今日已完成条目数 / 今日目标条目数（默认 3，可在设置改）。
+•  推荐列表：按「未完成的最早周」排序，取前 6 条；每条显示 周次、看什么、练什么、预计分钟。
+•  复习条：若有到期的自检卡，显示「有 N 张卡待复习」，点击进入测试。
+•  底部：今日累计用时、连续打卡天数。
+空状态：全部完成时显示一句克制的鼓励文案 + 今日用时，不撒花、不弹窗。
+3.2　计划页
+折叠屏展开时左侧模块列表、右侧周与条目；手机单栏时逐级下钻。
+•  模块卡片：编号、标题、周数、完成百分比、主题色细条。
+•  周列表：周次、标题、完成 x/7、状态（未开始 / 进行中 / 已完成）。
+•  条目详情：看什么、练什么、产出、预计分钟、所属周目标、打卡按钮、备注。
+3.3　测试页
+类型
+来源
+题量与规则
+自检卡
+736 张（每周回顾 + 每个条目一张）
+按 D1/D2/D4/D7/D15/D30 到期抽取，自评「记得 / 模糊 / 忘了」
+选择题
+276 道（每周 3 题）
+只出已学周次的题；答错自动进错题本
+概念题
+129 个概念自动生成「选定义」
+4 选 1，干扰项随机取其他概念定义
+旧题抽查
+错题本 + 已学选择题
+随机 10 题，错题优先
+白板抽背
+已学概念
+随机 10 个，逐个计时 60 秒口述，自评红黄绿
+阶段听力
+8 个阶段任务
+模块完成 ≥80% 解锁
+
+3.4　统计页
+•  顶部三个数字：连续天数、本周时长、总完成条目。
+•  热力图：最近 12 周，每天颜色深浅 = 当日完成条目数。
+•  模块进度：8 个横向进度条，用各模块主题色。
+•  掌握度：红黄绿三色饼图（来自自检卡与错题）。
+4　数据模型
+首次启动把 assets/data 下 4 个 JSON 导入 drift 数据库；之后所有读写走本地表。
+表
+字段
+说明
+modules
+id, title, sub, color, goal, accept
+8 个模块
+weeks
+week, module_id, title, goal, review
+92 周
+items
+id, week, day, watch, practice, output, minutes
+644 个条目
+checkins
+id, item_id, date, minutes, note, done
+打卡记录
+cards
+id, week, front, back, type, stage(0-6), due_date
+736 张自检卡
+mcqs
+id, week, question, options, answer, explain, wrong_count
+79 道选择题
+concepts
+term, definition, week, level(0-2)
+129 个概念
+stages
+module, week, title, where, task, pass
+8 个听力测试
+settings
+key, value
+目标时长、提醒、主题
+
+数据一致性规则
+items 的完成状态由 checkins 派生，不单独存，避免两处不一致。
+cards.due_date 由上次自评结果计算：记得 +7 天，模糊 +2 天，忘了 +1 天。
+周完成度 = 该周已完成条目 / 7；模块完成度 = 该模块已完成条目 / 总条目。
+
+5　核心逻辑
+5.1　时间模型：连续队列，不锁周
+•  644 个条目按周次顺序排成一条连续队列，周只是标签，不是锁。
+•  周目标默认 2400 分钟（40 小时），可在设置改成 20h / 10h。
+•  允许提前：队列里任何条目都可以直接打卡，不必等它“到周”。
+•  允许顺延：没做完的条目留在队列里，下周继续，不记“失败”。
+•  进度双计：一条是条目完成数，一条是本周已投入分钟数。
+•  跨天以凌晨 4 点为界：凌晨 2 点打的卡算前一天。
+5.2　今日推荐算法
+输入：队列中最早未完成的条目、今日已用分钟、每日预算（默认 90 分钟）。输出：最多 6 条，累计预计分钟不超过预算的 1.2 倍。如果用户提前打了后面的条目，队列自动跳过它们。
+没有任何“落后惩罚”：首页只显示“本周还剩 N 分钟 / M 条”，不显示“你落后了”。
+5.3　复习队列
+每张自检卡有 stage（0–6）和 due_date。到期卡进入今日复习；自评后按规则推进 stage 并重算 due_date。阶段对应 D1/D2/D4/D7/D15/D30/毕业。
+5.4　测试解锁
+•  只出「已学过」的题：item 完成即视为该周已学。
+•  周完成 ≥ 60% 解锁该周选择题；模块完成 ≥ 80% 解锁阶段听力测试。
+•  错题本题目在答对 2 次后移出。
+5.5　白板抽背
+从已学概念中随机 10 个，逐个 60 秒倒计时；结束后自评红/黄/绿，红黄进入次日复习队列。
+6　视觉规范
+整体气质：安静的纸感 + 一点金属色点缀。不要花哨渐变、不要大面积高饱和、不要圆滚滚的卡通图标。
+6.1　色板
+用途
+色值
+说明
+主色 Ink
+#1B2A41
+标题、主按钮、选中态
+点缀 Gold
+#A67C3D
+强调线、进度、数字
+背景 Paper
+#F7F5F0
+页面底色（浅色模式）
+卡片
+#FFFFFF
+卡片、弹层
+正文
+#2E3440
+正文文字
+次要
+#5B6472
+说明、时间戳
+分隔线
+#E3DED4
+1px 细线
+成功
+#3E6B57
+完成、正确
+警示
+#B03A2E
+错误、逾期
+
+深色模式：背景 #12161C，卡片 #1A2028，正文 #E6E3DC，主色改为 #D9C7A7，避免纯黑纯白。
+6.2　字体与字号
+层级
+字号/字重
+用途
+H1
+28 / SemiBold
+页面大标题
+H2
+20 / SemiBold
+区块标题
+H3
+16 / Medium
+卡片标题
+正文
+14 / Regular
+内容
+辅助
+12 / Regular
+说明、时间
+数字
+32–48 / Medium（Inter）
+统计数字
+
+6.3　间距与形状
+•  8pt 网格：所有间距为 8 的倍数（8/16/24/32）。
+•  圆角：卡片 20，按钮 14，输入框 12，头像 999。
+•  阴影：唯一一档 0 2 8 rgba(27,42,65,0.06)，不要多彩阴影。
+•  分割：优先用 1px 细线，少用卡片堆叠。
+•  动效：200–280ms，ease-out；页面切换用淡入 + 轻微上移 8dp。
+7　折叠屏适配（Galaxy Z Fold 3）
+屏幕
+分辨率
+约合 dp
+布局
+外屏 6.2"
+832 × 2268
+≈ 333 × 907
+单栏，底部导航
+内屏 7.6"
+2208 × 1768
+≈ 884 × 707
+双栏，左侧导航
+
+•  断点：< 600dp 单栏；600–840dp 单栏加宽（内容最大宽 680）；≥ 840dp 双栏。
+•  双栏结构：左侧 280dp 列表，右侧详情；折叠/展开时用 LayoutBuilder 重建，保留滚动位置与选中项。
+•  内外屏切换会触发尺寸变化，使用 MediaQuery.sizeOf 与 LayoutBuilder，不要缓存屏幕尺寸。
+•  铰链区：内屏中间约 20dp 竖带，避免把主按钮、输入框放在正中。
+•  横竖屏都支持；横屏时计划页强制双栏。
+•  列表项最小点击区域 48dp；内屏一屏最多显示 6–8 条，避免过密。
+8　随包数据文件
+文件
+内容
+大小
+assets/data/plan.json
+8 模块 / 92 周 / 644 条目
+约 144 KB
+assets/data/questions.json
+736 张自检卡 + 276 道选择题
+约 320 KB
+assets/data/concepts.json
+129 个概念
+约 15 KB
+assets/data/stages.json
+8 个阶段听力测试 + 直播清单
+约 3 KB
+
+JSON 结构见附录 A。首次启动读取并写入数据库，用 settings 里的 data_version 控制是否重新导入。
+9　验收标准
+编号
+验收项
+通过标准
+A1
+首启导入
+断网安装，首次启动 3 秒内进入今日页，644 条数据齐全
+A2
+打卡
+任意条目勾选后立即持久化，杀进程重开仍在
+A3
+今日推荐
+未完成时按最早周次推荐；全部完成显示空状态
+A4
+复习队列
+自评后按规则生成下次到期日，次日能在今日页看到
+A5
+选择题
+只出现已学周次；答错进错题本；解析可展开
+A6
+白板抽背
+随机 10 个已学概念，60 秒计时，结果入复习
+A7
+统计
+连续天数、周时长、热力图、模块进度与数据一致
+A8
+折叠屏
+内外屏切换不丢失状态；双栏布局正确；铰链区无关键操作
+A9
+深色模式
+跟随系统，对比度符合 WCAG AA
+A10
+导出
+可导出 JSON 备份并恢复
+A11
+首启校验
+任意 JSON 缺字段时回滚并显示错误页，不白屏
+A12
+连续队列
+提前打卡后面的条目、落后条目顺延，均不影响使用
+A13
+通知
+Android 13+ 授权后可收到每日提醒，拒绝不崩溃
+A14
+评分
+选择题 10 题答对 8 题算过，错题进本
+A15
+云打包
+push 后 Actions 产出可安装 APK
+A16
+无障碍
+字号 1.3 倍不破版，读屏能读出主要按钮
+
+10　给 AI 的分步构建指令
+按下面顺序执行，每步完成后运行一次，确认能编译再继续。
+01  初始化 Flutter 项目，配置 minSdk 26、targetSdk 34，加入 riverpod、go_router、drift、fl_chart 依赖。
+02  建立主题：按第 6 章色板与字号生成 ThemeData（浅色/深色两套），写好 TextTheme。
+03  把 assets/data 下 4 个 JSON 接入，写 drift 表结构与导入逻辑，首启导入。
+04  实现底部导航与四个空页面骨架，保证折叠屏断点布局生效。
+05  实现「今日页」：进度环、推荐算法、打卡动作、复习提示。
+06  实现「计划页」：模块/周/条目三级列表与详情，双栏适配。
+07  实现「测试页」：自检卡、选择题、概念题、旧题抽查、白板抽背、阶段听力。
+08  实现「统计页」：连续天数、周时长、热力图、模块进度。
+09  实现「设置页」：每日目标、提醒、深色模式、导出/导入。
+10  按第 9 章逐条自测，修完再打包 APK。
+11　数据校验与首次启动
+首启流程：读 settings.data_version → 为空或低于当前版本 → 事务内导入 4 个 JSON → 逐条校验 → 写库 → 写版本号 → 进主页。
+校验项
+规则
+失败处理
+模块
+8 个，id 唯一
+整批回滚，显示错误页
+周
+92 周，week 连续 1–92
+整批回滚
+条目
+每周 7 条，id 唯一
+整批回滚
+选择题
+answer ∈ [0,3]，options 长度 4
+跳过该题并记录
+概念
+term 与 definition 非空
+跳过该条并记录
+阶段
+8 个，module 与周次匹配
+跳过并记录
+
+自检页
+首次导入完成后显示：模块 8 / 周 92 / 条目 644 / 自检卡 736 / 选择题 276 / 概念 129。
+任何一项为 0 或数量不符，显示红色错误并提供「重试」「清空重导」两个按钮。
+全部通过才允许进入主页；自检页可在设置里随时再次打开。
+
+12　打包与签名
+没有签名就只能装调试包，且无法覆盖升级。签名文件一旦丢失，后续版本无法更新，务必单独备份。
+步骤
+命令 / 配置
+说明
+生成 keystore
+keytool -genkey -v -keystore release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias release
+密码与别名记在密码管理器
+配置密钥
+android/key.properties 写 storeFile/storePassword/keyAlias/keyPassword
+不要提交到 Git
+gradle 签名
+signingConfigs.release + buildTypes.release.signingConfig
+release 才启用
+打包
+flutter build apk --release --split-per-abi
+产物在 build/app/outputs/flutter-apk/
+版本号
+pubspec.yaml 的 version: 1.0.0+1
++ 后面是 versionCode，每次必须递增
+安装
+adb install -r app-arm64-v8a-release.apk 或直接传手机点击安装
+首次需允许未知来源
+
+13　没有安卓环境：GitHub Actions 云打包
+把项目推到 GitHub，push 后自动构建 APK，手机浏览器直接下载产物，不需要在本机装 Android SDK。
+仓库根目录新建 .github/workflows/build-apk.yml：
+name: build-apkon: [push, workflow_dispatch]jobs:  build:    runs-on: ubuntu-latest    steps:      - uses: actions/checkout@v4      - uses: actions/setup-java@v4        with: { distribution: temurin, java-version: '17' }      - uses: subosito/flutter-action@v2        with: { channel: stable }      - run: flutter pub get      - run: flutter build apk --release      - uses: actions/upload-artifact@v4        with:          name: apk          path: build/app/outputs/flutter-apk/app-release.apk
+•  签名放到 GitHub Secrets（KEYSTORE_BASE64 / KEY_PASSWORD 等），构建时解码写入。
+•  每次 push 自动出包，Actions 页面下载 artifact。
+•  私有仓库免费额度足够个人使用；公开仓库完全免费。
+14　提醒与通知
+•  Android 13+ 需动态申请 POST_NOTIFICATIONS 权限；拒绝则不弹提醒，不阻塞使用。
+•  每日提醒默认 20:00，可关闭或改时间；用 WorkManager 的普通任务，不强依赖精确闹钟。
+•  通知文案：“今天还有 N 条没打卡，预计 X 分钟”，点击直达今日页。
+•  错过不补发，不堆叠多条通知；每天最多一条。
+15　备份与导出
+•  每周日自动导出一次 JSON 备份到应用文档目录，保留最近 4 份。
+•  设置里提供「导出备份」（分享到文件/微信）与「导出打卡 CSV」（Excel 可打开）。
+•  导入时先校验结构与数量，确认后覆盖，覆盖前自动生成一份回滚备份。
+•  清空数据需要二次确认，并提示“不可恢复”。
+16　无障碍与性能
+项目
+要求
+字号缩放
+系统 1.0–1.3 倍不破版、不截断
+对比度
+正文与背景 ≥ 4.5:1（WCAG AA）
+读屏
+关键按钮有 Semantics 标签，进度环有文字替代
+点击区域
+≥ 48dp
+列表
+ListView.builder 懒加载；计划页按 50 条分页
+热力图
+只渲染可见 12 周，滑动时再算
+启动
+中端机冷启动 < 2 秒
+查询
+checkins(item_id)、checkins(date) 建索引
+
+17　测试与评分规则
+类型
+题量
+通过标准
+不通过怎么办
+选择题
+10 题
+≥ 8 题
+错题进错题本，次日重做
+概念题
+10 题
+≥ 8 题
+对应概念卡片降级复习
+自检卡
+到期数量
+自评记得/模糊/忘了
+按 1/2/7 天重新排期
+旧题抽查
+10 题
+≥ 7 题
+整组重做
+白板抽背
+10 个概念
+绿 ≥ 7 个
+红黄概念次日重抽
+阶段听力
+1 个任务
+能说出主题并记下 3 个新词
+一周后重测
+
+错题答对 2 次后移出错题本；连续答错 3 次的题标记为“难”，优先出现在抽查里。
+18　其他必须实现的细节
+•  撤销打卡：勾选后 5 秒内可撤销，避免误触。
+•  连续天数：当天完成 ≥ 1 条即算打卡，断一天清零。
+•  周起始：周一 00:00。
+•  空状态：不撒花、不弹窗，只显示一句文案和今日用时。
+•  应用图标与启动页：墨蓝底 + 金色细线 Logo，不要用默认 Flutter 图标。
+•  隐私：不收集任何数据，不申请网络权限（纯本地）；隐私政策写明“不收集、不上传”。
+•  版本号：1.0.0+1，之后每次发版递增。
+•  错误日志：本地环形缓冲 200 条，设置里可查看与复制。
+•  语言：简体中文；时区：跟随系统。
+•  横竖屏：都支持，横屏时计划页强制双栏。
+19　在云服务器上编译，手机安装
+手机上无法本地编译 Flutter（需要 JDK、Android SDK、Gradle，数 GB 且受权限限制）。已有云服务器时，正确分工是：Operit 写代码推到 GitHub → 云服务器拉代码编译 → 手机下载 APK。
+路径
+适合
+成本
+速度
+云服务器（推荐）
+已有服务器、想完全掌控
+0 额外成本
+增量构建 1–3 分钟
+GitHub Actions
+没有服务器时的备选
+公开仓库免费
+每次 5–10 分钟
+本机电脑
+有 Windows/Mac 开发环境
+需装约 10GB SDK
+最快
+
+19.1　服务器要求
+项目
+要求
+说明
+架构
+x86_64
+ARM 服务器装不了 Android 的 build-tools
+系统
+Ubuntu 20.04 / 22.04
+其他发行版换对应包管理命令
+配置
+2 核 4G 起，建议 4 核 8G
+Gradle 编译吃内存
+磁盘
+≥ 20GB 可用
+SDK + Gradle 缓存约 8–12GB
+网络
+能访问 dl.google.com 与 storage.googleapis.com
+下载 SDK 与依赖
+
+19.2　一次性安装
+在服务器上执行（Ubuntu，x86_64）：
+sudo apt update && sudo apt install -y openjdk-17-jdk unzip curl gitmkdir -p ~/android-sdk/cmdline-tools && cd ~/android-sdk/cmdline-toolscurl -O https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zipunzip commandlinetools-linux-*.zip && mv cmdline-tools latestexport ANDROID_HOME=$HOME/android-sdkyes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"git clone https://github.com/flutter/flutter.git -b stable ~/flutterecho 'export PATH=$PATH:$HOME/flutter/bin:$ANDROID_HOME/platform-tools' >> ~/.bashrc
+19.3　每次构建
+cd ~/study-tracker && git pullflutter pub getflutter build apk --release --split-per-abimkdir -p ~/dist && cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ~/dist/study-tracker.apk
+19.4　把 APK 拉到手机
+•  最省事：在 ~/dist 执行 python3 -m http.server 8080，手机浏览器访问 http://服务器IP:8080/study-tracker.apk。
+•  更稳妥：用 Nginx 托管，配一个随机路径，传完立刻关掉。
+•  下载完记得关端口，不要把 8080 长期暴露在公网。
+四个坑
+ARM 服务器装不上 Android build-tools，先执行 uname -m 确认是 x86_64。
+2G 内存容易在 Gradle 阶段 OOM：加 2G swap，并在 gradle.properties 写 org.gradle.jvmargs=-Xmx2g。
+首次构建要下载约 2GB 依赖，之后增量构建 1–3 分钟。
+release.jks 与密码单独备份，丢了以后无法覆盖升级。
+
+附录 A　JSON 结构示例
+plan.json：
+{ "meta": {...}, "modules": [ { "id": "01", "title": "...", "color": "#1F3864", "weeks": [ { "week": 1, "title": "...", "goal": "...", "review": "...", "items": [ { "id": "w1d1", "day": "周一", "watch": "...", "practice": "...", "output": "...", "minutes": 60 } ] } ] } ] }
+questions.json：
+{ "recall": [ { "id": "r-w1d1", "week": 1, "front": "...", "back": "...", "type": "item" } ], "mcq": [ { "id": "q001", "week": 2, "question": "...", "options": ["..."], "answer": 1, "explain": "..." } ] }
+附录 B　内容统计
+内容
+数量
+模块
+8
+周
+92
+学习条目
+644
+自检卡
+736（644 条目 + 92 周回顾）
+选择题
+276（每周 3 题）
+概念
+129
+阶段听力测试
+8
+推荐直播/UP 主
+6
