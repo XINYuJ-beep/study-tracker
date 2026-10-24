@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
 
@@ -25,8 +26,18 @@ jobs:
         run: flutter pub get
 
       # drift 的 .g.dart 不进仓库，由 build_runner 在 CI 里现场生成
+      # timeout 900：15 分钟内跑不完就直接失败，避免无限挂起看不到日志
       - name: Generate drift code
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: |
+          set -x
+          dart --version
+          timeout 900 dart run build_runner build --delete-conflicting-outputs --verbose
+        env:
+          CI: "true"
+
+      - name: Show generated files
+        if: always()
+        run: find lib -name '*.g.dart' -o -name '*.freezed.dart' | sort
 
       # 验证 local.properties 已被 flutter 自动生成（无则报错暴露问题）
       - name: Verify flutter.sdk path
