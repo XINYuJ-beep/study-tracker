@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers.dart';
-import '../../data/db/tables.dart';
+import '../../data/db/tables.dart' show Item;
 import '../../data/repo/plan_repo.dart';
 
 /// 今日页：M1 之后第一个真正能用的页面。
