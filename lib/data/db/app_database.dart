@@ -54,6 +54,11 @@ class AppDatabase {
           b.execute(sql);
         }
         await b.commit(noResult: true);
+        // 开发期自检：release 包也会输出，方便确认建表是否真的执行了。
+        // 正式发布前可删除这两行。
+        // ignore: avoid_print
+        print('[DB] onCreate done: version=$version '
+            'tables=${kCreateTableSql.length}/${kCreateTableOrder.length}');
       },
       onUpgrade: (Database db, int from, int to) async {
         // 开发期：schemaVersion 仍是 1，理论上不会走到这里。
