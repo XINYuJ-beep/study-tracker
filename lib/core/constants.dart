@@ -33,6 +33,8 @@ class AppConstants {
 
   // ---------- 周 ----------
   static const int daysPerWeek = 7;
+  /// 周目标分钟数 = 每日时间预算 × 每周天数（SPEC 4.1 的 90 分钟/天）
+  static const int weekGoalMinutes = dailyBudgetMinutes * daysPerWeek;
 
   // ---------- 学习计划总量（自检页基准值）----------
   /// 模块数

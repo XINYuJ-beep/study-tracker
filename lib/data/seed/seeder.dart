@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:sqflite/sqflite.dart' show ConflictAlgorithm;
+import 'package:sqflite/sqflite.dart'
+    show ConflictAlgorithm, DatabaseExecutor;
 
 import '../../core/constants.dart';
 import '../db/app_database.dart';

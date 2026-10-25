@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../../core/constants.dart';
 import '../db/app_database.dart';
 import '../db/tables.dart';
+import 'plan_repo.dart';
 
 
 /// 复习条目来源：闪卡 或 概念卡。
@@ -377,8 +378,6 @@ class QuestionRepo {
     return m ?? 9999;
   }
 }
-
-DateTime _startOfDay(DateTime t) => DateTime(t.year, t.month, t.day);
 
 DateTime? _msToDt(int? ms) =>
     ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
