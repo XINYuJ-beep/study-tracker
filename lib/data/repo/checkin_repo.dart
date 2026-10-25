@@ -1,6 +1,6 @@
-import 'package:drift/drift.dart';
 import '../../core/constants.dart';
 import '../db/app_database.dart';
+import '../db/tables.dart';
 import 'plan_repo.dart';
 
 /// 某一天（以凌晨 4 点为日界）的打卡汇总。
@@ -30,8 +30,8 @@ class CheckinRepo {
 
   /// 勾选或取消勾选某个条目（某一日）。
   ///
-  /// Checkins 是 (itemId, date) 联合主键，没有自增 id，
-  /// 所以必须走 insertOnConflictUpdate，重复调用不会插重复行。
+  /// checkins 是 (item_id, date) 联合主键，没有自增 id，
+  /// 所以必须走 INSERT ... ON CONFLICT REPLACE，重复调用不会插重复行。
   /// [day] 会先被归一化到「4 点日界当天」的零点。
   Future<void> setDone(
     String itemId,
@@ -39,14 +39,16 @@ class CheckinRepo {
     required bool done,
   }) async {
     final stamp = _startOfDay(_normalize(day));
-    await db.into(db.checkins).insertOnConflictUpdate(
-          CheckinsCompanion.insert(
-            itemId: itemId,
-            date: stamp,
-            done: Value(done),
-            completedAt: done ? Value(_clock()) : const Value(null),
-          ),
-        );
+    await db.insert(
+      T.checkins,
+      <String, Object?>{
+        'item_id': itemId,
+        'date': stamp.millisecondsSinceEpoch,
+        'done': done ? 1 : 0,
+        'completed_at': done ? _clock().millisecondsSinceEpoch : null,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   /// 勾选，等价于 setDone(..., done: true)。
@@ -70,19 +72,26 @@ class CheckinRepo {
   /// 某条目在某天是否已勾选。
   Future<bool> isDone(String itemId, DateTime day) async {
     final stamp = _startOfDay(_normalize(day));
-    final row = await (db.select(db.checkins)
-          ..where((t) => t.itemId.equals(itemId) & t.date.equals(stamp)))
-        .getSingleOrNull();
-    return row?.done ?? false;
+    final rows = await db.query(
+      T.checkins,
+      where: 'item_id = ? AND date = ?',
+      whereArgs: <Object?>[itemId, stamp.millisecondsSinceEpoch],
+      limit: 1,
+    );
+    if (rows.isEmpty) return false;
+    return Checkin.fromMap(rows.first).done;
   }
 
   /// 某天已勾选的条目 id 集合。
   Future<Set<String>> doneIdsOfDay(DateTime day) async {
     final stamp = _startOfDay(_normalize(day));
-    final rows = await (db.select(db.checkins)
-          ..where((t) => t.date.equals(stamp) & t.done.equals(true)))
-        .get();
-    return rows.map((e) => e.itemId).toSet();
+    final rows = await db.query(
+      T.checkins,
+      columns: <String>['item_id'],
+      where: 'date = ? AND done = ?',
+      whereArgs: <Object?>[stamp.millisecondsSinceEpoch, 1],
+    );
+    return rows.map((e) => e['item_id'] as String).toSet();
   }
 
   // ---------- 区间统计 ----------
@@ -95,28 +104,39 @@ class CheckinRepo {
     final b = _startOfDay(_normalize(to));
     if (b.isBefore(a)) return const [];
 
-    final rows = await (db.select(db.checkins)
-          ..where((t) =>
-              t.date.isBiggerOrEqualValue(a) &
-              t.date.isSmallerOrEqualValue(b) &
-              t.done.equals(true)))
-        .get();
+    final rows = await db.query(
+      T.checkins,
+      where: 'date >= ? AND date <= ? AND done = ?',
+      whereArgs: <Object?>[
+        a.millisecondsSinceEpoch,
+        b.millisecondsSinceEpoch,
+        1,
+      ],
+    );
     if (rows.isEmpty) return const [];
 
     // 一次查出涉及的条目分钟数，避免逐条再查库。
-    final ids = rows.map((e) => e.itemId).toSet().toList();
-    final items = await (db.select(db.items)
-          ..where((t) => t.id.isIn(ids)))
-        .get();
-    final minutesOf = {for (final it in items) it.id: it.minutes};
+    final ids = rows.map((e) => e['item_id'] as String).toSet().toList();
+    final placeholders = List<String>.filled(ids.length, '?').join(', ');
+    final itemRows = await db.query(
+      T.items,
+      columns: <String>['id', 'minutes'],
+      where: 'id IN ($placeholders)',
+      whereArgs: ids,
+    );
+    final minutesOf = <String, int>{
+      for (final it in itemRows)
+        it['id'] as String: (it['minutes'] as int?) ?? 0,
+    };
 
     final bucketItems = <DateTime, int>{};
     final bucketMinutes = <DateTime, int>{};
     for (final r in rows) {
-      final key = _startOfDay(r.date);
+      final checkin = Checkin.fromMap(r);
+      final key = _startOfDay(checkin.date);
       bucketItems[key] = (bucketItems[key] ?? 0) + 1;
       bucketMinutes[key] =
-          (bucketMinutes[key] ?? 0) + (minutesOf[r.itemId] ?? 0);
+          (bucketMinutes[key] ?? 0) + (minutesOf[checkin.itemId] ?? 0);
     }
 
     final keys = bucketItems.keys.toList()..sort();
@@ -135,8 +155,8 @@ class CheckinRepo {
     if (days <= 0) return const [];
     final today = _startOfDay(_normalize(_clock()));
     final from = today.subtract(Duration(days: days - 1));
-    final raw = await summariesBetween(from, today);
-    final byDay = {for (final s in raw) s.day: s};
+    final rawList = await summariesBetween(from, today);
+    final byDay = {for (final s in rawList) s.day: s};
 
     final out = <DaySummary>[];
     for (var i = 0; i < days; i++) {
@@ -155,26 +175,33 @@ class CheckinRepo {
     return ids.length;
   }
 
-  /// 今天已打卡分钟数（按 Items.minutes 累加）。
+  /// 今天已打卡分钟数（按 items.minutes 累加）。
   Future<int> todayMinutes() async {
     final ids = await doneIdsOfDay(_clock());
     if (ids.isEmpty) return 0;
-    final rows = await (db.select(db.items)
-          ..where((t) => t.id.isIn(ids.toList())))
-        .get();
+    final placeholders = List<String>.filled(ids.length, '?').join(', ');
+    final rows = await db.query(
+      T.items,
+      columns: <String>['minutes'],
+      where: 'id IN ($placeholders)',
+      whereArgs: ids.toList(),
+    );
     var total = 0;
     for (final r in rows) {
-      total += r.minutes;
+      total += (r['minutes'] as int?) ?? 0;
     }
     return total;
   }
 
-  /// 总打卡条目数（同一 itemId 多日打卡只算一次）。
+  /// 总打卡条目数（同一 item_id 多日打卡只算一次）。
   Future<int> totalDoneItems() async {
-    final rows = await (db.select(db.checkins)
-          ..where((t) => t.done.equals(true)))
-        .get();
-    return rows.map((e) => e.itemId).toSet().length;
+    final rows = await db.query(
+      T.checkins,
+      columns: <String>['item_id'],
+      where: 'done = ?',
+      whereArgs: <Object?>[1],
+    );
+    return rows.map((e) => e['item_id'] as String).toSet().length;
   }
 
   // ---------- 内部 ----------
