@@ -56,7 +56,7 @@ class AppConstants {
 
   // ---------- 数据版本（首启导入判断）----------
   /// 当前内置数据的版本号，JSON 有改动就 +1，首启比对后决定是否重导
-  static const int dataVersion = 1;
+  static const int dataVersion = 2;
   /// app_settings 表里存数据版本号的 key
   static const String keyDataVersion = 'data_version';
 

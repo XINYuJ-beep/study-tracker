@@ -77,13 +77,13 @@ class QuestionRepo {
 
     final cardRows = await db.query(
       T.cards,
-      where: 'stage < ? AND (due_date IS NULL OR due_date < ?)',
+      where: 'stage < ? AND due_date IS NOT NULL AND due_date < ?',
       whereArgs: [graduate, endMs],
     );
 
     final conceptRows = await db.query(
       T.concepts,
-      where: 'level < ? AND (due_date IS NULL OR due_date < ?)',
+      where: 'level < ? AND due_date IS NOT NULL AND due_date < ?',
       whereArgs: [graduate, endMs],
     );
 

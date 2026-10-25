@@ -223,6 +223,11 @@ class Seeder {
       final cardRows = <Map<String, Object?>>[];
       final recall = ((questions['recall'] as List<dynamic>?) ?? const [])
           .cast<Map<String, dynamic>>();
+      // 新导入的卡不能全部算「到期」，否则首启就会被几百张卡淹没。
+      // 统一按 stage=0 排到明天 00:00，从第二天开始进入复习队列。
+      final int firstDue = DateTime.now()
+          .add(const Duration(days: 1))
+          .millisecondsSinceEpoch;
       for (final r in recall) {
         cardRows.add(<String, Object?>{
           'id': r['id'] as String,
@@ -231,6 +236,8 @@ class Seeder {
           'front': r['front'] as String,
           'back': r['back'] as String,
           'type': r['type'] as String?,
+          'stage': 0,
+          'due_date': firstDue,
         });
       }
 
@@ -272,6 +279,8 @@ class Seeder {
           'term': term,
           'definition': definition,
           'week': c['week'] as int?,
+          'level': 0,
+          'due_date': firstDue,
         });
       }
 
