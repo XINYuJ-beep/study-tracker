@@ -122,10 +122,34 @@ class Seeder {
       final installed =
           int.tryParse((rows.isEmpty ? null : rows.first['value'] as String?) ?? '') ?? 0;
       if (installed >= AppConstants.dataVersion) {
-        // 已是最新版本，不重复导入。
-        return const SeedResult();
+        // 已是最新版本，不重复导入；但必须回报库里的真实条数，
+        // 否则空 SeedResult 会被 failures() 误判成「导入失败」。
+        return await countExisting();
       }
       return await run();
+    } catch (e) {
+      return SeedResult.failed('$e');
+    }
+  }
+
+  /// 跳过导入时，从数据库实际 count(*) 回报真实条数。
+  /// 目的：让首启与二次启动走同一套校验口径，不再把「已导入」当成「导入失败」。
+  Future<SeedResult> countExisting() async {
+    try {
+      Future<int> cnt(String table) async {
+        final rows = await db.rawQuery('SELECT COUNT(*) AS c FROM $table');
+        return (rows.first['c'] as int?) ?? 0;
+      }
+      return SeedResult(
+        modules: await cnt(T.modules),
+        weeks: await cnt(T.weeks),
+        items: await cnt(T.items),
+        cards: await cnt(T.cards),
+        mcqs: await cnt(T.mcqs),
+        concepts: await cnt(T.concepts),
+        stages: await cnt(T.stages),
+        streams: await cnt(T.streams),
+      );
     } catch (e) {
       return SeedResult.failed('$e');
     }
