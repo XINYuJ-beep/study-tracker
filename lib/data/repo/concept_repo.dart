@@ -1,9 +1,8 @@
 import 'dart:math';
 
-import 'package:drift/drift.dart';
-
 import '../../core/constants.dart';
 import '../db/app_database.dart';
+import '../db/tables.dart';
 
 /// 白板抽到的一张概念卡（随判分结果进入次日复习或推进等级）。
 class WhiteboardCard {
@@ -38,11 +37,13 @@ class ConceptRepo {
     int count = AppConstants.whiteboardCount,
   }) async {
     if (count <= 0) return const <WhiteboardCard>[];
-    final rows = await (db.select(db.concepts)
-          ..where((t) => t.week.isNotNull() & t.week.isSmallerOrEqualValue(currentWeek)))
-        .get();
+    final rows = await db.query(
+      T.concepts,
+      where: 'week IS NOT NULL AND week <= ?',
+      whereArgs: <Object?>[currentWeek],
+    );
     if (rows.isEmpty) return const <WhiteboardCard>[];
-    final pool = rows.toList()..shuffle(Random());
+    final pool = rows.map(Concept.fromMap).toList()..shuffle(Random());
     final take = pool.length < count ? pool.length : count;
     return pool.take(take).map((e) => WhiteboardCard(
           id: e.id,
@@ -59,97 +60,114 @@ class ConceptRepo {
   /// 说明：红黄都排到次日，但红卡不清零等级（保持当前 level 不变），
   /// 黄卡同样不清零，只有绿卡推进 —— 这样「蒙对一次」不会白赚 30 天间隔。
   Future<void> gradeWhiteboard(int conceptId, int level) async {
-    final row = await (db.select(db.concepts)
-          ..where((t) => t.id.equals(conceptId)))
-        .getSingleOrNull();
-    if (row == null) return;
+    final rows = await db.query(
+      T.concepts,
+      where: 'id = ?',
+      whereArgs: <Object?>[conceptId],
+      limit: 1,
+    );
+    if (rows.isEmpty) return;
+    final row = Concept.fromMap(rows.first);
 
     final now = _clock();
     if (level >= 2) {
-      final next = await _advance(row, now);
-      await (db.update(db.concepts)..where((t) => t.id.equals(conceptId)))
-          .write(next);
+      final next = _advance(row, now);
+      await db.update(
+        T.concepts,
+        next,
+        where: 'id = ?',
+        whereArgs: <Object?>[conceptId],
+      );
     } else {
-      await (db.update(db.concepts)..where((t) => t.id.equals(conceptId))).write(
-        ConceptsCompanion(
-          dueDate: Value(_startOfDay(now).add(const Duration(days: 1))),
-        ),
+      await db.update(
+        T.concepts,
+        <String, Object?>{
+          'due_date': _startOfDay(now).add(const Duration(days: 1)).millisecondsSinceEpoch,
+        },
+        where: 'id = ?',
+        whereArgs: <Object?>[conceptId],
       );
     }
   }
 
   // ---------- 复习间隔 ----------
   /// 按 reviewIntervals 推进一张概念卡，返回要写回的字段。
-  Future<ConceptsCompanion> _advance(Concepts row, DateTime now) async {
+  Map<String, Object?> _advance(Concept row, DateTime now) {
     final intervals = AppConstants.reviewIntervals;
     final curLevel = row.level < 0 ? 0 : row.level;
     final nextLevel = curLevel + 1;
 
     // 毕业：等级达到 reviewGraduatedStage，dueDate 置空不再出现。
     if (nextLevel >= AppConstants.reviewGraduatedStage) {
-      return ConceptsCompanion(
-        level: Value(AppConstants.reviewGraduatedStage),
-        dueDate: const Value(null),
-        reps: Value(row.reps + 1),
-      );
+      return <String, Object?>{
+        'level': AppConstants.reviewGraduatedStage,
+        'due_date': null,
+        'reps': row.reps + 1,
+      };
     }
 
     final idx = nextLevel - 1;
     final days = intervals[idx < 0 ? 0 : (idx >= intervals.length ? intervals.length - 1 : idx)];
-    return ConceptsCompanion(
-      level: Value(nextLevel),
-      dueDate: Value(_startOfDay(now).add(Duration(days: days))),
-      reps: Value(row.reps + 1),
-    );
+    return <String, Object?>{
+      'level': nextLevel,
+      'due_date': _startOfDay(now).add(Duration(days: days)).millisecondsSinceEpoch,
+      'reps': row.reps + 1,
+    };
   }
 
   // ---------- 查询 ----------
   /// 今天到期（dueDate <= now）的概念卡，按到期时间正序。
   Future<List<Concept>> dueConcepts({int limit = 0}) async {
     final now = _clock();
-    final q = db.select(db.concepts)
-      ..where((t) => t.dueDate.isNotNull() & t.dueDate.isSmallerOrEqualValue(now))
-      ..orderBy([(t) => OrderingTerm.asc(t.dueDate)]);
-    if (limit > 0) q.limit(limit);
-    return q.get();
+    final rows = await db.query(
+      T.concepts,
+      where: 'due_date IS NOT NULL AND due_date <= ?',
+      whereArgs: <Object?>[now.millisecondsSinceEpoch],
+      orderBy: 'due_date ASC',
+      limit: limit > 0 ? limit : null,
+    );
+    return rows.map(Concept.fromMap).toList();
   }
 
   /// 今日到期概念数（今日页角标用）。
   Future<int> dueConceptCount() async {
     final now = _clock();
-    final c = db.concepts.id.count();
-    final q = db.selectOnly(db.concepts)
-      ..addColumns([c])
-      ..where(db.concepts.dueDate.isNotNull() &
-          db.concepts.dueDate.isSmallerOrEqualValue(now));
-    final row = await q.getSingle();
-    return row.read(c) ?? 0;
+    final rows = await db.raw(
+      'SELECT COUNT(*) AS c FROM ${T.concepts} '
+      'WHERE due_date IS NOT NULL AND due_date <= ?',
+      <Object?>[now.millisecondsSinceEpoch],
+    );
+    return (rows.first['c'] as int?) ?? 0;
   }
 
   /// 按周取概念卡（周详情页用）。
   Future<List<Concept>> conceptsByWeek(int week) async {
-    return (db.select(db.concepts)
-          ..where((t) => t.week.equals(week))
-          ..orderBy([(t) => OrderingTerm.asc(t.id)]))
-        .get();
+    final rows = await db.query(
+      T.concepts,
+      where: 'week = ?',
+      whereArgs: <Object?>[week],
+      orderBy: 'id ASC',
+    );
+    return rows.map(Concept.fromMap).toList();
   }
 
   /// 关键词搜概念（问号词典用），term 模糊匹配。
   Future<List<Concept>> search(String keyword) async {
     final k = keyword.trim();
     if (k.isEmpty) return const <Concept>[];
-    return (db.select(db.concepts)
-          ..where((t) => t.term.like('%$k%') | t.definition.like('%$k%'))
-          ..limit(50))
-        .get();
+    final rows = await db.query(
+      T.concepts,
+      where: 'term LIKE ? OR definition LIKE ?',
+      whereArgs: <Object?>['%$k%', '%$k%'],
+      limit: 50,
+    );
+    return rows.map(Concept.fromMap).toList();
   }
 
   /// 全部概念数（自检页用）。
   Future<int> totalCount() async {
-    final c = db.concepts.id.count();
-    final q = db.selectOnly(db.concepts)..addColumns([c]);
-    final row = await q.getSingle();
-    return row.read(c) ?? 0;
+    final rows = await db.raw('SELECT COUNT(*) AS c FROM ${T.concepts}');
+    return (rows.first['c'] as int?) ?? 0;
   }
 
   // ---------- 工具 ----------
