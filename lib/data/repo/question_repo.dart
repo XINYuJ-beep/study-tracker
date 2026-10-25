@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:drift/drift.dart';
-
 import '../../core/constants.dart';
 import '../db/app_database.dart';
+import '../db/tables.dart';
+
 
 /// 复习条目来源：闪卡 或 概念卡。
 enum ReviewSource { card, concept }
@@ -71,40 +71,42 @@ class QuestionRepo {
   Future<List<ReviewEntry>> dueReview({int limit = 0}) async {
     final today = effectiveToday();
     final end = _startOfDay(today).add(const Duration(days: 1));
+    final endMs = end.millisecondsSinceEpoch;
+    final graduate = AppConstants.reviewGraduatedStage;
 
-    final cards = await (db.select(db.cards)
-          ..where((t) =>
-              t.stage.isSmallerThanValue(AppConstants.reviewGraduatedStage) &
-              (t.dueDate.isNull() | t.dueDate.isSmallerThanValue(end))))
-        .get();
+    final cardRows = await db.query(
+      T.cards,
+      where: 'stage < ? AND (due_date IS NULL OR due_date < ?)',
+      whereArgs: [graduate, endMs],
+    );
 
-    final concepts = await (db.select(db.concepts)
-          ..where((c) =>
-              c.level.isSmallerThanValue(AppConstants.reviewGraduatedStage) &
-              (c.dueDate.isNull() | c.dueDate.isSmallerThanValue(end))))
-        .get();
+    final conceptRows = await db.query(
+      T.concepts,
+      where: 'level < ? AND (due_date IS NULL OR due_date < ?)',
+      whereArgs: [graduate, endMs],
+    );
 
     final out = <ReviewEntry>[
-      for (final c in cards)
+      for (final r in cardRows)
         ReviewEntry(
           source: ReviewSource.card,
-          id: c.id,
-          front: c.front,
-          back: c.back,
-          stage: c.stage,
-          dueDate: c.dueDate,
-          week: c.week,
-          module: c.module,
+          id: r['id'] as String,
+          front: r['front'] as String,
+          back: r['back'] as String,
+          stage: r['stage'] as int,
+          dueDate: _msToDt(r['due_date'] as int?),
+          week: r['week'] as int?,
+          module: r['module'] as String?,
         ),
-      for (final c in concepts)
+      for (final r in conceptRows)
         ReviewEntry(
           source: ReviewSource.concept,
-          id: c.id.toString(),
-          front: c.term,
-          back: c.definition,
-          stage: c.level,
-          dueDate: c.dueDate,
-          week: c.week,
+          id: (r['id'] as int).toString(),
+          front: r['term'] as String,
+          back: r['definition'] as String,
+          stage: r['level'] as int,
+          dueDate: _msToDt(r['due_date'] as int?),
+          week: r['week'] as int?,
         ),
     ];
 
@@ -130,41 +132,57 @@ class QuestionRepo {
     final passed = score >= 3;
 
     if (entry.source == ReviewSource.card) {
-      final row = await (db.select(db.cards)
-            ..where((t) => t.id.equals(entry.id)))
-          .getSingleOrNull();
-      if (row == null) return;
+      final rows = await db.query(
+        T.cards,
+        where: 'id = ?',
+        whereArgs: [entry.id],
+        limit: 1,
+      );
+      if (rows.isEmpty) return;
+      final row = rows.first;
 
-      var stage = row.stage;
+      final oldStage = row['stage'] as int;
+      var stage = oldStage;
       stage = passed ? stage + 1 : (stage > 0 ? stage - 1 : 0);
       final graduated = stage >= AppConstants.reviewGraduatedStage;
 
-      await (db.update(db.cards)..where((t) => t.id.equals(entry.id))).write(
-        CardsCompanion(
-          stage: Value(stage),
-          dueDate: Value(graduated ? null : _nextDue(stage)),
-        ),
+      await db.update(
+        T.cards,
+        {
+          'stage': stage,
+          'due_date': graduated ? null : _nextDue(stage).millisecondsSinceEpoch,
+        },
+        where: 'id = ?',
+        whereArgs: [entry.id],
       );
       return;
     }
 
     final cid = int.tryParse(entry.id);
     if (cid == null) return;
-    final crow = await (db.select(db.concepts)
-          ..where((c) => c.id.equals(cid)))
-        .getSingleOrNull();
-    if (crow == null) return;
+    final crowRows = await db.query(
+      T.concepts,
+      where: 'id = ?',
+      whereArgs: [cid],
+      limit: 1,
+    );
+    if (crowRows.isEmpty) return;
+    final crow = crowRows.first;
 
-    var level = crow.level;
+    final oldLevel = crow['level'] as int;
+    var level = oldLevel;
     level = passed ? level + 1 : (level > 0 ? level - 1 : 0);
     final graduated = level >= AppConstants.reviewGraduatedStage;
 
-    await (db.update(db.concepts)..where((c) => c.id.equals(cid))).write(
-      ConceptsCompanion(
-        level: Value(level),
-        reps: Value(crow.reps + 1),
-        dueDate: Value(graduated ? null : _nextDue(level)),
-      ),
+    await db.update(
+      T.concepts,
+      {
+        'level': level,
+        'reps': (crow['reps'] as int) + 1,
+        'due_date': graduated ? null : _nextDue(level).millisecondsSinceEpoch,
+      },
+      where: 'id = ?',
+      whereArgs: [cid],
     );
   }
 
@@ -188,26 +206,28 @@ class QuestionRepo {
 
   /// 按周取选择题；[week] 为 null 时取全部。
   Future<List<McqQuestion>> mcqsByWeek(int? week) async {
-    final q = db.select(db.mcqs);
-    if (week != null) {
-      q.where((t) => t.week.equals(week));
-    }
-    final rows = await q.get();
+    final rows = await db.query(
+      T.mcqs,
+      where: week == null ? null : 'week = ?',
+      whereArgs: week == null ? null : [week],
+    );
     return rows.map(_toMcq).toList();
   }
 
   /// 按模块取选择题。
   Future<List<McqQuestion>> mcqsByModule(String module) async {
-    final rows = await (db.select(db.mcqs)
-          ..where((t) => t.module.equals(module)))
-        .get();
+    final rows = await db.query(
+      T.mcqs,
+      where: 'module = ?',
+      whereArgs: [module],
+    );
     return rows.map(_toMcq).toList();
   }
 
-  McqQuestion _toMcq(Mcq row) {
+  McqQuestion _toMcq(Map<String, Object?> r) {
     var opts = <String>[];
     try {
-      final decoded = jsonDecode(row.options);
+      final decoded = jsonDecode(r['options'] as String);
       if (decoded is List) {
         opts = decoded.map((e) => e.toString()).toList();
       }
@@ -215,15 +235,15 @@ class QuestionRepo {
       opts = <String>[];
     }
     return McqQuestion(
-      id: row.id,
-      question: row.question,
+      id: r['id'] as String,
+      question: r['question'] as String,
       options: opts,
-      answer: row.answer,
-      wrongCount: row.wrongCount,
-      rightStreak: row.rightStreak,
-      week: row.week,
-      module: row.module,
-      explain: row.explain,
+      answer: r['answer'] as int,
+      wrongCount: r['wrong_count'] as int,
+      rightStreak: r['right_streak'] as int,
+      week: r['week'] as int?,
+      module: r['module'] as String?,
+      explain: r['explain'] as String?,
     );
   }
 
@@ -231,35 +251,46 @@ class QuestionRepo {
 
   /// 错题本：错过的且还没被「连续答对 N 次」清出的题。
   Future<List<McqQuestion>> focusedMcqs({int? week}) async {
-    final q = db.select(db.mcqs)
-      ..where((t) =>
-          t.wrongCount.isBiggerThanValue(0) &
-          t.rightStreak.isSmallerThanValue(AppConstants.rightStreakToClear));
-    if (week != null) {
-      q.where((t) => t.week.equals(week));
-    }
-    final rows = await q.get();
+    final where = week == null
+        ? 'wrong_count > ? AND right_streak < ?'
+        : 'wrong_count > ? AND right_streak < ? AND week = ?';
+    final args = <Object?>[
+      0,
+      AppConstants.rightStreakToClear,
+      if (week != null) week,
+    ];
+    final rows = await db.query(T.mcqs, where: where, whereArgs: args);
     return rows.map(_toMcq).toList();
   }
 
   /// 记录一次作答：对则 rightStreak+1（达到阈值后清出错题本），错则 wrongCount+1 且连对清零。
   Future<void> recordAnswer(String mcqId, bool correct) async {
-    final row = await (db.select(db.mcqs)
-          ..where((t) => t.id.equals(mcqId)))
-        .getSingleOrNull();
-    if (row == null) return;
+    final rows = await db.query(
+      T.mcqs,
+      where: 'id = ?',
+      whereArgs: [mcqId],
+      limit: 1,
+    );
+    if (rows.isEmpty) return;
+    final row = rows.first;
 
     if (correct) {
-      final streak = row.rightStreak + 1;
-      await (db.update(db.mcqs)..where((t) => t.id.equals(mcqId))).write(
-        McqsCompanion(rightStreak: Value(streak)),
+      final streak = (row['right_streak'] as int) + 1;
+      await db.update(
+        T.mcqs,
+        {'right_streak': streak},
+        where: 'id = ?',
+        whereArgs: [mcqId],
       );
     } else {
-      await (db.update(db.mcqs)..where((t) => t.id.equals(mcqId))).write(
-        McqsCompanion(
-          wrongCount: Value(row.wrongCount + 1),
-          rightStreak: const Value(0),
-        ),
+      await db.update(
+        T.mcqs,
+        {
+          'wrong_count': (row['wrong_count'] as int) + 1,
+          'right_streak': 0,
+        },
+        where: 'id = ?',
+        whereArgs: [mcqId],
       );
     }
   }
@@ -268,18 +299,17 @@ class QuestionRepo {
 
   /// 周是否已解锁测试：该周条目完成比例 >= weekUnlockRatio。
   Future<bool> isWeekTestUnlocked(int week) async {
-    final items = await (db.select(db.items)
-          ..where((t) => t.week.equals(week)))
-        .get();
+    final items = await db.query(
+      T.items,
+      where: 'week = ?',
+      whereArgs: [week],
+    );
     if (items.isEmpty) return false;
 
-    final done = await (db.select(db.checkins)
-          ..where((t) =>
-              t.done.equals(true) &
-              t.itemId.isIn(items.map((e) => e.id).toList())))
-        .get();
+    final ids = items.map((e) => e['id'] as String).toList();
+    final doneCount = await _doneCountOf(ids);
 
-    final ratio = done.length / items.length;
+    final ratio = doneCount / items.length;
     return ratio >= AppConstants.weekUnlockRatio;
   }
 
@@ -288,20 +318,21 @@ class QuestionRepo {
   /// Items 表没有 module 字段，模块归属只能按 Modules 顺序累加 weeks
   /// 推出周区间，再用 Items.week 落入区间反查。
   Future<bool> isModuleListeningUnlocked(String module) async {
-    final mods = await db.select(db.modules).get();
+    final mods = await db.query(T.modules, orderBy: 'id ASC');
     if (mods.isEmpty) return false;
 
     // 按 id 的数值排序，保证 01..08 顺序累加不会因字符串排序错位
     final sorted = mods.toList()
-      ..sort((a, b) => _moduleOrder(a.id).compareTo(_moduleOrder(b.id)));
+      ..sort((a, b) => _moduleOrder(a['id'] as String)
+          .compareTo(_moduleOrder(b['id'] as String)));
 
     var startWeek = 1;
     int? from;
     int? to;
     for (final m in sorted) {
-      final span = m.weeks;
+      final span = m['weeks'] as int;
       final endWeek = startWeek + (span <= 0 ? 0 : span) - 1;
-      if (m.id == module) {
+      if (m['id'] as String == module) {
         from = startWeek;
         to = endWeek;
         break;
@@ -310,19 +341,31 @@ class QuestionRepo {
     }
     if (from == null || to == null) return false;
 
-    final items = await (db.select(db.items)
-          ..where((t) => t.week.isBetweenValues(from!, to!)))
-        .get();
+    final items = await db.query(
+      T.items,
+      where: 'week >= ? AND week <= ?',
+      whereArgs: [from, to],
+    );
     if (items.isEmpty) return false;
 
-    final done = await (db.select(db.checkins)
-          ..where((t) =>
-              t.done.equals(true) &
-              t.itemId.isIn(items.map((e) => e.id).toList())))
-        .get();
+    final ids = items.map((e) => e['id'] as String).toList();
+    final doneCount = await _doneCountOf(ids);
 
-    final ratio = done.length / items.length;
+    final ratio = doneCount / items.length;
     return ratio >= AppConstants.moduleUnlockRatio;
+  }
+
+  /// 统计一批 item id 里已打卡（done=1）的条数。
+  /// 空列表直接返回 0，避免拼出 `IN ()` 这种非法 SQL。
+  Future<int> _doneCountOf(List<String> itemIds) async {
+    if (itemIds.isEmpty) return 0;
+    final placeholders = List<String>.filled(itemIds.length, '?').join(', ');
+    final rows = await db.raw(
+      'SELECT COUNT(*) AS c FROM ${T.checkins} '
+      'WHERE done = ? AND item_id IN ($placeholders)',
+      [1, ...itemIds],
+    );
+    return (rows.first['c'] as int?) ?? 0;
   }
 
   /// 模块 id 转排序键：纯数字按数值，非数字退化为极大值排到末尾。
@@ -336,3 +379,6 @@ class QuestionRepo {
 }
 
 DateTime _startOfDay(DateTime t) => DateTime(t.year, t.month, t.day);
+
+DateTime? _msToDt(int? ms) =>
+    ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
