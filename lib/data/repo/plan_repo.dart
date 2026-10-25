@@ -1,7 +1,6 @@
-import 'package:drift/drift.dart';
-
 import '../../core/constants.dart';
 import '../db/app_database.dart';
+import '../db/tables.dart';
 
 /// 今天（以凌晨 4 点为日界）。
 DateTime effectiveToday() {
@@ -41,59 +40,70 @@ class PlanRepo {
 
   final AppDatabase db;
 
-  Future<List<Modules>> allModules() {
-    return (db.select(db.modules)..orderBy([
-          (t) => OrderingTerm(expression: t.id),
-        ]))
-        .get();
+  Future<List<Module>> allModules() async {
+    final rows = await db.query(T.modules, orderBy: 'id ASC');
+    return rows.map(Module.fromMap).toList();
   }
 
-  Future<Modules?> moduleById(String id) {
-    return (db.select(db.modules)..where((t) => t.id.equals(id)))
-        .getSingleOrNull();
+  Future<Module?> moduleById(String id) async {
+    final rows = await db.query(
+      T.modules,
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return rows.isEmpty ? null : Module.fromMap(rows.first);
   }
 
-  Future<List<Weeks>> allWeeks() {
-    return (db.select(db.weeks)..orderBy([
-          (t) => OrderingTerm(expression: t.week),
-        ]))
-        .get();
+  Future<List<Week>> allWeeks() async {
+    final rows = await db.query(T.weeks, orderBy: 'week ASC');
+    return rows.map(Week.fromMap).toList();
   }
 
-  Future<Weeks?> weekByNumber(int week) {
-    return (db.select(db.weeks)..where((t) => t.week.equals(week)))
-        .getSingleOrNull();
+  Future<Week?> weekByNumber(int week) async {
+    final rows = await db.query(
+      T.weeks,
+      where: 'week = ?',
+      whereArgs: [week],
+      limit: 1,
+    );
+    return rows.isEmpty ? null : Week.fromMap(rows.first);
   }
 
-  Future<List<Items>> itemsOfWeek(int week) {
-    return (db.select(db.items)
-          ..where((t) => t.week.equals(week))
-          ..orderBy([(t) => OrderingTerm(expression: t.day)]))
-        .get();
+  Future<List<Item>> itemsOfWeek(int week) async {
+    final rows = await db.query(
+      T.items,
+      where: 'week = ?',
+      whereArgs: [week],
+      orderBy: 'day ASC',
+    );
+    return rows.map(Item.fromMap).toList();
   }
 
-  Future<List<Items>> allItems() {
-    return (db.select(db.items)
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.week),
-            (t) => OrderingTerm(expression: t.day),
-          ]))
-        .get();
+  Future<List<Item>> allItems() async {
+    final rows = await db.query(T.items, orderBy: 'week ASC, day ASC');
+    return rows.map(Item.fromMap).toList();
   }
 
   Future<Set<String>> doneItemIdsOfDay(DateTime day) async {
     final d = _startOfDay(day);
-    final rows = await (db.select(db.checkins)
-          ..where((t) => t.date.equals(d) & t.done.equals(true)))
-        .get();
-    return rows.map((r) => r.itemId).toSet();
+    final rows = await db.query(
+      T.checkins,
+      columns: ['item_id'],
+      where: 'date = ? AND done = ?',
+      whereArgs: [d.millisecondsSinceEpoch, 1],
+    );
+    return rows.map((r) => r['item_id'] as String).toSet();
   }
 
   Future<Set<String>> allDoneItemIds() async {
-    final rows = await (db.select(db.checkins)
-          ..where((t) => t.done.equals(true)))
-        .get();
-    return rows.map((r) => r.itemId).toSet();
+    final rows = await db.query(
+      T.checkins,
+      columns: ['item_id'],
+      where: 'done = ?',
+      whereArgs: [1],
+    );
+    return rows.map((r) => r['item_id'] as String).toSet();
   }
 
   Future<int> progressiveCursorWeek() async {
@@ -113,14 +123,15 @@ class PlanRepo {
         : cursor;
   }
 
-  Future<List<Items>> todayRecommendation({int limit = AppConstants.recommendLimit}) async {
+  Future<List<Item>> todayRecommendation(
+      {int limit = AppConstants.recommendLimit}) async {
     final today = effectiveToday();
     final doneToday = await doneItemIdsOfDay(today);
     final doneAll = await allDoneItemIds();
     final cursor = await progressiveCursorWeek();
     final items = await allItems();
 
-    final pool = <Items>[];
+    final pool = <Item>[];
     for (final it in items) {
       if (doneAll.contains(it.id)) continue;
       if (doneToday.contains(it.id)) continue;
@@ -132,8 +143,9 @@ class PlanRepo {
       return c != 0 ? c : a.day.compareTo(b.day);
     });
 
-    final budget = (AppConstants.dailyBudgetMinutes * AppConstants.budgetFactor).round();
-    final out = <Items>[];
+    final budget =
+        (AppConstants.dailyBudgetMinutes * AppConstants.budgetFactor).round();
+    final out = <Item>[];
     var used = 0;
     for (final it in pool) {
       if (out.length >= limit) break;
@@ -183,9 +195,13 @@ class PlanRepo {
     final result = <bool>[];
     for (var i = days - 1; i >= 0; i--) {
       final d = _startOfDay(today.subtract(Duration(days: i)));
-      final rows = await (db.select(db.checkins)
-            ..where((t) => t.date.equals(d) & t.done.equals(true)))
-          .get();
+      final rows = await db.query(
+        T.checkins,
+        columns: ['item_id'],
+        where: 'date = ? AND done = ?',
+        whereArgs: [d.millisecondsSinceEpoch, 1],
+        limit: 1,
+      );
       result.add(rows.isNotEmpty);
     }
     return result;
@@ -194,8 +210,17 @@ class PlanRepo {
   Future<int> currentStreak() async {
     final done = await allDoneItemIds();
     if (done.isEmpty) return 0;
-    final all = await (db.select(db.checkins)..where((t) => t.done.equals(true))).get();
-    final dates = all.map((r) => _startOfDay(r.date)).toSet().toList()
+    final all = await db.query(
+      T.checkins,
+      columns: ['date'],
+      where: 'done = ?',
+      whereArgs: [1],
+    );
+    final dates = all
+        .map((r) => _startOfDay(
+            DateTime.fromMillisecondsSinceEpoch(r['date'] as int)))
+        .toSet()
+        .toList()
       ..sort((a, b) => b.compareTo(a));
     if (dates.isEmpty) return 0;
 
