@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:drift/drift.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:sqflite/sqflite.dart' show ConflictAlgorithm;
 
 import '../../core/constants.dart';
 import '../db/app_database.dart';
+import '../db/tables.dart';
 
 /// 首启导入结果。同时充当自检页的数据源。
 class SeedResult {
@@ -91,10 +92,14 @@ class Seeder {
   /// 版本一致就跳过，版本变了或首次安装才真正导入。
   Future<SeedResult> seedIfNeeded() async {
     try {
-      final row = await (db.select(db.appSettings)
-            ..where((t) => t.key.equals(AppConstants.keyDataVersion)))
-          .getSingleOrNull();
-      final installed = int.tryParse(row?.value ?? '') ?? 0;
+      final rows = await db.query(
+        T.appSettings,
+        where: 'key = ?',
+        whereArgs: <Object?>[AppConstants.keyDataVersion],
+        limit: 1,
+      );
+      final installed =
+          int.tryParse((rows.isEmpty ? null : rows.first['value'] as String?) ?? '') ?? 0;
       if (installed >= AppConstants.dataVersion) {
         // 已是最新版本，不重复导入。
         return const SeedResult();
@@ -130,8 +135,8 @@ class Seeder {
         }
       }
 
-      final weekRows = <WeeksCompanion>[];
-      final itemRows = <ItemsCompanion>[];
+      final weekRows = <Map<String, Object?>>[];
+      final itemRows = <Map<String, Object?>>[];
       final weekSeen = <int>{};
       final itemIds = <String>{};
 
@@ -143,12 +148,12 @@ class Seeder {
           if (!weekSeen.add(weekNo)) {
             return SeedResult.failed('周号重复：$weekNo');
           }
-          weekRows.add(WeeksCompanion.insert(
-            week: weekNo,
-            title: Value(w['title'] as String?),
-            goal: Value(w['goal'] as String?),
-            review: Value(w['review'] as String?),
-          ));
+          weekRows.add(<String, Object?>{
+            'week': weekNo,
+            'title': w['title'] as String?,
+            'goal': w['goal'] as String?,
+            'review': w['review'] as String?,
+          });
 
           final items = (w['items'] as List<dynamic>).cast<Map<String, dynamic>>();
           for (final it in items) {
@@ -156,15 +161,15 @@ class Seeder {
             if (!itemIds.add(itemId)) {
               return SeedResult.failed('条目 id 重复：$itemId');
             }
-            itemRows.add(ItemsCompanion.insert(
-              id: itemId,
-              week: weekNo,
-              day: it['day'] as int?,
-              watch: Value(it['watch'] as String?),
-              practice: Value(it['practice'] as String?),
-              output: Value(it['output'] as String?),
-              minutes: it['minutes'] as int?,
-            ));
+            itemRows.add(<String, Object?>{
+              'id': itemId,
+              'week': weekNo,
+              'day': it['day'] as int?,
+              'watch': it['watch'] as String?,
+              'practice': it['practice'] as String?,
+              'output': it['output'] as String?,
+              'minutes': it['minutes'] as int?,
+            });
           }
         }
       }
@@ -183,32 +188,32 @@ class Seeder {
       final skipped = <String>[];
 
       final moduleRows = modulesJson.map((m) {
-        return ModulesCompanion.insert(
-          id: m['id'] as String,
-          title: m['title'] as String,
-          sub: Value(m['sub'] as String?),
-          color: Value(m['color'] as String?),
-          goal: Value(m['goal'] as String?),
-          accept: Value(m['accept'] as String?),
-          weeks: Value(((m['weeks'] as List<dynamic>?) ?? const []).length),
-        );
+        return <String, Object?>{
+          'id': m['id'] as String,
+          'title': m['title'] as String,
+          'sub': m['sub'] as String?,
+          'color': m['color'] as String?,
+          'goal': m['goal'] as String?,
+          'accept': m['accept'] as String?,
+          'weeks': ((m['weeks'] as List<dynamic>?) ?? const []).length,
+        };
       }).toList();
 
-      final cardRows = <CardsCompanion>[];
+      final cardRows = <Map<String, Object?>>[];
       final recall = ((questions['recall'] as List<dynamic>?) ?? const [])
           .cast<Map<String, dynamic>>();
       for (final r in recall) {
-        cardRows.add(CardsCompanion.insert(
-          id: r['id'] as String,
-          week: r['week'] as int,
-          module: r['module'] as String,
-          front: r['front'] as String,
-          back: r['back'] as String,
-          type: Value(r['type'] as String?),
-        ));
+        cardRows.add(<String, Object?>{
+          'id': r['id'] as String,
+          'week': r['week'] as int,
+          'module': r['module'] as String,
+          'front': r['front'] as String,
+          'back': r['back'] as String,
+          'type': r['type'] as String?,
+        });
       }
 
-      final mcqRows = <McqsCompanion>[];
+      final mcqRows = <Map<String, Object?>>[];
       final mcq = ((questions['mcq'] as List<dynamic>?) ?? const [])
           .cast<Map<String, dynamic>>();
       for (final q in mcq) {
@@ -224,17 +229,17 @@ class Seeder {
           skipped.add('选择题 $id 答案越界：$answer');
           continue;
         }
-        mcqRows.add(McqsCompanion.insert(
-          id: id,
-          week: q['week'] as int,
-          module: q['module'] as String,
-          question: q['question'] as String,
-          options: jsonEncode(options),
-          answer: answer,
-        ));
+        mcqRows.add(<String, Object?>{
+          'id': id,
+          'week': q['week'] as int,
+          'module': q['module'] as String,
+          'question': q['question'] as String,
+          'options': jsonEncode(options),
+          'answer': answer,
+        });
       }
 
-      final conceptRows = <ConceptsCompanion>[];
+      final conceptRows = <Map<String, Object?>>[];
       for (final c in concepts.cast<Map<String, dynamic>>()) {
         final term = (c['term'] as String?)?.trim() ?? '';
         final definition = (c['definition'] as String?)?.trim() ?? '';
@@ -242,14 +247,14 @@ class Seeder {
           skipped.add('概念 term/definition 为空：（$term）');
           continue;
         }
-        conceptRows.add(ConceptsCompanion.insert(
-          term: term,
-          definition: definition,
-          week: c['week'] as int?,
-        ));
+        conceptRows.add(<String, Object?>{
+          'term': term,
+          'definition': definition,
+          'week': c['week'] as int?,
+        });
       }
 
-      final stageRows = <StagesCompanion>[];
+      final stageRows = <Map<String, Object?>>[];
       final stageList = ((stages['stages'] as List<dynamic>?) ?? const [])
           .cast<Map<String, dynamic>>();
       for (final s in stageList) {
@@ -258,21 +263,21 @@ class Seeder {
           skipped.add('阶段 ${s['title']} 的模块 $moduleId 不存在');
           continue;
         }
-        stageRows.add(StagesCompanion.insert(
-          module: moduleId,
-          week: s['week'] as int,
-          title: s['title'] as String,
-          whereAt: Value(s['where'] as String?), // JSON 的 where 对列 where_at
-          task: Value(s['task'] as String?),
-          pass: Value(s['pass'] as String?),
-        ));
+        stageRows.add(<String, Object?>{
+          'module': moduleId,
+          'week': s['week'] as int,
+          'title': s['title'] as String,
+          'where_at': s['where'] as String?, // JSON 的 where 对列 where_at
+          'task': s['task'] as String?,
+          'pass': s['pass'] as String?,
+        });
       }
 
-      final streamRows = <StreamsCompanion>[];
+      final streamRows = <Map<String, Object?>>[];
       final streamList = ((stages['streams'] as List<dynamic>?) ?? const [])
           .cast<String>();
       for (final name in streamList) {
-        streamRows.add(StreamsCompanion.insert(name: name));
+        streamRows.add(<String, Object?>{'name': name});
       }
 
       final result = SeedResult(
@@ -288,39 +293,56 @@ class Seeder {
       );
 
       // ---------- 事务内清表 + 批量插入 ----------
-      await db.transaction(() async {
-        await db.delete(db.checkins).go();
-        await db.delete(db.cards).go();
-        await db.delete(db.mcqs).go();
-        await db.delete(db.concepts).go();
-        await db.delete(db.stages).go();
-        await db.delete(db.streams).go();
-        await db.delete(db.items).go();
-        await db.delete(db.weeks).go();
-        await db.delete(db.modules).go();
+      await db.transaction((txn) async {
+        // 删表顺序严格照抄原实现（子表先删，父表后删），不得调整。
+        await txn.delete(T.checkins);
+        await txn.delete(T.cards);
+        await txn.delete(T.mcqs);
+        await txn.delete(T.concepts);
+        await txn.delete(T.stages);
+        await txn.delete(T.streams);
+        await txn.delete(T.items);
+        await txn.delete(T.weeks);
+        await txn.delete(T.modules);
 
-        await db.batch((b) {
-          b.insertAll(db.modules, moduleRows);
-          b.insertAll(db.weeks, weekRows);
-          b.insertAll(db.items, itemRows);
-          b.insertAll(db.cards, cardRows);
-          b.insertAll(db.mcqs, mcqRows);
-          b.insertAll(db.concepts, conceptRows);
-          b.insertAll(db.stages, stageRows);
-          b.insertAll(db.streams, streamRows);
-        });
+        await _insertAll(txn, T.modules, moduleRows);
+        await _insertAll(txn, T.weeks, weekRows);
+        await _insertAll(txn, T.items, itemRows);
+        await _insertAll(txn, T.cards, cardRows);
+        await _insertAll(txn, T.mcqs, mcqRows);
+        await _insertAll(txn, T.concepts, conceptRows);
+        await _insertAll(txn, T.stages, stageRows);
+        await _insertAll(txn, T.streams, streamRows);
 
-        await db.into(db.appSettings).insertOnConflictUpdate(
-              AppSettingsCompanion.insert(
-                key: AppConstants.keyDataVersion,
-                value: AppConstants.dataVersion.toString(),
-              ),
-            );
+        await txn.insert(
+          T.appSettings,
+          <String, Object?>{
+            'key': AppConstants.keyDataVersion,
+            'value': AppConstants.dataVersion.toString(),
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
       });
 
       return result;
     } catch (e) {
       return SeedResult.failed('$e');
+    }
+  }
+
+  /// 逐条插入。事务内批量写，比逐条自动提交快得多；
+  /// 用 INSERT OR REPLACE 保证重复导入时覆盖而非冲突。
+  Future<void> _insertAll(
+    DatabaseExecutor txn,
+    String table,
+    List<Map<String, Object?>> rows,
+  ) async {
+    for (final row in rows) {
+      await txn.insert(
+        table,
+        row,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
   }
 }
