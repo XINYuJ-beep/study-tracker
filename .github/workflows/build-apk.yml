@@ -25,22 +25,28 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      # drift 的 .g.dart 不进仓库，由 build_runner 在 CI 里现场生成
-      # timeout 2700：给 45 分钟。实测 2 核 runner 上 drift_dev 分析很慢
-      # （52 个 action 跑到 14m42s 才 38 个），15 分钟必被误杀。
+      # 全项目只有一个文件需要代码生成：lib/data/db/app_database.dart (part 'app_database.g.dart')
+      # 第六轮实测：全量 build_runner 在 2 核 runner 上 44 分 46 秒后仍卡在 38/52，
+      # 卡点正是 drift_dev 对 app_database.dart 的类型分析。
+      # 改用 --build-filter 只跑这一个目标，跳过其余 51 个 action。
       - name: Generate drift code
         run: |
           set -x
           dart --version
-          timeout 2700 dart run build_runner build --delete-conflicting-outputs --verbose
+          timeout 2700 dart run build_runner build \
+            --build-filter="lib/data/db/app_database.g.dart" \
+            --delete-conflicting-outputs \
+            --verbose
 
       - name: Show generated files
         if: always()
-        run: find lib -name '*.g.dart' | sort
+        run: |
+          find lib -name '*.g.dart' | sort
+          ls -la lib/data/db/ || true
 
-      # 验证 local.properties 已被 flutter 自动生成（无则报错暴露问题）
       - name: Verify flutter.sdk path
-        run: test -f android/local.properties && cat android/local.properties
+        run: |
+          test -f android/local.properties && cat android/local.properties
 
       - name: Build release APK
         run: flutter build apk --release
