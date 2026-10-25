@@ -6,13 +6,13 @@ import 'package:sqflite/sqflite.dart';
 
 import 'tables.dart';
 
-/// sqflite 数据库封装：10 张表，schemaVersion 1。
+/// sqflite 数据库封装：10 张表，schemaVersion 2。
 ///
 /// 与原 drift 版保持完全一致的外部契约：
 /// - 类名仍是 AppDatabase，无参构造；
 /// - 数据库文件名仍是 study_tracker.sqlite，路径仍在应用文档目录；
 /// - 打开后执行 PRAGMA foreign_keys = ON；
-/// - version = 1，onCreate 建全部表。
+/// - version = 2，onCreate 建全部表 + 索引；onUpgrade 补 v1->v2 迁移。
 ///
 /// 差异：drift 的 db.select/into/update 语法全部去掉，
 /// 改成 sqflite 的 db.query/insert/update/rawQuery。
@@ -25,7 +25,7 @@ class AppDatabase {
   static const String fileName = 'study_tracker.sqlite';
 
   /// schema 版本号
-  static const int schemaVersion = 1;
+  static const int schemaVersion = 2;
 
   /// 打开（或复用）底层连接。所有 repo 都通过它拿 Database。
   Future<Database> get database async {
@@ -53,6 +53,9 @@ class AppDatabase {
         for (final String sql in kCreateTableSql) {
           b.execute(sql);
         }
+        for (final String sql in kCreateIndexes) {
+          b.execute(sql);
+        }
         await b.commit(noResult: true);
         // 开发期自检：release 包也会输出，方便确认建表是否真的执行了。
         // 正式发布前可删除这两行。
@@ -61,8 +64,18 @@ class AppDatabase {
             'tables=${kCreateTableSql.length}/${kCreateTableOrder.length}');
       },
       onUpgrade: (Database db, int from, int to) async {
-        // 开发期：schemaVersion 仍是 1，理论上不会走到这里。
-        // 正式版前表结构冻结后，在这里补真实迁移。
+        // v1 -> v2：checkins 补 minutes / note，并补建索引。
+        // 逐版本链式升级，新增版本时在末尾追加分支。
+        if (from < 2) {
+          for (final String sql in kMigrateV1ToV2) {
+            await db.execute(sql);
+          }
+        }
+        for (final String sql in kCreateIndexes) {
+          await db.execute(sql);
+        }
+        // ignore: avoid_print
+        print('[DB] onUpgrade done: $from -> $to');
       },
     );
   }

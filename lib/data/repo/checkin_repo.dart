@@ -38,6 +38,8 @@ class CheckinRepo {
     String itemId,
     DateTime day, {
     required bool done,
+    int? minutes,
+    String note = '',
   }) async {
     final stamp = _startOfDay(_normalize(day));
     await db.insert(
@@ -47,9 +49,82 @@ class CheckinRepo {
         'date': stamp.millisecondsSinceEpoch,
         'done': done ? 1 : 0,
         'completed_at': done ? _clock().millisecondsSinceEpoch : null,
+        'minutes': done ? (minutes ?? 0) : 0,
+        'note': done ? note : '',
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  /// 打卡并写入实际用时与备注。
+  ///
+  /// [minutes] 不传则回退到 items.minutes（预估用时），保证统计口径不为 0。
+  /// 返回实际写入的分钟数，方便调用方回显。
+  Future<int> checkIn(
+    String itemId,
+    DateTime day, {
+    int? minutes,
+    String note = '',
+  }) async {
+    int actual = minutes ?? 0;
+    if (minutes == null) {
+      final rows = await db.query(
+        T.items,
+        columns: <String>['minutes'],
+        where: 'id = ?',
+        whereArgs: <Object?>[itemId],
+        limit: 1,
+      );
+      if (rows.isNotEmpty) {
+        actual = (rows.first['minutes'] as int?) ?? 0;
+      }
+    }
+    if (actual < 0) actual = 0;
+    await setDone(itemId, day, done: true, minutes: actual, note: note);
+    return actual;
+  }
+
+  /// 撤销打卡：物理删除当行。
+  ///
+  /// 5 秒撤销窗口用这个，删掉等于回到从未打卡的状态，
+  /// 比写 done = 0 更干净（不会在 checkins 里留垃圾行）。
+  Future<void> undo(String itemId, DateTime day) async {
+    final stamp = _startOfDay(_normalize(day));
+    await db.delete(
+      T.checkins,
+      where: 'item_id = ? AND date = ?',
+      whereArgs: <Object?>[itemId, stamp.millisecondsSinceEpoch],
+    );
+  }
+
+  /// 某条目在某天打卡时记录的用时（分钟）；没打卡返回 null。
+  Future<int?> minutesOf(String itemId, DateTime day) async {
+    final stamp = _startOfDay(_normalize(day));
+    final rows = await db.query(
+      T.checkins,
+      columns: <String>['minutes', 'done'],
+      where: 'item_id = ? AND date = ?',
+      whereArgs: <Object?>[itemId, stamp.millisecondsSinceEpoch],
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    if (((rows.first['done'] as int?) ?? 0) == 0) return null;
+    return (rows.first['minutes'] as int?) ?? 0;
+  }
+
+  /// 某条目在某天打卡时写的备注；没打卡返回 null。
+  Future<String?> noteOf(String itemId, DateTime day) async {
+    final stamp = _startOfDay(_normalize(day));
+    final rows = await db.query(
+      T.checkins,
+      columns: <String>['note', 'done'],
+      where: 'item_id = ? AND date = ?',
+      whereArgs: <Object?>[itemId, stamp.millisecondsSinceEpoch],
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    if (((rows.first['done'] as int?) ?? 0) == 0) return null;
+    return (rows.first['note'] as String?) ?? '';
   }
 
   /// 勾选，等价于 setDone(..., done: true)。
@@ -178,18 +253,17 @@ class CheckinRepo {
 
   /// 今天已打卡分钟数（按 items.minutes 累加）。
   Future<int> todayMinutes() async {
-    final ids = await doneIdsOfDay(_clock());
-    if (ids.isEmpty) return 0;
-    final placeholders = List<String>.filled(ids.length, '?').join(', ');
-    final rows = await db.query(
-      T.items,
-      columns: <String>['minutes'],
-      where: 'id IN ($placeholders)',
-      whereArgs: ids.toList(),
+    final stamp = _startOfDay(_normalize(_clock()));
+    // 优先用打卡时记录的实际用时；老数据 minutes 为 0 时回退到 items.minutes。
+    final rows = await db.raw(
+      'SELECT COALESCE(NULLIF(c.minutes, 0), i.minutes, 0) AS m '
+      'FROM ${T.checkins} c LEFT JOIN ${T.items} i ON i.id = c.item_id '
+      'WHERE c.done = 1 AND c.date = ?',
+      <Object?>[stamp.millisecondsSinceEpoch],
     );
     var total = 0;
     for (final r in rows) {
-      total += (r['minutes'] as int?) ?? 0;
+      total += ((r['m'] as num?) ?? 0).toInt();
     }
     return total;
   }

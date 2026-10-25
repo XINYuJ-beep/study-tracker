@@ -82,15 +82,39 @@ CREATE TABLE IF NOT EXISTS items (
 /// done 默认 1，未撤销的行即代表已打卡
 /// completed_at 供 5 秒撤销窗口使用
 /// date 存当天 00:00（本地时区）；04:00 日界规则在 repo 层处理，不在这里
+///
+/// minutes：本条实际用时（分钟）。打卡面板可改，默认取 items.minutes。
+///          统计「今日用时 / 本周时长」以它为准，而不是 items 的预估。
+/// note：   选填备注，最多 200 字，空串表示没写。
 const String sqlCreateCheckins = '''
 CREATE TABLE IF NOT EXISTS checkins (
   item_id       TEXT NOT NULL,
   date          INTEGER NOT NULL,
   done          INTEGER NOT NULL DEFAULT 1,
   completed_at  INTEGER,
+  minutes       INTEGER NOT NULL DEFAULT 0,
+  note          TEXT NOT NULL DEFAULT '',
   PRIMARY KEY (item_id, date),
   FOREIGN KEY (item_id) REFERENCES items (id)
 )''';
+
+/// schemaVersion 1 -> 2 的迁移语句。
+///
+/// 老库（v1）的 checkins 没有 minutes / note，必须 ALTER 补上，
+/// 否则升级后所有读这两列的 SQL 都会报 no such column。
+/// ALTER TABLE 加 NOT NULL 列必须带默认值。
+const List<String> kMigrateV1ToV2 = <String>[
+  "ALTER TABLE checkins ADD COLUMN minutes INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE checkins ADD COLUMN note TEXT NOT NULL DEFAULT ''",
+];
+
+/// 性能索引（SPEC 第 16 节：checkins(item_id)、checkins(date) 建索引）
+const List<String> kCreateIndexes = <String>[
+  'CREATE INDEX IF NOT EXISTS idx_checkins_item ON checkins (item_id)',
+  'CREATE INDEX IF NOT EXISTS idx_checkins_date ON checkins (date)',
+  'CREATE INDEX IF NOT EXISTS idx_cards_due ON cards (due_date)',
+  'CREATE INDEX IF NOT EXISTS idx_items_week ON items (week)',
+];
 
 /// ====================================
 /// 表 5: cards (736 张记忆卡)
