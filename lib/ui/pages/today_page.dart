@@ -30,12 +30,12 @@ import '../../data/repo/question_repo.dart';
 class TodayPage extends ConsumerStatefulWidget {
   const TodayPage({super.key});
 
-  @Override
+  @override
   ConsumerState<TodayPage> createState() => _TodayPageState();
 }
 
 class _TodayPageState extends ConsumerState<TodayPage> {
-  /// 今天(＄ 点日界)
+  /// 今天（4 点日界）
   DateTime _today = effectiveToday();
 
   /// 今日推荐条目
