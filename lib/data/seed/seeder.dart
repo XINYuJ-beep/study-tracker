@@ -137,7 +137,7 @@ class Seeder {
   Future<SeedResult> countExisting() async {
     try {
       Future<int> cnt(String table) async {
-        final rows = await db.rawQuery('SELECT COUNT(*) AS c FROM $table');
+        final rows = await db.raw('SELECT COUNT(*) AS c FROM $table');
         return (rows.first['c'] as int?) ?? 0;
       }
       return SeedResult(
