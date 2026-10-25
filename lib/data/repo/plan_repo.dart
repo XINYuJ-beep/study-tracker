@@ -145,13 +145,20 @@ class PlanRepo {
 
     final budget =
         (AppConstants.dailyBudgetMinutes * AppConstants.budgetFactor).round();
+    // 填满 limit 条，且累计分钟不超过 budget；
+    // 碰到装不下的就跳过该条看下一条（不是直接 break），
+    // 否则开头几条都是 60 分钟时会把整个列表压成 1 条。
     final out = <Item>[];
     var used = 0;
     for (final it in pool) {
       if (out.length >= limit) break;
-      if (out.isNotEmpty && used + it.minutes > budget) break;
+      if (out.isNotEmpty && used + it.minutes > budget) continue;
       out.add(it);
       used += it.minutes;
+    }
+    // 兜底：一条都装不下时也要给第一条，首页不能空白。
+    if (out.isEmpty && pool.isNotEmpty) {
+      out.add(pool.first);
     }
     return out;
   }
