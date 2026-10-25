@@ -15,27 +15,19 @@ import 'ui/pages/today_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   final db = AppDatabase();
 
   // 首启导数据。失败不闪退，页面仍能起来，设置页可以重试。
+  // 成功静默，只在失败时留一行日志。
   try {
     final r = await Seeder(db).seedIfNeeded();
+    if (!r.ok) {
+      // ignore: avoid_print
+      print('[SEED] failed fatal=${r.fatalError} ${r.failures()}');
+    }
+  } catch (e) {
     // ignore: avoid_print
-    print('[SEED] ok=${r.ok} fatal=${r.fatalError} items=${r.items} weeks=${r.weeks} '
-        'modules=${r.modules} cards=${r.cards} mcqs=${r.mcqs} '
-        'skipped=${r.skipped.length}');
-    final rows = await db.query('items');
-    final ver = await db.query('app_settings');
-    // ignore: avoid_print
-    print('[SEED] failures=${r.failures()} skipped=${r.skipped}');
-    // ignore: avoid_print
-    print('[SEED] items_in_db=${rows.length} app_settings=${ver}');
-  } catch (e, st) {
-    // ignore: avoid_print
-    print('[SEED] THROW: $e');
-    // ignore: avoid_print
-    print('$st');
+    print('[SEED] throw $e');
   }
 
   runApp(
