@@ -377,6 +377,11 @@ class QuestionRepo {
     final m = digits == null ? null : int.tryParse(digits);
     return m ?? 9999;
   }
+
+  /// 抹掉时分秒，只留当天零点。
+  /// 注意：本方法为库私有（`_` 开头），跨文件不可见，
+  /// 所以此处保留一份类内实现；后续统一抽到 core/date_utils.dart。
+  DateTime _startOfDay(DateTime t) => DateTime(t.year, t.month, t.day);
 }
 
 DateTime? _msToDt(int? ms) =>
