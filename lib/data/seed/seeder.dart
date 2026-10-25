@@ -85,7 +85,27 @@ class SeedResult {
 ///
 /// 流程：读 4 个 asset JSON -> 解析 -> 硬校验 -> 事务内清表+批量插入 -> 写版本号。
 /// 硬错误整批回滚；软错误跳过单条并记录进 [SeedResult.skipped]。
+
 class Seeder {
+  /// 把 JSON 里的 day 字段统一成 1..7（周一=1）。
+  ///
+  /// plan.json 给的是中文（'周一'..'周日'），
+  /// 但 items.day 列是 INTEGER，直接 as int 会抛类型转换异常。
+  /// 兼容数字、数字字符串与中文三种写法，认不出的一律当周一。
+  int _dayIndex(Object? raw) {
+    if (raw is int) return raw >= 1 && raw <= 7 ? raw : 1;
+    final String s = raw?.toString().trim() ?? '';
+    const Map<String, int> table = <String, int>{
+      '1': 1, '一': 1, '周一': 1, '星期一': 1,
+      '2': 2, '二': 2, '周二': 2, '星期二': 2,
+      '3': 3, '三': 3, '周三': 3, '星期三': 3,
+      '4': 4, '四': 4, '周四': 4, '星期四': 4,
+      '5': 5, '五': 5, '周五': 5, '星期五': 5,
+      '6': 6, '六': 6, '周六': 6, '星期六': 6,
+      '7': 7, '日': 7, '天': 7, '周日': 7, '周天': 7, '星期日': 7, '星期天': 7,
+    };
+    return table[s] ?? 1;
+  }
   Seeder(this.db);
 
   final AppDatabase db;
@@ -165,7 +185,7 @@ class Seeder {
             itemRows.add(<String, Object?>{
               'id': itemId,
               'week': weekNo,
-              'day': it['day'] as int?,
+              'day': _dayIndex(it['day']),
               'watch': it['watch'] as String?,
               'practice': it['practice'] as String?,
               'output': it['output'] as String?,
