@@ -36,6 +36,14 @@ jobs:
         run: |
           test -f android/local.properties && cat android/local.properties
 
+      # profile 包保留 Dart 侧 print 输出（release 会被 AOT 剥离），
+      # 用于真机抓 [SEED]/[DB] 验收日志；release 包作为最终交付物。
+      - name: Build profile APK (log-visible)
+        run: flutter build apk --profile
+
+      - name: Stash profile APK
+        run: cp build/app/outputs/flutter-apk/app-profile.apk /tmp/app-profile.apk
+
       - name: Build release APK
         run: flutter build apk --release
 
@@ -43,4 +51,10 @@ jobs:
         with:
           name: study-tracker-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: study-tracker-apk-profile
+          path: /tmp/app-profile.apk
           retention-days: 30
