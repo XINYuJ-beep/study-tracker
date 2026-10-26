@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
 import 'package:sqflite/sqflite.dart' show ConflictAlgorithm;
 import '../../core/constants.dart';
 import '../db/app_database.dart';
@@ -81,6 +82,7 @@ class CheckinRepo {
     }
     if (actual < 0) actual = 0;
     await setDone(itemId, day, done: true, minutes: actual, note: note);
+    await _traceCount('after checkIn', itemId, day);
     return actual;
   }
 
@@ -95,6 +97,7 @@ class CheckinRepo {
       where: 'item_id = ? AND date = ?',
       whereArgs: <Object?>[itemId, stamp.millisecondsSinceEpoch],
     );
+    await _traceCount('after undo', itemId, day);
   }
 
   /// 某条目在某天打卡时记录的用时（分钟）；没打卡返回 null。
@@ -280,6 +283,22 @@ class CheckinRepo {
   }
 
   // ---------- 内部 ----------
+
+  /// 仅 debug 生效：打印 checkins 中该条目当日的真实行数。
+  ///
+  /// 用于实机核验「撤销 = 物理删除」：打卡后应为 1，撤销后应为 0。
+  /// release 包里 kDebugMode 为 false，整段不执行、不产生日志。
+  Future<void> _traceCount(String tag, String itemId, DateTime day) async {
+    if (!kDebugMode) return;
+    final stamp = _startOfDay(_normalize(day));
+    final rows = await db.raw(
+      'SELECT COUNT(*) AS c FROM ${T.checkins} '
+      'WHERE item_id = ? AND date = ?',
+      <Object?>[itemId, stamp.millisecondsSinceEpoch],
+    );
+    final n = ((rows.first['c'] as num?) ?? 0).toInt();
+    debugPrint('[TRACE][$tag] item=$itemId rows=$n');
+  }
 
   /// 把任意时间点归一化到「凌晨 4 点日界」所属的那一天。
   DateTime _normalize(DateTime t) =>
