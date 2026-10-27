@@ -756,6 +756,80 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         child: Text('暂无数据', style: _tsMinor),
       );
     }
+
+    final bool dataOk = c.ok;
+    if (!dataOk) {
+      final List<String> fails = c.failures();
+      final String detail = fails.isEmpty
+          ? (c.fatalError ?? '数据结构校验未通过')
+          : fails.join('\n');
+      return _Panel(
+        title: '数据现状',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(AppSizes.gap2),
+              decoration: BoxDecoration(
+                color: AppColors.warning.withValues(alpha: 0.08),
+                border: Border.all(
+                  color: AppColors.warning.withValues(alpha: 0.45),
+                ),
+                borderRadius: BorderRadius.circular(AppSizes.cardRadius),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 18,
+                        color: AppColors.warning,
+                      ),
+                      const SizedBox(width: AppSizes.gap),
+                      Expanded(
+                        child: Text(
+                          '数据校验未通过',
+                          style: const TextStyle(
+                            fontSize: AppSizes.body,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.warning,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSizes.gap),
+                  Text(detail, style: _tsBoldWarning),
+                  const SizedBox(height: AppSizes.gap),
+                  Text(
+                    '可先点「重试」重新读取；若仍不符，用「清空重导」按内置 JSON 重建。',
+                    style: _tsMinor,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSizes.gap2),
+            OutlinedButton.icon(
+              onPressed: _busy ? null : _load,
+              icon: const Icon(Icons.refresh, size: 18),
+              label: const Text('重试'),
+            ),
+            const SizedBox(height: AppSizes.gap),
+            OutlinedButton.icon(
+              onPressed: _busy ? null : _clearAndReseed,
+              icon: const Icon(Icons.restore, size: 18),
+              label: const Text('清空重导'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.warning,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     final rows = <Widget>[
       _Row(label: '模块', actual: c.modules, expected: AppConstants.expectedModules),
       _Row(label: '周计划', actual: c.weeks, expected: AppConstants.expectedWeeks),
@@ -997,7 +1071,7 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool ok = actual >= expected;
+    final bool ok = actual == expected;
     final color = ok ? AppColors.success : AppColors.warning;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
