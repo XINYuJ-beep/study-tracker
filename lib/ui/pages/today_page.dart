@@ -65,7 +65,10 @@ class _TodayPageState extends ConsumerState<TodayPage> {
   /// 首次加载中
   bool _loading = true;
 
-  /// 正在提交打卡请条目的 id ，防连点
+  /// 冷启动到期提醒是否已弹过，保证一次进入只弹一次
+  bool _bootNoticeShown = false;
+
+  /// 正在提交打卡条目的 id，防连点
   final Set<String> _submitting = <String>{};
 
   /// 已打卡且仍在撤销窗口内的条目 id -> 定时器
@@ -119,6 +122,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
         _currentModule = module;
         _loading = false;
       });
+      _maybeShowBootNotice();
     } catch (e) {
       if (!mounted) return;
       setState(() => _loading = false);
@@ -257,6 +261,44 @@ class _TodayPageState extends ConsumerState<TodayPage> {
       ..showSnackBar(
         SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),
       );
+  }
+
+  /// 冷启动进入首页：存在到期项时弹一次页面级提醒，带「去复习」动作。
+  ///
+  /// 只弹一次：_bootNoticeShown 一旦为 true 不再弹，页内下拉刷新不会重复打扰。
+  /// 不引入第三方通知库，全部走 ScaffoldMessenger。
+  void _maybeShowBootNotice() {
+    if (_bootNoticeShown) return;
+    final int total = _dueReview + _dueConcept;
+    if (total <= 0) return;
+    _bootNoticeShown = true;
+
+    final List<String> parts = <String>[];
+    if (_dueReview > 0) {
+      parts.add(_dueReview.toString() + ' 张卡');
+    }
+    if (_dueConcept > 0) {
+      parts.add(_dueConcept.toString() + ' 个概念');
+    }
+    final String msg = '今天有 ' + parts.join(' + ') + ' 到期，先复习再学新。';
+
+    // 等一帧，确保 Scaffold 已挂载再弹
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(msg),
+            duration: const Duration(seconds: 6),
+            action: SnackBarAction(
+              label: '去复习',
+              textColor: AppColors.gold,
+              onPressed: () => context.go('/qa'),
+            ),
+          ),
+        );
+    });
   }
 
   @override
