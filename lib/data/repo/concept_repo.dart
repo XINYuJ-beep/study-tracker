@@ -164,6 +164,39 @@ class ConceptRepo {
     return rows.map(Concept.fromMap).toList();
   }
 
+  /// 概念题 4 选 1 的题源：随机抽 [count] 张「已学」概念。
+  ///
+  /// 「已学」口径与 pickWhiteboard 一致：week 非空且 week <= [currentWeek]。
+  /// 题干用 definition，正确项用 term，干扰项由页面从同一批池子里取。
+  Future<List<Concept>> quizPool(
+    int currentWeek, {
+    int count = AppConstants.quizPickCount,
+  }) async {
+    if (count <= 0) return const <Concept>[];
+    final rows = await db.query(
+      T.concepts,
+      where: 'week IS NOT NULL AND week <= ?',
+      whereArgs: <Object?>[currentWeek],
+    );
+    if (rows.isEmpty) return const <Concept>[];
+    final pool = rows.map(Concept.fromMap).toList()..shuffle(Random());
+    final take = pool.length < count ? pool.length : count;
+    return pool.take(take).toList();
+  }
+
+  /// 4 选 1 的候选术语池（不含正确项），用于生成干扰项。
+  Future<List<String>> otherTerms(Set<int> excludeIds, {int limit = 60}) async {
+    final rows = await db.query(T.concepts, orderBy: 'id ASC');
+    final out = <String>[];
+    for (final r in rows) {
+      final id = r['id'] as int;
+      if (excludeIds.contains(id)) continue;
+      out.add(r['term'] as String);
+      if (out.length >= limit) break;
+    }
+    return out;
+  }
+
   /// 全部概念数（自检页用）。
   Future<int> totalCount() async {
     final rows = await db.raw('SELECT COUNT(*) AS c FROM ${T.concepts}');

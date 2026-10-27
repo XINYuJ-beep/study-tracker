@@ -25,10 +25,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants.dart';
 import '../../data/repo/plan_repo.dart';
 import '../../data/repo/question_repo.dart';
-import '../providers.dart';
+import '../../core/providers.dart';
+import 'qa_extra_page.dart';
 
 /// 页面内两个模块。
-enum _QaTab { review, mcq }
+enum _QaTab { review, mcq, extra }
 
 /// 自检卡正反面。
 enum _CardPhase { front, back }
@@ -238,15 +239,23 @@ class _QaPageState extends ConsumerState<QaPage> {
                   selected: _tab == _QaTab.mcq,
                   onTap: () => _switchTab(_QaTab.mcq),
                 ),
+                const SizedBox(width: 8),
+                _TabChip(
+                  label: '进阶',
+                  selected: _tab == _QaTab.extra,
+                  onTap: () => _switchTab(_QaTab.extra),
+                ),
               ],
             ),
           ),
         ),
       ),
       body: SafeArea(
-        child: _tab == _QaTab.review
-            ? _buildReview(theme)
-            : _buildMcq(theme),
+        child: switch (_tab) {
+          _QaTab.review => _buildReview(theme),
+          _QaTab.mcq => _buildMcq(theme),
+          _QaTab.extra => const QaExtraPage(),
+        },
       ),
     );
   }

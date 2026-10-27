@@ -85,6 +85,17 @@ class AppConstants {
   static const int whiteboardCount = 10;
   /// 每个概念限时（秒）
   static const int whiteboardSeconds = 60;
+
+  /// 概念题 4 选 1：抽题数量与通过线（10 题 8 过）。
+  static const int quizPickCount = 10;
+  static const int quizPassCount = 8;
+
+  /// 旧题抽查：抽题数量与通过线（10 题 7 过）。
+  static const int spotCheckCount = 10;
+  static const int spotCheckPassCount = 7;
+
+  /// 白板抽背：绿卡通过线（绿 >= 7 过）。
+  static const int whiteboardPassCount = 7;
 }
 
 /// 应用展示名

@@ -318,6 +318,40 @@ class QuestionRepo {
   ///
   /// Items 表没有 module 字段，模块归属只能按 Modules 顺序累加 weeks
   /// 推出周区间，再用 Items.week 落入区间反查。
+  /// 模块完成率（0.0 ~ 1.0）：该模块周区间内 items 的打卡比例。
+  ///
+  /// 阶段听力的解锁判定与进度展示共用这一个口径，避免两处各算一套。
+  Future<double> moduleProgress(String module) async {
+    final mods = await db.query(T.modules, orderBy: 'id ASC');
+    if (mods.isEmpty) return 0;
+    final sorted = mods.toList()
+      ..sort((a, b) => _moduleOrder(a['id'] as String)
+          .compareTo(_moduleOrder(b['id'] as String)));
+    var startWeek = 1;
+    int? from;
+    int? to;
+    for (final m in sorted) {
+      final span = m['weeks'] as int;
+      final endWeek = startWeek + (span <= 0 ? 0 : span) - 1;
+      if (m['id'] as String == module) {
+        from = startWeek;
+        to = endWeek;
+        break;
+      }
+      startWeek = endWeek + 1;
+    }
+    if (from == null || to == null) return 0;
+    final items = await db.query(
+      T.items,
+      where: 'week >= ? AND week <= ?',
+      whereArgs: [from, to],
+    );
+    if (items.isEmpty) return 0;
+    final ids = items.map((e) => e['id'] as String).toList();
+    final doneCount = await _doneCountOf(ids);
+    return doneCount / items.length;
+  }
+
   Future<bool> isModuleListeningUnlocked(String module) async {
     final mods = await db.query(T.modules, orderBy: 'id ASC');
     if (mods.isEmpty) return false;

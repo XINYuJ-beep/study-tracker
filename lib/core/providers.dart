@@ -5,6 +5,7 @@ import '../data/repo/checkin_repo.dart';
 import '../data/repo/concept_repo.dart';
 import '../data/repo/plan_repo.dart';
 import '../data/repo/question_repo.dart';
+import '../data/repo/stage_repo.dart';
 import '../data/repo/stats_repo.dart';
 import '../data/seed/seeder.dart';
 
@@ -42,6 +43,11 @@ final Provider<QuestionRepo> questionRepoProvider = Provider<QuestionRepo>((ref)
 /// 概念仓库：概念 / 术语卡，含掌握度等级。
 final Provider<ConceptRepo> conceptRepoProvider = Provider<ConceptRepo>((ref) {
   return ConceptRepo(ref.watch(databaseProvider));
+});
+
+/// 阶段仓库：stages / streams 只读。阶段听力解锁判定在 QuestionRepo。
+final Provider<StageRepo> stageRepoProvider = Provider<StageRepo>((ref) {
+  return StageRepo(ref.watch(databaseProvider));
 });
 
 /// 统计仓库：本周时长、12 周热力图、8 模块进度、掌握度分桶。
