@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../core/constants.dart';
@@ -617,9 +621,62 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             '清空全部业务数据后重新导入。每日目标等设置会保留。此操作不可撤销。',
             style: _tsMinor,
           ),
+          const SizedBox(height: AppSizes.gap2),
+          OutlinedButton.icon(
+            onPressed: _busy ? null : _export,
+            icon: const Icon(Icons.upload_file_outlined, size: 18),
+            label: const Text('导出备份数据'),
+          ),
+          const SizedBox(height: AppSizes.gap),
+          Text(
+            '导出整份数据库副本，成功后会在对话框显示完整路径。',
+            style: _tsMinor,
+          ),
         ],
       ),
     );
+  }
+
+  Future<void> _export() async {
+    await _runTask('正在导出备份', () async {
+      final dbPath = p.join(await getDatabasesPath(), AppDatabase.fileName);
+      final dbFile = File(dbPath);
+      if (!await dbFile.exists()) {
+        return '导出失败：数据库文件不存在\n' + dbPath;
+      }
+
+      Directory? targetDir;
+      try {
+        targetDir = await getExternalStorageDirectory();
+      } catch (_) {
+        targetDir = null;
+      }
+      targetDir ??= await getApplicationDocumentsDirectory();
+      final backupDir = Directory(p.join(targetDir.path, 'study_tracker_backup'));
+      if (!await backupDir.exists()) {
+        await backupDir.create(recursive: true);
+      }
+
+      final now = DateTime.now();
+      String two(int v) => v.toString().padLeft(2, '0');
+      final stamp = now.year.toString() +
+          two(now.month) +
+          two(now.day) +
+          '_' +
+          two(now.hour) +
+          two(now.minute) +
+          two(now.second);
+      final target = p.join(backupDir.path, 'study_tracker_' + stamp + '.sqlite');
+
+      // 先做 checkpoint 保证 -wal 内容已落主库，再复制，避免备份丢最近写入。
+      final db = await ref.read(databaseProvider).database;
+      await db.execute('PRAGMA wal_checkpoint(TRUNCATE)');
+      await dbFile.copy(target);
+
+      final size = await File(target).length();
+      final kb = (size / 1024).toStringAsFixed(1);
+      return '导出成功\n' + target + '\n文件大小 ' + kb + ' KB';
+    });
   }
 
   Widget _aboutCard() {

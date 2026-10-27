@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../../core/constants.dart';
+import '../../core/date_utils.dart';
 import '../db/app_database.dart';
 import '../db/tables.dart';
 
@@ -82,7 +83,7 @@ class ConceptRepo {
       await db.update(
         T.concepts,
         <String, Object?>{
-          'due_date': _startOfDay(now).add(const Duration(days: 1)).millisecondsSinceEpoch,
+          'due_date': startOfDay(now).add(const Duration(days: 1)).millisecondsSinceEpoch,
         },
         where: 'id = ?',
         whereArgs: <Object?>[conceptId],
@@ -106,11 +107,12 @@ class ConceptRepo {
       };
     }
 
-    final idx = nextLevel - 1;
-    final days = intervals[idx < 0 ? 0 : (idx >= intervals.length ? intervals.length - 1 : idx)];
+    // 索引即档位：level 与 question_repo 口径一致，同一档取同一间隔。
+    final idx = nextLevel < 0 ? 0 : (nextLevel >= intervals.length ? intervals.length - 1 : nextLevel);
+    final days = intervals[idx];
     return <String, Object?>{
       'level': nextLevel,
-      'due_date': _startOfDay(now).add(Duration(days: days)).millisecondsSinceEpoch,
+      'due_date': startOfDay(now).add(Duration(days: days)).millisecondsSinceEpoch,
       'reps': row.reps + 1,
     };
   }
@@ -203,13 +205,4 @@ class ConceptRepo {
     return (rows.first['c'] as int?) ?? 0;
   }
 
-  // ---------- 工具 ----------
-  /// 4 点日界：把时间归到「学习日」的零点。
-  /// 例：今天 03:30 属于昨天，返回昨天 00:00。
-  DateTime _startOfDay(DateTime t) {
-    final shifted = t.hour < AppConstants.dayBoundaryHour
-        ? t.subtract(const Duration(days: 1))
-        : t;
-    return DateTime(shifted.year, shifted.month, shifted.day);
-  }
 }

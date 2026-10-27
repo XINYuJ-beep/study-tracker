@@ -58,11 +58,6 @@ class AppDatabase {
           b.execute(sql);
         }
         await b.commit(noResult: true);
-        // 开发期自检：release 包也会输出，方便确认建表是否真的执行了。
-        // 正式发布前可删除这两行。
-        // ignore: avoid_print
-        print('[DB] onCreate done: version=$version '
-            'tables=${kCreateTableSql.length}/${kCreateTableOrder.length}');
       },
       onUpgrade: (Database db, int from, int to) async {
         // v1 -> v2：checkins 补 minutes / note，并补建索引。
@@ -75,8 +70,6 @@ class AppDatabase {
         for (final String sql in kCreateIndexes) {
           await db.execute(sql);
         }
-        // ignore: avoid_print
-        print('[DB] onUpgrade done: $from -> $to');
       },
     );
   }

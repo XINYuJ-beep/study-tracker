@@ -1,14 +1,11 @@
 import '../../core/constants.dart';
+import '../../core/date_utils.dart';
 import '../db/app_database.dart';
 import '../db/tables.dart';
 
-/// 今天（以凌晨 4 点为日界）。
-DateTime effectiveToday() {
-  final now = DateTime.now();
-  return now.hour < AppConstants.dayBoundaryHour
-      ? now.subtract(const Duration(days: 1))
-      : now;
-}
+/// 今天（以凌晨 4 点为日界），返回当天零点。
+/// 直接返回零点，避免调用方再用 startOfDay 做二次日界判断导致跨日错位。
+DateTime effectiveToday() => startOfDay(DateTime.now());
 
 DateTime _startOfDay(DateTime t) => DateTime(t.year, t.month, t.day);
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../core/constants.dart';
+import '../../core/date_utils.dart';
 import '../db/app_database.dart';
 import '../db/tables.dart';
 import 'plan_repo.dart';
@@ -71,7 +72,7 @@ class QuestionRepo {
   /// [limit] 为 0 表示不限条数。
   Future<List<ReviewEntry>> dueReview({int limit = 0}) async {
     final today = effectiveToday();
-    final end = _startOfDay(today).add(const Duration(days: 1));
+    final end = startOfDay(today).add(const Duration(days: 1));
     final endMs = end.millisecondsSinceEpoch;
     final graduate = AppConstants.reviewGraduatedStage;
 
@@ -130,7 +131,6 @@ class QuestionRepo {
   /// score >= 3 视为记住，stage 前进一级；否则退回一级（最低 0）。
   /// 到达毕业 stage 后不再排期（dueDate 置 null）。
   Future<void> gradeReview(ReviewEntry entry, int score) async {
-    final passed = score >= 3;
 
     if (entry.source == ReviewSource.card) {
       final rows = await db.query(
@@ -143,14 +143,14 @@ class QuestionRepo {
       final row = rows.first;
 
       final oldStage = row['stage'] as int;
-      var stage = oldStage;
-      stage = passed ? stage + 1 : (stage > 0 ? stage - 1 : 0);
+      final stage = _nextStage(oldStage, score);
       final graduated = stage >= AppConstants.reviewGraduatedStage;
 
       await db.update(
         T.cards,
         {
           'stage': stage,
+          'reps': (row['reps'] as int? ?? 0) + 1,
           'due_date': graduated ? null : _nextDue(stage).millisecondsSinceEpoch,
         },
         where: 'id = ?',
@@ -171,8 +171,7 @@ class QuestionRepo {
     final crow = crowRows.first;
 
     final oldLevel = crow['level'] as int;
-    var level = oldLevel;
-    level = passed ? level + 1 : (level > 0 ? level - 1 : 0);
+    final level = _nextStage(oldLevel, score);
     final graduated = level >= AppConstants.reviewGraduatedStage;
 
     await db.update(
@@ -187,6 +186,17 @@ class QuestionRepo {
     );
   }
 
+  /// 三档打分 -> 新档位。
+  /// score >= 4（记得）：升一档；
+  /// score == 3（模糊）：档位不变，只重置当前档间隔；
+  /// score <= 2（忘了）：降一档，下限 0。
+  int _nextStage(int stage, int score) {
+    final cur = stage < 0 ? 0 : stage;
+    if (score >= 4) return cur + 1;
+    if (score == 3) return cur;
+    return cur > 0 ? cur - 1 : 0;
+  }
+
   /// 按 [stage] 取下一次到期时间；越界时取最后一个间隔。
   DateTime _nextDue(int stage) {
     final list = AppConstants.reviewIntervals;
@@ -194,7 +204,7 @@ class QuestionRepo {
         ? 0
         : (stage >= list.length ? list.length - 1 : stage);
     final days = list[idx];
-    return _startOfDay(effectiveToday()).add(Duration(days: days));
+    return startOfDay(effectiveToday()).add(Duration(days: days));
   }
 
   /// 今日到期的复习条数（用于首页角标）。
@@ -412,10 +422,6 @@ class QuestionRepo {
     return m ?? 9999;
   }
 
-  /// 抹掉时分秒，只留当天零点。
-  /// 注意：本方法为库私有（`_` 开头），跨文件不可见，
-  /// 所以此处保留一份类内实现；后续统一抽到 core/date_utils.dart。
-  DateTime _startOfDay(DateTime t) => DateTime(t.year, t.month, t.day);
 }
 
 DateTime? _msToDt(int? ms) =>

@@ -73,10 +73,21 @@ class AppConstants {
   static const int wrongCountToFocus = 2;
 
   // ---------- 间隔重复（艾宾浩斯档位，单位：天）----------
-  /// 阶段的间隔天数，索引即 stage（0-6），7 为毕业
-  static const List<int> reviewIntervals = <int>[1, 2, 4, 7, 15, 30];
-  /// 毕业档位（达到即不再安排复习）
-  static const int reviewGraduatedStage = 6;
+  /// 各档位的间隔天数。索引即档位（0-6），共 7 档。
+  ///
+  /// 口径（唯一，question_repo 与 concept_repo 必须一致）：
+  ///   stage = 0 -> 1 天
+  ///   stage = 1 -> 2 天
+  ///   stage = 2 -> 4 天
+  ///   stage = 3 -> 7 天
+  ///   stage = 4 -> 15 天
+  ///   stage = 5 -> 30 天
+  ///   stage = 6 -> 60 天
+  ///   达到 reviewGraduatedStage(7) 即毕业，due_date 置空不再出现。
+  /// 列表长度 = reviewGraduatedStage，故按 stage 直接下标不会越界。
+  static const List<int> reviewIntervals = <int>[1, 2, 4, 7, 15, 30, 60];
+  /// 毕业档位（达到即不再安排复习）。同时等于 reviewIntervals 的长度。
+  static const int reviewGraduatedStage = 7;
   /// 初始难度因子
   static const double initialEase = 2.5;
 

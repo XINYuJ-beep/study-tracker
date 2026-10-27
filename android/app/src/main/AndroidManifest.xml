@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="study_tracker"
+        android:label="学习打卡"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -11,6 +11,7 @@ import '../../data/db/tables.dart' show Item;
 import '../../data/repo/plan_repo.dart';
 import '../../data/repo/checkin_repo.dart';
 import '../../data/repo/question_repo.dart';
+import '../../data/repo/concept_repo.dart';
 
 
 /// 今日页：今日进度的唯一入口。
@@ -55,6 +56,8 @@ class _TodayPageState extends ConsumerState<TodayPage> {
 
   /// 到期复习张数
   int _dueReview = 0;
+  /// 到期复习概念数
+  int _dueConcept = 0;
 
   /// 当前模块标题（取推荐队列首条所属周所属模块，取不到则空）
   String _currentModule = '';
@@ -88,6 +91,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
     final PlanRepo planRepo = ref.read(planRepoProvider);
     final CheckinRepo checkinRepo = ref.read(checkinRepoProvider);
     final QuestionRepo questionRepo = ref.read(questionRepoProvider);
+    final ConceptRepo conceptRepo = ref.read(conceptRepoProvider);
 
     // 每次刷新重算「今天」，防止页面挂过夜后日期不更新
     final DateTime today = effectiveToday();
@@ -98,6 +102,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
       final int minutes = await checkinRepo.todayMinutes();
       final int streak = await planRepo.currentStreak();
       final int due = await questionRepo.dueReviewCount();
+      final int dueConcept = await conceptRepo.dueConceptCount();
       final int goal = await _readDailyGoal();
       final String module = await _moduleNameOf(items);
 
@@ -109,6 +114,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
         _todayMinutes = minutes;
         _streak = streak;
         _dueReview = due;
+        _dueConcept = dueConcept;
         _dailyGoal = goal;
         _currentModule = module;
         _loading = false;
@@ -306,9 +312,10 @@ class _TodayPageState extends ConsumerState<TodayPage> {
           ),
         ],
         const SizedBox(height: 24),
-        if (_dueReview > 0) ...<Widget>[
+        if (_dueReview > 0 || _dueConcept > 0) ...<Widget>[
           _ReviewBanner(
-            count: _dueReview,
+            cardCount: _dueReview,
+            conceptCount: _dueConcept,
             onTap: () => context.go('/qa'),
           ),
           const SizedBox(height: 16),
@@ -574,12 +581,32 @@ class _SectionTitle extends StatelessWidget {
 }
 
 
-/// 到期复习提示条：有 N 张卡待复习，点击进测试页。
+/// 到期复习提示条：卡片与概念两路到期合并展示，点击进测试页。
 class _ReviewBanner extends StatelessWidget {
-  const _ReviewBanner({required this.count, required this.onTap});
+  const _ReviewBanner({
+    required this.cardCount,
+    required this.conceptCount,
+    required this.onTap,
+  });
 
-  final int count;
+  final int cardCount;
+  final int conceptCount;
   final VoidCallback onTap;
+
+  /// 两路到期合并成一句人话，空的一路不显示。
+  String get _label {
+    final List<String> parts = <String>[];
+    if (cardCount > 0) {
+      parts.add(cardCount.toString() + ' 张卡');
+    }
+    if (conceptCount > 0) {
+      parts.add(conceptCount.toString() + ' 个概念');
+    }
+    if (parts.isEmpty) {
+      return '没有待复习内容';
+    }
+    return '有 ' + parts.join(' + ') + ' 待复习';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -598,7 +625,7 @@ class _ReviewBanner extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  '有 $count 张卡待复习',
+                  _label,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppColors.text,
                     fontWeight: FontWeight.w500,

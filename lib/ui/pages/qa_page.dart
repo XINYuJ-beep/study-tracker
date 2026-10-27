@@ -8,12 +8,14 @@
 ///
 /// 本轮未实现（P1）：概念题 4选1、旧题抽查、白板抽背、阶段听力。
 ///
-/// 【SRS 口径偏差留痕】
-/// SPEC 4.3 字面写「记得/模糊/忘了 → 间隔 7/2/1 天」，而当前 gradeReview 是纯 SRS 档位制：
-/// score >= 3 进一级，否则退一级，间隔由 reviewIntervals=[1,2,4,7,15,30] 查表得出。
-/// 两套模型不同源，UI 层以 SRS 语义为准：记得 = 4，模糊 = 3，忘了 = 1。
-/// 后果：模糊与记得在 repo 中行为相同（stage 均 +1），三档退化为两档语义。
-/// 不改 repo（改动会连带影响 concepts 逻辑），校准推至第 5 轮做统计页时统一处理。
+/// 【SRS 口径校准记录】
+/// SPEC 4.3 字面写「记得/模糊/忘了」，repo 侧已按此校准为三档语义：
+///   记得（score 4）：档位 +1，间隔按新档位查表；
+///   模糊（score 3）：档位不变，只把 due_date 按当前档位间隔重置；
+///   忘了（score 1/2）：档位 -1，下限 0。
+/// 间隔表 AppConstants.reviewIntervals = [1,2,4,7,15,30,60] 共 7 档（索引即档位），
+/// 档位达到 AppConstants.reviewGraduatedStage（7）即毕业，due_date 置空不再进队列。
+/// UI 层分数映射：记得 = 4，模糊 = 3，忘了 = 1，与 repo._nextStage 判据一致。
 ///
 /// 数据全部走 repo，页面里不写 SQL。
 /// 跨天以凌晨 4 点为界，统一用 effectiveToday()。
@@ -147,7 +149,7 @@ class _QaPageState extends ConsumerState<QaPage> {
     final entry = _reviewQueue[_reviewIndex];
     setState(() {
       _grading = true;
-      if (score >= 3) _reviewRemembered++;
+      if (score >= 4) _reviewRemembered++;
     });
     try {
       await ref.read(questionRepoProvider).gradeReview(entry, score);
@@ -421,7 +423,7 @@ class _QaPageState extends ConsumerState<QaPage> {
                 Expanded(
                   child: _GradeButton(
                     label: '模糊',
-                    hint: '进一级',
+                    hint: '重置本档',
                     color: const Color(0xFFFF9500),
                     onTap: _grading ? null : () => _gradeCard(3),
                   ),

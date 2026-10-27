@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,13 +22,11 @@ Future<void> main() async {
   // 成功静默，只在失败时留一行日志。
   try {
     final r = await Seeder(db).seedIfNeeded();
-    if (!r.ok) {
-      // ignore: avoid_print
-      print('[SEED] failed fatal=${r.fatalError} ${r.failures()}');
+    if (!r.ok && kDebugMode) {
+      debugPrint('[SEED] failed fatal=${r.fatalError} ${r.failures()}');
     }
   } catch (e) {
-    // ignore: avoid_print
-    print('[SEED] throw $e');
+    if (kDebugMode) debugPrint('[SEED] throw $e');
   }
 
   runApp(
