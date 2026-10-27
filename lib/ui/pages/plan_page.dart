@@ -8,6 +8,7 @@ import '../../core/providers.dart';
 import '../../core/theme.dart';
 import '../../data/db/tables.dart';
 import '../../data/repo/plan_repo.dart' show effectiveToday;
+import '../widgets/checkin_sheet.dart';
 
 /// 计划页。
 ///
@@ -107,11 +108,11 @@ class _PlanPageState extends ConsumerState<PlanPage> {
 
   Future<void> _openCheckinSheet(Item item) async {
     if (_submitting.contains(item.id)) return;
-    final _CheckinInput? input = await showModalBottomSheet<_CheckinInput>(
+    final CheckinInput? input = await showModalBottomSheet<CheckinInput>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (BuildContext ctx) => _CheckinSheet(
+      builder: (BuildContext ctx) => CheckinSheet(
         item: item,
         defaultMinutes: item.minutes,
       ),
@@ -714,11 +715,11 @@ class _DetailPageState extends State<_DetailPage> {
       });
       return;
     }
-    final _CheckinInput? input = await showModalBottomSheet<_CheckinInput>(
+    final CheckinInput? input = await showModalBottomSheet<CheckinInput>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (BuildContext ctx) => _CheckinSheet(
+      builder: (BuildContext ctx) => CheckinSheet(
         item: widget.item,
         defaultMinutes: widget.item.minutes,
       ),
@@ -911,179 +912,6 @@ class _EmptyDetail extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// ----------------------------------------------------------------
-/// 打卡面板：与 today_page 的 _CheckinSheet 同构重写。
-///
-/// 为什么重写而不是 import：today_page 里的 _CheckinSheet 带下划线，
-/// 是库私有类，跨文件引用不了。本轮不做结构性重构（不动已验收的
-/// today_page），故在本地复刻一份，参数与行为保持一致：
-/// 步进 ±5（上限 600）、Slider 5–240 / 47 格、备注 maxLength 200、
-/// viewInsetsOf 键盘避让、defaultMinutes <= 0 回退 15。
-/// ----------------------------------------------------------------
-class _CheckinInput {
-  const _CheckinInput({required this.minutes, required this.note});
-
-  final int minutes;
-  final String note;
-}
-
-class _CheckinSheet extends StatefulWidget {
-  const _CheckinSheet({required this.item, required this.defaultMinutes});
-
-  final Item item;
-  final int defaultMinutes;
-
-  @override
-  State<_CheckinSheet> createState() => _CheckinSheetState();
-}
-
-class _CheckinSheetState extends State<_CheckinSheet> {
-  late int _minutes;
-  late final TextEditingController _noteCtrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _minutes = widget.defaultMinutes <= 0 ? 15 : widget.defaultMinutes;
-    _noteCtrl = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _noteCtrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final double bottom = MediaQuery.viewInsetsOf(context).bottom;
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottom),
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.cardTheme.color,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(AppSizes.cardRadius),
-          ),
-        ),
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.divider,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(widget.item.watch, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 4),
-            Text(
-              '第 ${widget.item.week} 周 · 预估 ${widget.item.minutes} 分钟',
-              style: theme.textTheme.bodySmall,
-            ),
-            const SizedBox(height: 24),
-            Text('实际用时', style: theme.textTheme.bodyLarge),
-            const SizedBox(height: 8),
-            Row(
-              children: <Widget>[
-                _stepBtn(Icons.remove, () {
-                  if (_minutes > 5) setState(() => _minutes -= 5);
-                }),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      '$_minutes 分钟',
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                _stepBtn(Icons.add, () {
-                  if (_minutes < 600) setState(() => _minutes += 5);
-                }),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Slider(
-              value: _minutes.toDouble().clamp(5, 240),
-              min: 5,
-              max: 240,
-              divisions: 47,
-              label: '$_minutes',
-              onChanged: (double v) => setState(() => _minutes = v.round()),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _noteCtrl,
-              maxLength: 200,
-              maxLines: 2,
-              minLines: 1,
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                labelText: '备注（选填）',
-                hintText: '今天卡在哪里，下次注意什么',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('取消'),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  flex: 2,
-                  child: FilledButton(
-                    onPressed: () => Navigator.of(context).pop(
-                      _CheckinInput(
-                        minutes: _minutes,
-                        note: _noteCtrl.text.trim(),
-                      ),
-                    ),
-                    child: const Text('完成打卡'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _stepBtn(IconData icon, VoidCallback onTap) {
-    return SizedBox(
-      width: 48,
-      height: 48,
-      child: OutlinedButton(
-        onPressed: onTap,
-        style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Icon(icon),
       ),
     );
   }
