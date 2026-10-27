@@ -6,7 +6,6 @@ import '../db/app_database.dart';
 import '../db/tables.dart';
 import 'plan_repo.dart';
 
-
 /// 复习条目来源：闪卡 或 概念卡。
 enum ReviewSource { card, concept }
 

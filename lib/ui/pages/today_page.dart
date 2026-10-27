@@ -14,7 +14,6 @@ import '../../data/repo/question_repo.dart';
 import '../../data/repo/concept_repo.dart';
 import '../widgets/checkin_sheet.dart';
 
-
 /// 今日页：今日进度的唯一入口。
 ///
 /// 对应 SPEC 3.1 + 4.1 + 4.6，功能闭环：
@@ -350,7 +349,6 @@ class _TodayPageState extends ConsumerState<TodayPage> {
   }
 }
 
-
 /// 顶部：日期 + 问候语 + 当前模块 + 设置入口。
 class _TodayHeader extends StatelessWidget {
   const _TodayHeader({
@@ -424,7 +422,6 @@ class _TodayHeader extends StatelessWidget {
     );
   }
 }
-
 
 /// 进度环：今日已完成 / 今日目标，圆心显示数字。
 ///
@@ -506,7 +503,6 @@ class _ProgressRing extends StatelessWidget {
   }
 }
 
-
 /// 三个数字：今日用时 / 完成条数 / 连续天数。
 class _TodaySummary extends StatelessWidget {
   const _TodaySummary({
@@ -580,7 +576,6 @@ class _SectionTitle extends StatelessWidget {
     );
   }
 }
-
 
 /// 到期复习提示条：卡片与概念两路到期合并展示，点击进测试页。
 class _ReviewBanner extends StatelessWidget {

@@ -7,7 +7,6 @@ import '../db/tables.dart';
 /// 直接返回零点，避免调用方再用 startOfDay 做二次日界判断导致跨日错位。
 DateTime effectiveToday() => startOfDay(DateTime.now());
 
-
 class WeekProgress {
   const WeekProgress({
     required this.week,
