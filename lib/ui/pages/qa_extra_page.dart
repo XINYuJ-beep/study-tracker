@@ -27,6 +27,7 @@ import '../../core/providers.dart';
 import '../../data/db/tables.dart';
 import '../../data/repo/concept_repo.dart';
 import '../../data/repo/question_repo.dart';
+import '../widgets/qa_widgets.dart';
 
 /// 四个模块各自的阶段。
 enum _Phase { idle, running, finished }
@@ -236,7 +237,7 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
       return const Center(child: CircularProgressIndicator());
     }
     if (_error != null) {
-      return _HintBlock(
+      return HintBlock(
         icon: Icons.help_outline,
         title: '暂不可用',
         subtitle: _error!,
@@ -247,7 +248,7 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
     if (_phase == _Phase.finished) {
       final total = _items.length;
       final pass = _right >= AppConstants.quizPassCount;
-      return _ResultBlock(
+      return ResultBlock(
         pass: pass,
         title: pass ? '通过' : '未通过',
         detail: '答对 $_right / $total，通过线 ${AppConstants.quizPassCount} 题',
@@ -257,7 +258,7 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
       );
     }
     if (_phase == _Phase.idle) {
-      return _HintBlock(
+      return HintBlock(
         icon: Icons.quiz_outlined,
         title: '概念题',
         subtitle: '从已学概念随机抽 ${AppConstants.quizPickCount} 题做 4 选 1，'
@@ -314,7 +315,7 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
           for (var i = 0; i < item.options.length; i++)
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
-              child: _OptionTile(
+              child: OptionTile(
                 label: String.fromCharCode(65 + i),
                 text: item.options[i],
                 selected: _picked == i,
@@ -471,7 +472,7 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
       return const Center(child: CircularProgressIndicator());
     }
     if (_error != null && _items.isEmpty) {
-      return _HintBlock(
+      return HintBlock(
         icon: Icons.filter_alt_outlined,
         title: '旧题抽查',
         subtitle: _error!,
@@ -482,7 +483,7 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
     if (_phase == _Phase.finished) {
       final total = _items.length;
       final pass = _right >= AppConstants.spotCheckPassCount;
-      return _ResultBlock(
+      return ResultBlock(
         pass: pass,
         title: pass ? '通过' : '未通过',
         detail: '答对 $_right / $total，通过线 ${AppConstants.spotCheckPassCount} 题',
@@ -492,7 +493,7 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
       );
     }
     if (_phase == _Phase.idle) {
-      return _HintBlock(
+      return HintBlock(
         icon: Icons.filter_alt_outlined,
         title: '旧题抽查',
         subtitle: '错题优先抽 ${AppConstants.spotCheckCount} 题，'
@@ -535,7 +536,7 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
           for (var i = 0; i < q.options.length; i++)
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
-              child: _OptionTile(
+              child: OptionTile(
                 label: String.fromCharCode(65 + i),
                 text: q.options[i],
                 selected: _picked == i,
@@ -546,7 +547,7 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
             ),
           if (_answered && q.explain != null && q.explain!.isNotEmpty) ...<Widget>[
             const SizedBox(height: 8),
-            _ExplainBox(text: q.explain!),
+            ExplainBox(text: q.explain!),
           ],
           const SizedBox(height: 20),
           SizedBox(
@@ -692,7 +693,7 @@ class _WhiteboardViewState extends ConsumerState<_WhiteboardView> {
       return const Center(child: CircularProgressIndicator());
     }
     if (_error != null && _cards.isEmpty) {
-      return _HintBlock(
+      return HintBlock(
         icon: Icons.edit_note,
         title: '白板抽背',
         subtitle: _error!,
@@ -703,7 +704,7 @@ class _WhiteboardViewState extends ConsumerState<_WhiteboardView> {
     if (_phase == _Phase.finished) {
       final total = _cards.length;
       final pass = _green >= AppConstants.whiteboardPassCount;
-      return _ResultBlock(
+      return ResultBlock(
         pass: pass,
         title: pass ? '通过' : '未通过',
         detail: '绿 $_green · 黄 $_yellow · 红 $_red（共 $total 个）',
@@ -713,7 +714,7 @@ class _WhiteboardViewState extends ConsumerState<_WhiteboardView> {
       );
     }
     if (_phase == _Phase.idle) {
-      return _HintBlock(
+      return HintBlock(
         icon: Icons.edit_note,
         title: '白板抽背',
         subtitle: '已学概念随机 ${AppConstants.whiteboardCount} 个，'
@@ -794,7 +795,7 @@ class _WhiteboardViewState extends ConsumerState<_WhiteboardView> {
           Row(
             children: <Widget>[
               Expanded(
-                child: _GradeButton(
+                child: GradeButton(
                   label: '红',
                   hint: '不会',
                   color: theme.colorScheme.error,
@@ -803,7 +804,7 @@ class _WhiteboardViewState extends ConsumerState<_WhiteboardView> {
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: _GradeButton(
+                child: GradeButton(
                   label: '黄',
                   hint: '模糊',
                   color: const Color(0xFFFF9500),
@@ -812,7 +813,7 @@ class _WhiteboardViewState extends ConsumerState<_WhiteboardView> {
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: _GradeButton(
+                child: GradeButton(
                   label: '绿',
                   hint: '掌握',
                   color: const Color(0xFF34C759),
@@ -944,7 +945,7 @@ class _ListeningViewState extends ConsumerState<_ListeningView> {
       return const Center(child: CircularProgressIndicator());
     }
     if (_error != null) {
-      return _HintBlock(
+      return HintBlock(
         icon: Icons.headphones_outlined,
         title: '阶段听力',
         subtitle: _error!,
@@ -953,7 +954,7 @@ class _ListeningViewState extends ConsumerState<_ListeningView> {
       );
     }
     if (_entries.isEmpty) {
-      return _HintBlock(
+      return HintBlock(
         icon: Icons.headphones_outlined,
         title: '没有阶段任务',
         subtitle: '数据源缺少 stages 内容，检查导入是否完成',
@@ -1044,241 +1045,6 @@ class _Chip extends StatelessWidget {
                 ? theme.colorScheme.onPrimary
                 : theme.colorScheme.onSurface,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _OptionTile extends StatelessWidget {
-  const _OptionTile({
-    required this.label,
-    required this.text,
-    required this.selected,
-    required this.correct,
-    required this.wrong,
-    required this.onTap,
-  });
-
-  final String label;
-  final String text;
-  final bool selected;
-  final bool correct;
-  final bool wrong;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    var border = theme.colorScheme.outlineVariant;
-    var bg = Colors.transparent;
-    if (correct) {
-      border = theme.colorScheme.primary;
-      bg = theme.colorScheme.primary.withValues(alpha: 0.08);
-    } else if (wrong) {
-      border = theme.colorScheme.error;
-      bg = theme.colorScheme.error.withValues(alpha: 0.08);
-    } else if (selected) {
-      border = theme.colorScheme.primary;
-      bg = theme.colorScheme.primary.withValues(alpha: 0.05);
-    }
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: border),
-          borderRadius: BorderRadius.circular(12),
-          color: bg,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: 24,
-              height: 24,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: border),
-              ),
-              child: Text(label, style: theme.textTheme.labelSmall),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _GradeButton extends StatelessWidget {
-  const _GradeButton({
-    required this.label,
-    required this.hint,
-    required this.color,
-    required this.onTap,
-  });
-
-  final String label;
-  final String hint;
-  final Color color;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          border: Border.all(color: color.withValues(alpha: 0.6)),
-          borderRadius: BorderRadius.circular(12),
-          color: color.withValues(alpha: 0.08),
-        ),
-        child: Column(
-          children: <Widget>[
-            Text(
-              label,
-              style: theme.textTheme.titleSmall?.copyWith(color: color),
-            ),
-            const SizedBox(height: 2),
-            Text(hint, style: theme.textTheme.bodySmall),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ExplainBox extends StatelessWidget {
-  const _ExplainBox({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('解析', style: theme.textTheme.labelLarge),
-          const SizedBox(height: 6),
-          Text(
-            text,
-            style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HintBlock extends StatelessWidget {
-  const _HintBlock({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.actionLabel,
-    required this.onAction,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String actionLabel;
-  final VoidCallback onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(icon, size: 56, color: theme.colorScheme.outline),
-            const SizedBox(height: 12),
-            Text(title, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall?.copyWith(height: 1.6),
-            ),
-            const SizedBox(height: 20),
-            OutlinedButton(onPressed: onAction, child: Text(actionLabel)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ResultBlock extends StatelessWidget {
-  const _ResultBlock({
-    required this.pass,
-    required this.title,
-    required this.detail,
-    required this.note,
-    required this.actionLabel,
-    required this.onAction,
-  });
-
-  final bool pass;
-  final String title;
-  final String detail;
-  final String note;
-  final String actionLabel;
-  final VoidCallback onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              pass ? Icons.verified : Icons.error_outline,
-              size: 56,
-              color: pass ? theme.colorScheme.primary : theme.colorScheme.error,
-            ),
-            const SizedBox(height: 12),
-            Text(title, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
-            Text(
-              detail,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 6),
-            Text(
-              note,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall,
-            ),
-            const SizedBox(height: 20),
-            OutlinedButton(onPressed: onAction, child: Text(actionLabel)),
-          ],
         ),
       ),
     );

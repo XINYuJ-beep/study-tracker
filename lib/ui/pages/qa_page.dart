@@ -29,6 +29,7 @@ import '../../data/repo/plan_repo.dart';
 import '../../data/repo/question_repo.dart';
 import '../../core/providers.dart';
 import 'qa_extra_page.dart';
+import '../widgets/qa_widgets.dart';
 
 /// 页面内两个模块。
 enum _QaTab { review, mcq, extra }
@@ -301,7 +302,7 @@ class _QaPageState extends ConsumerState<QaPage> {
 
   Widget _buildReviewBody(ThemeData theme) {
     if (_reviewQueue.isEmpty) {
-      return _EmptyHint(
+      return EmptyHint(
         icon: Icons.check_circle_outline,
         title: '今天没有到期的自检卡',
         subtitle: '到期条目由卡片与概念的复习档位自动排期',
@@ -412,7 +413,7 @@ class _QaPageState extends ConsumerState<QaPage> {
             Row(
               children: [
                 Expanded(
-                  child: _GradeButton(
+                  child: GradeButton(
                     label: '忘了',
                     hint: '退一级',
                     color: theme.colorScheme.error,
@@ -421,7 +422,7 @@ class _QaPageState extends ConsumerState<QaPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: _GradeButton(
+                  child: GradeButton(
                     label: '模糊',
                     hint: '重置本档',
                     color: const Color(0xFFFF9500),
@@ -430,7 +431,7 @@ class _QaPageState extends ConsumerState<QaPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: _GradeButton(
+                  child: GradeButton(
                     label: '记得',
                     hint: '进一级',
                     color: const Color(0xFF34C759),
@@ -478,7 +479,7 @@ class _QaPageState extends ConsumerState<QaPage> {
 
   Widget _buildMcqBody(ThemeData theme) {
     if (_mcqList.isEmpty) {
-      return _EmptyHint(
+      return EmptyHint(
         icon: Icons.quiz_outlined,
         title: _learnedWeek == 0 ? '还没有可出的题' : '本周没有可用题目',
         subtitle: _learnedWeek == 0
@@ -570,7 +571,7 @@ class _QaPageState extends ConsumerState<QaPage> {
           for (var i = 0; i < q.options.length; i++)
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
-              child: _OptionTile(
+              child: OptionTile(
                 label: String.fromCharCode(65 + i),
                 text: q.options[i],
                 selected: _mcqPicked == i,
@@ -685,158 +686,6 @@ class _SourceTag extends StatelessWidget {
         label,
         style: theme.textTheme.labelSmall?.copyWith(
           color: theme.colorScheme.primary,
-        ),
-      ),
-    );
-  }
-}
-
-class _GradeButton extends StatelessWidget {
-  const _GradeButton({
-    required this.label,
-    required this.hint,
-    required this.color,
-    required this.onTap,
-  });
-
-  final String label;
-  final String hint;
-  final Color color;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          border: Border.all(color: color.withValues(alpha: 0.6)),
-          borderRadius: BorderRadius.circular(12),
-          color: color.withValues(alpha: 0.08),
-        ),
-        child: Column(
-          children: [
-            Text(
-              label,
-              style: theme.textTheme.titleSmall?.copyWith(color: color),
-            ),
-            const SizedBox(height: 2),
-            Text(hint, style: theme.textTheme.bodySmall),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _OptionTile extends StatelessWidget {
-  const _OptionTile({
-    required this.label,
-    required this.text,
-    required this.selected,
-    required this.correct,
-    required this.wrong,
-    required this.onTap,
-  });
-
-  final String label;
-  final String text;
-  final bool selected;
-  final bool correct;
-  final bool wrong;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    Color border = theme.colorScheme.outlineVariant;
-    Color bg = Colors.transparent;
-    if (correct) {
-      border = theme.colorScheme.primary;
-      bg = theme.colorScheme.primary.withValues(alpha: 0.08);
-    } else if (wrong) {
-      border = theme.colorScheme.error;
-      bg = theme.colorScheme.error.withValues(alpha: 0.08);
-    } else if (selected) {
-      border = theme.colorScheme.primary;
-      bg = theme.colorScheme.primary.withValues(alpha: 0.05);
-    }
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: border),
-          borderRadius: BorderRadius.circular(12),
-          color: bg,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 24,
-              height: 24,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: border),
-              ),
-              child: Text(label, style: theme.textTheme.labelSmall),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                text,
-                style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _EmptyHint extends StatelessWidget {
-  const _EmptyHint({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.actionLabel,
-    required this.onAction,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String actionLabel;
-  final VoidCallback onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 56, color: theme.colorScheme.outline),
-            const SizedBox(height: 12),
-            Text(title, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall,
-            ),
-            const SizedBox(height: 20),
-            OutlinedButton(onPressed: onAction, child: Text(actionLabel)),
-          ],
         ),
       ),
     );
