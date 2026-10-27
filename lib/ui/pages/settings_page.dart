@@ -11,6 +11,7 @@ import '../../core/providers.dart';
 import '../../core/theme.dart';
 import '../../data/db/app_database.dart';
 import '../../data/db/tables.dart';
+import '../../data/backup/backup_service.dart';
 import '../../data/seed/seeder.dart';
 import '../../data/repo/settings_repo.dart';
 import '../../core/notify/reminder_service.dart';
@@ -45,6 +46,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   void initState() {
     super.initState();
     _load();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoBackupIfNeeded();
+    });
   }
 
   Future<void> _load() async {
@@ -230,6 +234,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     await _runTask('正在清空并重导…', () async {
       final db = ref.read(databaseProvider);
       final seeder = ref.read(seederProvider);
+
+      // 清空前先落一份回滚备份，失败了不阻断清空流程。
+      try {
+        final rollback = await BackupService(
+          db.database,
+        ).exportJson(prefix: BackupService.rollbackPrefix);
+        await rollback.length();
+      } catch (_) {}
 
       final cleared = await db.clearBusinessData();
       final result = await seeder.seedIfNeeded();
@@ -898,6 +910,17 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             '导出整份数据库副本，成功后会在对话框显示完整路径。',
             style: _tsMinor,
           ),
+          const SizedBox(height: AppSizes.gap2),
+          OutlinedButton.icon(
+            onPressed: _busy ? null : _exportCsv,
+            icon: const Icon(Icons.table_chart_outlined, size: 18),
+            label: const Text('导出打卡 CSV'),
+          ),
+          const SizedBox(height: AppSizes.gap),
+          Text(
+            '导出打卡流水表，可用 Excel 打开，共九列含日期、科目与备注。',
+            style: _tsMinor,
+          ),
         ],
       ),
     );
@@ -943,6 +966,31 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       final kb = (size / 1024).toStringAsFixed(1);
       return '导出成功\n' + target + '\n文件大小 ' + kb + ' KB';
     });
+  }
+
+  Future<void> _exportCsv() async {
+    await _runTask('正在导出打卡 CSV…', () async {
+      final db = await ref.read(databaseProvider).database;
+      final svc = BackupService(db);
+      final file = await svc.exportCheckinsCsv();
+      final size = await file.length();
+      final kb = (size / 1024).toStringAsFixed(1);
+      return '导出成功\n' + file.path + '\n文件大小 ' + kb + ' KB';
+    });
+  }
+
+  Future<void> _autoBackupIfNeeded() async {
+    try {
+      final db = await ref.read(databaseProvider).database;
+      final svc = BackupService(db);
+      final file = await svc.autoBackupIfNeeded();
+      if (file == null) return;
+      await svc.pruneAutoBackups();
+      if (!mounted) return;
+      _toast('已自动备份本周数据');
+    } catch (_) {
+      // 自动备份失败不打断用户操作，静默跳过。
+    }
   }
 
   Widget _aboutCard() {
