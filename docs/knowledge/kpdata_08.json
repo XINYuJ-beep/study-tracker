@@ -1,0 +1,265 @@
+{
+ "week": 8,
+ "weekTitle": "CSS",
+ "days": [
+  {
+   "day": 1,
+   "itemId": "w8d1",
+   "review": false,
+   "kps": [
+    [
+     "CSS 三种引入方式",
+     "外部样式表（link）、内部样式（style）、行内样式（style 属性）。优先级：行内 > 内部/外部（按顺序与权重）。link 放 head 里，可缓存、可复用。",
+     "能用 link 就不要用 @import，@import 会串行阻塞加载",
+     "<link rel=\"stylesheet\" href=\"style.css\">"
+    ],
+    [
+     "选择器优先级",
+     "权重= (id数, 类/属性/伪类数, 元素/伪元素数)，逐位比较不进位。!important 最高但不可滥用。通配符与继承权重为 0。",
+     "别背 100/10/1，直接数 (a,b,c) 三元组，位与位之间不进位",
+     "#nav .item a:hover { color: red; }"
+    ],
+    [
+     "盒模型 content-box 与 border-box",
+     "content-box：width 只算内容，padding/border 额外加。border-box：width 含 padding+border，撑不动总宽。全局设 border-box 最省心。",
+     "写 * { box-sizing: border-box } 之后，设置 100% 宽度不会再被 padding 顶破容器",
+     "* { box-sizing: border-box; }"
+    ],
+    [
+     "margin 折叠",
+     "相邻块级元素的上下 margin 会合并，取较大的那个；父子之间也会折叠（父无 border/padding/BFC 时）。flex 容器、浮动、absolute 不折叠。",
+     "两个 div 各 20px margin 不会变 40px，只变 20px；这坑排查布局时常遇到",
+     ""
+    ],
+    [
+     "BFC（块级格式化上下文）",
+     "触发方式：overflow 非 visible、float 非 none、position 为 absolute/fixed、display 为 flow-root/flex/inline-block。作用是清除浮动、阻止 margin 折叠、隔离内外。",
+     "不想写 clear:both 就给孩子容器加 display: flow-root，比 overflow:hidden 干净",
+     " .clearfix { display: flow-root; }"
+    ]
+   ]
+  },
+  {
+   "day": 2,
+   "itemId": "w8d2",
+   "review": false,
+   "kps": [
+    [
+     "display: flex 与主轴",
+     "给容器设 display:flex 后子项默认一行排布。flex-direction 决定主轴方向（row/column），justify-content 沿主轴对齐，align-items 沿交叉轴对齐。",
+     "justify 管主轴、align 管交叉轴，方向一改两个作用面就互换，一定要先确认 direction",
+     ".box { display: flex; flex-direction: row; justify-content: space-between; align-items: center; }"
+    ],
+    [
+     "flex 简写三个值",
+     "flex 是 flex-grow flex-shrink flex-basis 的简写。flex:1 等于 1 1 0%，表示可放大可缩小且基准为 0，平分剩余空间。默认值是 0 1 auto。",
+     "要等分就用 flex:1；要按内容宽度别压缩用 flex:0 0 auto；flex:1 和 flex:auto 差在基准",
+     ".item { flex: 1; }"
+    ],
+    [
+     "常用对齐值",
+     "justify-content 可取 flex-start/flex-end/center/space-between/space-around/space-evenly。align-items 可取 stretch/flex-start/flex-end/center/baseline。",
+     "space-around 每项左右各留半份，space-evenly 是均分，两者视觉差别很大",
+     ""
+    ],
+    [
+     "居中与换行",
+     "单行水平垂直居中：display:flex + justify-content:center + align-items:center。需要换行加 flex-wrap:wrap，多行对齐用 align-content。",
+     "flex 不加 wrap 时子项会被压扁而不换行，这是窄屏溢出最常见原因",
+     ".center { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; }"
+    ],
+    [
+     "gap 属性",
+     "直接给 flex/grid 容器设 gap 控制子项间距，不用再算 margin 的两倍抵消问题。gap 不接受负数。",
+     "有了 gap 就不用再写 :last-child { margin-right: 0 } 这类补丁",
+     ".list { display: flex; gap: 12px; }"
+    ],
+    [
+     "flex 与 float 的取舍",
+     "现代布局一律用 flex/grid，float 只剩图文环绕场景。float 需要清浮动，还会脱离文档流造成高度塌陷。",
+     "看到别人项目里 float 布局，说明是老代码，能不碰就不碰",
+     ""
+    ]
+   ]
+  },
+  {
+   "day": 3,
+   "itemId": "w8d3",
+   "review": false,
+   "kps": [
+    [
+     "position 五个值",
+     "static（默认，无定位）、relative（相对自身位移，占位保留）、absolute（相对最近的定位祖先）、fixed（相对视口）、sticky（滚动到阈值后吸附）。",
+     "absolute 找的不是父元素，而是最近一个有 position 的祖先，找不到就相对初始包含块",
+     ".modal { position: fixed; top: 0; left: 0; }"
+    ],
+    [
+     "子绝父相",
+     "绝对定位元素以最近的定位祖先为参照系。父元素设 position:relative 但不加位移，子元素 absolute 就能相对父元素定位。",
+     "absolute 定位跑偏九成是父级忘了 relative",
+     ".wrap { position: relative; } .badge { position: absolute; top: 0; right: 0; }"
+    ],
+    [
+     "z-index 与层叠上下文",
+     "z-index 只在定位元素或 flex/grid 子项上生效。层叠上下文（根元素、position+z-index、opacity<1、transform、filter 等）会把子元素层级限制在内部，无法跨上下文比较。",
+     "父级加了 transform 或 opacity，子元素 z-index 再高也压不过另一层的父级",
+     ".box { position: relative; z-index: 10; }"
+    ],
+    [
+     "层叠顺序七级",
+     "从低到高：背景边框 → 负 z-index → 块级盒 → 浮动盒 → 行内盒 → z-index:0/auto → 正 z-index。这就是背景为什么总在文字下面。",
+     "记这七级不如记三层：负 z、正常流、正 z，中间细节很少考",
+     ""
+    ],
+    [
+     "弹窗与遮罩三件套",
+     "遮罩层 fixed + inset:0 + 半透明背景；弹窗本身 fixed + 居中（top/left 50% + translate(-50%,-50%) 或 flex 居中）；点遮罩关闭用事件冒泡判断 e.target。",
+     "遮罩用 fixed inset:0 而不是 width:100% height:100%，后者滚不动页面时会短",
+     ".mask { position: fixed; inset: 0; background: rgba(0,0,0,.5); }"
+    ]
+   ]
+  },
+  {
+   "day": 4,
+   "itemId": "w8d4",
+   "review": false,
+   "kps": [
+    [
+     "媒体查询语法",
+     "@media (max-width: 768px) { ... } 表示视口宽度 ≤768px 时生效。条件可用 and 组合、or 用逗号分隔。移动优先写 min-width，桌面优先写 max-width。",
+     "断点别照抄，选内容开始变形的位置；常见 640/768/1024/1280",
+     "@media (max-width: 768px) { .side { display: none; } }"
+    ],
+    [
+     "viewport meta 不可省",
+     "移动端必须写 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">，否则手机会用 980px 虚拟宽度渲染，媒体查询全部失效。",
+     "媒体查询写了没反应，先看有没有这行 meta，这坑排第一",
+     "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+    ],
+    [
+     "相对单位 rem / em / vw",
+     "rem 相对根元素 font-size（默认 16px）。em 相对当前元素 font-size，会逐层相乘。vw/vh 相对视口。1rem=16px 是等效默认，可改 html 字号做整体缩放。",
+     "em 会叠乘导致尺寸失控，做尺寸用 rem 和 px，字号内间距才考虑 em",
+     "html { font-size: 16px; } .title { font-size: 2rem; }"
+    ],
+    [
+     "响应式图片",
+     "img 设 max-width:100%; height:auto 保证不溢出。多分辨率用 srcset + sizes 让浏览器自选。background-image 用 background-size: cover/contain。",
+     "max-width 100% 是图片溢出第一解药，height 记得 auto，不然会变形",
+     "<img src=\"a.jpg\" srcset=\"a@2x.jpg 2x\" alt=\"示例\">"
+    ],
+    [
+     "移动端适配的两个易错点",
+     "别忘了加 <meta charset> 之外的 viewport；100vh 在移动浏览器会被地址栏吃掉，用 100dvh 或 min-height:100vh。点击区域 ≥44px。",
+     "100vh 在 iOS Safari 底部会被压掉一截，改用 dvh 一次解决",
+     ".full { min-height: 100dvh; }"
+    ]
+   ]
+  },
+  {
+   "day": 5,
+   "itemId": "w8d5",
+   "review": false,
+   "kps": [
+    [
+     "CSS 变量（自定义属性）",
+     "--name: value 定义，var(--name) 使用。作用域跟随选择器层级，:root 定义即全局。可带兜底 var(--x, 16px)。可被 JS 用 setProperty 动态改。",
+     "用 :root 收口配色，改主题只改一处；变量名区分大小写",
+     ":root { --brand: #4d6bfe; } .btn { background: var(--brand); }"
+    ],
+    [
+     "transition 四个属性",
+     "transition: property duration timing-function delay。只对可插值的属性有效（颜色、长度、透明度），display 不能过渡。多变属性用逗号分隔。",
+     "transition 不能过渡 display:none，要淡出得用 opacity/visibility 组合或加个 .hidden 类",
+     ".btn { transition: background .2s ease, transform .2s ease; }"
+    ],
+    [
+     "transform 与性能",
+     "transform 不影响文档流，可做位移、缩放、旋转、倾斜。translate/scale/rotate 走合成层，性能优于改 top/left/width。GPU 加速提示用 will-change。",
+     "做动画优先 transform + opacity，改 width/height 会触发重排，卡",
+     ".card { transform: translateY(-4px) scale(1.02); }"
+    ],
+    [
+     "animation 与 @keyframes",
+     "@keyframes 定义关键帧，animation 绑定并设时长/次数/方向/填充模式。animation-fill-mode: forwards 保留终态；infinite 循环；alternate 来回。",
+     "动画播完想停在终点必须写 forwards，不写会瞬间跳回初始",
+     "@keyframes fade { from { opacity: 0 } to { opacity: 1 } } .box { animation: fade .3s ease forwards; }"
+    ],
+    [
+     "减少动效偏好",
+     "用 @media (prefers-reduced-motion: reduce) 关掉动画，照顾前庭系统敏感用户。",
+     "这一条是加分项，写进项目里显得懂无障碍",
+     "@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }"
+    ]
+   ]
+  },
+  {
+   "day": 6,
+   "itemId": "w8d6",
+   "review": false,
+   "kps": [
+    [
+     "还原设计稿四步法",
+     "①量框架：量容器宽高与间距；②定布局：拆成 flex/grid 骨架先不写样式；③填细节：颜色字号圆角阴影；④对像素：截图叠图比对偏差。",
+     "先骨架后皮肤，别一上来就写颜色，改布局时颜色全废",
+     ""
+    ],
+    [
+     "Design Tokens 落地",
+     "把颜色、字号、间距、圆角、阴影抽成变量集中在 :root，页面只用变量。好处是视觉一致、改版只改一处。",
+     "间距用 4 的倍数（4/8/12/16/24/32），比随便写 13px 好看得多",
+     ":root { --space-1: 4px; --space-2: 8px; --radius: 8px; }"
+    ],
+    [
+     "Debug 布局的四个手段",
+     "①browser devtools 逐层选中看盒子；②给元素加 outline:1px solid red（不影响布局）；③临时加背景色看占位；④用 devtools 的 flex/grid 面板看对齐线。",
+     "排查用 outline 不要用 border，border 会改变盒模型尺寸",
+     ".debug { outline: 1px solid red; }"
+    ],
+    [
+     "常见还原偏差来源",
+     "line-height 未设导致行高不一致；图片未设 display:block 底部留 3px 白缝；默认 margin/padding 未清零；字体不同导致换行位置不同；小数像素累积。",
+     "图片下方莫名 3px 空白就是 inline 基线问题，加 display:block 或 vertical-align:top",
+     "img { display: block; max-width: 100%; }"
+    ],
+    [
+     "工程化收尾检查",
+     "交付前查：无内联样式、无 !important 滥用、无固定写死宽度、层级不超过三层、所有图片有 alt、控制台无 404。",
+     "fixed 宽度是响应式杀手，一律改 max-width 或百分比",
+     ""
+    ]
+   ]
+  },
+  {
+   "day": 7,
+   "itemId": "w8d7",
+   "review": true,
+   "kps": [
+    [
+     "Flex 默写清单",
+     "容器属性：display/flex-direction/flex-wrap/justify-content/align-items/align-content/gap。项目属性：flex/order/align-self。默写时按容器→项目两组分区记。",
+     "默写失分的多半是 align-content 和 align-self 这两个挂错组",
+     ""
+    ],
+    [
+     "盒模型两种模式的换算",
+     "总宽 = width + padding-left/right + border-left/right（content-box）。border-box 下总宽直接等于 width，内容宽 = width - padding - border。",
+     "从 content-box 换 border-box 会让原有固定宽度元素变小，需要重新量",
+     ".box { box-sizing: border-box; width: 300px; padding: 20px; }"
+    ],
+    [
+     "层叠优先级与 z-index 的边界",
+     "样式冲突先比优先级三元组，再比出现顺序。z-index 只在层叠上下文内比较，跨上下文靠父级决定。",
+     "样式没生效先看是不是被更高优先级压了，不是 z-index 的锅",
+     ""
+    ],
+    [
+     "响应式断点设计思路",
+     "断点来自内容变形点而非设备型号。移动优先：默认写窄屏样式，用 min-width 逐级增强。桌面优先：默认宽屏，用 max-width 逐级降级。",
+     "两套都写会打架，一个项目只选一种方向，全站统一",
+     "@media (min-width: 768px) { .grid { display: flex; } }"
+    ]
+   ]
+  }
+ ]
+}

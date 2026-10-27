@@ -48,7 +48,7 @@ class AppConstants {
   /// 选择题数
   static const int expectedMcqs = 276;
   /// 概念词条数
-  static const int expectedConcepts = 129;
+  static const int expectedConcepts = 164;
   /// 阶段（直播/课程）数
   static const int expectedStages = 8;
   /// 主播清单数
@@ -56,7 +56,7 @@ class AppConstants {
 
   // ---------- 数据版本（首启导入判断）----------
   /// 当前内置数据的版本号，JSON 有改动就 +1，首启比对后决定是否重导
-  static const int dataVersion = 2;
+  static const int dataVersion = 3;
   /// app_settings 表里存数据版本号的 key
   static const String keyDataVersion = 'data_version';
 
