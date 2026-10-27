@@ -15,7 +15,6 @@ build/
 # Android
 android/local.properties
 android/.gradle/
-**/android/**/gradle-wrapper.jar
 **/android/app/debug
 **/android/app/profile
 **/android/app/release
