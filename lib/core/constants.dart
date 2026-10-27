@@ -107,6 +107,20 @@ class AppConstants {
 
   /// 白板抽背：绿卡通过线（绿 >= 7 过）。
   static const int whiteboardPassCount = 7;
+
+  // ---------- 每日提醒（SPEC 第 14 章）----------
+  /// 默认提醒时刻：20:00
+  static const int reminderHourDefault = 20;
+  static const int reminderMinuteDefault = 0;
+  /// 通知里估算「预计 X 分钟」时，单条目按多少分钟折算。
+  /// 取计划里条目分钟数的中位数口径，宁高不宁低，避免用户觉得被低估。
+  static const int avgMinutesPerItem = 55;
+  /// app_settings 里存提醒开关的 key
+  static const String keyReminderEnabled = 'reminder_enabled';
+  /// app_settings 里存提醒时刻的 key（格式 HH:mm）
+  static const String keyReminderTime = 'reminder_time';
+  /// app_settings 里存「最后一次推送成功的学习日」的 key（去重用）
+  static const String keyLastNotifiedDay = 'last_notified_day';
 }
 
 /// 应用展示名

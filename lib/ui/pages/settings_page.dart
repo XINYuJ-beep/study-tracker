@@ -12,6 +12,8 @@ import '../../core/theme.dart';
 import '../../data/db/app_database.dart';
 import '../../data/db/tables.dart';
 import '../../data/seed/seeder.dart';
+import '../../data/repo/settings_repo.dart';
+import '../../core/notify/reminder_service.dart';
 
 /// 设置页。
 ///
@@ -34,6 +36,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   int _dailyGoal = AppConstants.dailyGoalDefault;
   int? _installedVersion;
   SeedResult? _counts;
+  bool _reminderEnabled = true;
+  int _reminderHour = AppConstants.reminderHourDefault;
+  int _reminderMinute = AppConstants.reminderMinuteDefault;
+  bool _permGranted = true;
 
   @override
   void initState() {
@@ -66,12 +72,25 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
 
       final counts = await seeder.countExisting();
+      final SettingsRepo settings = SettingsRepo(db);
+      final bool rEnabled = await settings.reminderEnabled();
+      final (int, int) rTime = await settings.reminderTime();
+      bool perm = true;
+      try {
+        perm = await ReminderService().isPermissionGranted();
+      } catch (_) {
+        perm = true;
+      }
 
       if (!mounted) return;
       setState(() {
         _dailyGoal = _parseGoal(goalRaw);
         _installedVersion = _parseVersion(versionRaw);
         _counts = counts;
+        _reminderEnabled = rEnabled;
+        _reminderHour = rTime.$1;
+        _reminderMinute = rTime.$2;
+        _permGranted = perm;
         _loading = false;
       });
     } catch (e) {
@@ -88,6 +107,75 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final n = int.tryParse(raw.trim());
     if (n == null || n <= 0) return AppConstants.dailyGoalDefault;
     return n;
+  }
+
+  String _hhmm(int h, int m) {
+    return h.toString().padLeft(2, '0') + ':' + m.toString().padLeft(2, '0');
+  }
+
+  Future<void> _toggleReminder(bool on) async {
+    final bool prev = _reminderEnabled;
+    setState(() => _reminderEnabled = on);
+    try {
+      final SettingsRepo settings = SettingsRepo(ref.read(databaseProvider));
+      await settings.setReminderEnabled(on);
+      final svc = ReminderService();
+      if (on) {
+        final bool granted = await svc.requestPermission();
+        if (!mounted) return;
+        setState(() => _permGranted = granted);
+        if (!granted) {
+          _toast('未授予通知权限，提醒不会弹出。请到系统设置里打开。');
+        }
+        await svc.schedule(hour: _reminderHour, minute: _reminderMinute);
+        if (!mounted) return;
+        _toast('已开启每日提醒：' + _hhmm(_reminderHour, _reminderMinute));
+      } else {
+        await svc.cancel();
+        if (!mounted) return;
+        _toast('已关闭每日提醒');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _reminderEnabled = prev);
+      _toast('设置失败：' + e.toString());
+    }
+  }
+
+  Future<void> _pickReminderTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: _reminderHour, minute: _reminderMinute),
+      helpText: '选择每天提醒的时间',
+      cancelText: '取消',
+      confirmText: '确定',
+    );
+    if (picked == null) return;
+    final int prevH = _reminderHour;
+    final int prevM = _reminderMinute;
+    setState(() {
+      _reminderHour = picked.hour;
+      _reminderMinute = picked.minute;
+    });
+    try {
+      final SettingsRepo settings = SettingsRepo(ref.read(databaseProvider));
+      await settings.setReminderTime(picked.hour, picked.minute);
+      if (_reminderEnabled) {
+        await ReminderService().schedule(
+          hour: picked.hour,
+          minute: picked.minute,
+        );
+      }
+      if (!mounted) return;
+      _toast('提醒时间已改为 ' + _hhmm(picked.hour, picked.minute));
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _reminderHour = prevH;
+        _reminderMinute = prevM;
+      });
+      _toast('保存失败：' + e.toString());
+    }
   }
 
   int? _parseVersion(String? raw) {
@@ -356,6 +444,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 _versionCard(),
               ],
               const SizedBox(height: AppSizes.gap2),
+              _reminderCard(),
+              const SizedBox(height: AppSizes.gap2),
               _dataCard(),
               const SizedBox(height: AppSizes.gap2),
               _actionCard(),
@@ -556,6 +646,108 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
+  Widget _reminderCard() {
+    final timeText = _hhmm(_reminderHour, _reminderMinute);
+    return _Panel(
+      title: '每日提醒',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _reminderEnabled ? '已开启' : '已关闭',
+                      style: TextStyle(
+                        fontSize: AppSizes.body,
+                        fontWeight: FontWeight.w600,
+                        color: _reminderEnabled
+                            ? AppColors.success
+                            : AppColors.textMinor,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text('到点提醒还有多少条没打卡', style: _tsMinor),
+                  ],
+                ),
+              ),
+              Switch(
+                value: _reminderEnabled,
+                onChanged: _busy ? null : _toggleReminder,
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSizes.gap2),
+          Material(
+            color: AppColors.paper,
+            borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
+              onTap: (_reminderEnabled && !_busy) ? _pickReminderTime : null,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.gap2,
+                  vertical: AppSizes.gap,
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.schedule,
+                      size: 18,
+                      color: _reminderEnabled
+                          ? AppColors.gold
+                          : AppColors.textMinor,
+                    ),
+                    const SizedBox(width: AppSizes.gap),
+                    Expanded(
+                      child: Text('提醒时间', style: _tsMinor),
+                    ),
+                    Text(
+                      timeText,
+                      style: TextStyle(
+                        fontSize: AppSizes.body,
+                        fontWeight: FontWeight.w600,
+                        color: _reminderEnabled
+                            ? AppColors.ink
+                            : AppColors.textMinor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          if (!_permGranted) ...[
+            const SizedBox(height: AppSizes.gap),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  size: 16,
+                  color: AppColors.warning,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    '通知权限未开启，到点不会弹出提醒。请到系统设置里为本应用打开通知权限。',
+                    style: _tsBoldWarning.copyWith(
+                      fontSize: AppSizes.caption,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
   Widget _dataCard() {
     final c = _counts;
     if (c == null) {

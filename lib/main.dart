@@ -5,8 +5,10 @@ import 'package:go_router/go_router.dart';
 
 import 'core/constants.dart';
 import 'core/providers.dart';
+import 'core/notify/reminder_service.dart';
 import 'core/theme.dart';
 import 'data/db/app_database.dart';
+import 'data/repo/settings_repo.dart';
 import 'data/seed/seeder.dart';
 import 'ui/pages/plan_page.dart';
 import 'ui/pages/qa_page.dart';
@@ -27,6 +29,20 @@ Future<void> main() async {
     }
   } catch (e) {
     if (kDebugMode) debugPrint('[SEED] throw $e');
+  }
+
+  // 通知服务：建渠道 + 注册后台分发器。失败不影响启动。
+  try {
+    await ReminderService().init();
+    final SettingsRepo settings = SettingsRepo(db);
+    final (int, int) t = await settings.reminderTime();
+    if (await settings.reminderEnabled()) {
+      await ReminderService().schedule(hour: t.$1, minute: t.$2);
+    } else {
+      await ReminderService().cancel();
+    }
+  } catch (e) {
+    if (kDebugMode) debugPrint('[REMINDER] init error: $e');
   }
 
   runApp(
