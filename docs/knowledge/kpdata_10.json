@@ -1,0 +1,90 @@
+{
+  "week": 10,
+  "weekTitle": "JavaScript DOM 与事件",
+  "days": [
+    {
+      "day": 1,
+      "itemId": "w10d1",
+      "review": false,
+      "kps": [
+        ["document.querySelector 与 querySelectorAll 的返回值差异", "querySelector 返回第一个匹配的元素（Element 或 null），querySelectorAll 返回静态的 NodeList，拿不到就是空 NodeList 而不是 null。", "选单个元素用 querySelector，要批量操作或需要长度判断用 querySelectorAll，判断存在性时后者要用 length === 0。", "const one = document.querySelector('.item');\nconst all = document.querySelectorAll('.item');\nconsole.log(one, all.length, all instanceof NodeList);"],
+        ["NodeList 是静态的而 HTMLCollection 是动态的", "querySelectorAll 得到的 NodeList 是快照，DOM 后续变化不会反映进去；getElementsByClassName 得到的 HTMLCollection 是实时的，DOM 一变它自动更新。", "循环中删除节点时用 querySelectorAll 的静态集合最安全，用 HTMLCollection 会因实时更新导致漏删。", "const live = document.getElementsByClassName('item');\nconst still = document.querySelectorAll('.item');\nconsole.log(live.length, still.length); // 新增节点后 live 变大，still 不变"],
+        ["textContent 与 innerHTML 的选择", "textContent 读写纯文本，性能好且不会解析标签；innerHTML 会解析 HTML 字符串并生成节点，有 XSS 风险。", "显示用户输入的内容必须用 textContent，只有确定字符串安全且需要渲染结构时才用 innerHTML。", "el.textContent = userInput;      // 安全\nel.innerHTML = '<b>固定标记</b>'; // 仅限静态字符串"],
+        ["classList 增删改查四件套", "classList 提供 add / remove / toggle / contains 四个方法，比操作 className 字符串更精确，不会误伤其他类名。", "切换状态类名一律用 classList.toggle('active')，不要用 className 拼接字符串。", "box.classList.add('on');\nbox.classList.toggle('active');\nconsole.log(box.classList.contains('on')); // true"],
+        ["style 属性只能改行内样式", "el.style.color 修改的是元素的行内 style 特性，优先级高于外部样式表，但无法读取样式表中定义的值。", "读计算后的样式用 getComputedStyle(el)，尤其是想拿宽度、颜色等样式表里的值时。", "const w = getComputedStyle(box).width; // '200px'\nbox.style.width = '300px';"]
+      ]
+    },
+    {
+      "day": 2,
+      "itemId": "w10d2",
+      "review": false,
+      "kps": [
+        ["addEventListener 三个参数的作用", "第三个参数可以是布尔值（是否捕获阶段触发）或对象 { capture, once, passive }。once 让监听器只触发一次自动移除，passive 提升滚动性能。", "滚动、触摸事件加 passive: true；只执行一次的逻辑用 once: true，省去手动 removeEventListener。", "btn.addEventListener('click', fn, { once: true });\nwindow.addEventListener('touchmove', onMove, { passive: true });"],
+        ["事件对象 event.target 与 currentTarget 的区别", "target 是实际触发事件的最深层元素，currentTarget 是当前正在执行监听器的那个元素。", "做事件委托时判断 target，想拿到绑定监听的容器时用 currentTarget。", "list.addEventListener('click', (e) => {\n  console.log(e.target.tagName, e.currentTarget.id);\n});"],
+        ["阻止默认行为的正确时机", "event.preventDefault() 能取消表单提交、链接跳转等浏览器默认动作，但必须在事件处理函数同步执行阶段调用，异步里调用无效。", "表单校验不通过时立即 preventDefault 并 return，不要先 await 再阻止。", "form.addEventListener('submit', (e) => {\n  if (!valid()) { e.preventDefault(); return; }\n});"],
+        ["stopPropagation 与 stopImmediatePropagation 的差别", "stopPropagation 阻止事件继续向上冒泡但同元素其他监听器照常执行；stopImmediatePropagation 连同一元素上后续监听器也一起拦掉。", "只在明确需要隔离父子行为时才用，滥用会破坏事件委托。", "child.addEventListener('click', (e) => {\n  e.stopPropagation(); // 父级收不到\n});"],
+        ["DOMContentLoaded 与 load 的触发时机", "DOMContentLoaded 在 HTML 解析完成、DOM 树建好后触发，不等图片等资源；load 要等所有资源（图片、样式、iframe）加载完毕。", "操作 DOM 的逻辑挂 DOMContentLoaded 或直接把 script 放 body 末尾 deferred；需要拿到图片尺寸才用 load。", "document.addEventListener('DOMContentLoaded', init);\nwindow.addEventListener('load', () => measure());"],
+        ["自定义事件 CustomEvent 的用法", "用 new CustomEvent('name', { detail }) 创建，通过 el.dispatchEvent 派发，父级可以用 addEventListener 接收 detail 数据。", "组件间解耦通信时用自定义事件，比全局变量干净，且能冒泡到父容器监听。", "const ev = new CustomEvent('cart:add', { detail: { id: 1 }, bubbles: true });\ndoc.dispatchEvent(ev);"]
+      ]
+    },
+    {
+      "day": 3,
+      "itemId": "w10d3",
+      "review": false,
+      "kps": [
+        ["表单校验为什么要同时做前端和校验属性", "HTML 的 required、pattern、minlength 是浏览器原生校验，submit 时自动拦截并弹出提示，但可被绕过。", "先用原生属性挡一层，再用 JS 做业务级校验（如两次密码一致），两者都不可省。", "input type=\"email\" required minlength=\"6\""],
+        ["checkValidity 与 reportValidity 的区别", "checkValidity 静默返回布尔值不弹提示；reportValidity 返回布尔值同时触发浏览器原生气泡提示。", "自定义提交流程用 checkValidity 自己控制提示样式，想省事直接 reportValidity。", "if (!form.checkValidity()) {\n  form.reportValidity();\n  return;\n}"],
+        ["setCustomValidity 实现自定义错误文案", "调用 setCustomValidity('消息') 后该字段被判定为无效且显示这条消息，必须传空字符串才能清除。", "每次重新校验前先 setCustomValidity('')，否则错误状态会残留再也提交不了。", "input.setCustomValidity('');\nif (v.length < 6) input.setCustomValidity('至少 6 位');"],
+        ["失焦校验与实时校验的取舍", "blur 时校验体验最稳，不会在用户打字途中报警；input 时校验能实时反馈但容易误报；两者可组合成「失焦严格、输入宽松」。", "必填和格式用 blur 触发，字数统计、密码强度条用 input 触发。", "input.addEventListener('blur', validate);\ninput.addEventListener('input', updateStrength);"],
+        ["正则表达式校验手机号与邮箱的写法", "手机号用 ^1[3-9]\\d{9}$，邮箱用 ^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$，test 方法返回布尔值。", "正则要写在变量里复用，不要每次校验重新构造，且 anchor 首尾防部分匹配。", "const PHONE = /^1[3-9]\\d{9}$/;\nconst MAIL = /^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$/;\nconsole.log(PHONE.test('13800000000')); // true"]
+      ]
+    },
+    {
+      "day": 4,
+      "itemId": "w10d4",
+      "review": false,
+      "kps": [
+        ["localStorage 只能存字符串", "localStorage 的键和值都必须是字符串，存对象会自动变成 '[object Object]'，必须序列化。", "存对象一律 JSON.stringify，取的时候 JSON.parse，读取时用 try/catch 防脏数据。", "localStorage.setItem('user', JSON.stringify({ id: 1 }));\nconst u = JSON.parse(localStorage.getItem('user') || '{}');"],
+        ["localStorage 与 sessionStorage 的生命周期差异", "localStorage 永久保存直到手动清除，同源所有标签页共享；sessionStorage 只在当前标签页会话内有效，关闭标签即清空，且不跨标签共享。", "登录态、主题偏好用 localStorage；表单草稿、一次性流程状态用 sessionStorage。", "sessionStorage.setItem('draft', text);\nconsole.log(sessionStorage.getItem('draft'));"],
+        ["storage 事件实现跨标签页同步", "一个标签页修改 localStorage 时，同源的其他标签页会触发 window 的 storage 事件，携带 key、oldValue、newValue，但改动的那个标签页自己不会触发。", "多标签页同步登录态或主题时监听 storage 事件，不要用轮询。", "window.addEventListener('storage', (e) => {\n  if (e.key === 'theme') applyTheme(e.newValue);\n});"],
+        ["localStorage 的容量与写入限制", "大多数浏览器同源上限约 5MB，超出会抛 QuotaExceededError；且它是同步 API，写大量数据会阻塞主线程。", "只存小体积配置和索引，大数据（图片、文章正文）用 IndexedDB，写入前用 try/catch 兜住配额错误。", "try {\n  localStorage.setItem('big', data);\n} catch (err) {\n  console.warn('配额超限', err.name);\n}"],
+        ["无痕模式下 localStorage 可能直接抛错", "部分浏览器无痕模式访问 localStorage 会抛 SecurityError，或者 setItem 时抛 QuotaExceededError，直接使用会导致页面白屏。", "封装一个 safeStorage 层，getItem / setItem 全部 try/catch，失败时降级到内存对象。", "const mem = {};\nconst safe = {\n  get: (k) => { try { return localStorage.getItem(k); } catch { return mem[k] ?? null; } }\n};"]
+      ]
+    },
+    {
+      "day": 5,
+      "itemId": "w10d5",
+      "review": false,
+      "kps": [
+        ["export default 与具名 export 的区别", "一个模块只能有一个 default 导出，导入时名字随意且不加花括号；具名导出可以有多个，导入必须用花括号且名字对应。", "工具库对外只有一个主入口用 default，多个函数并列导出用具名，便于 tree-shaking。", "// a.js\nexport default function init() {}\nexport const VERSION = '1.0';\n// b.js\nimport init, { VERSION } from './a.js';"],
+        ["import 的路径必须带扩展名或前缀", "浏览器原生 ESM 不会自动补 .js 后缀，也不认裸模块名，路径必须以 ./ 或 ../ 开头并写全文件名。", "原生模块化项目里一律写 import x from './utils.js'，写 './utils' 会 404。", "import { sum } from './utils.js';   // 正确\n// import { sum } from './utils';    // 报错"],
+        ["module 脚本默认 defer 且有独立作用域", "script type=\"module\" 天然延迟执行（等 DOM 解析完）、天然严格模式、变量不挂到 window 上，也不允许重复执行同一 URL（只执行一次）。", "HTML 里用 type=\"module\" 就不需要再写 defer，也不用担心全局污染。", "script type=\"module\" src=\"./main.js\""],
+        ["动态 import 返回 Promise 用于按需加载", "import('./heavy.js') 返回 Promise，resolve 出模块对象，可配合 await 在需要时才加载，也能拿到打包后的独立 chunk。", "首屏不需要的大模块（图表、编辑器、导出功能）一律用动态 import 拆包。", "async function openChart() {\n  const { render } = await import('./chart.js');\n  render('#box');\n}"],
+        ["循环依赖会导致部分导出为 undefined", "A 引用 B、B 又引用 A 时，谁先被求值谁就可能拿到对方尚未初始化的绑定，表现为 undefined 或暂时性死区报错。", "拆分公共依赖到第三个模块，或用函数调用延迟访问绕过循环引用。", "// a.js  \nimport { b } from './b.js';\nexport const a = () => 'a';\n// 循环引用处改成 b() 延迟调用而非顶层使用"]
+      ]
+    },
+    {
+      "day": 6,
+      "itemId": "w10d6",
+      "review": false,
+      "kps": [
+        ["createElement 与模板字符串渲染的取舍", "createElement 一步步建节点，安全、无解析开销；innerHTML 拼接字符串代码短，但会重建整块 DOM，丢失原有事件与输入焦点。", "列表整块刷新用 innerHTML 重建后再统一挂委托；局部增删用 createElement 精确插入。", "const li = document.createElement('li');\nli.textContent = todo.text;\nul.append(li);"],
+        ["数据驱动渲染：状态一变就重绘", "待办清单的核心是把 todos 数组当唯一数据源，任何增删改先改数组，再调用一次 render() 全量重建列表。", "所有操作只改数据，不直接改 DOM；渲染函数是纯的，输入数组输出 DOM。", "let todos = [];\nfunction render() {\n  ul.textContent = '';\n  todos.forEach(addRow);\n}"],
+        ["用 dataset 存业务 id 而不是闭包数组下标", "在元素上写 data-id，点击时从 e.target.closest('[data-id]').dataset.id 取值，比依赖渲染顺序的 index 更抗乱序和删除。", "列表项的标识一律放 data-id，事件里用 closest 向上找，避免点到子元素取不到值。", "li.dataset.id = todo.id;\nlist.addEventListener('click', (e) => {\n  const row = e.target.closest('[data-id]');\n  if (row) remove(row.dataset.id);\n});"],
+        ["列表增删要用事件委托而不是逐个绑定", "列表重新渲染后会丢失所有直接绑定的事件，委托把监听器挂在父容器上，新增节点自动生效。", "容器上只绑一次 click，用 e.target 判断点到了删除按钮还是勾选框。", "ul.addEventListener('click', (e) => {\n  if (e.target.matches('.del')) delItem(e.target.closest('li').dataset.id);\n});"],
+        ["待办持久化：初始化时读、变更后写", "启动时从 localStorage 反序列化 todos 并渲染，之后每次增删改都同步写回，形成「读一次、写多次」的闭环。", "把 save() 封装在每次数据变更之后统一调用，避免每个操作点都重复写。", "todos = JSON.parse(localStorage.getItem('todos') || '[]');\nfunction save() { localStorage.setItem('todos', JSON.stringify(todos)); }"]
+      ]
+    },
+    {
+      "day": 7,
+      "itemId": "w10d7",
+      "review": true,
+      "kps": [
+        ["DOM 操作三步模型：查询、修改、插入", "所有 DOM 操作都可归为三类：用选择器查到元素、改它的属性或内容、创建并插入到指定位置。", "遇到不会的需求先归到这三类里的某一类，再想对应 API，不要凭感觉乱试。", "const el = document.querySelector('#box');\nel.textContent = 'hi';\ndocument.body.append(el);"],
+        ["事件流程三阶段与委托的因果关系", "捕获（window→目标）、目标、冒泡（目标→window）三阶段中，冒泡是事件委托唯一成立的前提。", "能说清「委托 = 父级监听 + 冒泡 + target 判断」这三件事，就掌握了事件模型。", "container.addEventListener('click', (e) => {\n  // 依赖冒泡，父级收到子元素事件\n});"],
+        ["本地存储选型判断表", "要跨会话保留用 localStorage，只在本标签用 sessionStorage，存结构化大数据用 IndexedDB，存凭证类不做。", "先问「关掉浏览器还要不要」，再问「多大体积」，两个问题就能定存储方案。", "if (needPersist && size < 5 * 1024 * 1024) use localStorage();\nelse if (!needPersist) use sessionStorage();\nelse use IndexedDB();"],
+        ["闭卷重写待办清单的验收标准", "从空白文件开始，不看任何参考，30 分钟内完成：增、删、勾选、持久化四项功能，且刷新后数据不丢。", "写不出来时不要翻旧代码，先画数据流（数组→渲染→事件→数组→存储），再逐段补。", "// 验收自检\n// 1. 新增后刷新仍在\n// 2. 删除后不残留\n// 3. 勾选状态持久\n// 4. 空列表有占位文案"]
+      ]
+    }
+  ]
+}
