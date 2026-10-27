@@ -1168,5 +1168,185 @@
     "term": "闭卷重写待办清单的验收标准",
     "definition": "从空白文件开始，不看任何参考，30 分钟内完成：增、删、勾选、持久化四项功能，且刷新后数据不丢。",
     "week": 10
+  },
+  {
+    "term": "单线程与异步的本质",
+    "definition": "JS 主线程只有一条，所以耗时操作不能干等，必须交出去、事后再回调",
+    "week": 11
+  },
+  {
+    "term": "回调函数与回调地狱",
+    "definition": "层层嵌套的回调让错误处理和数据传递都失控，横向写成金字塔即为回调地狱",
+    "week": 11
+  },
+  {
+    "term": "Promise 三态与不可逆",
+    "definition": "pending 只能单向变成 fulfilled 或 rejected，一旦落定终身为该状态",
+    "week": 11
+  },
+  {
+    "term": "then 链式传递与返回值穿透",
+    "definition": "then 里 return 普通值会被包成新 Promise 继续往下传，忘记 return 则下游拿到 undefined",
+    "week": 11
+  },
+  {
+    "term": "Promise.all 与 allSettled 的分工",
+    "definition": "all 只要有一个 reject 整体就失败；要拿到每个请求的成败明细必须用 allSettled",
+    "week": 11
+  },
+  {
+    "term": "async 函数永远返回 Promise",
+    "definition": "async 声明的函数返回值会被自动包成 Promise，调用方必须 await 或 then 才能拿到真实值",
+    "week": 11
+  },
+  {
+    "term": "await 的暂停语义",
+    "definition": "await 只暂停当前 async 函数内部，不会阻塞整个主线程，外部代码照常执行",
+    "week": 11
+  },
+  {
+    "term": "await 后面接非 Promise 值",
+    "definition": "await 一个普通值只是包一层 Promise.resolve，不会真的等待，别指望它产生延迟",
+    "week": 11
+  },
+  {
+    "term": "用 try/catch 替代 then 的第二个参数",
+    "definition": "await 写法下捕获失败统一走 try/catch，比 then(ok, err) 更不容易漏掉中间环节",
+    "week": 11
+  },
+  {
+    "term": "串行与并行的写法差异",
+    "definition": "先 await 再 await 是串行，两个 await 之前先把请求都发出去再用 Promise.all 才是并行",
+    "week": 11
+  },
+  {
+    "term": "回调改写成 async 的三步",
+    "definition": "找出回调里的成功与失败分支，改为 await 赋值加 try/catch，并用返回值替代回调参数",
+    "week": 11
+  },
+  {
+    "term": "fetch 只在网络层失败时 reject",
+    "definition": "服务端返回 404 或 500 时 fetch 依然算成功，必须自己检查 response.ok",
+    "week": 11
+  },
+  {
+    "term": "response.json 只能读一次",
+    "definition": "响应体是流，读过一次就耗尽，需要复用必须先把结果存进变量",
+    "week": 11
+  },
+  {
+    "term": "请求头的 Content-Type 决定后端如何解析",
+    "definition": "发 JSON 必须带 application/json 且 body 用 JSON.stringify，否则后端收到空对象",
+    "week": 11
+  },
+  {
+    "term": "GET 与 POST 的写法差异",
+    "definition": "GET 不能带 body，参数只能拼查询串；POST 需要 method 与 body 成对出现",
+    "week": 11
+  },
+  {
+    "term": "渲染列表的三段式",
+    "definition": "加载中展示骨架或文案，成功用 map 拼 HTML 或节点，失败给可重试提示",
+    "week": 11
+  },
+  {
+    "term": "跨域被拦时浏览器先报错",
+    "definition": "预检失败的请求后端根本没收到日志，排查要先看控制台而非服务端",
+    "week": 11
+  },
+  {
+    "term": "AbortController 实现请求超时",
+    "definition": "传给 fetch 的 signal 被 abort 后请求以 AbortError 结束，是最干净的超时手段",
+    "week": 11
+  },
+  {
+    "term": "区分超时、网络断开与服务端报错",
+    "definition": "三者兜底文案与重试策略不同，统一报网络异常会误导用户",
+    "week": 11
+  },
+  {
+    "term": "指数退避重试",
+    "definition": "第 n 次重试间隔按倍数增长并加随机抖动，防止瞬时把所有流量同时砸向后端",
+    "week": 11
+  },
+  {
+    "term": "重试只适用于幂等请求",
+    "definition": "支付和创建订单类接口重试会产生重复数据，必须靠幂等键保护才能重试",
+    "week": 11
+  },
+  {
+    "term": "兜底数据的用途与禁区",
+    "definition": "兜底只用于让页面不白屏，不能用旧数据冒充新数据且不给用户任何标记",
+    "week": 11
+  },
+  {
+    "term": "JSON 的合法取值边界",
+    "definition": "只允许双引号、不允许注释与尾逗号，undefined 与函数会被直接丢弃",
+    "week": 11
+  },
+  {
+    "term": "JSON.parse 与 JSON.stringify 的往返失真",
+    "definition": "Date 变字符串、undefined 消失、循环引用直接抛错",
+    "week": 11
+  },
+  {
+    "term": "curl 调接口的最小可用写法",
+    "definition": "curl -X POST -H 头 -d 数据 网址，加 -i 看响应头，排查鉴权最快",
+    "week": 11
+  },
+  {
+    "term": "用 curl 复现浏览器请求",
+    "definition": "从开发者工具复制为 curl 命令，能一键验证排除前端代码嫌疑",
+    "week": 11
+  },
+  {
+    "term": "接口调试必看的四项",
+    "definition": "状态码、响应头里的 Content-Type、响应体结构、请求实际发出的载荷",
+    "week": 11
+  },
+  {
+    "term": "接口封装的三层结构",
+    "definition": "请求层只负责发请求，服务层拼业务参数，页面层只管渲染，混在一起后期无法替换数据源",
+    "week": 11
+  },
+  {
+    "term": "统一错误格式返回",
+    "definition": "把各种异常收敛成 code 加 message 的对象，页面只处理一种结构",
+    "week": 11
+  },
+  {
+    "term": "API Key 不能写在前端",
+    "definition": "前端打包后源码完全可见，正确做法是客户端调自己的后端再由后端带上密钥",
+    "week": 11
+  },
+  {
+    "term": "城市搜索的防抖与请求竞态",
+    "definition": "连打关键字会并发多请求，用防抖加只认可最后一个请求的序号防止旧结果覆盖新结果",
+    "week": 11
+  },
+  {
+    "term": "加载骨架与空状态的必要性",
+    "definition": "没有骨架用户以为卡死，没有空状态用户不知道是没数据还是出错",
+    "week": 11
+  },
+  {
+    "term": "闭卷手写 fetch 封装清单",
+    "definition": "超时、重试、统一错误、自动解析 JSON、业务错误与网络错误分离，五项齐全才算过关",
+    "week": 11
+  },
+  {
+    "term": "事件循环与宏微任务的执行顺序",
+    "definition": "同步代码先跑完，然后清空微任务队列，再取下一个宏任务，这正是 await 表现异常的原因",
+    "week": 11
+  },
+  {
+    "term": "未捕获的 Promise 失败是静默的",
+    "definition": "漏写 catch 的链式调用不会报错到控制台之外，线上会表现为功能无反应，必须全局兜一层",
+    "week": 11
+  },
+  {
+    "term": "异步与网络知识地图",
+    "definition": "回调到 Promise 到 async 到 fetch 到错误兜底，一条线串起所有网络请求写法",
+    "week": 11
   }
 ]
