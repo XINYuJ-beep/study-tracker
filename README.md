@@ -81,3 +81,18 @@ android/       Android 壳工程（签名、Manifest、gradle）
 - 每次改表结构必须同步导出 schema 快照，随版本一起提交。
 - 开发期允许 `fallbackToDestructiveMigration`，改表即清库。
 - 一旦有真实用户数据，**必须写好 Migration 并删掉 destructive 回退**，否则升级会直接清库。
+
+## 无障碍（A11y）
+
+- **文字对比度**：所有文字对背景 ≥4.5:1（WCAG 2.1 AA）。Gold 分两个常量：`AppColors.gold = #A67C3D` 只用于图标/装饰/图表等非文字元素（3:1 门槛）；`AppColors.goldText = #8F6329` 用于小号正文与按钮文字（对白底 5.27:1、对纸底 4.84:1）。新增文字用色必须选 `goldText`，不要图省事直接用 `gold`。
+- **加载态**：首屏无文字加载页统一包 `Semantics(label: '正在加载…')`；覆盖式忙碌遮罩用 `Semantics(scopesRoute: true, namesRoute: true, label: <状态文本>)` 包整块，让 TalkBack 只读一句而不是逐节点碎读。
+- **环形进度**：`_ProgressRing` 外层 `Semantics` 必须带 `container: true` 与 `excludeSemantics: true`，否则内部数字和标签会被重复朗读。
+- **触达尺寸**：可点击控件最小 48×48dp。`IconButton` 一律显式写 `constraints: BoxConstraints(minWidth: 48, minHeight: 48)`，不要依赖默认值——主题 density 一变就会缩。
+- **验证方式**：TalkBack / VoiceOver 实机走一遍五个页面 + 深色模式；CI 只保证语法，朗读效果必须靠真机。
+
+## 备份策略
+
+- 设置页提供 JSON / CSV 导出。
+- 每周自动打一份 JSON 备份，只留最近 4 份，旧的自动清理，避免无限膨胀。
+- 导入前先自动生成本地回滚备份，导入失败可回退到操作前状态。
+- 清空数据前同样先打备份，二次确认后才执行。
