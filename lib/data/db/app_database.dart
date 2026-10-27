@@ -4,6 +4,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../core/constants.dart';
 import 'tables.dart';
 
 /// sqflite 数据库封装：10 张表，schemaVersion 2。
@@ -152,9 +153,66 @@ class AppDatabase {
     await db.execute(sql, args);
   }
 
+  /// 清空全部业务数据，保留用户设置。
+  ///
+  /// 只删九张业务表（modules/weeks/items/checkins/cards/mcqs/concepts/stages/streams），
+  /// 按 kDropTableOrder 从下游到上游删除，满足外键依赖；
+  /// app_settings 不整表清空，只删除 data_version 一行，
+  /// 这样 daily_goal 等用户设置会保留下来。
+  ///
+  /// 清空后 installed 归零 < dataVersion，再次调用 Seeder.seedIfNeeded()
+  /// 会自动重新灌入完整数据。
+  ///
+  /// 返回被删除的业务表张数与 app_settings 删除行数，便于页面提示。
+  Future<ClearResult> clearBusinessData() async {
+    return await transaction<ClearResult>((Transaction txn) async {
+      int tables = 0;
+      int deletedRows = 0;
+      for (final String table in kDropTableOrder) {
+        if (table == T.appSettings) {
+          continue;
+        }
+        deletedRows += await txn.delete(table);
+        tables++;
+      }
+      final int settingsRows = await txn.delete(
+        T.appSettings,
+        where: 'key = ?',
+        whereArgs: <Object?>[AppConstants.keyDataVersion],
+      );
+      return ClearResult(
+        tableCount: tables,
+        deletedRows: deletedRows,
+        settingsRows: settingsRows,
+      );
+    });
+  }
+
   /// 事务：seeder 清表 + 批量灌数据用。
   Future<T> transaction<T>(Future<T> Function(Transaction txn) action) async {
     final Database db = await database;
     return db.transaction<T>(action);
   }
+}
+
+/// clearBusinessData() 的执行结果。
+class ClearResult {
+  const ClearResult({
+    required this.tableCount,
+    required this.deletedRows,
+    required this.settingsRows,
+  });
+
+  /// 被清空的业务表数量
+  final int tableCount;
+
+  /// 被删除的业务数据行数合计
+  final int deletedRows;
+
+  /// app_settings 中被删除的行数（正常为 1，即 data_version）
+  final int settingsRows;
+
+  @override
+  String toString() =>
+      'ClearResult(tables=$tableCount, rows=$deletedRows, settings=$settingsRows)';
 }
