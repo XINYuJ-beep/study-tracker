@@ -7,7 +7,6 @@ import '../db/tables.dart';
 /// 直接返回零点，避免调用方再用 startOfDay 做二次日界判断导致跨日错位。
 DateTime effectiveToday() => startOfDay(DateTime.now());
 
-DateTime _startOfDay(DateTime t) => DateTime(t.year, t.month, t.day);
 
 class WeekProgress {
   const WeekProgress({
@@ -83,7 +82,7 @@ class PlanRepo {
   }
 
   Future<Set<String>> doneItemIdsOfDay(DateTime day) async {
-    final d = _startOfDay(day);
+    final d = startOfNaturalDay(day);
     final rows = await db.query(
       T.checkins,
       columns: ['item_id'],
@@ -198,7 +197,7 @@ class PlanRepo {
     final today = effectiveToday();
     final result = <bool>[];
     for (var i = days - 1; i >= 0; i--) {
-      final d = _startOfDay(today.subtract(Duration(days: i)));
+      final d = startOfNaturalDay(today.subtract(Duration(days: i)));
       final rows = await db.query(
         T.checkins,
         columns: ['item_id'],
@@ -221,14 +220,14 @@ class PlanRepo {
       whereArgs: [1],
     );
     final dates = all
-        .map((r) => _startOfDay(
+        .map((r) => startOfNaturalDay(
             DateTime.fromMillisecondsSinceEpoch(r['date'] as int)))
         .toSet()
         .toList()
       ..sort((a, b) => b.compareTo(a));
     if (dates.isEmpty) return 0;
 
-    final today = _startOfDay(effectiveToday());
+    final today = startOfNaturalDay(effectiveToday());
     final newest = dates.first;
     if (newest.difference(today).inDays.abs() > 1) return 0;
 

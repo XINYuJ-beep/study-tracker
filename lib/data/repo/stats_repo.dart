@@ -1,4 +1,5 @@
 import '../../core/constants.dart';
+import '../../core/date_utils.dart';
 import '../db/app_database.dart';
 import '../db/tables.dart';
 
@@ -61,7 +62,7 @@ class StatsRepo {
   // ---------- 今日 / 周 ----------
   /// 本周已打卡分钟数。周以周一为第一天。
   Future<int> weekMinutes() async {
-    final today = _startOfDay(_effectiveToday());
+    final today = startOfDay(_effectiveToday());
     final monday = today.subtract(Duration(days: today.weekday - 1));
     final sunday = monday.add(const Duration(days: 6));
 
@@ -104,7 +105,7 @@ class StatsRepo {
   Future<List<HeatCell>> heatmap({int weeks = 12}) async {
     if (weeks <= 0) return const <HeatCell>[];
 
-    final today = _startOfDay(_effectiveToday());
+    final today = startOfDay(_effectiveToday());
     final thisMonday = today.subtract(Duration(days: today.weekday - 1));
     final first = thisMonday.subtract(Duration(days: (weeks - 1) * 7));
     final last = today;
@@ -121,7 +122,7 @@ class StatsRepo {
 
     final counter = <DateTime, int>{};
     for (final r in rows) {
-      final key = _startOfDay(_msToDt(r['date'] as int?) ?? first);
+      final key = startOfDay(_msToDt(r['date'] as int?) ?? first);
       counter[key] = (counter[key] ?? 0) + 1;
     }
 
@@ -217,7 +218,6 @@ class StatsRepo {
     return DateTime(shifted.year, shifted.month, shifted.day);
   }
 
-  DateTime _startOfDay(DateTime t) => DateTime(t.year, t.month, t.day);
 }
 
 DateTime? _msToDt(int? ms) =>

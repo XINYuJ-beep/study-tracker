@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
 import 'package:sqflite/sqflite.dart' show ConflictAlgorithm;
 import '../../core/constants.dart';
+import '../../core/date_utils.dart';
 import '../db/app_database.dart';
 import '../db/tables.dart';
 import 'plan_repo.dart';
@@ -42,7 +43,7 @@ class CheckinRepo {
     int? minutes,
     String note = '',
   }) async {
-    final stamp = _startOfDay(_normalize(day));
+    final stamp = startOfDay(_normalize(day));
     await db.insert(
       T.checkins,
       <String, Object?>{
@@ -91,7 +92,7 @@ class CheckinRepo {
   /// 5 秒撤销窗口用这个，删掉等于回到从未打卡的状态，
   /// 比写 done = 0 更干净（不会在 checkins 里留垃圾行）。
   Future<void> undo(String itemId, DateTime day) async {
-    final stamp = _startOfDay(_normalize(day));
+    final stamp = startOfDay(_normalize(day));
     await db.delete(
       T.checkins,
       where: 'item_id = ? AND date = ?',
@@ -102,7 +103,7 @@ class CheckinRepo {
 
   /// 某条目在某天打卡时记录的用时（分钟）；没打卡返回 null。
   Future<int?> minutesOf(String itemId, DateTime day) async {
-    final stamp = _startOfDay(_normalize(day));
+    final stamp = startOfDay(_normalize(day));
     final rows = await db.query(
       T.checkins,
       columns: <String>['minutes', 'done'],
@@ -117,7 +118,7 @@ class CheckinRepo {
 
   /// 某条目在某天打卡时写的备注；没打卡返回 null。
   Future<String?> noteOf(String itemId, DateTime day) async {
-    final stamp = _startOfDay(_normalize(day));
+    final stamp = startOfDay(_normalize(day));
     final rows = await db.query(
       T.checkins,
       columns: <String>['note', 'done'],
@@ -150,7 +151,7 @@ class CheckinRepo {
 
   /// 某条目在某天是否已勾选。
   Future<bool> isDone(String itemId, DateTime day) async {
-    final stamp = _startOfDay(_normalize(day));
+    final stamp = startOfDay(_normalize(day));
     final rows = await db.query(
       T.checkins,
       where: 'item_id = ? AND date = ?',
@@ -163,7 +164,7 @@ class CheckinRepo {
 
   /// 某天已勾选的条目 id 集合。
   Future<Set<String>> doneIdsOfDay(DateTime day) async {
-    final stamp = _startOfDay(_normalize(day));
+    final stamp = startOfDay(_normalize(day));
     final rows = await db.query(
       T.checkins,
       columns: <String>['item_id'],
@@ -179,8 +180,8 @@ class CheckinRepo {
   /// 只返回有打卡记录的天，没记录的天不会补空行。
   Future<List<DaySummary>> summariesBetween(
       DateTime from, DateTime to) async {
-    final a = _startOfDay(_normalize(from));
-    final b = _startOfDay(_normalize(to));
+    final a = startOfDay(_normalize(from));
+    final b = startOfDay(_normalize(to));
     if (b.isBefore(a)) return const [];
 
     final rows = await db.query(
@@ -212,7 +213,7 @@ class CheckinRepo {
     final bucketMinutes = <DateTime, int>{};
     for (final r in rows) {
       final checkin = Checkin.fromMap(r);
-      final key = _startOfDay(checkin.date);
+      final key = startOfDay(checkin.date);
       bucketItems[key] = (bucketItems[key] ?? 0) + 1;
       bucketMinutes[key] =
           (bucketMinutes[key] ?? 0) + (minutesOf[checkin.itemId] ?? 0);
@@ -232,7 +233,7 @@ class CheckinRepo {
   /// 最近 [days] 天（含今天）每天的打卡汇总，从早到晚，缺数据补 0。
   Future<List<DaySummary>> recentDays({int days = 14}) async {
     if (days <= 0) return const [];
-    final today = _startOfDay(_normalize(_clock()));
+    final today = startOfDay(_normalize(_clock()));
     final from = today.subtract(Duration(days: days - 1));
     final rawList = await summariesBetween(from, today);
     final byDay = {for (final s in rawList) s.day: s};
@@ -256,7 +257,7 @@ class CheckinRepo {
 
   /// 今天已打卡分钟数（按 items.minutes 累加）。
   Future<int> todayMinutes() async {
-    final stamp = _startOfDay(_normalize(_clock()));
+    final stamp = startOfDay(_normalize(_clock()));
     // 优先用打卡时记录的实际用时；老数据 minutes 为 0 时回退到 items.minutes。
     final rows = await db.raw(
       'SELECT COALESCE(NULLIF(c.minutes, 0), i.minutes, 0) AS m '
@@ -290,7 +291,7 @@ class CheckinRepo {
   /// release 包里 kDebugMode 为 false，整段不执行、不产生日志。
   Future<void> _traceCount(String tag, String itemId, DateTime day) async {
     if (!kDebugMode) return;
-    final stamp = _startOfDay(_normalize(day));
+    final stamp = startOfDay(_normalize(day));
     final rows = await db.raw(
       'SELECT COUNT(*) AS c FROM ${T.checkins} '
       'WHERE item_id = ? AND date = ?',
@@ -306,5 +307,4 @@ class CheckinRepo {
           ? t.subtract(const Duration(days: 1))
           : t;
 
-  DateTime _startOfDay(DateTime t) => DateTime(t.year, t.month, t.day);
 }
