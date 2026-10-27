@@ -30,4 +30,4 @@ android/.gradle/
 
 # 中间产物
 assets/spec/x/
-*.bak_w8
+*.bak_w*

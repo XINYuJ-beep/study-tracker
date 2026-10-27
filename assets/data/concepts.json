@@ -818,5 +818,180 @@
     "term": "响应式断点设计思路",
     "definition": "断点来自内容变形点而非设备型号。移动优先：默认写窄屏样式，用 min-width 逐级增强。桌面优先：默认宽屏，用 max-width 逐级降级。",
     "week": 8
+  },
+  {
+    "term": "var / let / const 的区别",
+    "definition": "var 函数作用域、可重复声明、变量提升但值为 undefined；let 块级作用域、不能重复声明、有暂时性死区（TDZ）；const 同 let 但声明时必须初始化且不能重新赋值。",
+    "week": 9
+  },
+  {
+    "term": "typeof 与 8 种数据类型",
+    "definition": "7 种原始类型：undefined / null / boolean / number / string / bigint / symbol，加 1 种引用类型 object。typeof null 返回 'object' 是历史 bug；typeof 函数返回 'function'。",
+    "week": 9
+  },
+  {
+    "term": "== 与 === 的区别",
+    "definition": "== 会做隐式类型转换（'1' == 1 为 true），=== 比较类型和值都不转换。null == undefined 为 true 但 null === undefined 为 false。",
+    "week": 9
+  },
+  {
+    "term": "NaN 与 isNaN 的坑",
+    "definition": "NaN 是 number 类型，任何 NaN 参与比较都返回 false，包括 NaN === NaN。判断用 Number.isNaN()，比全局 isNaN() 严格（后者会先强制转数字，isNaN('abc') 为 true）。",
+    "week": 9
+  },
+  {
+    "term": "隐式类型转换规则",
+    "definition": "转布尔：除了 0 / '' / null / undefined / NaN / false 这 6 个假值，其余全为真（对象、数组、空字符串外都是 true）。转数字：'' 转 0，'12px' 转 NaN，[] 转 0，[1] 转 1。",
+    "week": 9
+  },
+  {
+    "term": "函数声明与函数表达式的提升差异",
+    "definition": "函数声明整体提升，声明前可调用；函数表达式（含箭头函数赋值给变量）只提升变量名，声明前调用报 is not a function。",
+    "week": 9
+  },
+  {
+    "term": "作用域链与词法作用域",
+    "definition": "JS 是词法作用域：函数能访问哪些变量，在定义时就已经确定，和在哪里调用无关。查找变量从当前作用域逐层向外，直到全局，找不到报 ReferenceError。",
+    "week": 9
+  },
+  {
+    "term": "闭包的定义与经典用途",
+    "definition": "函数与其词法环境的组合。内层函数引用了外层函数的变量，外层函数执行完后这个变量不会被回收。用途：私有变量、函数工厂、防抖节流、计数器。",
+    "week": 9
+  },
+  {
+    "term": "闭包造成内存泄漏的场景",
+    "definition": "被闭包捕获的变量即使不再使用也不会释放。典型：定时器未清除、事件监听未移除、意外的全局引用、大 DOM 节点被闭包持有。",
+    "week": 9
+  },
+  {
+    "term": "this 的五种指向",
+    "definition": "① 普通函数独立调用 → window（严格模式 undefined）② 对象方法调用 → 调用它的对象 ③ 构造函数 new → 新创建的实例 ④ call/apply/bind 显式指定 ⑤ 箭头函数不绑定 this，取定义处外层 this。",
+    "week": 9
+  },
+  {
+    "term": "call / apply / bind 区别",
+    "definition": "call(thisArg, arg1, arg2) 立即执行，参数逐个传；apply(thisArg, [args]) 立即执行，参数用数组；bind(thisArg) 返回新函数不执行，可柯里化。",
+    "week": 9
+  },
+  {
+    "term": "数组改变原值 vs 返回新数组",
+    "definition": "改变原数组：push / pop / shift / unshift / splice / sort / reverse / fill。返回新数组：map / filter / slice / concat / flat / flatMap。",
+    "week": 9
+  },
+  {
+    "term": "map / filter / reduce 老三样",
+    "definition": "map 一对一映射返回同长度新数组；filter 按布尔条件筛选；reduce(回调, 初值) 归约成一个值，累加器类型由初值决定。",
+    "week": 9
+  },
+  {
+    "term": "数组去重的四种写法",
+    "definition": "① [...new Set(arr)] 最简洁，只对原始值有效 ② filter + indexOf ③ reduce + includes ④ 对象去重（NaN 会被误判）。对象数组按某字段去重需用 Map。",
+    "week": 9
+  },
+  {
+    "term": "字符串与数组的常用转换",
+    "definition": "split(sep) 字符串转数组；join(sep) 数组转字符串；slice / substring / substr 差异（substr 已废弃）；trim / padStart / padEnd / includes / startsWith。",
+    "week": 9
+  },
+  {
+    "term": "对象的遍历方式",
+    "definition": "for...in 遍历可枚举属性，包含原型链上的；Object.keys / values / entries 只取自身可枚举属性；JSON.stringify 会忽略 undefined 和函数。",
+    "week": 9
+  },
+  {
+    "term": "if 判空的正确写法",
+    "definition": "常见错：if (x) 会把 0 和 '' 判成假。需要区分「不存在」和「值为空」时用 x === undefined || x === null，简写 x == null 同时覆盖两者。",
+    "week": 9
+  },
+  {
+    "term": "for / for...of / for...in / forEach 选型",
+    "definition": "for 最灵活可 break；for...of 遍历可迭代对象（数组、字符串、Map、Set），支持 break；for...in 遍历对象键名，遍历数组会拿到字符串下标；forEach 无法 break、无法 await 顺序执行。",
+    "week": 9
+  },
+  {
+    "term": "try / catch / finally 与错误对象",
+    "definition": "catch 捕到的是 Error 实例，含 message / name / stack。finally 无论是否抛错都会执行，用于释放资源。throw 可以抛任何值，但抛 Error 实例才能保留堆栈。",
+    "week": 9
+  },
+  {
+    "term": "抛出与捕获的边界选择",
+    "definition": "只捕获你能处理的错误。捕获后要么恢复执行、要么补上下文再抛出（throw new Error(..., {cause: e})），绝不静默 catch 吞掉。",
+    "week": 9
+  },
+  {
+    "term": "循环里 await 的性能陷阱",
+    "definition": "for 循环里 await 是串行执行，10 个请求依次 1 秒共 10 秒。需要并发时用 Promise.all 收集 Promise 数组。需要限流则分批 Promise.all。",
+    "week": 9
+  },
+  {
+    "term": "解构赋值的默认值与重命名",
+    "definition": "const {a, b = 1, c: alias} = obj —— b 在 obj.b 为 undefined 时取 1，c 重命名为 alias。数组解构按位置：[x, , y] 跳过第二项；剩余项用 ...rest。",
+    "week": 9
+  },
+  {
+    "term": "展开运算符的三种用途",
+    "definition": "① 浅拷贝数组/对象 ② 合并 ③ 函数传参展开。展开是浅拷贝，嵌套对象仍共享引用；对象展开时后面的同名属性覆盖前面的。",
+    "week": 9
+  },
+  {
+    "term": "模板字符串的多行与插值",
+    "definition": "用反引号，${} 内可写任意表达式；支持换行保留格式。嵌套模板字符串时注意反引号转义。标签模板可自定义处理逻辑（如 SQL 防注入、i18n）。",
+    "week": 9
+  },
+  {
+    "term": "剩余参数与 arguments",
+    "definition": "function f(...args) 拿到真数组，可使用数组方法；arguments 是类数组，需 Array.from 转换，且箭头函数里没有 arguments。",
+    "week": 9
+  },
+  {
+    "term": "ES6 简写与计算属性名",
+    "definition": "属性简写 { name } 等价 { name: name }；方法简写 { run() {} }；计算属性名 { [key]: value } 可动态生成键。合并简写与展开时要留意覆盖顺序。",
+    "week": 9
+  },
+  {
+    "term": "深浅拷贝的实现与边界",
+    "definition": "浅拷贝：{...obj} / Object.assign / arr.slice。深拷贝：structuredClone（现代浏览器原生，支持 Date/Map/Set，不支持函数）、JSON 方案（丢 undefined/函数/Date 变字符串）。",
+    "week": 9
+  },
+  {
+    "term": "数组 sort 的排序规则坑",
+    "definition": "默认按字符串 Unicode 排序，[10,9,1].sort() 得 [1,10,9]。数字排序必须传比较函数 (a,b)=>a-b。sort 改变原数组；比较函数返回负数 a 在前。",
+    "week": 9
+  },
+  {
+    "term": "对象判空的可靠写法",
+    "definition": "Object.keys(obj).length === 0 最稳。JSON.stringify(obj) === '{}' 在含 undefined 值时也成立但有性能损耗。不能写 if (obj)，空对象为真。",
+    "week": 9
+  },
+  {
+    "term": "数字精度与 toFixed",
+    "definition": "0.1 + 0.2 !== 0.3（IEEE 754 双精度）。金额计算转成整数分或用 decimal 库。toFixed 返回字符串且有银行家舍入争议，(1.005).toFixed(2) 得 '1.00'。",
+    "week": 9
+  },
+  {
+    "term": "常见刷题套路：双指针与哈希表",
+    "definition": "两数之和用 Map 存 值→下标，一次遍历 O(n)；有序数组两数之和用左右双指针 O(n)。判断回文用左右指针向中间收敛。",
+    "week": 9
+  },
+  {
+    "term": "五个必背工具函数",
+    "definition": "① debounce(fn, delay) 防抖：事件停 delay 后才执行 ② throttle 节流：固定间隔最多执行一次 ③ deepClone 递归深拷贝（Map 记忆化） ④ uniqueBy(arr, key) 按字段去重 ⑤ formatMoney(分) 转元并加千分位。",
+    "week": 9
+  },
+  {
+    "term": "防抖与节流的适用场景",
+    "definition": "防抖用于「最终结果才重要」：搜索联想、表单校验、窗口 resize 后重算布局。节流用于「过程中要持续反馈」：滚动加载、拖拽、鼠标移动轨迹。",
+    "week": 9
+  },
+  {
+    "term": "本周知识地图",
+    "definition": "第 1 天变量与类型 → 第 2 天函数与闭包 → 第 3 天数组对象方法 → 第 4 天流程控制与错误处理 → 第 5 天 ES6 语法糖 → 第 6 天刷题套路。主线是「作用域 → 闭包 → this」，这三个通了 JS 基础就通了。",
+    "week": 9
+  },
+  {
+    "term": "闭卷自测清单",
+    "definition": "能不看资料写出：let/const/var 三点差异、闭包定义加一个使用场景、this 五种指向、map/filter/reduce 各一例、防抖实现。写不出来的就是下周要回补的洞。",
+    "week": 9
   }
 ]
