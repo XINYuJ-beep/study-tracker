@@ -234,7 +234,12 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Semantics(
+          label: '正在加载…',
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     if (_error != null) {
       return HintBlock(
@@ -469,7 +474,12 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Semantics(
+          label: '正在加载…',
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     if (_error != null && _items.isEmpty) {
       return HintBlock(
@@ -690,7 +700,12 @@ class _WhiteboardViewState extends ConsumerState<_WhiteboardView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Semantics(
+          label: '正在加载…',
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     if (_error != null && _cards.isEmpty) {
       return HintBlock(
@@ -942,7 +957,12 @@ class _ListeningViewState extends ConsumerState<_ListeningView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Semantics(
+          label: '正在加载…',
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     if (_error != null) {
       return HintBlock(

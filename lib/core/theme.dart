@@ -10,6 +10,8 @@ class AppColors {
   static const Color ink = Color(0xFF1B2A41);
   /// 金棕色：强调、进度环
   static const Color gold = Color(0xFFA67C3D);
+  /// 金棕色（文字级）：仅用于小号正文/按钮文字，对 #FFFFFF 与 #F7F5F0 均 >=4.5:1（WCAG AA）
+  static const Color goldText = Color(0xFF8F6329);
   /// 纸色：页面背景
   static const Color paper = Color(0xFFF7F5F0);
   /// 卡片白

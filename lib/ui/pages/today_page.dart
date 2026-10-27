@@ -293,7 +293,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
             duration: const Duration(seconds: 6),
             action: SnackBarAction(
               label: '去复习',
-              textColor: AppColors.gold,
+              textColor: AppColors.goldText,
               onPressed: () => context.go('/qa'),
             ),
           ),
@@ -307,7 +307,12 @@ class _TodayPageState extends ConsumerState<TodayPage> {
     final bool dual = MediaQuery.sizeOf(context).width >= AppConstants.breakpointDual;
 
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Semantics(
+          label: '正在加载…',
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
     final Widget header = _TodayHeader(
@@ -452,11 +457,13 @@ class _TodayHeader extends StatelessWidget {
         ),
         IconButton(
           tooltip: '刷新',
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
           icon: const Icon(Icons.refresh),
           onPressed: () => onRefresh(),
         ),
         IconButton(
           tooltip: '设置',
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
           icon: const Icon(Icons.settings_outlined),
           onPressed: onSettings,
         ),
@@ -492,6 +499,8 @@ class _ProgressRing extends StatelessWidget {
         : (dark ? AppColors.darkPrimary : AppColors.ink);
 
     return Semantics(
+      container: true,
+      excludeSemantics: true,
       label: '今日已完成 $done 条，目标 $safeGoal 条，共 $minutes 分钟',
       child: SizedBox(
         width: 168,
@@ -672,7 +681,7 @@ class _ReviewBanner extends StatelessWidget {
               ),
               Text(
                 '去复习',
-                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.gold),
+                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.goldText),
               ),
               const Icon(Icons.chevron_right, size: 18, color: AppColors.gold),
             ],

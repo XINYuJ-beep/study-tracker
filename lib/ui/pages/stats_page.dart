@@ -71,7 +71,12 @@ class _StatsPageState extends ConsumerState<StatsPage> {
 
     if (_loading) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(
+          child: Semantics(
+            label: '正在加载…',
+            child: CircularProgressIndicator(),
+          ),
+        ),
       );
     }
 

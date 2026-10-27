@@ -387,6 +387,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         actions: [
           IconButton(
             tooltip: '刷新',
+            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
             onPressed: _loading || _busy ? null : _load,
             icon: const Icon(Icons.refresh),
           ),
@@ -398,7 +399,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   Widget _buildBody(BuildContext context) {
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Semantics(
+          label: '正在加载…',
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     if (_error != null) {
       return Center(
@@ -468,7 +474,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         ),
         if (_busy)
           Positioned.fill(
-            child: Container(
+            child: Semantics(
+              scopesRoute: true,
+              namesRoute: true,
+              label: _busyText,
+              child: Container(
               color: Colors.black.withValues(alpha: 0.28),
               child: Center(
                 child: Container(
@@ -500,6 +510,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     ],
                   ),
                 ),
+              ),
               ),
             ),
           ),

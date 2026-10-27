@@ -267,7 +267,12 @@ class _QaPageState extends ConsumerState<QaPage> {
 
   Widget _buildReview(ThemeData theme) {
     if (!_reviewLoaded) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Semantics(
+          label: '正在加载…',
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -449,7 +454,12 @@ class _QaPageState extends ConsumerState<QaPage> {
 
   Widget _buildMcq(ThemeData theme) {
     if (!_mcqLoaded) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Semantics(
+          label: '正在加载…',
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
