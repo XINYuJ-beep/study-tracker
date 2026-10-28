@@ -25,7 +25,7 @@ dependencies:
 
   # 国际化 / 日期格式化
   flutter_local_notifications: ^17.2.4
-  workmanager: ^0.5.2
+  workmanager: ^0.10.10
   intl: ^0.19.0
 
   # 图表

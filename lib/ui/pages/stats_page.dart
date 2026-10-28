@@ -70,11 +70,11 @@ class _StatsPageState extends ConsumerState<StatsPage> {
     final bool wide = width >= AppConstants.breakpointNarrow;
 
     if (_loading) {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
           child: Semantics(
             label: '正在加载…',
-            child: CircularProgressIndicator(),
+            child: const CircularProgressIndicator(),
           ),
         ),
       );

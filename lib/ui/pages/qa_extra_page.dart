@@ -234,10 +234,10 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
-      return const Center(
+      return Center(
         child: Semantics(
           label: '正在加载…',
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }
@@ -474,10 +474,10 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
-      return const Center(
+      return Center(
         child: Semantics(
           label: '正在加载…',
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }
@@ -700,10 +700,10 @@ class _WhiteboardViewState extends ConsumerState<_WhiteboardView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
-      return const Center(
+      return Center(
         child: Semantics(
           label: '正在加载…',
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }
@@ -957,10 +957,10 @@ class _ListeningViewState extends ConsumerState<_ListeningView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
-      return const Center(
+      return Center(
         child: Semantics(
           label: '正在加载…',
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }

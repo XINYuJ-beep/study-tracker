@@ -241,11 +241,11 @@ class _PlanPageState extends ConsumerState<PlanPage> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
           child: Semantics(
             label: '正在加载…',
-            child: CircularProgressIndicator(),
+            child: const CircularProgressIndicator(),
           ),
         ),
       );

@@ -126,17 +126,17 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       final svc = ReminderService();
       if (on) {
         final bool granted = await svc.requestPermission();
-        if (!mounted) return;
+      if (!mounted) return;
         setState(() => _permGranted = granted);
         if (!granted) {
           _toast('未授予通知权限，提醒不会弹出。请到系统设置里打开。');
         }
         await svc.schedule(hour: _reminderHour, minute: _reminderMinute);
-        if (!mounted) return;
+      if (!mounted) return;
         _toast('已开启每日提醒：' + _hhmm(_reminderHour, _reminderMinute));
       } else {
         await svc.cancel();
-        if (!mounted) return;
+      if (!mounted) return;
         _toast('已关闭每日提醒');
       }
     } catch (e) {
@@ -238,7 +238,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       // 清空前先落一份回滚备份，失败了不阻断清空流程。
       try {
         final rollback = await BackupService(
-          db.database,
+          await db.database,
         ).exportJson(prefix: BackupService.rollbackPrefix);
         await rollback.length();
       } catch (_) {}
@@ -375,7 +375,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   void _toast(String msg) {
-    if (!mounted) return;
+      if (!mounted) return;
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
@@ -403,10 +403,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   Widget _buildBody(BuildContext context) {
     if (_loading) {
-      return const Center(
+      return Center(
         child: Semantics(
           label: '正在加载…',
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }

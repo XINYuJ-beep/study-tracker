@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../db/tables.dart';
@@ -42,8 +43,9 @@ class BackupService {
     } catch (_) {
       base = null;
     }
-    base ??= await getApplicationDocumentsDirectory();
-    final dir = Directory(p.join(base.path, subDir));
+    final Directory resolved =
+        base ?? await getApplicationDocumentsDirectory();
+    final dir = Directory(p.join(resolved.path, subDir));
     if (!await dir.exists()) {
       await dir.create(recursive: true);
     }

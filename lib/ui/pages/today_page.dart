@@ -307,10 +307,10 @@ class _TodayPageState extends ConsumerState<TodayPage> {
     final bool dual = MediaQuery.sizeOf(context).width >= AppConstants.breakpointDual;
 
     if (_loading) {
-      return const Center(
+      return Center(
         child: Semantics(
           label: '正在加载…',
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }

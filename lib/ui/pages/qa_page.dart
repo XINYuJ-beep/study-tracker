@@ -267,10 +267,10 @@ class _QaPageState extends ConsumerState<QaPage> {
 
   Widget _buildReview(ThemeData theme) {
     if (!_reviewLoaded) {
-      return const Center(
+      return Center(
         child: Semantics(
           label: '正在加载…',
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }
@@ -454,10 +454,10 @@ class _QaPageState extends ConsumerState<QaPage> {
 
   Widget _buildMcq(ThemeData theme) {
     if (!_mcqLoaded) {
-      return const Center(
+      return Center(
         child: Semantics(
           label: '正在加载…',
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       );
     }
