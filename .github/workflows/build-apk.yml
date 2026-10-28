@@ -42,6 +42,98 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      # ---- 还原签名材料：keystore 经 base64 从 Secrets 解出，key.properties 现场生成 ----
+      # 与 android/app/build.gradle.kts 的约定严格一致：
+      #   key.properties 里 storeFile 只写文件名，Gradle 侧统一走 rootProject.file("keystore/$ksName")
+      #   解析基准恒为 android/keystore/<name>
+      - name: Restore signing material
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "--- secrets presence ---"
+          for v in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            eval "val=\$$v"
+            if [ -z "$val" ]; then echo "MISSING: $v"; else echo "OK(${#val} chars): $v"; fi
+          done
+
+          missing=0
+          [ -z "$KEYSTORE_BASE64" ]   && missing=1
+          [ -z "$KEYSTORE_PASSWORD" ] && missing=1
+          [ -z "$KEY_ALIAS" ]         && missing=1
+          [ -z "$KEY_PASSWORD" ]      && missing=1
+          if [ "$missing" = "1" ]; then
+            echo "::error::缺少签名 Secrets（KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD）。"
+            echo "::error::请到 Settings -> Secrets and variables -> Actions 补齐后再重跑。"
+            exit 1
+          fi
+
+          mkdir -p android/keystore
+          echo "$KEYSTORE_BASE64" | base64 -d > android/keystore/study.jks
+          ls -l android/keystore/study.jks
+          echo "--- keystore sha256 ---"
+          sha256sum android/keystore/study.jks
+
+          cat > android/key.properties <<EOF
+          storePassword=$KEYSTORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=study.jks
+          EOF
+          echo "--- key.properties (passwords masked) ---"
+          sed -e 's/^storePassword=.*/storePassword=***/' \
+              -e 's/^keyPassword=.*/keyPassword=***/' android/key.properties
+
+      # keystore 真能被 keytool 打开才算还原成功，否则等构建到签名阶段才炸、排查成本高
+      - name: Verify keystore is readable
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        run: |
+          keytool -list -keystore android/keystore/study.jks \
+            -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" \
+            | sed 's/^/  /'
+          echo "OK: keystore 可读且别名存在"
+
+      # ---- 数据契约校验：assets 里的条目数必须与 lib/core/constants.dart 的常量一致 ----
+      # 不一致会让首启重导逻辑走进未定义分支，宁可构建期失败也不上线错数据
+      - name: Verify data contract
+        run: |
+          echo "--- constants ---"
+          grep -nE 'expectedMcqs|expectedConcepts|expectedStages|expectedStreams|dataVersion' lib/core/constants.dart
+
+          expectedMcqs=$(grep -oE 'expectedMcqs\s*=\s*[0-9]+' lib/core/constants.dart | grep -oE '[0-9]+' | head -1)
+          expectedConcepts=$(grep -oE 'expectedConcepts\s*=\s*[0-9]+' lib/core/constants.dart | grep -oE '[0-9]+' | head -1)
+          expectedStages=$(grep -oE 'expectedStages\s*=\s*[0-9]+' lib/core/constants.dart | grep -oE '[0-9]+' | head -1)
+          expectedStreams=$(grep -oE 'expectedStreams\s*=\s*[0-9]+' lib/core/constants.dart | grep -oE '[0-9]+' | head -1)
+          dataVersion=$(grep -oE 'dataVersion\s*=\s*[0-9]+' lib/core/constants.dart | grep -oE '[0-9]+' | head -1)
+
+          echo "expectedMcqs=$expectedMcqs expectedConcepts=$expectedConcepts"
+          echo "expectedStages=$expectedStages expectedStreams=$expectedStreams dataVersion=$dataVersion"
+
+          [ -z "$expectedMcqs" ] && { echo "::error::constants.dart 里找不到 expectedMcqs"; exit 1; }
+          [ -z "$expectedConcepts" ] && { echo "::error::constants.dart 里找不到 expectedConcepts"; exit 1; }
+
+          ls -l assets/data/
+          # 题库文件名是 questions.json，不是 mcqs.json，别按常量名想当然
+          actualConcepts=$(python3 -c "import json;print(len(json.load(open('assets/data/concepts.json'))))")
+          # questions.json 顶层是 dict（键 recall / mcq），直接 len() 得到的是键数 2，不是业务条数
+          # expectedMcqs 对应的是 mcq 子列表长度
+          actualMcqs=$(python3 -c "import json;print(len(json.load(open('assets/data/questions.json'))['mcq']))")
+          echo "actualConcepts=$actualConcepts actualMcqs=$actualMcqs"
+
+          if [ "$actualConcepts" != "$expectedConcepts" ]; then
+            echo "::error::concepts.json 实际 $actualConcepts 条，常量 expectedConcepts=$expectedConcepts，不一致"
+            exit 1
+          fi
+          if [ "$actualMcqs" != "$expectedMcqs" ]; then
+            echo "::error::questions.json 实际 $actualMcqs 条，常量 expectedMcqs=$expectedMcqs，不一致"
+            exit 1
+          fi
+          echo "OK: 数据契约一致（concepts=$actualConcepts mcqs=$actualMcqs dataVersion=$dataVersion）"
+
       # 已切换到 sqflite：建表 SQL 与增删改查全部手写，
       # 全项目不再有任何代码生成步骤。
       - name: Confirm no code generation needed

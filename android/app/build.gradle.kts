@@ -1,7 +1,21 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+// 从 android/key.properties 读取签名信息。
+// 文件不存在（例如 CI 没注入 Secrets）时 loaded = false，
+// release 构建会直接失败并给出明确原因，绝不静默退回 debug 签名
+// ——否则每次 CI 产出的包签名都不同，手机上每次都得卸载重装。
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+val hasKeystore = keystorePropertiesFile.exists()
+if (hasKeystore) {
+    FileInputStream(keystorePropertiesFile).use { keystoreProperties.load(it) }
 }
 
 android {
@@ -28,13 +42,47 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (hasKeystore) {
+            create("release") {
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                // storeFile 在 key.properties 里只写文件名（如 study.jks），
+                // 路径基准统一钉在 android/keystore/，避免 file() 默认以 android/app/ 为基准造成错位。
+                val ksName = keystoreProperties["storeFile"] as String
+                val ksFile = rootProject.file("keystore/$ksName")
+                if (!ksFile.exists()) {
+                    throw GradleException(
+                        "[SIGN] 找不到 keystore：${ksFile.absolutePath}。" +
+                            "本地请把 study.jks 放到 android/keystore/ 下；CI 请确认「还原签名材料」步骤已把 keystore 解到 android/keystore/。"
+                    )
+                }
+                storeFile = ksFile
+                storePassword = keystoreProperties["storePassword"] as String
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // 内部自用版：沿用 debug 签名，保证 flutter run --release / flutter build apk --release 直接可装。
-            // 注意：debug 签名的 APK 无法上架任何应用商店，也无法覆盖安装到不同签名的旧包上。
-            // 需要转正式签名时：用 keytool 生成 keystore，在本文件外层新增 signingConfigs.release 块，
-            // 并把 key.properties 加进 .gitignore（禁止把口令与 keystore 提交进仓库），此处改为 signingConfigs.getByName("release")。
-            signingConfig = signingConfigs.getByName("debug")
+            // 正式签名：CI 上由 workflow 从 GitHub Secrets 还原 keystore 并生成 key.properties。
+            // 没有 key.properties 时：CI 环境直接构建失败，本地环境退回 debug 但打醒目警告。
+            // CI 里绝不允许静默产出 debug 签名包——那种包覆盖安装会失败，等于白跑一次流水线。
+            if (hasKeystore) {
+                signingConfig = signingConfigs.getByName("release")
+            } else if (System.getenv("CI") != null) {
+                throw GradleException(
+                    "[SIGN] CI 环境缺少 android/key.properties，拒绝产出 release 包。" +
+                        "请检查 GitHub Secrets：KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD 是否齐全，" +
+                        "以及 workflow 里的「还原签名材料」步骤是否成功执行。"
+                )
+            } else {
+                logger.warn("======================================================")
+                logger.warn("[SIGN] 警告：android/key.properties 不存在，release 退回 debug 签名。")
+                logger.warn("[SIGN] 该包无法覆盖安装到正式签名的旧包上，仅限本地临时调试使用。")
+                logger.warn("======================================================")
+                signingConfig = signingConfigs.getByName("debug")
+            }
         }
     }
 }

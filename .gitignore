@@ -40,3 +40,9 @@ tools/*.bak
 *.bak_polish
 *.bak_*
 tools/gen_outline.py.bak
+
+# 签名口令（禁止入库）
+android/key.properties
+android/keystore/
+*.jks
+*.keystore
