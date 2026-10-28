@@ -21,7 +21,9 @@ if (hasKeystore) {
 android {
     namespace = "com.xinyuj.studytracker"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // 不声明 ndkVersion：本项目无任何 C/C++ 原生代码，
+    // 声明它会让 Gradle 强制校验/现场下载 NDK，在 CI 上就是几百 MB 的随机失败源。
+    // （2026-10-28 run 40700839233 因 NDK 包损坏构建失败）
 
     compileOptions {
         // flutter_local_notifications（>=16.x）的 AAR metadata 强制要求开启
