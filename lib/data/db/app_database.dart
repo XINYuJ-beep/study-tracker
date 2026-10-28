@@ -7,13 +7,13 @@ import 'package:sqflite/sqflite.dart';
 import '../../core/constants.dart';
 import 'tables.dart';
 
-/// sqflite 数据库封装：10 张表，schemaVersion 2。
+/// sqflite 数据库封装：10 张表，schemaVersion 3。
 ///
 /// 与原 drift 版保持完全一致的外部契约：
 /// - 类名仍是 AppDatabase，无参构造；
 /// - 数据库文件名仍是 study_tracker.sqlite，路径仍在应用文档目录；
 /// - 打开后执行 PRAGMA foreign_keys = ON；
-/// - version = 2，onCreate 建全部表 + 索引；onUpgrade 补 v1->v2 迁移。
+/// - version = 3，onCreate 建全部表 + 索引；onUpgrade 链式补 v1->v2、v2->v3 迁移。
 ///
 /// 差异：drift 的 db.select/into/update 语法全部去掉，
 /// 改成 sqflite 的 db.query/insert/update/rawQuery。
@@ -26,7 +26,7 @@ class AppDatabase {
   static const String fileName = 'study_tracker.sqlite';
 
   /// schema 版本号
-  static const int schemaVersion = 2;
+  static const int schemaVersion = 3;
 
   /// 打开（或复用）底层连接。所有 repo 都通过它拿 Database。
   Future<Database> get database async {
@@ -64,6 +64,12 @@ class AppDatabase {
         // 逐版本链式升级，新增版本时在末尾追加分支。
         if (from < 2) {
           for (final String sql in kMigrateV1ToV2) {
+            await db.execute(sql);
+          }
+        }
+        // v2 -> v3：cards / mcqs 补 source_ref（题目出处），老数据回填内置题库。
+        if (from < 3) {
+          for (final String sql in kMigrateV2ToV3) {
             await db.execute(sql);
           }
         }

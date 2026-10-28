@@ -107,6 +107,17 @@ const List<String> kMigrateV1ToV2 = <String>[
   "ALTER TABLE checkins ADD COLUMN minutes INTEGER NOT NULL DEFAULT 0",
   "ALTER TABLE checkins ADD COLUMN note TEXT NOT NULL DEFAULT ''",
 ];
+/// schemaVersion 2 -> 3 的迁移语句。
+///
+/// 新增 source_ref：记录每张卡 / 每道选择题的原始出处，格式「类型:定位符」，
+/// 例如 builtin:questions、outline:docs/大纲/模块01.md。
+/// 老库数据没有出处信息，统一回填 builtin:questions。
+const List<String> kMigrateV2ToV3 = <String>[
+  "ALTER TABLE cards ADD COLUMN source_ref TEXT NOT NULL DEFAULT ''",
+  "ALTER TABLE mcqs ADD COLUMN source_ref TEXT NOT NULL DEFAULT ''",
+  "UPDATE cards SET source_ref = 'builtin:questions' WHERE source_ref = ''",
+  "UPDATE mcqs SET source_ref = 'builtin:questions' WHERE source_ref = ''",
+];
 
 /// 性能索引（SPEC 第 16 节：checkins(item_id)、checkins(date) 建索引）
 const List<String> kCreateIndexes = <String>[
@@ -130,7 +141,8 @@ CREATE TABLE IF NOT EXISTS cards (
   type       TEXT NOT NULL,
   stage      INTEGER NOT NULL DEFAULT 0,
   due_date   INTEGER,
-  ease       REAL NOT NULL DEFAULT 2.5
+  ease       REAL NOT NULL DEFAULT 2.5,
+  source_ref TEXT NOT NULL DEFAULT ''
 )''';
 
 /// ====================================
@@ -147,7 +159,8 @@ CREATE TABLE IF NOT EXISTS mcqs (
   answer        INTEGER NOT NULL,
   explain       TEXT,
   wrong_count   INTEGER NOT NULL DEFAULT 0,
-  right_streak  INTEGER NOT NULL DEFAULT 0
+  right_streak  INTEGER NOT NULL DEFAULT 0,
+  source_ref    TEXT NOT NULL DEFAULT ''
 )''';
 
 /// ====================================

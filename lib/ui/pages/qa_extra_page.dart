@@ -526,6 +526,8 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
                 style: theme.textTheme.bodySmall,
               ),
               const Spacer(),
+              SourceTag.ref(q.sourceRef),
+              const SizedBox(width: 8),
               Text('错题池 $_wrongPoolSize 题', style: theme.textTheme.bodySmall),
             ],
           ),

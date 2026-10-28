@@ -299,3 +299,64 @@ class ExplainBox extends StatelessWidget {
     );
   }
 }
+
+/// ----
+/// 题目出处展示：把 `type:locator` 形式的 source_ref 翻译成人话标签。
+///
+/// 取值口径（施工计划 source_ref 一节）：
+///   - `builtin:questions` -> 内置题库
+///   - `outline:<file>`    -> 大纲 · <file>
+///   - `dagang:<file>`     -> 大纲 · <file>
+///   - `manual`            -> 手动录入
+///   - 空串 / null         -> 内置题库（兜底）
+/// ----
+String sourceRefLabel(String? ref) {
+  final String raw = (ref ?? '').trim();
+  if (raw.isEmpty) return '内置题库';
+  final int sep = raw.indexOf(':');
+  if (sep < 0) {
+    return raw == 'manual' ? '手动录入' : raw;
+  }
+  final String type = raw.substring(0, sep);
+  final String locator = raw.substring(sep + 1);
+  switch (type) {
+    case 'builtin':
+      return '内置题库';
+    case 'outline':
+    case 'dagang':
+      return '大纲 · $locator';
+    case 'manual':
+      return '手动录入';
+    default:
+      return '$type · $locator';
+  }
+}
+
+/// 出处小标签（圆角胶囊），复用自问答页原 _SourceTag 视觉。
+class SourceTag extends StatelessWidget {
+  const SourceTag({super.key, required this.label});
+
+  /// 已翻译好的展示文案；传 `sourceRef` 时会自动走 [sourceRefLabel]。
+  factory SourceTag.ref(String? sourceRef) =>
+      SourceTag(label: sourceRefLabel(sourceRef));
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.primary,
+        ),
+      ),
+    );
+  }
+}

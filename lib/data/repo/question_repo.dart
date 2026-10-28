@@ -46,6 +46,7 @@ class McqQuestion {
     this.week,
     this.module,
     this.explain,
+    this.sourceRef = '',
   });
 
   final String id;
@@ -57,6 +58,10 @@ class McqQuestion {
   final int? week;
   final String? module;
   final String? explain;
+
+  /// 题目出处，形如 `builtin:questions` / `outline:xxx.md` / `manual`。
+  /// 空串表示未知，UI 侧按内置题库兜底。
+  final String sourceRef;
 }
 
 /// 复习 / 选择题 / 错题 / 解锁判断。
@@ -254,6 +259,7 @@ class QuestionRepo {
       week: r['week'] as int?,
       module: r['module'] as String?,
       explain: r['explain'] as String?,
+      sourceRef: (r['source_ref'] as String?) ?? '',
     );
   }
 

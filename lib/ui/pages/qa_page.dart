@@ -375,7 +375,7 @@ class _QaPageState extends ConsumerState<QaPage> {
               children: [
                 Row(
                   children: [
-                    _SourceTag(
+                    SourceTag(
                       label: entry.source == ReviewSource.card ? '卡片' : '概念',
                     ),
                     const SizedBox(width: 8),
@@ -558,6 +558,8 @@ class _QaPageState extends ConsumerState<QaPage> {
                 style: theme.textTheme.bodySmall,
               ),
               const Spacer(),
+              SourceTag.ref(q.sourceRef),
+              const SizedBox(width: 8),
               if (q.week != null)
                 Text('第 ${q.week} 周', style: theme.textTheme.bodySmall),
             ],
@@ -672,30 +674,6 @@ class _TabChip extends StatelessWidget {
                 ? theme.colorScheme.onPrimary
                 : theme.colorScheme.onSurface,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SourceTag extends StatelessWidget {
-  const _SourceTag({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        label,
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: theme.colorScheme.primary,
         ),
       ),
     );

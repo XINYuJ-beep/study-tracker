@@ -262,6 +262,7 @@ class Seeder {
           'type': r['type'] as String?,
           'stage': 0,
           'due_date': firstDue,
+          'source_ref': (r['source_ref'] as String?) ?? 'builtin:questions',
         });
       }
 
@@ -288,6 +289,7 @@ class Seeder {
           'question': q['question'] as String,
           'options': jsonEncode(options),
           'answer': answer,
+          'source_ref': (q['source_ref'] as String?) ?? 'builtin:questions',
         });
       }
 
