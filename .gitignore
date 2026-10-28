@@ -31,3 +31,12 @@ android/.gradle/
 # 中间产物
 assets/spec/x/
 *.bak_w*
+
+# 备份与中间产物（2026-10-28 补）
+__pycache__/
+*.pyc
+tools/*.bak
+*.v[0-9]bak
+*.bak_polish
+*.bak_*
+tools/gen_outline.py.bak
