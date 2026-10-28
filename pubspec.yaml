@@ -1,7 +1,7 @@
 name: study_tracker
 description: 学习打卡 App（纯本地离线 · 折叠屏适配）
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.1.1+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
