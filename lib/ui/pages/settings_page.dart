@@ -261,19 +261,23 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     });
   }
 
-  Future<void> _runTask(String text, Future<void> Function() body) async {
+  /// 执行一次性长任务：统一置忙态、兜住异常。
+  /// body 可返回结果文案，非 null 时在任务结束后以 toast 呈现。
+  Future<void> _runTask(String text, Future<String?> Function() body) async {
     if (_busy) return;
     setState(() {
       _busy = true;
       _busyText = text;
     });
+    String? result;
     try {
-      await body();
+      result = await body();
     } catch (e) {
       if (mounted) _toast('出错了：' + e.toString());
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+    if (result != null) _toast(result);
   }
 
   void _showResult(SeedResult r, String okTitle) {
