@@ -24,6 +24,10 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // flutter_local_notifications（>=16.x）的 AAR metadata 强制要求开启
+        // core library desugaring，否则 :app:checkDebugAarMetadata 直接失败。
+        // Kotlin DSL 里属性名必须带 is 前缀，写 Groovy 的 coreLibraryDesugaringEnabled 会编译不过。
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -95,4 +99,10 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+// core library desugaring 所需的脱糖库。版本必须 >= 2.0.4，
+// 2.1.4 是当前与 AGP 8.x / compileSdk 35 搭配的稳定版本。
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
