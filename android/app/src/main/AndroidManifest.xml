@@ -38,17 +38,12 @@
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
-        <!-- WorkManager 重启接收器：设备重启/应用更新后恢复周期任务 -->
-        <receiver
-            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
-            android:enabled="true"
-            android:exported="false"
-            android:directBootAware="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-            </intent-filter>
-        </receiver>
+        <!-- 不要在这里手动声明 androidx.work.impl.background.systemalarm.RescheduleReceiver：
+             work-runtime 自带的 AndroidManifest 已经声明了它（enabled 默认 false，由库运行时按需开关）。
+             手动再写一份 enabled="true" 会让 manifest merger 直接构建失败：
+             Attribute receiver#...RescheduleReceiver@enabled value=(true) is also present at
+             [androidx.work:work-runtime:2.11.2] value=(false)。
+             重启后恢复周期任务靠上面的 RECEIVE_BOOT_COMPLETED 权限 + 库自身声明，无需手写。 -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
