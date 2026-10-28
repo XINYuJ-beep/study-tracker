@@ -1578,5 +1578,265 @@
     "term": "下一阶段该练什么",
     "definition": "把同一个项目重写两遍：第一遍不看笔记，第二遍换一种存储方式。重复实现同一功能比不断换新项目更能练出熟练度。",
     "week": 12
+  },
+  {
+    "term": "类型注解",
+    "definition": "写在变量后面用冒号标出类型，告诉编译器这个东西是什么，写错了当场报错，不用等运行时才发现。",
+    "week": 13
+  },
+  {
+    "term": "类型推断",
+    "definition": "你省略类型标注时，编译器自己按初始值或上下文算出变量该是什么类型，多数场合够用，所以新手不必到处写冒号。",
+    "week": 13
+  },
+  {
+    "term": "静态类型检查",
+    "definition": "在编译阶段就把类型错误挑出来，不用跑起来才崩，重构时改一处类型编译器帮你把牵连的地方全找出来。",
+    "week": 13
+  },
+  {
+    "term": "any 等于关掉检查",
+    "definition": "标成 any 就放弃了这个值的所有类型保护，能不用就不用，用多了等于白上 TypeScript。",
+    "week": 13
+  },
+  {
+    "term": "unknown 比 any 安全",
+    "definition": "unknown 表示还不知道是什么，用之前必须收窄，any 是随便用，拿不准时选 unknown 让编译器盯着你。",
+    "week": 13
+  },
+  {
+    "term": "void 与 undefined",
+    "definition": "函数返回 void 表示不关心返回值，调用处别拿它的结果用；undefined 是一个真实存在的值，两者不是一回事。",
+    "week": 13
+  },
+  {
+    "term": "never 表示不可能",
+    "definition": "用在永远不返回的函数或永远进不去的分支上，比如抛异常、死循环，它也用来做穷尽性检查的兜底。",
+    "week": 13
+  },
+  {
+    "term": "interface 描述对象",
+    "definition": "用 interface 给对象定形状，写清有哪些字段、各是什么类型，对象写错字段名或类型时编译直接报错。",
+    "week": 13
+  },
+  {
+    "term": "可选属性与只读",
+    "definition": "字段名后加问号表示可以不传，加 readonly 表示初始化后不能再改，把契约写进类型而不是靠注释提醒。",
+    "week": 13
+  },
+  {
+    "term": "索引签名",
+    "definition": "对象字段名不固定时用索引签名[键: string]: 类型，告诉编译器任意字符串键都对应同一类值。",
+    "week": 13
+  },
+  {
+    "term": "interface 合并",
+    "definition": "同名 interface 会声明合并，多的字段拼一起；extends 则继承过来，适合给第三方类型做扩展。",
+    "week": 13
+  },
+  {
+    "term": "type 与 interface 取舍",
+    "definition": "对象结构两边都能写，需要合并或 extends 用 interface，需要联合、交叉、映射这类运算就用 type。",
+    "week": 13
+  },
+  {
+    "term": "函数参数注解",
+    "definition": "参数逐个标类型，返回值也标上，标了返回值编译器就会回头检查每条 return 是否都对得上。",
+    "week": 13
+  },
+  {
+    "term": "可选参数与默认值",
+    "definition": "参数后加问号表示可选，且必须排在必选参数之后；给默认值时类型由默认值推断，调用方可传可不传。",
+    "week": 13
+  },
+  {
+    "term": "函数重载",
+    "definition": "同一个函数名按不同参数组合写多份签名，最后一份实现兜底，调用时按签名匹配出对应返回值类型。",
+    "week": 13
+  },
+  {
+    "term": "泛型是类型的参数",
+    "definition": "把类型当成参数传进去，一份代码适配多种类型还保留类型信息，比 any 强在返回类型不会丢。",
+    "week": 13
+  },
+  {
+    "term": "泛型约束",
+    "definition": "用 extends 限定泛型能是什么，比如要求有 length 字段，这样函数体里就能安全访问这个字段。",
+    "week": 13
+  },
+  {
+    "term": "泛型默认值",
+    "definition": "给类型参数设一个不传就用的默认值，比如不写 T 时默认按 unknown 处理，让调用方少写一截，写法是 T = unknown。",
+    "week": 13
+  },
+  {
+    "term": "联合类型",
+    "definition": "用竖线把多个类型连起来表示可以是其中之一，用之前必须先收窄，否则只能访问几种类型共同的成员。",
+    "week": 13
+  },
+  {
+    "term": "交叉类型",
+    "definition": "用 & 把多个类型合并成一个，值必须同时满足全部结构才算合法，常用于给对象叠加额外能力或拼装接口。",
+    "week": 13
+  },
+  {
+    "term": "字面量类型",
+    "definition": "直接拿具体的值当类型，比如只允许 success 或 fail，比宽泛的 string 更精确，能挡住拼错。",
+    "week": 13
+  },
+  {
+    "term": "as const",
+    "definition": "让对象里每个字段都变成只读的字面量类型，编译器就不会把字符串宽泛成 string，做常量表和配置字典时特别顺手。",
+    "week": 13
+  },
+  {
+    "term": "类型断言",
+    "definition": "用 as 告诉编译器我知道这是什么，它不做运行时校验，断言错了编译不报错只会在运行时炸掉。",
+    "week": 13
+  },
+  {
+    "term": "非空断言",
+    "definition": "变量后加感叹号表示我保证它不是 null 或 undefined，纯粹是关掉检查，能靠收窄解决就别用它。",
+    "week": 13
+  },
+  {
+    "term": "类型守卫函数",
+    "definition": "写一个返回类型谓词的函数，用 is 标出收窄后的类型，调用后编译器就认这个结果，适合复杂判断。",
+    "week": 13
+  },
+  {
+    "term": "可辨识联合",
+    "definition": "每种情况带一个共同的字段值当标记，switch 这个字段就能自动收窄，安全写多分支就靠它。",
+    "week": 13
+  },
+  {
+    "term": "穷尽性检查",
+    "definition": "switch 所有分支写完后在 default 里把值赋给 never，将来新增一种情况忘处理编译器立刻报错。",
+    "week": 13
+  },
+  {
+    "term": "typeof 在类型位置",
+    "definition": "在类型位置上写 typeof 变量能取出这个变量的类型，省得为了写类型把同样的结构再声明一遍。",
+    "week": 13
+  },
+  {
+    "term": "keyof 取键集合",
+    "definition": "keyof 对象类型得到所有键组成的联合类型，配合索引访问就能写出跟着对象自动变的工具类型。",
+    "week": 13
+  },
+  {
+    "term": "索引访问类型",
+    "definition": "用 T['某个键'] 的写法从类型里取字段类型，像查对象取值一样查类型，还能配合 keyof 遍历所有键批量取。",
+    "week": 13
+  },
+  {
+    "term": "映射类型",
+    "definition": "在类型上遍历键做批量改写，比如一次把全部字段变可选或只读，内置的工具类型底层都是它实现的。",
+    "week": 13
+  },
+  {
+    "term": "条件类型",
+    "definition": "写成 A extends B ? X : Y 这种三元式，类型层面按条件分支决定结果，联合类型碰到它会逐项分发，是高级工具类型的核心。",
+    "week": 13
+  },
+  {
+    "term": "infer 提取类型",
+    "definition": "在条件类型里用 infer 把某段类型占住再取出来，取函数返回值类型、数组元素类型都靠它。",
+    "week": 13
+  },
+  {
+    "term": "Partial 与 Required",
+    "definition": "Partial 把所有字段变可选，Required 变必填，做更新参数和补全默认值这两件事最常用。",
+    "week": 13
+  },
+  {
+    "term": "Pick 与 Omit",
+    "definition": "Pick 挑出几个字段组成新类型，Omit 去掉几个字段，从大类型裁出小类型不用再重写一遍。",
+    "week": 13
+  },
+  {
+    "term": "Record 造字典",
+    "definition": "Record 用键集合和值类型快速造出字典类型，比索引签名更明确，键的取值范围能直接写死。",
+    "week": 13
+  },
+  {
+    "term": "Exclude 与 Extract",
+    "definition": "Exclude 从联合里去掉一部分，Extract 只留一部分，做类型筛选的时候直接套用。",
+    "week": 13
+  },
+  {
+    "term": "NonNullable 与 ReturnType",
+    "definition": "NonNullable 去掉 null 和 undefined，ReturnType 取函数返回值类型，省得手动抄一遍。",
+    "week": 13
+  },
+  {
+    "term": "tsc 与 tsconfig",
+    "definition": "tsc 是编译器，tsconfig.json 是它的说明书，告诉它编译哪些文件、编成什么目标、开哪些检查。",
+    "week": 13
+  },
+  {
+    "term": "strict 系列开关",
+    "definition": "strict 一次打开所有严格检查，新项目别关，旧项目逐个开 strictNullChecks 这类单项慢慢收紧。",
+    "week": 13
+  },
+  {
+    "term": "noImplicitAny",
+    "definition": "严格模式下禁止不写类型的参数隐式变成 any，一开这个选项就逼着你把函数签名补齐，正好是新手打类型基本功的地方。",
+    "week": 13
+  },
+  {
+    "term": "strictNullChecks",
+    "definition": "让 null 和 undefined 变成独立类型，不再能随便塞给别的类型，副作用最明显的一项检查。",
+    "week": 13
+  },
+  {
+    "term": "target 与 module",
+    "definition": "target 决定编译产出什么语法版本，module 决定用什么模块格式，两个是不同维度别混。",
+    "week": 13
+  },
+  {
+    "term": "outDir 与 rootDir",
+    "definition": "rootDir 定源码根目录，outDir 定产出目录，两处对齐才能让编译结果保持原目录结构。",
+    "week": 13
+  },
+  {
+    "term": "类型声明文件",
+    "definition": "后缀 d.ts 的文件只放类型不放代码，专门给没有类型的库补形状，编译时读取但不影响运行。",
+    "week": 13
+  },
+  {
+    "term": "declare 关键字",
+    "definition": "declare 用来声明一个运行时已经存在的值，只给编译器看，不会生成任何实际执行的代码。",
+    "week": 13
+  },
+  {
+    "term": "给 JS 库补类型",
+    "definition": "库没自带类型时先查社区类型包，没有再自己写 d.ts 声明用到的部分，够用就行不必写完整。",
+    "week": 13
+  },
+  {
+    "term": "allowJs 与渐进迁移",
+    "definition": "开 allowJs 让 JS 和 TS 混着编译，老项目从单个文件改起，不用一次性全部重写。",
+    "week": 13
+  },
+  {
+    "term": "把 JS 改成 TS 的顺序",
+    "definition": "先把 tsconfig 的 allowJs 打开，从入口文件开始一个一个改成 .ts，边改边修类型报错，最后全部改完再开严格模式。",
+    "week": 13
+  },
+  {
+    "term": "第三方库类型来源",
+    "definition": "类型来自库自带的 types 字段、社区维护的类型包、或自己写的声明文件，排查按这个顺序来。",
+    "week": 13
+  },
+  {
+    "term": "类型检查与运行时边界",
+    "definition": "编译器只在写代码时挑错，类型在编译后全部被抹掉，所以接口返回的数据在运行期间不受任何校验，该判空还是得判。",
+    "week": 13
+  },
+  {
+    "term": "W13 知识地图",
+    "definition": "本周主线是给 JS 加类型：注解与推断打底，接口和泛型建模，联合收窄做分支，工具类型做加工。",
+    "week": 13
   }
 ]
