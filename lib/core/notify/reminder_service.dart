@@ -22,6 +22,7 @@ import '../date_utils.dart';
 import '../../data/db/app_database.dart';
 import '../../data/repo/concept_repo.dart';
 import '../../data/repo/question_repo.dart';
+import '../../data/repo/plan_repo.dart';
 import '../../data/repo/settings_repo.dart';
 
 /// WorkManager 里这条任务的唯一名字。改名会导致旧任务残留，别动。
@@ -157,7 +158,8 @@ class ReminderService {
     // 3. 算数：未完成条目数 + 到期复习数。
     final questionRepo = QuestionRepo(database);
     final conceptRepo = ConceptRepo(database);
-    final int remaining = await settings.remainingItemCount();
+    final PlanRepo planRepo = PlanRepo(database);
+    final int remaining = (await planRepo.todayPendingItems()).length;
     final int dueCards = await questionRepo.dueReviewCount();
     final int dueConcepts = await conceptRepo.dueConceptCount();
 
@@ -169,13 +171,13 @@ class ReminderService {
     }
 
     // 4. 预计分钟：剩余条目按日均 minutes 估算，复习按每张 1 分钟。
-    final int estMinutes = remaining * AppConstants.avgMinutesPerItem +
+    final int estMinutes = await planRepo.todayEstimateMinutes() +
         dueCards +
         dueConcepts;
 
     // 5. 文案严格按 SPEC 第 14 章。
     final String title = kAppName;
-    var body = '今天还有 ' + total.toString() + ' 条没打卡';
+    var body = '今天计划 ' + total.toString() + ' 条，还没打卡';
     if (estMinutes > 0) {
       body = body + '，预计 ' + estMinutes.toString() + ' 分钟';
     }

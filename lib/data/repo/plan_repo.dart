@@ -118,6 +118,28 @@ class PlanRepo {
         : cursor;
   }
 
+  /// 今日待做的条目（已复用 todayRecommendation 的同一口径）。
+  /// 用于通知文案：不再拿全库剩余量乘系数，避免出现「预计三万分钟」。
+  Future<List<Item>> todayPendingItems() async {
+    return todayRecommendation(limit: AppConstants.recommendLimit);
+  }
+
+  /// 今日待做的预计分钟：直接对条目真实 minutes 求和。
+  /// 兜底逻辑：若未来数据里 minutes 全为 0，则退回 recommendLimit ×
+  /// avgMinutesPerItem 的保守估计，保证不会显示 0 分钟。
+  Future<int> todayEstimateMinutes() async {
+    final List<Item> items = await todayPendingItems();
+    if (items.isEmpty) return 0;
+    var sum = 0;
+    for (final it in items) {
+      sum += it.minutes;
+    }
+    if (sum <= 0) {
+      return items.length * AppConstants.avgMinutesPerItem;
+    }
+    return sum;
+  }
+
   Future<List<Item>> todayRecommendation(
       {int limit = AppConstants.recommendLimit}) async {
     final today = effectiveToday();
