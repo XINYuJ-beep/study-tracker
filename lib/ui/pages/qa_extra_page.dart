@@ -27,6 +27,7 @@ import '../../core/providers.dart';
 import '../../data/db/tables.dart';
 import '../../data/repo/concept_repo.dart';
 import '../../data/repo/question_repo.dart';
+import '../widgets/concept_popup.dart';
 import '../widgets/qa_widgets.dart';
 
 /// 四个模块各自的阶段。
@@ -309,8 +310,8 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
               children: <Widget>[
                 Text('这条解释说的是哪个概念？', style: theme.textTheme.labelMedium),
                 const SizedBox(height: 10),
-                Text(
-                  item.prompt,
+                ConceptTappable(
+                  text: item.prompt,
                   style: theme.textTheme.titleMedium?.copyWith(height: 1.6),
                 ),
               ],
@@ -540,8 +541,8 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
             ),
           ),
           const SizedBox(height: 20),
-          Text(
-            q.question,
+          ConceptTappable(
+            text: q.question,
             style: theme.textTheme.titleMedium?.copyWith(height: 1.5),
           ),
           const SizedBox(height: 16),

@@ -29,6 +29,7 @@ import '../../data/repo/plan_repo.dart';
 import '../../data/repo/question_repo.dart';
 import '../../core/providers.dart';
 import 'qa_extra_page.dart';
+import '../widgets/concept_popup.dart';
 import '../widgets/qa_widgets.dart';
 
 /// 页面内两个模块。
@@ -575,8 +576,8 @@ class _QaPageState extends ConsumerState<QaPage> {
             ),
           ),
           const SizedBox(height: 20),
-          Text(
-            q.question,
+          ConceptTappable(
+            text: q.question,
             style: theme.textTheme.titleMedium?.copyWith(height: 1.5),
           ),
           const SizedBox(height: 16),
@@ -607,8 +608,8 @@ class _QaPageState extends ConsumerState<QaPage> {
                 children: [
                   Text('解析', style: theme.textTheme.labelLarge),
                   const SizedBox(height: 6),
-                  Text(
-                    q.explain!,
+                  ConceptTappable(
+                    text: q.explain!,
                     style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
                   ),
                 ],

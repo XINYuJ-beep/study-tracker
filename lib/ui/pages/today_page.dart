@@ -13,6 +13,7 @@ import '../../data/repo/checkin_repo.dart';
 import '../../data/repo/question_repo.dart';
 import '../../data/repo/concept_repo.dart';
 import '../widgets/checkin_sheet.dart';
+import '../widgets/concept_popup.dart';
 
 /// 今日页：今日进度的唯一入口。
 ///
@@ -793,8 +794,8 @@ class _ItemCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      item.watch,
+                    ConceptTappable(
+                      text: item.watch,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
@@ -802,16 +803,16 @@ class _ItemCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 6),
-                    Text(
-                      '练：${item.practice}',
+                    ConceptTappable(
+                      text: '练：${item.practice}',
                       style: theme.textTheme.bodySmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (item.output.isNotEmpty) ...<Widget>[
                       const SizedBox(height: 4),
-                      Text(
-                        '产出：${item.output}',
+                      ConceptTappable(
+                        text: '产出：${item.output}',
                         style: theme.textTheme.bodySmall,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

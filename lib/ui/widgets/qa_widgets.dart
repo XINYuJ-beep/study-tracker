@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'concept_popup.dart';
 
 /// ----
 /// 题目自评按钮：三档（不会 / 模糊 / 会）。
@@ -290,9 +293,13 @@ class ExplainBox extends StatelessWidget {
         children: <Widget>[
           Text('解析', style: theme.textTheme.labelLarge),
           const SizedBox(height: 6),
-          Text(
-            text,
-            style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+          Consumer(
+            builder: (BuildContext ctx, WidgetRef ref, Widget? _) {
+              return ConceptTappable(
+                text: text,
+                style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+              );
+            },
           ),
         ],
       ),

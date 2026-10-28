@@ -205,4 +205,13 @@ class ConceptRepo {
     return (rows.first['c'] as int?) ?? 0;
   }
 
+  /// 全量概念（问号词典 / 全局名词弹卡用）。
+  ///
+  /// 一次性把 concept 表全部取回，供前端建内存索引做最长匹配。
+  /// 当前题库量级约 368 条，单次全量代价可忽略。
+  Future<List<Concept>> allConcepts() async {
+    final rows = await db.query(T.concepts, orderBy: 'id ASC');
+    return rows.map(Concept.fromMap).toList();
+  }
+
 }
