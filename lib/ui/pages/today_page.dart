@@ -59,6 +59,8 @@ class _TodayPageState extends ConsumerState<TodayPage> {
   int _dueReview = 0;
   /// 到期复习概念数
   int _dueConcept = 0;
+  /// 到期复习选择题数
+  int _dueMcq = 0;
 
   /// 当前模块标题（取推荐队列首条所属周所属模块，取不到则空）
   String _currentModule = '';
@@ -107,6 +109,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
       final int streak = await planRepo.currentStreak();
       final int due = await questionRepo.dueReviewCount();
       final int dueConcept = await conceptRepo.dueConceptCount();
+      final int dueMcq = await questionRepo.dueMcqCount();
       final int goal = await _readDailyGoal();
       final String module = await _moduleNameOf(items);
 
@@ -119,6 +122,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
         _streak = streak;
         _dueReview = due;
         _dueConcept = dueConcept;
+        _dueMcq = dueMcq;
         _dailyGoal = goal;
         _currentModule = module;
         _loading = false;
@@ -270,7 +274,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
   /// 不引入第三方通知库，全部走 ScaffoldMessenger。
   void _maybeShowBootNotice() {
     if (_bootNoticeShown) return;
-    final int total = _dueReview + _dueConcept;
+    final int total = _dueReview + _dueConcept + _dueMcq;
     if (total <= 0) return;
     _bootNoticeShown = true;
 
@@ -280,6 +284,9 @@ class _TodayPageState extends ConsumerState<TodayPage> {
     }
     if (_dueConcept > 0) {
       parts.add(_dueConcept.toString() + ' 个概念');
+    }
+    if (_dueMcq > 0) {
+      parts.add(_dueMcq.toString() + ' 道选择题');
     }
     final String msg = '今天有 ' + parts.join(' + ') + ' 到期，先复习再学新。';
 
@@ -360,10 +367,11 @@ class _TodayPageState extends ConsumerState<TodayPage> {
           ),
         ],
         const SizedBox(height: 24),
-        if (_dueReview > 0 || _dueConcept > 0) ...<Widget>[
+        if (_dueReview > 0 || _dueConcept > 0 || _dueMcq > 0) ...<Widget>[
           _ReviewBanner(
             cardCount: _dueReview,
             conceptCount: _dueConcept,
+            mcqCount: _dueMcq,
             onTap: () => context.go('/qa'),
           ),
           const SizedBox(height: 16),
@@ -634,11 +642,13 @@ class _ReviewBanner extends StatelessWidget {
   const _ReviewBanner({
     required this.cardCount,
     required this.conceptCount,
+    required this.mcqCount,
     required this.onTap,
   });
 
   final int cardCount;
   final int conceptCount;
+  final int mcqCount;
   final VoidCallback onTap;
 
   /// 两路到期合并成一句人话，空的一路不显示。
@@ -649,6 +659,9 @@ class _ReviewBanner extends StatelessWidget {
     }
     if (conceptCount > 0) {
       parts.add(conceptCount.toString() + ' 个概念');
+    }
+    if (mcqCount > 0) {
+      parts.add(mcqCount.toString() + ' 道选择题');
     }
     if (parts.isEmpty) {
       return '没有待复习内容';
