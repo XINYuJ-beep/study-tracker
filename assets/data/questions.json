@@ -6638,7 +6638,7 @@
     "显示图像"
    ],
    "answer": 0,
-   "explain": "CPU 负责取指、译码、执行，内存和硬盘负责存储。",
+   "explain": "答案是执行指令并做运算。CPU 负责取指、译码、执行，是唯一真正做计算判断的部件；联网靠网卡、存文件靠硬盘、显示图像靠显卡，它们只是搬运或呈现数据。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6653,7 +6653,7 @@
     "自动加密"
    ],
    "answer": 1,
-   "explain": "RAM 是易失性存储，断电即失；硬盘才是持久化。",
+   "explain": "答案是全部丢失。RAM 是易失性存储，靠持续供电维持数据，断电即清空；硬盘是持久化介质，所以不会自动写入硬盘，也不会永久保留或自动加密。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6668,7 +6668,7 @@
     "ls"
    ],
    "answer": 0,
-   "explain": "pwd = print working directory；ls 是列出内容。",
+   "explain": "答案是 pwd，print working directory，打印当前工作目录。cd 切换目录、ls 列目录内容、rm 删文件，都不显示路径。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6683,7 +6683,7 @@
     "推送到远程"
    ],
    "answer": 1,
-   "explain": "add 暂存，commit 提交，push 推送。",
+   "explain": "答案是把改动放入暂存区。git 分工作区、暂存区、本地仓库三层，add 只走第一跳，commit 才进本地仓库。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6698,7 +6698,7 @@
     "443"
    ],
    "answer": 1,
-   "explain": "HTTP 80，HTTPS 443，SSH 22，MySQL 3306。",
+   "explain": "答案是 80。HTTP 明文默认 80，HTTPS 加密默认 443，22 是 SSH 端口，3306 是 MySQL 端口，这四个端口常被放在同一题里混考。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6713,7 +6713,7 @@
     "资源不存在"
    ],
    "answer": 3,
-   "explain": "4xx 客户端错误，5xx 服务端错误。",
+   "explain": "答案是资源不存在。4xx 是客户端错误，请求的地址或资源找不到；重定向是 3xx，请求成功是 2xx，服务器内部错误是 500。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6728,7 +6728,7 @@
     "只能存数字"
    ],
    "answer": 1,
-   "explain": "list 可变有序；tuple 不可变。",
+   "explain": "答案是可变、有序。list 支持按下标访问、可增删改，能装任意类型；不可变的是 tuple，无序的是 set 和 dict（dict 现保留插入顺序）。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6743,7 +6743,7 @@
     "注释"
    ],
    "answer": 1,
-   "explain": "缩进即语法，错缩进会直接报错。",
+   "explain": "答案是代码块层级。Python 靠缩进划分代码块的归属，不用花括号，缩进错了逻辑就错了，所以它不是运算优先级、类型或注释标记。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6758,7 +6758,7 @@
     "2"
    ],
    "answer": 2,
-   "explain": "返回元素个数。",
+   "explain": "答案是 3。[1,2,3] 有三个元素，len 返回元素个数，不看元素值大小，也不是下标最大值，所以不是 2，也不会报错。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6773,7 +6773,7 @@
     "自动压缩"
    ],
    "answer": 2,
-   "explain": "上下文管理器保证异常时也关闭。",
+   "explain": "答案是自动关闭文件。with 是上下文管理器语法，代码块结束或中途抛异常都会自动 close，避免文件句柄泄漏；它不做加密、备份或压缩。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6788,7 +6788,7 @@
     "def"
    ],
    "answer": 0,
-   "explain": "def 定义函数，class 定义类。",
+   "explain": "答案是 class。class 定义类，def 定义函数和方法，type 用来查类型，struct 是 C 语言的结构体关键字，Python 里没有。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6803,7 +6803,7 @@
     "定义函数"
    ],
    "answer": 2,
-   "explain": "避免程序因异常直接崩溃。",
+   "explain": "答案是捕获并处理异常。try 里放可能出错的代码，except 接住并处理，避免程序直接崩掉；导入用 import，循环用 for/while，函数用 def。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6818,7 +6818,7 @@
     "[0, 1, 2]"
    ],
    "answer": 0,
-   "explain": "列表推导式，range(3) 是 0,1,2。",
+   "explain": "答案是 [0,2,4]。range(3) 生成 0、1、2，各乘 2 得 0、2、4；不是从 1 开始的 [2,4,6]，也不是原列表。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6833,7 +6833,7 @@
     "加速 Python"
    ],
    "answer": 0,
-   "explain": "不同项目依赖版本互不干扰。",
+   "explain": "答案是隔离项目依赖。venv 给每个项目独立的解释器和 site-packages，避免版本冲突；它不联网编辑、不虚拟电脑，也不会加速 Python 运行。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6848,7 +6848,7 @@
     "发 HTTP 请求"
    ],
    "answer": 3,
-   "explain": "最常用的 Python HTTP 客户端。",
+   "explain": "答案是发 HTTP 请求。requests 封装 GET、POST 和响应解析，是爬虫调接口的常用库；编译靠编译器，画图靠 matplotlib。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6863,7 +6863,7 @@
     "后进先出"
    ],
    "answer": 3,
-   "explain": "LIFO，函数调用栈就是典型。",
+   "explain": "答案是后进先出。栈只在同一端进出，最后压入的最先弹出，即 LIFO；先进先出是队列，随机访问是数组的特点，栈并不限元素类型。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6878,7 +6878,7 @@
     "只能存字符串"
    ],
    "answer": 0,
-   "explain": "FIFO，任务队列常用。",
+   "explain": "答案是先进先出。队列从尾部入队、头部出队，先来的先被处理，即 FIFO，排队买票就是这模型；后进先出是栈，两者常被对调混考。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6893,7 +6893,7 @@
     "O(n²)"
    ],
    "answer": 1,
-   "explain": "平均常数，最坏 O(n)。",
+   "explain": "答案是 O(1)。哈希表用哈希函数把键直接算出数组下标，一步定位；O(n) 是线性查找，O(log n) 是二分或平衡树，O(n²) 是双层循环。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6908,7 +6908,7 @@
     "自动加密"
    ],
    "answer": 2,
-   "explain": "如 header/nav/main/article。",
+   "explain": "答案是让结构和含义更清晰，利于 SEO 与无障碍。header、nav、article 这类标签让搜索引擎和读屏软件读懂结构，它不会让 CSS 失效也不加密。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6923,7 +6923,7 @@
     "样式"
    ],
    "answer": 0,
-   "explain": "超链接目标。",
+   "explain": "答案是链接地址。href 写目标 URL，决定点一下跳去哪里；图标用 img 的 src，标题用 title，样式用 class 或 style。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6938,7 +6938,7 @@
     "图片格式"
    ],
    "answer": 1,
-   "explain": "也是无障碍读屏的依据。",
+   "explain": "答案是图片无法显示时的替代文字。alt 供加载失败时显示、供读屏软件朗读、供搜索引擎识别；宽度用 width，缓存和格式由服务器与扩展名决定。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6953,7 +6953,7 @@
     "自动外边距"
    ],
    "answer": 2,
-   "explain": "布局更好算。",
+   "explain": "答案是宽高含 padding 和 border。content-box 只算内容区，加内边距和边框会撑大盒子；border-box 让宽高即最终尺寸。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6968,7 +6968,7 @@
     "justify-content"
    ],
    "answer": 0,
-   "explain": "justify-content 沿主轴对齐。",
+   "explain": "答案是 flex-direction。定主轴横竖，决定 justify-content 管哪条轴；flex-wrap 管换行，align-items 管交叉轴。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6983,7 +6983,7 @@
     "class"
    ],
    "answer": 2,
-   "explain": "行内 > id > class > 标签。",
+   "explain": "答案是行内样式。优先级为行内样式高于 id 高于 class 高于标签，所以 id 和 class 都压不过它；只有 !important 能反制行内样式。",
    "source_ref": "builtin:questions"
   },
   {
@@ -6998,7 +6998,7 @@
     "没有区别"
    ],
    "answer": 0,
-   "explain": "const 是常量绑定，对象内容仍可改。",
+   "explain": "答案是 const 声明后不能重新赋值。const 和 let 都是块级作用域，差别只在能否重新绑定；但 const 声明的对象内部属性仍可修改。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7013,7 +7013,7 @@
     "=== 不做类型转换"
    ],
    "answer": 3,
-   "explain": "推荐一律用 ===。",
+   "explain": "答案是 === 不做类型转换。== 会先转类型再比，所以 1 和字符串 1 判等；=== 要求类型和值都相同才为真，比较时优先用 ===。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7028,7 +7028,7 @@
     "一种数据类型"
    ],
    "answer": 1,
-   "explain": "常用于封装私有变量。",
+   "explain": "答案是函数记住并访问其定义时的作用域。内层函数被外层返回后，仍能读到外层变量，这就是闭包；常用来做私有状态和函数工厂。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7043,7 +7043,7 @@
     "所有匹配元素"
    ],
    "answer": 2,
-   "explain": "querySelectorAll 才返回全部。",
+   "explain": "答案是第一个匹配的元素。querySelector 只返首个命中的 Element，找不到返回 null；要拿全部匹配必须用 querySelectorAll。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7058,7 +7058,7 @@
     "修改样式"
    ],
    "answer": 0,
-   "explain": "可绑定多个，不覆盖。",
+   "explain": "答案是绑定事件处理函数。给元素挂 click、input 等回调，触发时执行，可批量绑定；发请求用 fetch，建元素用 createElement。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7073,7 +7073,7 @@
     "关闭浏览器后仍保留"
    ],
    "answer": 3,
-   "explain": "需手动 JSON 序列化。",
+   "explain": "答案是关闭浏览器后仍保留。localStorage 持久存本地，需手动清除，容量约 5MB；关闭即清空的是 sessionStorage。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7088,7 +7088,7 @@
     "start/run/end"
    ],
    "answer": 2,
-   "explain": "状态不可逆。",
+   "explain": "答案是 pending、fulfilled、rejected。待定、成功、失败三态，从 pending 变成后两者就不可逆；open/close 不是标准状态。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7103,7 +7103,7 @@
     "创建线程"
    ],
    "answer": 2,
-   "explain": "只能在 async 函数内使用。",
+   "explain": "答案是等待 Promise 完成并取结果。await 在 async 函数内暂停执行，直到 Promise 落地再拿值或抛错；它不发送请求也不创建线程。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7118,7 +7118,7 @@
     "字符串"
    ],
    "answer": 0,
-   "explain": "需要 await 后再 .json()。",
+   "explain": "答案是 Promise。fetch 立即返回 Promise，须用 .then 或 await 取 Response，再调 .json() 解析。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7133,7 +7133,7 @@
     "测试代码"
    ],
    "answer": 0,
-   "explain": "常见有静态托管和服务器部署。",
+   "explain": "答案是把代码放到服务器上供人访问。部署包含打包、上传、配环境与启动服务；写代码是开发，备份是防灾，测试是验证，三者都不等于上线。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7148,7 +7148,7 @@
     "只做桌面端"
    ],
    "answer": 1,
-   "explain": "媒体查询 + 弹性布局。",
+   "explain": "答案是同一套页面适配不同屏幕。靠弹性布局、媒体查询和相对单位让手机、平板、桌面都可用；只做单端或用图片代替文字都不叫响应式。",
    "source_ref": "builtin:questions"
   },
   {
@@ -7163,7 +7163,7 @@
     "存代码"
    ],
    "answer": 1,
-   "explain": "别人（和未来的你）看的第一份文档。",
+   "explain": "答案是说明项目怎么用、怎么跑。README 写安装、运行、配置和对接方式，让新人和未来的自己快速上手；它不存图片、不存数据库、也不存业务代码。",
    "source_ref": "builtin:questions"
   },
   {
