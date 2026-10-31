@@ -877,37 +877,37 @@
         {
           "id": "w4d1-p1",
           "topic": "def 定义函数与调用",
-          "desc": "用 def 名字(参数): 定义，函数体靠缩进；定义只是把函数对象绑到名字上，不执行，调用时从内存找到函数对象对应代码块执行；不带括号的写法 f 打印出的是对象地址，调用必须写 f()。",
+          "desc": "【机制】def 是给一段代码起名字并把它存进内存的动作。执行到 def 这一行时，Python 创建函数对象（记录代码位置、参数表、默认值），并把函数名绑定到当前作用域的命名空间里。注意：def 语句执行完不会运行函数体，函数体要等你写 函数名() 时才跑。所以文件从上往下读到 def 只是“登记”，不是“执行”。\n【调用】调用时 Python 新建一个栈帧，把实参按顺序填进形参名，从函数体第一行开始跑，遇到 return 就带着返回值弹栈；没有 return 的隐式返回 None。这个 None 是最常见的坑之一：print(f()) 打出 None，不是 bug 是没写 return。\n【示例】def greet(name): return '你好,' + name。这里 name 是形参，'小明' 是实参，greet('小明') 返回 '你好,小明'。调用表达式本身就是一个值，可以赋值、可以塞进列表、可以当参数传出去。\n【踩坑】①先调用后定义：Python 按行执行，函数定义写在调用之后会 NameError；但定义写在后面、调用写在 if __name__=='__main__' 块里则可以。②函数名拼错或大小写不一致，报 NameError 而不是沉默失败。③在函数内部 print 而不是 return，后面想拿这个值做运算就拿不到。\n【查找】Python 官方教程第 4.7 节 Defining Functions。",
           "level": 1
         },
         {
           "id": "w4d1-p2",
           "topic": "形参与实参、位置与关键字传参",
-          "desc": "函数定义里的叫形参，调用时传的叫实参；按位置传要求数量一致，按关键字传不受顺序限制，混用时位置参数必须在关键字参数前面，否则报 SyntaxError。",
+          "desc": "【机制】形参是函数定义时写在括号里的占位名，实参是调用时真正传进去的值，两者只在栈帧里发生一次绑定。位置参数按从左到右的顺序对应，关键字参数按名字对应，所以 greet(name='小红') 可以打乱顺序。Python 的规则是：位置参数必须全部在关键字参数之前，greet('a', name='b') 会 TypeError: got multiple values for argument 'name'。\n【示例】def area(w, h): return w*h。area(3, 4) 与 area(h=4, w=3) 结果一样都是 12；area(3, h=4) 也合法。可读性上，参数超过两个就建议调用时写关键字，调用点一眼看得懂哪个是哪个。\n【坑】①数量不匹配：TypeError: area() missing 1 required positional argument: 'h' 或 takes 2 positional arguments but 3 were given。②名字打错：area(w=3, hh=4) → TypeError: unexpected keyword argument 'hh'。\n【推论】错误信息里带参数名，说明参数名是接口的一部分，改参数名属于破坏性变更，会打断所有用关键字调用它的代码。\n【查找】Python 官方教程 4.8 节 More on Defining Functions。",
           "level": 2
         },
         {
           "id": "w4d1-p3",
           "topic": "默认参数、可变参数与返回值",
-          "desc": "默认参数靠后设，如 def f(a, b=10)；可变参数 *args 收成元组、**kwargs 收成字典；return 返回一个值，多个值用逗号会自动打包成元组，没写 return 时函数返回 None，不要靠 None 参与运算。",
+          "desc": "【机制】三类参数在同一个括号里共存，顺序写死：普通形参 → 默认参数 → *args → **kwargs。默认参数的价值是不传就用，写了就覆盖，注意默认值在 def 执行时求值一次并保存在函数对象里，不是每次调用重新算。*args 把所有多余的位置实参收成 tuple，**kwargs 把所有多余的关键字实参收成 dict，二者名字里的星号才是关键，args/kwargs 只是约定俗成的叫法。\n【示例】def f(a, b=2, *args, **kw): return (a,b,args,kw)。f(1) → (1,2,(),{})；f(1,3,5,6,x=9) → (1,3,(5,6),{'x':9})。返回值可以是单个值、多个值（逗号分隔即 tuple）、容器、None。\n【踩坑】① return a, b 拿到的是 tuple，不是两个变量，要 a, b = f() 解包。② *args 已经是 tuple，别再 list(*args) 绕圈，直接 list(args)。③函数既 return 又 print 属于职责混乱，学习阶段先坚持只 return。\n【查找】Python 官方教程 4.9.2 与 4.9.3 节。",
           "level": 2
         },
         {
           "id": "w4d1-p4",
           "topic": "默认参数的可变对象大坑",
-          "desc": "def f(lst=[]) 的默认值只在定义时求值一次，每次调用共用同一个列表，导致数据越积越多；正确写法是默认设 None，函数体内 if lst is None: lst = []。这是 Python 最常见的新手坑之一。",
+          "desc": "【机制】默认参数的值只在 def 那一行被执行的时候求值一次，之后永久保存在函数对象的 __defaults__ 里。所以 def f(lst=[]): 里的那个 [] 是全局唯一的同一个列表对象，即使 f 一次都没调用过，它也已经存在。每次不传参调用，用的都是这一个列表，append 的累积效果全部留在它身上。\n【示例】def f(lst=[]): lst.append(1); return lst。f() → [1]；f() → [1,1]；f() → [1,1,1]。而 f([9]) → [9,1]，因为传了新列表，没动默认值。验证手段：print(f.__defaults__) 直接看到那个被污染的列表。\n【正确写法】def f(lst=None):\n    if lst is None: lst = []\n    lst.append(1); return lst\n这里用 is None 判断而不是 if not lst，因为空列表 [] 在布尔判断里是假，会把调用方明确传进来的空列表误判成没传。\n【同等坑】默认值是任何可变对象都会中，dict、set、自定义对象同理；不可变对象（int、str、tuple、None）安全。\n【查找】Python 官方教程 4.9.1 Default Argument Values 有一句话专门点破这一点。",
           "level": 3
         },
         {
           "id": "w4d1-p5",
           "topic": "局部变量、全局变量与作用域 LEGB",
-          "desc": "查找顺序是 Local、Enclosing、Global、Built-in；函数内部只读全局变量没问题，要改全局必须写 global 声明，否则会当局部变量处理并报 UnboundLocalError；嵌套函数改外层变量用 nonlocal。",
+          "desc": "【机制】LEGB 是 Python 查找变量名的四层顺序：Local（当前函数内部）→ Enclosing（外层嵌套函数）→ Global（模块层）→ Builtins（内置名）。查找只往上一层走，第一处命中就停，绝不回头。赋值语句会让 Python 在编译期就认定这个名字属于“当前局部”，这就是 UnboundLocalError 的起源：你在函数里读了 x 又在函数里给 x 赋值，x 在外层有值也没用，函数内部它是本地变量，读的时候还没赋过值。\n【global 与 nonlocal】函数内要给模块级变量重新赋值必须写 global x；要修改外层嵌套函数的变量必须写 nonlocal x。不写就会在本地新建一个同名变量，外层那个不动。\n【示例】x=1\ndef f(): print(x)  # 1，纯读不加 global 也行\ndef g(): x = 2    # 新建局部，外层 x 不变\ndef h(): global x; x = 2  # 真的改了全局\n【坑】①全局变量可读不可改，改必声明。②global 是坏味道，函数依赖外部可变状态会让调试变难，优先通过参数传入、通过返回值传出。③列表这种可变对象 append 不需要 global（因为没重新绑定名字），但 dict 重建就需要，规则是“重新绑定才要声明”。\n【查找】Python 官方 FAQ《Why am I getting an UnboundLocalError》。",
           "level": 3
         },
         {
           "id": "w4d1-p6",
           "topic": "函数拆分与工具函数的职责单一",
-          "desc": "一个函数只做一件事，输入靠参数、输出靠 return，不靠全局变量传递；判断是否该拆的简单标准是能否用一句不含“并且”的话说清它的作用；本周产出的 10 个工具函数必须各自可单独测试。",
+          "desc": "【机制】函数拆分是把一段 60 行的流程切成 5 个 10 行的函数：一个负责总体流程（编排），其余各自只做一件事。好处有三条：名字代替注释、每块可以单独测试、出 bug 时阅读范围缩小。判据是“一句话能说清它干什么”，如果需要用“并且”描述，说明该再拆。\n【示例】把通讯录程序拆成 load_contacts()、save_contacts(cs)、find_contact(cs, kw)、add_contact(cs)、main()。main 只负责菜单循环和调用，不碰文件读写细节；find_contact 只负责匹配，不负责打印。\n【职责单一】工具函数不 print，只返回结果，打印交给上层。这样同一个查找函数可以复用到搜索、删除、修改三处，而不是复制三份代码。参数和返回值要设计成“输入数据、输出数据”，不依赖全局变量，否则拆分就成了假拆分。\n【坑】①拆得太碎（三行一个函数）反而增加跳转成本。②函数之间通过全局变量通信，等于没解耦。③命名含糊（handle、process、do_xxx）会让拆分白做，名字必须说清动作和对象。\n【查找】Python 官方教程 4.6 节 Defining Functions 对代码组织的建议。",
           "level": 2
         }
       ]
@@ -918,37 +918,37 @@
         {
           "id": "w4d2-p1",
           "topic": "open 的模式与文件句柄",
-          "desc": "open(path, mode) 常用模式 r 读、w 覆盖写、a 追加、r+ 读写；w 会把文件清空，误用等于删数据；不加 b 是文本模式，加 b 是二进制模式；必须 close 释放句柄，否则数据可能没刷盘。",
+          "desc": "【机制】open(file, mode, encoding) 返回一个文件对象（句柄），它内部保存着操作系统分配的文件描述符和当前位置指针。mode 决定权限：r 只读、w 只写（文件存在则清空、不存在则创建）、a 追加写入、x 独占创建（文件已存在就报错）、加 b 表示二进制、加 + 表示读写皆可。r+ 和 w+ 的区别是 w+ 会先清空文件。\n【示例】f = open('a.txt', 'r', encoding='utf-8')，读完后必须 f.close()。不 close 的后果：文件描述符不释放，大量打开会 OSError: Too many open files；写模式下缓冲区没刷盘，进程崩溃时数据丢失。\n【坑】①w 模式误用于想保留原内容，结果整文件清空——这是新手最常见的毁数据操作。②mode 里 b 和 encoding 不能同时给，二进制模式下没有编码概念。③文本模式在 Windows 下会把 \n 悄悄转成 \r\n，二进制模式不会。\n【推论】写文件想“先清空再写”用 w，想“接着往后加”用 a；日志一律用 a。\n【查找】Python 官方文档 Built-in Functions 的 open 条目。",
           "level": 2
         },
         {
           "id": "w4d2-p2",
           "topic": "with 语句自动关闭文件",
-          "desc": "with open(...) as f 即使在块内抛异常也能保证 close，等价于 try/finally；写法固定为 with open(path, 'r', encoding='utf-8') as f:，不要写成 f = with ...，也不要手动再 close。",
+          "desc": "【机制】with open(...) as f: 依赖上下文管理器协议：进入时调用 __enter__ 拿到文件对象，退出时无论正常结束、return、break 还是抛异常，都会调用 __exit__ 关闭文件。它把“一定执行”这件事交给语言保证，而不是靠你手动写 close。\n【示例】with open('a.txt', 'r', encoding='utf-8') as f:\n    data = f.read()\n出了 with 块 f 已关闭，再 f.read() 会 ValueError: I/O operation on closed file。\n【对比】手动 open/close 有两个破口：中间任一行抛异常，close 就永远不会执行；代码里有多处 return 时容易漏掉某个分支的 close。with 把这两个破口同时封住。\n【多个文件】with open('a') as fa, open('b') as fb: 一行同时开两个，退出时自动都关，不用嵌套。\n【坑】①把 with 里的变量拿到外面继续用（文件对象已关）。②在 with 块里把整个文件读成列表后还想再读第二遍，需要 f.seek(0)。③自己写类时忘记实现 __exit__，with 会 TypeError。\n【查找】Python 官方教程 7.2 节 Reading and Writing Files。",
           "level": 2
         },
         {
           "id": "w4d2-p3",
           "topic": "编码参数与乱码根因",
-          "desc": "不指定 encoding 时 Windows 用 GBK、Linux 用 UTF-8，跨平台必乱码；统一写 encoding='utf-8'；读取报 UnicodeDecodeError 通常是文件本身不是 UTF-8，可用 errors='ignore' 或先转码；Windows 下写文件还要注意换行符被自动转成 \\r\\n。",
+          "desc": "【机制】文本模式下 open 会自动做一次字符串 ↔ 字节的解码/编码，encoding 参数指定用哪张码表。不写 encoding 时 Python 取值来自 locale.getpreferredencoding()，Linux 通常是 UTF-8，Windows 简体中文环境是 GBK/cp936。乱码根因只有一个：写入时用 A 编码，读取时用 B 编码，字节没变但解释成了别的字。\n【排查顺序】①确认文件真实编码：Linux 上 file -i a.txt 或 python 里 chardet.detect；②读取时显式写 encoding='utf-8'；③如果报 UnicodeDecodeError，说明字节序列不符合该编码，可以用 errors='ignore' 或 errors='replace' 先读出来（会丢字/出 �），但正确做法是找到正确编码；④写出时用 utf-8-sig 可以让 Excel 正常打开带 BOM 的 CSV，普通场景不要用。\n【坑】①只在一台机器上测试通过，换到另一台报 UnicodeDecodeError——就是默认编码不同。②中文变问号的不可逆情况：先用 errors='replace' 写坏文件，原字节已经丢失。③JSON 文件不是 UTF-8 时 json.load 会报错，因为 JSON 规范要求 UTF-8。\n【铁律】凡涉及中文的 open，一律显式写 encoding='utf-8'，一条不漏。\n【查找】Python 官方文档 codecs 模块与 open 的 encoding 说明。",
           "level": 3
         },
         {
           "id": "w4d2-p4",
           "topic": "读文件的三种方式",
-          "desc": "read() 一次读全部返回字符串，read(n) 读 n 个字符，readlines() 返回行列表带换行符；最常用的是 for line in f 逐行迭代，内存友好；line.strip() 去掉末尾换行，否则比较时会不相等。",
+          "desc": "【机制】文件对象是流式的、位置指针只向前走的读取器。三种读法消耗指针的方式不同：read() 一次读完剩下全部（大文件会把内存吃光）；readline() 读一行（含行尾换行符）；readlines() 一次读成字符串列表。更常用的第四种是直接 for line in f: 迭代，它按需逐行读，内存占用最小，适合大文件。\n【示例】with open('a.txt', encoding='utf-8') as f:\n    for line in f:\n        print(line.rstrip('\n'))\n注意每行末尾带着 \n，不处理的话 print 会多空一行，用 rstrip 或 .strip() 清掉。\n【指针陷阱】读完之后指针在文件末尾，再调用任何读方法都返回空字符串/空列表，不是 bug。要重读必须 f.seek(0)。同一个文件对象不能既用 for 迭代又用 readline 混着读，迭代会预读缓冲，行数的心理预期会错位。\n【选择】小配置文件用 read()；日志/CSV 大文件用 for line in f 或 readlines（中小文件）；一次读固定字节用 read(n)。\n【查找】Python 官方教程 7.2.1 节 Methods of File Objects。",
           "level": 2
         },
         {
           "id": "w4d2-p5",
           "topic": "CSV 读写与 csv 模块",
-          "desc": "原生 split(',') 无法处理字段内含逗号的情况；标准做法是 import csv，用 csv.reader(f) 逐行读成列表、csv.writer(f).writerow(row) 写；读出来全是字符串，数字要手动 int()/float() 转换。",
+          "desc": "【机制】csv 模块负责两件手工 split 做不好的事：一是按 RFC4180 规则处理带逗号、引号、换行的字段（字段里有逗号时用双引号包起来，字段里有双引号时写成两个双引号）；二是换行控制。csv.reader 返回迭代器，每行是一个字符串列表；csv.DictReader 用表头把每行变成 dict，按列名取值，代码比按下标取好读得多。\n【示例】\nimport csv\nwith open('a.csv', newline='', encoding='utf-8') as f:\n    for row in csv.DictReader(f):\n        print(row['姓名'], row['金额'])\n写：with open('a.csv','w',newline='',encoding='utf-8') as f:\n    w = csv.DictWriter(f, fieldnames=['姓名','金额']); w.writeheader(); w.writerows(rows)\n【坑】①open 时漏写 newline=''：csv 模块自己会写 \r\n，再叠加文本模式的换行转换，Windows 下会出现空行。②用 split(',') 代替 csv 模块，遇到“含逗号的字段”整行错位。③读出来全是字符串，金额要自己 int()/float() 转，否则 '10'+'5' 得 '105'。④Excel 打开中文乱码，用 encoding='utf-8-sig' 输出。\n【查找】Python 官方文档 csv 模块 Module Contents。",
           "level": 2
         },
         {
           "id": "w4d2-p6",
           "topic": "FileNotFoundError 与文件存在性判断",
-          "desc": "打开不存在的文件（r 模式）抛 FileNotFoundError；不要靠 if os.path.exists 先判断再打开（存在竞态），直接 try: open 再 except FileNotFoundError 处理更可靠；w/a 模式会自动创建文件，不报这个错。",
+          "desc": "【机制】FileNotFoundError 是 OSError 的子类，errno 为 2（ENOENT），在 open 一个不存在的路径读取时抛出。注意区分场景：r 模式打不开不存在文件报错，w/a 模式会自动创建不报错，所以这个异常基本只出现在读取侧和目录不存在的写入侧。\n【错误做法】if os.path.exists(p): open(p) 这种“先判断再打开”存在竞态窗口（TOCTOU）：判断为真到真正 open 之间文件可能被别的进程删掉，照样崩。正确姿态是直接 try/except 捕获，让文件系统在一步内完成判断和打开。\n【示例】\ntry:\n    with open(p, encoding='utf-8') as f:\n        data = f.read()\nexcept FileNotFoundError:\n    data = ''  # 首次运行，用默认值\n【目录不存在】写文件时如果父目录缺失，同样报 FileNotFoundError，需要 os.makedirs(os.path.dirname(p), exist_ok=True) 先建目录，注意 dirname 可能为空串要跳过。\n【坑】①用 except Exception 全吞，把 PermissionError（没权限）、IsADirectoryError（路径是目录）也一起吃掉，掩盖真实问题。②只捕获不记录，出了事无法定位，至少 log 一下路径。\n【查找】Python 官方文档 errno 模块与 OSError 子类列表。",
           "level": 3
         }
       ]
@@ -959,37 +959,37 @@
         {
           "id": "w4d3-p1",
           "topic": "try/except 的结构与异常匹配",
-          "desc": "try 里放可能出错的代码，except 后接异常类型匹配，按书写顺序从上往下匹配，命中第一个就跳出；except Exception as e 能拿到异常对象打印原因；finally 无条件执行，用于释放资源。",
+          "desc": "［try/except 的结构与异常匹配］try 块里只放“可能抛异常的那一句”，except 后面接异常类型做匹配，解释器按书写顺序从上往下逐个比对，一旦命中第一个匹配的类型就执行该分支并跳出整个结构，后面的 except 不再看。所以子类必须写在父类前面：except ValueError 放在 except Exception 前面，否则 ValueError 永远轮不到，被 Exception 一把捞走。用 except XxxError as e 可以拿到异常对象，print(e) 打印的是异常携带的消息，str(e) 与 e.args 都能取到，排查时把它记进日志比 print 一句“出错了”有用得多。finally 不管有没有异常都执行，用来兜底释放文件句柄、数据库连接、锁，哪怕 try 里 return 了、except 里又抛了新异常，finally 也会先跑完再往外走。典型的四段形态是 try / except / else / finally 各就各位：try 只放风险句，except 处理已知错误，else 放“成功了才做的事”，finally 做清理。与 Java 的 catch 不同，Python 允许一个 except 匹配多个类型，写法是 except (ValueError, TypeError) as e，省得分支写两遍。判断一道题该不该用 try 的标准很简单：这段代码的正常输入下会不会抛异常？不会就别包，包了反而把真正的 bug 藏起来。",
           "level": 1
         },
         {
           "id": "w4d3-p2",
           "topic": "裸 except 的危害与精确捕获",
-          "desc": "光写 except: 会吞掉包括 KeyboardInterrupt、SystemExit 在内的一切异常，导致 Ctrl+C 都停不下来且掩盖真实 bug；应该按类型精确捕获 ValueError、KeyError、FileNotFoundError，非预期异常要让它抛出来。",
+          "desc": "［裸 except 的危害与精确捕获］写成 except: 后面什么都不接，等于捕获 BaseException，把 KeyboardInterrupt（Ctrl+C）和 SystemExit（sys.exit()）一起吞掉，结果是程序既不会因为异常退出，也停不下来，只能杀进程；更隐蔽的后果是真实 bug 被静默吞没，日志里干干净净，线上却数据不对。这比崩溃严重，崩溃至少能看见。正确做法是按能预期的具体类型精确捕获，ValueError、TypeError、KeyError、IndexError、FileNotFoundError、ZeroDivisionError 各管各的，写清楚在哪个分支里干什么。确实需要兜底时（比如主循环最外层防止整个服务挂掉），用 except Exception as e 并把 traceback 完整记进日志，traceback.format_exc() 或 logging.exception() 都行，同时绝不能用 pass 假装没事——except Exception: pass 是这行里最难查的毒瘤，因为它意味着“我知道可能出错，但我不在乎”，而写代码的人往往并不知道错在哪。另外注意 except (ValueError, TypeError): 这种元组写法是先求值元组再匹配，与 except ValueError, TypeError: 的旧式写法在 Python 3 里已不合法。判断标准一句话：能不能说出这个 except 具体在防什么？说不出就说明它是裸的。",
           "level": 3
         },
         {
           "id": "w4d3-p3",
           "topic": "常见内置异常类型辨析",
-          "desc": "ValueError 值不对（int('abc')）、TypeError 类型不对（'1'+1）、KeyError 字典键不存在、IndexError 列表越界、ZeroDivisionError 除零、AttributeError 属性不存在；出题时看清触发条件再选类型。",
+          "desc": "［常见内置异常类型辨析］这六种必须一眼分清，出题时先看触发条件再选类型。ValueError 是“类型对、值不对”：int('abc') 参数确实是 str（类型合法），但内容转不成整数，同理 int('3.5')、float('x')、list.remove(不存在的值)、解包数量不符 ValueError: too many values to unpack。TypeError 是“类型本身就不对”：'1' + 1 把 str 和 int 相加、len(5) 对整数取长度、调用函数时参数个数或关键字名不符也是 TypeError。KeyError 是字典取值时键不存在，d['nokey']；注意 d.get('nokey') 不抛异常而返回 None，这是两者最关键的分界。IndexError 是序列用下标越界，lst[10] 但长度只有 3；切片越界不报错，只返回能取到的部分，这个反直觉点常被考。ZeroDivisionError 是除零，1/0；注意 1//0 和 1%0 同样是它，浮点 1/0.0 也是它，不是 inf。AttributeError 是对象没有这个属性或方法，'abc'.append(1)、None.foo 都属于它。另有两个高频易混：NameError 是变量名从未定义就被引用，UnboundLocalError 是函数内赋值过但执行路径上未赋值，后者是 NameError 的子类。",
           "level": 2
         },
         {
           "id": "w4d3-p4",
           "topic": "else 分支与异常捕获范围",
-          "desc": "try/except/else/finally 四段：else 在 try 无异常时执行，用于放“成功后要做的事”，使 try 块尽量只有一句可能出错的语句；把大段逻辑塞进 try 会让 except 误抓到不相关的错误。",
+          "desc": "［else 分支与异常捕获范围］完整形态是 try / except / else / finally 四段，else 在 try 块全程无异常时执行，语义是“成功之后紧接着要做的事”。它存在的唯一理由就是把 try 的覆盖范围压到最小：假如把读取、解析、计算、写回全塞进 try，那么解析阶段的一个 ValueError 和写回阶段的一个 OSError 会混在同一个作用域里，except OSError 甚至可能误抓到根本不属于它的错误，排查时你不知道异常来自哪一行。正确写法是 try 里只有一句 open，然后 else 里做后续处理，这样每个 except 对应的风险点唯一。finally 与 else 并存时的执行顺序是：无异常 → try → else → finally；有异常且被捕获 → try 中断 → except → finally（else 跳过）；有异常未被捕获 → try 中断 → finally → 异常继续往外抛。另一条硬规则：try 里不要放大段循环，循环里某次迭代失败会让整个循环退出且状态半残；要逐条容错就把 try 放进循环体内。还有一个细节：return 写在 try 里不会跳过 finally，如果 finally 里也有 return，它会覆盖掉 try 里 return 的值，这是极隐蔽的 bug。",
           "level": 3
         },
         {
           "id": "w4d3-p5",
           "topic": "raise 与自定义异常",
-          "desc": "用 raise ValueError('手机号格式错误') 主动抛异常；自定义异常写 class MyError(Exception): pass，继承 Exception；自定义异常的作用是让调用方能用类型区分业务错误，而不是靠解析错误字符串。",
+          "desc": "［raise 与自定义异常］用 raise ValueError('手机号格式错误') 主动抛异常，括号里的字符串会成为异常消息，能被 str(e) 取到并直接展示给用户，所以消息要写成人能看懂的话，不要写“err_code_1003”。单独写 raise 不带参数只能在 except 块里用，作用是原样重新抛出当前异常，用于记录日志后不改变异常类型的场景；在 except 外裸写 raise 是 RuntimeError: No active exception to reraise。自定义异常用 class MyError(Exception): pass 即可，必须继承 Exception（不要继承 BaseException，那是给系统退出信号留的），命名后缀统一加 Error。它的价值在于让调用方能按类型分流：except InsufficientBalanceError 就去引导充值，except 别的就走通用处理，而不是靠 in '余额不足' in str(e) 这种字符串匹配——后者一旦文案改字就全崩。派生建议建个基类 AppError(Exception) 再分子类，这样上层可以 except AppError 统一兜，底层又保留细分类型。写 raise MyError('xxx') from e 可以把原始异常挂在 __cause__ 上，traceback 里显示成“The above exception was the direct cause of...”，链式溯源比直接吞掉原始信息清晰得多。",
           "level": 2
         },
         {
           "id": "w4d3-p6",
           "topic": "健壮输入程序的重试循环模式",
-          "desc": "标准写法是 while True: 里 try: v=int(input(...)); break，except ValueError: print('请输入数字') 后继续循环；校验收敛在函数内，非法输入永远不把程序打崩，这是“健壮”的具体判据。",
+          "desc": "［健壮输入程序的重试循环模式］标准骨架是 while True 包住 try，try 里做 int(input(...)) 赋值并立刻 break，except ValueError 里 print 提示后什么也不做让循环继续，这样任何非法输入都不会让程序崩，直到拿到合法值才出去。三处关键细节：一是 input 的返回值即使输入 123 也是字符串 '123'，必须显式 int 转换，转换失败正是 ValueError 的来源；二是 break 必须放在转换语句之后、同一个 try 里，如果放在 try 外面，那么转换成功与否都会退出，容错就失效了；三是校验规则要收敛在函数里，写成 ask_int(prompt, lo, hi) 这种形态，调用方拿到的一定是已校验过的值，不要在业务代码里零散地散落 if 判断。若还要限制范围，就在转换成功后加 if not lo <= v <= hi: print 提示并 continue，注意 continue 在 while 里与 break 同理要放在 try 内部。想要限定尝试次数的版本，就用 for _ in range(3) 代替 while True，循环耗尽后抛异常或返回 None，两头都要有出路，不能静默退出。判断一段输入处理是否健壮的具体判据：随便喂空串、纯字母、负数、超大数、前后带空格，都不能看到 Traceback。",
           "level": 2
         }
       ]
@@ -1000,37 +1000,37 @@
         {
           "id": "w4d4-p1",
           "topic": "import 的三种写法与命名空间",
-          "desc": "import m 用 m.f() 调用、from m import f 直接 f()、from m import f as g 起别名；import 把模块对象整体绑定到名字，from import 只绑定指定成员；同名函数被后导入的覆盖，可用别名避免冲突。",
+          "desc": "［import 的三种写法与命名空间］import 模块 会把整个模块对象绑定到当前命名空间的一个名字上，调用时要带前缀写 m.f()，好处是来源一目了然，看代码就知道 f 出自哪个模块。from m import f 只把指定成员绑定进来，调用直接写 f()，短但会丢失来源信息，成员多了容易和本地名字撞车。from m import f as g 起别名，用于解决命名冲突（比如同时要用两个库的 parse）或简化过长的名字。关键区别在绑定粒度：import m 绑定的是模块对象，之后通过 m.xxx 访问的所有属性都是运行时动态查的，模块内改了变量这边立刻可见；from m import x 在导入那一刻就把值复制到本地，之后再改 m.x，本地的 x 仍是旧值，对可变对象则共享同一个引用。同名覆盖的规则是“后导入的赢”，先 from a import f 再 from b import f，最终 f 指向 b 的；本地 def f() 写在 import 之后也会把导入的 f 顶掉，这与 import 本身无关，就是普通的名字绑定顺序。规范上一条硬建议：不要在函数内部写 import 来“躲循环导入”，那会让每次调用都走一次模块查找（虽然 sys.modules 命中很快，但仍是坏味道），循环导入要从结构上拆，把公共部分抽到第三个模块。",
           "level": 1
         },
         {
           "id": "w4d4-p2",
           "topic": "模块的 __name__ 与主程序入口",
-          "desc": "脚本直接运行时 __name__ 等于 '__main__'，被 import 时等于模块名；因此把测试代码写在 if __name__ == '__main__': 下面，避免被导入时自动执行，这是模块可复用的前提。",
+          "desc": "［模块的 __name__ 与主程序入口］每个模块都有一个内置变量 __name__，被 Python 直接执行时它的值是字符串 '__main__'，被别的模块 import 时它的值是模块自己的名字（包内模块则是 'pkg.mod' 这种带点的全名）。因此把自测代码写在 if __name__ == '__main__': 下面，就能做到“直接跑这个文件时执行测试，被别人导入时不执行”，这是模块能被安全复用的前提。反例很好识别：如果你在模块顶层写了 print 或调了一个耗时函数，别人一 import 整个程序就先跑一遍这些副作用，日志被污染、启动变慢、甚至真的发起了网络请求。注意 __name__ 与 __file__ 是两个东西，__file__ 是文件路径（Python 3.9+ 为绝对路径），判断“是否主程序”只能看 __name__。另一个高频考点：__main__ 模块与以 '__main__' 为名导入的模块是两个不同对象，所以 from a import 某变量时若 a 是被当主程序跑的，会出现“同一文件被加载两次、状态各一份”的诡异现象，注册表、单例、全局缓存都会失效，这也是为什么入口文件里不要放需要唯一性的状态。写库的时候还有个习惯值得养：把逻辑全放进函数，主程序段只留参数解析和函数调用两行。",
           "level": 2
         },
         {
           "id": "w4d4-p3",
           "topic": "pip 安装与国内镜像源",
-          "desc": "pip install 包名 安装、pip list 查看、pip uninstall 卸载、pip freeze > requirements.txt 导出依赖；国内常用 -i https://pypi.tuna.tsinghua.edu.cn/simple 指定镜像加速，配好后可写入 pip.conf 持久生效。",
+          "desc": "［pip 安装与国内镜像源］常用五条：pip install 包名 装最新版，pip install 包名==1.2.3 锁定精确版本，pip list 列出已装（pip list --outdated 看可升级），pip uninstall 包名 卸载，pip freeze > requirements.txt 把当前环境依赖及其精确版本导出，换机器用 pip install -r requirements.txt 一键复现。国内加速用 -i 指定索引源，最稳的是清华 https://pypi.tuna.tsinghua.edu.cn/simple，阿里 https://mirrors.aliyun.com/pypi/simple，中科大 https://pypi.mirrors.ustc.edu.cn/simple。每次都敲 -i 太烦，持久化写配置文件：Linux/macOS 下 ~/.pip/pip.conf 或 ~/.config/pip/pip.conf，Windows 下 %APPDATA%\\pip\\pip.ini，内容为 [global] 段里 index-url = https://pypi.tuna.tsinghua.edu.cn/simple 和 trusted-host = pypi.tuna.tsinghua.edu.cn，也可以直接 pip config set global.index-url 那条命令来写。三个高频坑：一是 pip 装到了系统 Python 而你实际用的是另一个解释器，症状是装完 import 还是找不到，解决是统一用 python3 -m pip install 而不是裸 pip，前者与当前解释器强绑定；二是装包需要编译时报 gcc 或 Python.h 缺失，优先找有没有现成的 wheel，别无脑装 build-essential；三是权限错误就加 --user 装到用户目录，不要习惯性 sudo pip 污染系统环境。",
           "level": 1
         },
         {
           "id": "w4d4-p4",
           "topic": "venv 虚拟环境与依赖隔离",
-          "desc": "python3 -m venv .venv 创建，source .venv/bin/activate 激活（Windows 是 .venv\\Scripts\\activate），deactivate 退出；虚拟环境把依赖装在项目目录内，避免 A 项目升级库搞崩 B 项目；requirements.txt 用于在新环境复现。",
+          "desc": "［venv 虚拟环境与依赖隔离］创建用 python3 -m venv .venv，激活 Linux/macOS 是 source .venv/bin/activate，Windows 是 .venv\\Scripts\u0007ctivate，退出用 deactivate。激活后命令行提示符前会出现 (.venv)，此时 which python 指向 .venv/bin/python、pip 也指向环境内那一份，装的所有包都落在项目目录里，不污染系统。它解决的核心问题是版本冲突：A 项目要 django 4.2、B 项目要 django 5.0，全局只能有一个版本，隔离后各装各的。三个必须知道的点。第一，.venv 目录绝对不能提交进 git，加进 .gitignore；别人拿到代码自己建环境。第二，复现靠 requirements.txt 而不是拷环境目录，venv 里的绝对路径写死了，换机器即废。第三，激活只是改了 PATH 环境变量，是个纯 shell 层的便利，任何脚本或 IDE 都可以绕过激活直接用 .venv/bin/python 来跑，所以“忘了激活就装到全局”的解药是永远用 .venv/bin/python -m pip 这种全路径写法。另外 venv 只管 Python 包，不管 Python 解释器本身的版本；要锁解释器版本得用 pyenv 或 conda，这是两码事。虚拟环境目录也不要嵌套在会被递归扫描的路径下，否则 grep、备份、IDE 索引都会被它拖慢。",
           "level": 2
         },
         {
           "id": "w4d4-p5",
           "topic": "包与目录结构的层级关系",
-          "desc": "包是带 __init__.py 的目录，包内可再套子包；import 路径按包目录层级书写，如 from pkg.sub import mod；__init__.py 在导入包时执行，可用来暴露常用接口或做初始化。",
+          "desc": "［包与目录结构的层级关系］包就是带 __init__.py 的目录（Python 3.3+ 有命名空间包可以没有这个文件，但常规项目一律加上，显式好过隐式），包里面再套带 __init__.py 的子目录就是子包，一层层构成点分路径。导入路径必须和目录层级一一对应：目录 pkg/sub/mod.py，写法就是 import pkg.sub.mod 或 from pkg.sub import mod 或 from pkg.sub.mod import 函数名，路径里少一层或多一层都直接 ModuleNotFoundError。__init__.py 在包第一次被导入时执行，且整个进程生命周期只执行一次，所以能用它做初始化（建连接池、读配置）和暴露常用接口——在 __init__.py 里 from .core import run，外部就能直接 from pkg import run，调用方不必知道内部布局，这是封装边界。但注意副作用式初始化是双刃剑：只要有人 import 包里任何一个子模块，__init__.py 就先跑，所以你写在里面的重活会被“顺手”触发。相对导入用 . 表示当前包、.. 表示上级包，只能在包内的模块里用，直接在命令行执行某个子模块文件时相对导入会报 ImportError: attempted relative import with no known parent package，正确姿势是 python -m pkg.sub.mod 从外部以模块方式启动。最后一层现实约束：包名不要和标准库或常用第三方库撞名。",
           "level": 3
         },
         {
           "id": "w4d4-p6",
           "topic": "模块搜索路径与同名文件遮蔽",
-          "desc": "import 时按 sys.path 顺序查找：脚本所在目录、PYTHONPATH、标准库、site-packages；自己在项目里建了 json.py 之类的同名文件会把标准库顶掉，导致标准库功能异常，这是极难排查的坑。",
+          "desc": "［模块搜索路径与同名文件遮蔽］import 时的查找顺序是 sys.path 列表一个个试：第一项是脚本所在目录（注意是入口脚本所在目录，不是被导入文件所在目录，这个细节坑极多），然后是 PYTHONPATH 环境变量里的路径，然后是标准库目录，最后是 site-packages 里的第三方包。找到第一个同名模块就停止，后面的再也不看，这就是遮蔽机制。最经典的坑是自己建了个 json.py 或 random.py、string.py、email.py 放在项目根目录，于是 import json 拿到的是你那个空文件，标准库 json 整块功能消失，报错信息还很不像“名字撞了”，因为第三方库内部 import json 时也跟着中招，报的是 AttributeError: module 'json' has no attribute 'loads'，新手常以为是 json 库坏了。排查三板斧：print(json.__file__) 看实际加载的是哪个文件；print(sys.path) 看搜索顺序；python -c 'import json; print(json.__file__)' 在干净目录下对照。规避规则很直白：文件名不要用标准库名字，测试文件别叫 test.py（会和 pytest 的用例收集规则打架），也不要在项目根建 utils.py 这种一个人写一份就容易撞的名字。要临时改搜索路径用 sys.path.insert(0, '/some/dir')，插到最前面优先级最高，但它会持久影响整个进程，只在脚本入口或调试时用；正式项目走安装成包这条正路，别靠改 sys.path 硬凑。",
           "level": 3
         }
       ]
@@ -1041,37 +1041,37 @@
         {
           "id": "w4d5-p1",
           "topic": "class 定义类与实例化",
-          "desc": "class 类名: 定义类，类名大驼峰；obj = 类名() 创建实例；__init__ 是初始化方法，创建实例时自动调用，self 指代当前实例且必须写在首位但不是普通参数。",
+          "desc": "［class 定义类与实例化］class 是自造类型的关键字，写法是 class 类名: 然后缩进写类体，类名习惯用大驼峰（如 class Contact:）。类体里两类东西：属性与方法。定义完类不等于有了对象，类只是模板，要拿到能用的东西必须实例化，写法是 c = Contact()，这一步调用的是 __init__ 做初始化，返回一个新对象。机制上 Python 每次执行 Contact() 都会在堆上分一块新内存装实例属性，类本身只在内存里存一份。示例：class Dog: 里写 def __init__(self, name): self.name = name，然后 a = Dog('旺财')、b = Dog('小黑')，a.name 与 b.name 各是各的，互不影响。踩坑三条：一是类体里写 name = 'x' 那是类属性，所有实例共享，别指望它是每个对象私有的；二是 __init__ 不是构造函数而是初始化器，真正创建对象的是 __new__，初学只要知道写 __init__ 就对了；三是实例化时必须把 __init__ 除 self 外的参数全喂齐，否则直接 TypeError: __init__() missing 1 required positional argument。正确写法就是 init 里只做赋值与轻量校验，不写耗时 IO，构造器里做重活会让测试和调试都变难。查这条的入口是看 class 关键字小节与 __init__ 说明，验收标准是自己能定义两个不同类并各造出两个实例，且改 a 的属性能验证 b 不受影响。",
           "level": 1
         },
         {
           "id": "w4d5-p2",
           "topic": "实例属性与类属性",
-          "desc": "写在 __init__ 里用 self.x 赋的是实例属性，每个实例独立；写在 class 体内直接赋值的是类属性，全体实例共享；通过实例给同名类属性赋值时实际新建了实例属性，类属性不变，这一区分是常见考点。",
+          "desc": "［实例属性与类属性］实例属性写在 __init__ 里用 self.xxx = 赋值，每个对象一份；类属性写在类体顶层、不加 self，如 class A: count = 0，全类共享一份。查找顺序是先实例字典后类字典，读的时候实例属性优先，所以同名时实例属性会遮蔽类属性。写的时候差别极大：self.count = 5 是在实例上新建属性，只动这个对象；A.count = 5 或 cls.count = 5 才是改类属性，所有实例一起变。最容易踩的坑是可变的类属性：class A: items = []，然后 a1.items.append(1)，a2.items 里也会看到 1，因为两个实例共享同一个 list 对象，这是新手最典型的幽灵 bug。正确写法是凡需要每个对象独立的容器一律在 __init__ 里初始化 self.items = []，类属性只留给真正的常量、默认值、计数器这类共享数据。想在实例上用类属性做计数器就写成 type(self).count += 1 或 类名.count += 1，直接写 self.count += 1 会在实例上造出一个新属性，类上的计数永远不变。区分手段很硬：print(a.__dict__) 能看到哪些是实例自己的，print(A.__dict__) 看类自己的，两边一比就清楚了。验收是自己造两个实例，一个改属性一个读，能解释为什么读到的值不同，并能说明 items=[] 这类可变类属性为什么危险。",
           "level": 3
         },
         {
           "id": "w4d5-p3",
           "topic": "方法与 self 的含义",
-          "desc": "定义 def show(self): 后调用 obj.show() 时 Python 自动把 obj 传入 self，等价于 类名.show(obj)；忘写 self 会导致调用时报 takes 0 positional arguments but 1 was given，这类报错几乎都是漏写 self。",
+          "desc": "［方法与 self 的含义］类体里定义的函数叫方法，第一个参数写 self，它不代表关键字也不强制叫 self，只是约定俗成。机制是 Python 的绑定方法：a.speak() 在调用时等价于 A.speak(a)，解释器自动把 a 放进第一个参数位，所以 self 就是“当前这个实例”的引用。谁调用 self 就是谁，a.speak() 里 self 是 a，b.speak() 里 self 是 b，正因如此方法里 self.name 才能读到各自的属性。三个高频坑：一是漏写 self，定义 def speak(): 后调用 a.speak() 会报 TypeError: speak() takes 0 positional arguments but 1 was given，因为那个 1 就是被自动塞进去的实例；二是把 self 写到参数表最后，这样第一个真实参数会被当成 self，报错位置和真实原因差得很远；三是类名直接调用时忘了手动传实例，写成 A.speak() 会报缺 self 参数，正确写法是 A.speak(a)。类方法用 @classmethod 装饰、第一个参数是 cls，代表类本身，用于造工厂方法；静态方法用 @staticmethod 装饰、不接 self 也不接 cls，纯粹是挂在命名空间下的普通函数。判断该用哪种很简单：要读改实例状态用普通方法，要操作类级数据或做替代构造器用 classmethod，跟类状态无关只是逻辑上归这个类管用 staticmethod。验收是自己写一个带参数的方法，能解释漏写 self 时报错里那个 1 是什么。",
           "level": 2
         },
         {
           "id": "w4d5-p4",
           "topic": "继承与 super()",
-          "desc": "class Dog(Animal): 表示继承，子类自动获得父类的方法；子类重写 __init__ 时必须调 super().__init__(...) 完成父类初始化，否则父类属性缺失；方法查找沿 MRO（方法解析顺序）向上查找。",
+          "desc": "［继承与 super()］继承写法是 class Child(Parent):，Child 自动拿到 Parent 的所有属性与方法的查找权。属性查找沿 MRO（方法解析顺序）从子类往上走，找到即停，所以子类同名的定义会覆盖父类的。super() 的语义是“按当前类在 MRO 里的位置取下一个类”，不是“取父类”，多继承时这个区别直接决定对错。最典型用法是子类 __init__ 里先 super().__init__(参数) 再补自己的东西，否则父类初始化被跳过，父类那部分属性根本不存在，后面访问就 AttributeError。示例：class Animal 有 __init__(self, name)，class Dog(Animal) 的 __init__ 里必须写 super().__init__(name) 再写 self.breed = breed。三个坑：一是忘了调 super().__init__，只在自己 init 里赋值，导致父类属性全丢；二是多继承时写 Parent.__init__(self) 手工调父类，这会绕过 MRO 造成部分类被初始化两次或直接漏掉，一律用 super()；三是子类重写方法后想扩而不是覆盖，必须显式调 super().方法名()。MRO 查看用 Dog.__mro__ 或 Dog.mro() 直接看顺序，菱形继承能靠这个一眼看出谁先谁后。判断该继承还是组合：is-a 关系用继承（狗是动物），has-a 关系用组合（狗有项圈），多数情况组合更稳，继承层级别超过三层基本是设计出了问题。验收是写父子两类，父类打印一句话，子类 super() 之后打印两句，输出顺序正确即算过。",
           "level": 2
         },
         {
           "id": "w4d5-p5",
           "topic": "魔法方法 __str__ 与 __repr__",
-          "desc": "不定义 __str__ 时 print(obj) 输出类似 <__main__.A object at 0x...> 的内存地址；定义 __str__ 返回字符串可让 print 友好显示，__repr__ 面向调试；面试常问二者区别：__str__ 给人看，__repr__ 给开发者看。",
+          "desc": "［魔法方法 __str__ 与 __repr__］这两个都决定对象“打印出来长什么样”，但用途严格区分。__str__ 面向终端用户，print(x) 和 str(x) 和 f'{x}' 调用它，要求可读、中文友好；__repr__ 面向开发者，进入列表打印、交互式回显、容器里存的元素都用它，要求精确无歧义，理想状态是能照抄回代码里重建这个对象，比如 Point(1, 2)。只定义了 __repr__ 时 __str__ 会退回用它，反过来不成立，所以最低成本写法是先写 __repr__。机制上 print([obj]) 打印列表时会调每个元素的 __repr__，所以只写 __str__ 的人会发现 print(对象) 好看、print([对象]) 难看，这不是 bug 是规则。正确写法是两个都写，__str__ 里可以 return self.__repr__() 做兜底。三个坑：一是两个都不写，得到 <__main__.Point object at 0x7f...> 这种带内存地址的串，每次运行都变，没法做日志对比；二是 __repr__ 里返回非字符串会报 TypeError: __repr__ returned non-string；三是 __repr__ 里做了重计算或 IO，导致调试打印本身变慢甚至递归（比如 __repr__ 里 print(self)）。常用的还有 __eq__ 决定 == 行为，默认比的是内存地址，两个内容相同的对象 == 为 False，重写后要顺手写 __hash__ 才能继续放进 set 或当 dict 键。验收是自己写的类 print 出来是人话，放进列表打印也是人话，不含内存地址。",
           "level": 2
         },
         {
           "id": "w4d5-p6",
           "topic": "用类重写通讯录的思路",
-          "desc": "把数据从全局列表搬进 self.contacts，把 add/delete/search/update 变成方法，外部只调方法不碰数据；好处是状态与行为封装在一起，可同时存在两个互不干扰的通讯录实例，这是从函数式到面向对象的核心变化。",
+          "desc": "［用类重写通讯录的思路］前面用字典加函数写的通讯录，改用类不是重写业务，而是换一层组织方式，分三步走。第一步定模型：class Contact 只负责一个联系人的数据与自校验，字段 name/phone/email，__init__ 里赋值，__repr__ 给可读输出，需要时加 validate 方法校验手机号长度与邮箱里有没有 @。第二步定管理器：class ContactBook 持有一个列表 self.contacts = []，方法对应增删改查，add(contact) 要查重（同名或同号拒绝并返回失败原因）、remove(name)、find(keyword) 返回匹配列表、update(name, **fields) 局部改、save(path) 与 load(path) 落盘。第三步才是外层交互：主循环只负责输入输出与调用 ContactBook 的方法，不再直接碰数据结构。这样拆的收益很具体：数据结构只有 ContactBook 一处知道是 list，将来换成 dict 按姓名索引，只改管理器内部；每个方法都能单独测，不用跑整个交互循环；Contact 的校验集中一处，不会出现某个分支漏校验。三个注意点：一是不要让 Contact 自己去读写文件，模型只管数据，持久化归管理器，职责混了后面改存储格式会牵连一片；二是查重放在 add 里而不是外层，否则多个调用方各写一遍必然有不一致；三是不要在 __init__ 里做磁盘加载，加载要显式调用 load()，构造里带 IO 会让测试难写。验收标准是原有功能一条不少、且交互层代码里不再出现 contacts.append 这类直接操作容器的语句。",
           "level": 2
         }
       ]
@@ -1082,37 +1082,37 @@
         {
           "id": "w4d6-p1",
           "topic": "JSON 的结构与 Python 对象映射",
-          "desc": "JSON 对象对应 dict、数组对应 list、字符串对应 str、数字对应 int/float、true/false 对应 True/False、null 对应 None；JSON 的键必须是双引号字符串，不能是单引号或数字。",
+          "desc": "【机制】JSON 只有六种值：对象 {}、数组 []、字符串 「」、数字、true/false、null。它本身没有「类型」概念，落到 Python 里就靠 json 模块做映射：{} 变 dict，[] 变 list，字符串变 str，数字变 int 或 float，true/false 变 True/False，null 变 None。反方向也一样，dict 和 list 会被序列化成对象和数组。真正容易翻车的是自造类型：datetime、Decimal、set、tuple 全都没有对应的 JSON 类型，直接丢进去会抛 TypeError: Object of type datetime is not JSON serializable。解决办法是 date.isoformat() 存成字符串，读回来再用 datetime.fromisoformat() 转回；set 先 list(s) 再存，读回来需要集合时再 set(...)。另一个坑是 tuple 会被静默转成数组，读回来拿到的是 list 而不是 tuple，程序如果依赖元组的不可变性就会出问题。键必须是字符串，dict 里用整数当键时 json 会自己转成 “1”，读回来就是字符串 「1」，再拿整数去取就 KeyError。\n\n【示例】先看正常映射：json.dumps({'a': 1, 'b': [1, 2], 'c': None}) 得到 {「a」: 1, 「b」: [1, 2], 「c」: null}。再看不支持的：把 datetime.date.today() 塞进 dict 会直接报错。正确写法是 d = {'date': date.today().isoformat(), 'amount': '12.50'}，金额用字符串存避免浮点误差；读的时候 raw = json.loads(s)，再用 date.fromisoformat(raw['date']) 和 Decimal(raw['amount']) 还原。还有中文问题：json.dumps({'名': '张三'}) 默认得到 \\u5f20\\u4e09 一堆转义，加 ensure_ascii=False 才能看到原字，账本这种要人肉看备份文件的场景必须加。\n\n【踩坑】新手最常见的三个连环坑：一是直接把 datetime 丢进去，程序在某条记账上突然崩，前面的数据已经写了一半；二是没加 ensure_ascii=False，备份文件打开全是 \\u 转义，想手动改一条都看不懂；三是拿整数当 dict 键，存进去变 「1」，取的时候报 KeyError，看代码半天看不出问题，因为 type(dict.keys()) 里明明是 1。还有 continue 的坑：json.loads 拿到空字符串 '' 会抛 JSONDecodeError，读取空的 jsonl 文件时如果逐行 load 而不判空，第一条就崩。\n\n【推论/正确写法】把「存」和「读」两边各设一个函数做转换层：to_jsonable(obj) 负责把 date/Decimal 转成字符串，from_json 负责把字符串还原。所有落盘前先过 to_jsonable，所有读盘后先过 from_json。JSONDecodeError 必须显式捕获，读到损坏的行就跳过并打印行号，不能让整个账本因为一行坏数据打不开。dumps 默认加 ensure_ascii=False、separators=(',', ':')。\n\n【查找】关键词：json 序列化映射、JSONDecodeError、Object of type is not JSON serializable、ensure_ascii、isoformat、default=str。",
           "level": 2
         },
         {
           "id": "w4d6-p2",
           "topic": "json.dumps 与 json.loads 序列化",
-          "desc": "json.dumps(obj) 转字符串、json.loads(s) 转对象，两个 s 代表 string，在内存里来回；ensure_ascii=False 才不把中文转成 \\uXXXX，indent=2 美化缩进，这两项是导出可读 JSON 文件的标配。",
+          "desc": "【机制】dumps 和 loads 是内存里的字符串互转，dump 和 load 是文件对象上的读写。四条函数看着像两对，其实分工很清楚：dumps(obj) 返回 str，loads(s) 返回对象，都要你自己拿字符串；dump(obj, f) 直接写进文件对象，load(f) 直接从文件对象读出来。关键差别在于 dump 和 load 接受的是一个「文件对象」，不是路径。很多人写成 json.dump(data, 'a.json') 会报 AttributeError: 'str' object has no attribute 'write'，因为它以为拿到的是个能 write 的东西。正确写法是先 open() 再传文件句柄。另外 dumps 有个 indent 参数，indent=2 会让输出带缩进便于人看，但文件会变大、解析变慢；indent=None 是最省空间的紧凑格式。sort_keys=True 按键排序，做 diff 很有用。\n\n【示例】写：with open('a.json', 'w', encoding='utf-8') as f: json.dump(data, f, ensure_ascii=False, indent=2)。读：with open('a.json', encoding='utf-8') as f: data = json.load(f)。内存互转：s = json.dumps(data)；data = json.loads(s)。下面这一行是错的，务必记住：json.dump(data, 'a.json') —— 第二个参数要文件对象，不是路径。\n\n【踩坑】五个高频坑：①dump 传路径字符串直接 AttributeError；②忘了 encoding='utf-8'，Windows 上中文写到一半抛 UnicodeDecodeError，这类报错位置和真实原因常常错位；③用 'w' 打开后程序在中途崩溃，原文件已经被清空成 0 字节，历史账本全丢，正确做法是先写临时文件再 os.replace 原子替换；④dump 之后没 f.flush() 也没离开 with 就跑去读同一个文件，读到的是空内容；⑤loads 用在文件对象上，或 load 用在字符串上，报 AttributeError: 'str' object has no attribute 'read'，和第三条正好对称。\n\n【推论/正确写法】记住一句口诀：有 s 的是字符串玩法，没 s 的是文件玩法。落盘统一走「写临时文件 + os.replace」这套原子写法：with open(tmp, 'w') as f: json.dump(...); os.replace(tmp, path)。这样即使程序死在中间，旧文件仍完好。读取时统一 with open(path, encoding='utf-8') as f。\n\n【查找】关键词：json.dump 与 json.dumps 区别、Object of type is not writable、atomic write、os.replace、encoding utf-8 json。",
           "level": 2
         },
         {
           "id": "w4d6-p3",
           "topic": "json.dump 与 json.load 文件读写",
-          "desc": "json.dump(obj, f) 直接写文件对象、json.load(f) 直接读文件对象，注意没有 s 的这组才是操作文件；写文件时模式用 w，且必须指定 encoding='utf-8'。",
+          "desc": "【机制】jsonl 是每行一个独立 JSON 对象的格式，也叫 JSON Lines。它和一份大 JSON 数组的本质区别在于：大数组必须整体解析，一个字节坏了整份都打不开，而 jsonl 是按行独立解析，坏一行只影响那一行。账本这种「记录只会追加、几乎不改」的场景，jsonl 天然合适：追加一行就是 open('a', 'a') 写一行，不需要读全量再写回去。代价是没有全局结构，无法直接表达嵌套层级；统计时得逐行遍历累加。选择标准很简单：数据是「一条条记录」且以追加为主 → jsonl；数据是「一张配置表」或需要整体读写 → 单个 json。账本建议 jsonl 存流水、单个 json 存配置（币种、分类映射）。读 jsonl 时不能 load(f)，那样只会解析第一个对象然后报 Extra data；正确做法是 for line in f: if line.strip(): json.loads(line)。\n\n【示例】追加一条：with open('ledger.jsonl', 'a', encoding='utf-8') as f: f.write(json.dumps(rec, ensure_ascii=False) + '\\n')。注意 write 不会自动加换行，这里的 + '\\n' 就是分隔符，漏了它两条记录会粘成一行，下次读取直接 JSONDecodeError。逐行读：recs = [json.loads(l) for l in open('ledger.jsonl', encoding='utf-8') if l.strip()]。统计总额：total = sum(Decimal(r['amount']) for r in recs)。\n\n【踩坑】①忘记加 \\n，两条记录粘连成 {「a」:1}{「a」:2} 一行，读的时候报 Extra data；②用 json.load(f) 读 jsonl，第一条成功第二条报 Extra data: line 2，很多人误以为是文件坏了，其实是方法用错了；③空行没跳过，json.loads('') 抛 JSONDecodeError；④以为追加很快就可以不 flush，断电时最后几十字节丢了；⑤把大数组 json 改写成 jsonl 又忘了旧代码整体 load，迁移后程序读不到数据。\n\n【推论/正确写法】定两条规矩：写 jsonl 一律封装成 append_record(rec)，内部统一补 \\n 并 f.flush()；读 jsonl 一律封装成 iter_records()，内部跳过空行、捕获 JSONDecodeError 并打印行号后继续。所有下游统计只调 iter_records()，不直接摸文件。\n\n【查找】关键词：jsonl JSON Lines、Extra data 报错、append 追加 json、json.load 读取多对象、line 分隔。",
           "level": 2
         },
         {
           "id": "w4d6-p4",
           "topic": "记账本的数据模型设计",
-          "desc": "每条记录用一个字典 {日期, 类型, 金额, 备注}，整体是记录列表，顶层存 {'records': [...]} 方便以后扩展字段；金额统一存 float 或统一存分为单位的 int，避免浮点存储导致的精度问题。",
+          "desc": "【机制】记账本的数据模型就三层：账户、分类、流水。流水是主体，一条记录至少要有 id、日期、金额、类型（收/支）、分类、备注。设计时最关键的一个决定是金额怎么存：用 float 会在累加时出现 0.1+0.2=0.30000000000000004 这类尾巴，账本最后对不上账，必须用 int 存分（以分为最小单位）或者用 Decimal。存 int 分是更稳妥的做法，显示时除以 100。第二个关键决定是类型怎么表达：不要用正负号偷偷编码收支，账单里 -50 到底是支出还是退款歧义很大；显式加一个 type 字段，取值 'income' / 'expense'，amount 永远存正数。第三个是 id 怎么生成：用 uuid4().hex 或者 int(time.time()*1000) 拼随机后缀，绝不能用列表下标当 id，删除一条之后下标全乱。日期统一存 'YYYY-MM-DD' 字符串，排序天然正确。\n\n【示例】一条流水长这样：{「id」: 「a1b2c3」, 「date」: 「2026-10-31」, 「type」: 「expense」, 「amount_cents」: 2550, 「category」: 「餐饮」, 「note」: 「午饭」}。对应显示：金额 25.50，类型支出。配置文件单独存：{「currency」: 「CNY」, 「categories」: {「餐饮」: 「expense」, 「工资」: 「income」}}。别把分类表塞进每条流水里，那是冗余，改一次分类名要全量重写。\n\n【踩坑】①金额用 float，跑了两个月发现总支出比支付宝账单多 0.03 元，查不出来；②用正负号表示收支，退款（正数但属于支出冲回）没法表达；③金额直接用字符串 「25.5」，求和时 TypeError 或按字典序比较；④id 用 index，删掉中间一条后新增又撞号；⑤把备注混进分类字段，后面想按分类统计时全是自由文本，统计不出来；⑥日期存成 '10/31/2026'，排序变成字符串排序，跨年就乱。\n\n【推论/正确写法】字段固定七项：id/date/type/amount_cents/category/note/created_at。金额入库前统一 int(round(float(x)*100)) 并打印一次原文核对，防止 25.5 输入变 2549 分这种精度事故。所有统计函数只吃 amount_cents，最后除以 100 展示。\n\n【查找】关键词：float 精度 0.1+0.2、金额用分存、Decimal、uuid4 生成 id、日期字符串排序。",
           "level": 2
         },
         {
           "id": "w4d6-p5",
           "topic": "持久化时机与数据不丢的保证",
-          "desc": "启动时 json.load 读入，每次增删改后立即 json.dump 写回，而不是只在退出时写；只在退出时写会导致进程被杀时数据全丢；写文件建议先写临时文件再 os.replace 原子替换，防止写一半断电损坏。",
+          "desc": "【机制】持久化时机就是「什么时候把内存里的数据落到磁盘」这个问题。三种策略：每条即时写（最安全最慢）、退出时统一写（最快最危险）、定时/事件触发批量写（折中）。账本的正确答案是「每条立即追加」，因为 jsonl 追加一行的成本极低（O(1) 且不用重写全量），而丢失一条真实支出的代价远高于那几毫秒。但「即时写」不等于「每次都全量 dump」：如果用单个大 JSON 数组全量重写，10 万条记录每记一笔就要写几 MB，这时候才需要改成追加式或引入缓冲。另一个致命点是崩溃安全：打开文件用 'w' 会立刻把文件截断成 0 字节，程序如果在这之后崩溃，历史数据全没了，所以必须用「写临时文件 → flush + os.fsync → os.replace」三步。os.replace 在同一文件系统内是原子的，要么全旧要么全新，不存在写了一半的文件。\n\n【示例】安全落盘函数：def save(path, data):\n    tmp = path + '.tmp'\n    with open(tmp, 'w', encoding='utf-8') as f:\n        json.dump(data, f, ensure_ascii=False)\n        f.flush()\n        os.fsync(f.fileno())\n    os.replace(tmp, path)\n追加流水：def append(path, rec):\n    with open(path, 'a', encoding='utf-8') as f:\n        f.write(json.dumps(rec, ensure_ascii=False) + '\\n')\n        f.flush()\n        os.fsync(f.fileno())\n每一步都做了 fsync，代价是每条慢几毫秒，账本完全能接受。\n\n【踩坑】①用 'w' 打开后立刻崩溃，0 字节；②只 flush 不 fsync，进程崩溃能保住，断电保不住；③不带 with，异常路径上文件句柄不关，数据卡在缓冲区；④typing 时每条都全量重写大 JSON，记到几千条开始卡；⑤备份逻辑和写入逻辑混在一起，写失败还去删备份；⑥读取时不知道可能存在 .tmp 残留文件，误以为是有效数据。\n\n【推论/正确写法】账本拆成两个文件：ledger.jsonl 只追加，append + flush + fsync；config.json 用 save() 原子替换。程序启动时检查并删除残留的 .tmp。关闭前不需要再「统一保存」，因为每条已经落了盘，退出时只做一次全量校验：统计总条数与最后一条 id，打印给用户看。\n\n【查找】关键词：os.replace 原子写、fsync 与 flush 区别、json 崩溃丢数据、append 模式、tmp 文件。",
           "level": 3
         },
         {
           "id": "w4d6-p6",
           "topic": "统计口径与报表输出",
-          "desc": "按类型汇总用 dict 累加或 collections.Counter，按月份汇总按日期字符串前 7 位切片分组；平均支出算 total/len 时注意 len 为 0 会抛 ZeroDivisionError，必须先判空。",
+          "desc": "【机制】统计口径是记账本里最容易「看起来对但实际错」的部分。三个需要先定死的口径：①时间范围是自然月还是滚动 30 天——自然月按 date[:7] 分组，滚动 30 天要拿 datetime 算区间，两者结果不同；②收入要不要抵减支出——「本月支出」和「本月结余」是两个指标，界面上混在一起用户必然误解；③退款怎么处理——一条 expense 的退款应该算作负支出还是收入？推荐做法是退款记录 type 仍为 expense，但加 is_refund=true，统计支出时用 sum(正数) - sum(退款)，不要把它算进收入，否则本月收入会虚高。报表输出建议固定三张：分类汇总、日汇总、月度趋势。分类汇总按 category 分组求和并算占比，占比用 amount/total 且要防 total=0 的除零。\n\n【示例】分类汇总：from collections import defaultdict\nagg = defaultdict(int)\nfor r in iter_records():\n    if r['date'][:7] == '2026-10' and r['type'] == 'expense' and not r.get('is_refund'):\n        agg[r['category']] += r['amount_cents']\ntotal = sum(agg.values())\nfor k, v in sorted(agg.items(), key=lambda x: -x[1]):\n    pct = v / total * 100 if total else 0\n    print(f'{k}\\t{v/100:.2f}\\t{pct:.1f}%')\n注意最后格式化时才除 100，全程用分做整数运算，避免浮点误差累积。\n\n【踩坑】①total 为 0 时除零崩溃（新月份第一天必然遇到）；②把所有 expense 简单相加，忘了退款导致支出虚高；③按 amount 排序却用字符串的 amount；④用 defaultdict(int) 但忘了它是 int，除法前没转 float 导致整数除法；⑤把「本月」写成按 created_at 而不是 date，补录旧账时统计错月；⑥日汇总用 dict 但没按日期排序输出，趋势图数据是乱的。\n\n【推论/正确写法】把口径写成三个常量：PERIOD='natural_month'、REFUND_MODE='net_expense'、BASIS='date'，函数里只引用常量不改硬编码。所有聚合函数先做过滤再做分组，过滤条件抽成 match(record, period) 单独可测。报表只在最后一层做单位换算和格式化，中间全程整数分。\n\n【查找】关键词：defaultdict 分组统计、ZeroDivisionError 占比、退款统计口径、自然月分组、整数分运算。",
           "level": 2
         }
       ]
@@ -1123,37 +1123,37 @@
         {
           "id": "w4d7-p1",
           "topic": "闭卷重写记账本的检验价值",
-          "desc": "与前两周一样，标准是不查资料从空文件写到能跑；函数定义、文件读写、异常处理、类这些点里任何一处写不顺，说明该点只是看过没掌握，这就是本周唯一有效的自测。",
+          "desc": "【机制】闭卷重写的意思是：不看自己上周写的代码，从空白文件开始，把同一个记账本再写一遍。它的检验价值不在于「结果一样」，而在于暴露三类东西：①语法层面的记忆缺口——你能不能凭手写出 with open(...) as f 而不是去搜；②设计层面的犹豫——某个函数要不要拆、数据放 dict 还是 list，如果卡住说明上周你没真做决策，只是碰巧写对了；③调试能力——闭卷时出的错都是你自己的错，报错信息你得自己看懂。开卷照着抄一遍，哪怕跑通了，脑子里也没有任何东西被验证过；闭卷卡住的那五分钟，恰恰是知识真正被固化或暴露的时刻。建议时间给 60 分钟，不许查资料、不许看旧文件，写不出来就在旁边记一笔「卡在什么地方」，那一笔比写出来的代码更有价值。\n\n【示例】闭卷重写的验收不是「能跑」，而是三段对照：①行数对比——上次 120 行，这次 90 行，说明结构更紧凑了，或者丢了功能；②卡点清单——写下所有停顿超过 30 秒的位置，例如「忘了 with 语法怎么写」「想不起来 defaultdict 的 import 路径」；③报错清单——凭自己看懂并修掉了哪些报错。写完再打开上周的版本逐段对比，卡点清单和差异清单合并成一份复习重点。\n\n【踩坑】①一卡住就偷看旧代码，等于没闭卷，检验价值归零；②追求逐字一致，把时间花在变量名和排版上；③只写主流程不写落盘，绕过了最需要肌肉记忆的部分；④写不出来就干脆放弃，其实卡点记录本身就是产出；⑤写完不复盘差异，下次还是同样的地方卡。\n\n【推论/正确写法】把闭卷重写当成一场有产出的实验：准备空白文件、计时器、一张纸记卡点。写不完也交卷，交卷后必须做「对比 + 归档卡点」两个动作。卡点按语法/设计/调试三类归档，其中语法类当周必须补，设计类下周再看，调试类随经验积累。\n\n【查找】关键词：闭卷重写、主动回忆、检索练习、卡点清单、代码复盘。",
           "level": 1
         },
         {
           "id": "w4d7-p2",
           "topic": "本周语法清单回忆",
-          "desc": "六大块：def 参数与返回值 / 作用域 LEGB / 文件 open 与 with 与 encoding / try-except-else-finally 与 raise / import 与 pip 与 venv / class 属性方法与继承；能不看笔记口述这六块即达标。",
+          "desc": "【机制】本周（W4）语法清单按使用频率排，最值得背下来的是这几组：①变量与类型——int/float/str/bool 的转换，int('25') 与 int('25.5') 的区别（后者直接 ValueError），float 转 int 是截断不是四舍五入；②字符串——f-string 里 {} 里可以写任意表达式和格式符，:.2f 两位小数、:>10 右对齐、:, 千分位；.strip()/.split()/.join()/.replace() 这四个覆盖 90% 场景；③容器——list 的 append/pop/sort/切片，dict 的 get(k, default) 与 setdefault，set 做去重；④控制流——for…else、enumerate、zip、列表推导式带 if；⑤函数——默认参数、*args/**kwargs、作用域 LEGB；⑥异常——try/except/else/finally 的执行顺序，except Exception as e 的 as 不能省；⑦文件——with open(path, encoding='utf-8') as f。这七组里，字符串格式化和 dict.get 是账本里出现频率最高的两个。\n\n【示例】自测式回忆：合上屏幕，在纸上依次写下——①把 '25.5' 转成整数分怎么写（答案：int(round(float('25.5')*100))）；②把 2550 分显示成 25.50 怎么写（答案：f'{2550/100:.2f}' 或 f'{2550//100}.{2550%100:02d}'）；③dict 取不存在的键不报错怎么写（答案：d.get('x') 或 d.get('x', 0)）；④读写中文文件怎么写一行（答案：with open(p, encoding='utf-8') as f）。凡是写不出来的，就是本周必须补的。\n\n【踩坑】①记成 int('25.5') 能转，其实抛 ValueError；②以为 round(2.5) 是 3，实际 Python 是银行家舍入得 2；③f-string 里写 {x:.2f} 但 x 是 str，抛 Unknown format code；④以为 dict.keys() 返回 list，其实是视图，调用处不能直接索引；⑤list.sort() 返回 None，写成 x = a.sort() 得到 None；⑥except 后面写空，捕获了 KeyboardInterrupt 还不易发现。\n\n【推论/正确写法】清单不要背全部，只背「本周真正用过 + 闭卷卡住」这两类，控制在 20 条以内写进一张卡片。检查方式唯一：合上屏幕口述一遍，能说出写法的才算掌握，说不上来的抄三遍并写一个最小可运行例子。\n\n【查找】关键词：f-string 格式化 2f、round 银行家舍入、list.sort 返回 None、ValueError 转换、dict.get 默认值。",
           "level": 2
         },
         {
           "id": "w4d7-p3",
           "topic": "本周坑集中复盘",
-          "desc": "默认参数设可变对象、函数内改全局忘写 global、open 忘写 encoding 乱码、w 模式误清空文件、裸 except 吞异常、漏写 self、__init__ 里忘调 super()、json 中文变 \\uXXXX——这八条是本周最容易被扣分的点。",
+          "desc": "【机制】本周的坑可以归成四类，每类的根因完全不同：①精度类——金额用 float，0.1+0.2 得 0.30000000000000004，根治办法是全程用 int 分或 Decimal，绝不在中间层转 float；②可变与不可变类——默认参数写成 def f(x, items=[]) 会让所有调用共享同一个列表，正确写法是 items=None 再 if items is None: items = []；同样地 class A: items = [] 是类属性共享，容易出现「改了 a1 结果 a2 也变了」的幽灵 bug；③作用域类——在函数里写 total += 1 而不声明 global，会 UnboundLocalError，因为赋值让 total 变成局部名；④文件与编码类——忘了 encoding='utf-8' 在中文环境下必炸，用 'w' 打开后崩溃会让文件变 0 字节。这四类的共同点是：报错位置通常不在真正的原因行，所以读报错要往上看一层。\n\n【示例】四个坑的最小复现：\n# 坑1 精度\nprint(0.1 + 0.2)          # 0.30000000000000004\nprint(Decimal('0.1') + Decimal('0.2'))  # 0.3\n# 坑2 默认参数\n def f(x, items=[]):\n     items.append(x); return items\nprint(f(1), f(2))         # [1] [1, 2]\n# 坑3 作用域\ntotal = 0\ndef add():\n    total += 1            # UnboundLocalError\n# 坑4 编码\nopen('a.txt','w').write('张三')   # Windows 下可能 UnicodeEncodeError\n四个都是十来行就能复现的，跑一遍比看十遍解释管用。\n\n【踩坑】①只改报错那行不改根因，比如把 float 比较改成 round 比较，尾巴还在；②用 global 解决一切作用域问题，把状态搞得更乱；③默认参数可变坑被改成了 items=() 但还在里面 append，报 AttributeError；④类属性坑用「给每个实例都重新赋值」绕过去，遇到嵌套结构又复发；⑤编码坑在 Linux 上不出现，换到 Windows 才炸。\n\n【推论/正确写法】四条硬规矩：金额只用 int 分；函数默认参数一律用 None 占位；函数内部不读外部可变状态，要改就返回新值；所有 open 显式写 encoding='utf-8'。把这四条写进项目开头注释，比事后 debug 省十倍时间。\n\n【查找】关键词：0.1+0.2 浮点误差、默认参数可变对象、UnboundLocalError、UnicodeEncodeError、类属性共享。",
           "level": 2
         },
         {
           "id": "w4d7-p4",
           "topic": "从函数式到面向对象的分界",
-          "desc": "W3 的通讯录靠全局变量 + 函数堆出来，W4 的记账本要求把数据和操作收进类里；判断标准是能否同时创建两个实例而互不干扰，能做到就说明真正理解了封装。",
+          "desc": "【机制】从函数式到面向对象的分界线不是「代码行数」，而是「有没有一组数据被多个函数反复传进来传出去」。函数式版本的记账本长这样：add_record(records, rec)、save_records(records, path)、total_by_category(records) —— 每条函数第一个参数都是 records，这个「每次都出现、谁都离不开」的参数就是该封装的信号。它说明数据和操作在逻辑上是一体的，只是语法上还没绑在一起。封装成类之后，records 变成 self.contacts 或 self.records，函数第一个参数从 records 变成 self，本质完全一样，只是把「人肉维护的关联」交给了语言。反过来，如果一块功能只用到入参、不依赖任何持久状态（比如 parse_date(s)、format_money(cents)），它就该是普通函数，别为了 OOP 硬塞进类里变成 @staticmethod。分界线一句话：有状态且状态要被多个操作共享 → 类；无状态纯转换 → 函数。\n\n【示例】函数式：\ndef add_record(records, rec): records.append(rec); return records\ndef total(records): return sum(r['amount_cents'] for r in records)\n封装后：\nclass Ledger:\n    def __init__(self): self.records = []\n    def add(self, rec): self.records.append(rec)\n    def total(self): return sum(r['amount_cents'] for r in self.records)\n对比调用：total(records) 变成 ledger.total()，少了一个参数，也少了一次传错列表的机会。而 format_money(2550) 保持是函数不变。\n\n【踩坑】①把所有函数都改成类方法，连 format_money 都塞进去，类变成垃圾桶；②封装后忘了状态初始化，__init__ 里没写 self.records = []，一调用就 AttributeError；③在类方法里又去操作全局 records，等于封装了个寂寞；④为了 OOP 硬造继承，Ledger 继承 dict，父类方法全污染；⑤成员变量名和方法名冲突。\n\n【推论/正确写法】判断改不改的标准是「同一份状态被几个函数共享」：≥2 个就封装，只有 1 个就保持函数。封装时只包状态和真正依赖状态的操作，纯计算工具函数留在模块级。改完后接口要更短（参数变少），如果封装之后调用反而更啰嗦，说明包错了。\n\n【查找】关键词：函数式与面向对象、self 与首参、状态封装、@staticmethod 滥用、组合优于继承。",
           "level": 2
         },
         {
           "id": "w4d7-p5",
           "topic": "Python 两周一并的位置与后续依赖",
-          "desc": "W3 打语法地基，W4 打工程地基；后面的后端接口、爬虫、数据分析全部建立在这两周之上，函数与类的写法不扎实，后面所有代码都写不顺，所以这两周值得闭卷重写两遍。",
+          "desc": "【机制】Python 两周的学习路线是「语法 → 数据与文件 → 对象化」，W4 正好卡在第二周到第三周的交接处。往后走的依赖关系是这样的：W5 通常会进入模块与包、异常体系的系统化、以及标准库的常见模块（collections、itertools、pathlib、datetime）；W6 会把项目做成多文件、引入虚拟环境与依赖管理；再往后才是第三方库、网络请求、数据处理。也就是说，W4 的「类和对象 + JSON 落盘」是所有后续内容的直接底座：没有类，后面的框架全是类和实例；没有 JSON/文件，后面的配置、接口返回、缓存全都读不进来。反过来看 W1~W3 的位置：W1 是基础语法，W2 是容器，W3 是函数与控制流——这三周任何一处虚，到 W4 都会以「看得懂但写不出」的形式暴露。\n\n【示例】把学习地图画成依赖箭头：W1 语法 → W2 容器 → W3 函数/控制流 → W4 类与对象 + 文件 JSON → W5 模块与标准库 → W6 工程化（多文件、虚拟环境、测试）→ 第三方库与实战。自查方法：如果你能独立闭卷写出 W4 记账本，说明 W1~W4 的链条是通的；如果卡在 dict 操作上，问题不在 W4 而在 W2，要回去补容器而不是硬啃继承。\n\n【踩坑】①卡在继承就想不通，其实根本没到那一层，前面容器没练熟；②提前去学框架，回头发现连 with 都写不利索；③把 W4 当成孤立的「类语法」，不知道它是在为后面的工程化铺路；④跳过异常与文件直接学网络请求，报错完全看不懂；⑤每天学新东西不做闭卷，学了六周还以为自己在进步。\n\n【推论/正确写法】每周末做一次闭卷小项目，只用一个周末能写完的规模。项目卡住时先判断「卡在哪一层」：语法层（写不出来）回 W1，数据层（不知道用什么结构）回 W2，流程层（不知道怎么写循环）回 W3，组织层（不知道怎么拆文件）才用到 W4。找准层级再补，别在错误的层反复撞墙。\n\n【查找】关键词：Python 学习路线、模块与包、虚拟环境 venv、pathlib、学习依赖图。",
           "level": 2
         },
         {
           "id": "w4d7-p6",
           "topic": "思维导图与主动回忆的用法",
-          "desc": "导图只画主干：文件、异常、模块、类四个分支各挂 3~5 个关键词，不抄代码；做完立刻用遮住分支默写一遍，能默出来才算过了这一遍；导图是回忆工具不是抄写工具。",
+          "desc": "【机制】思维导图和主动回忆解决的是两个不同问题：思维导图解决「结构不清」，把散点串成树；主动回忆解决「记不住」，是把内容从脑子里调出来而不是从书上读进去。两者的正确顺序是：先建图定结构，再反复靠回忆调取。只用思维导图的问题是它给人「我都懂」的错觉——你看着图很顺，合上图一片空白；只用主动回忆的问题是不知道自己缺哪块，回忆得零散。给 W4 的具体用法是：中心节点写「Python 记账本」，一级分支四根——语法点、数据结构、文件与持久化、易错坑；每个一级下挂不超过七个子节点，超了就说明该拆成两张图。画完立刻做三步回忆：①合上图，只看中心节点，口述四根分支及其下至少三个子项；②对每个子项写一行最小代码；③把说不出的子项标红，那就是复习重点。\n\n【示例】一次标准 20 分钟流程：5 分钟画图（四根分支、每根 5~7 项）；8 分钟合上白纸回忆，先写分支名再补子项；5 分钟为回忆不全的项各写一行代码验证；2 分钟把标红项列成明天的待办。检验标准：第二天早上不看图，能否在 90 秒内口述出四根分支的完整结构——能，说明结构进脑了；不能，说明前一天的图是抄的不是想的。\n\n【踩坑】①把思维导图画成整本书的目录，几十个节点全在一张图上，看完什么也没记住；②画图时不停翻书抄节点，等于抄写不是回忆；③只画不测，图永远是别人的图；④回忆时觉得「这个我知道，就是说不清」就跳过去，其实说不清就是不会；⑤每天换一张新图，旧的从不复测，结构永远建立不起来。\n\n【推论/正确写法】限制节点数量是硬约束：一张图不超过 35 个节点，逼着自己做取舍。图只画一次，之后反复用它做回忆测试，每周复测一次同样的图，能把整图默画出来才更新版本。所有复习动作最终落到「闭卷说得出 + 能写一行代码验证」这两条硬指标上。\n\n【查找】关键词：思维导图、主动回忆 recall、艾宾浩斯间隔复习、知识结构树、闭卷自测。",
           "level": 1
         }
       ]
