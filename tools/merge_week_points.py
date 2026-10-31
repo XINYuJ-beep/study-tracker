@@ -82,10 +82,12 @@ def verify_week(d, expect_points=None):
                     die('%s 考点 %r 字段 %s 为空' % (k, p.get('id'), f))
             if p.get('level') not in LEVELS:
                 die('%s 考点 %s level 非法: %r' % (k, p['id'], p.get('level')))
+            if not isinstance(p.get('id'), str):
+                die('%s 考点 id 必须是字符串: %r' % (k, p.get('id')))
             ids.append(p['id'])
             line.append(p['id'])
         total += len(pl)
-        print('  ' + ' '.join(line))
+        print('  ' + ' '.join(map(str, line)))
 
     if len(set(ids)) != len(ids):
         dup = [i for i in set(ids) if ids.count(i) > 1]
@@ -144,6 +146,8 @@ def verify_source(path='tools/points/m01.json'):
             for f in FIELDS:
                 if not p.get(f) or not str(p.get(f)).strip():
                     die('%s 字段 %s 空' % (k, f))
+            if not isinstance(p.get('id'), str):
+                die('%s 考点 id 必须是字符串: %r' % (k, p.get('id')))
             if p.get('level') not in LEVELS:
                 die('%s level 非法' % p['id'])
             ids.append(p['id'])
