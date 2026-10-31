@@ -47,3 +47,5 @@ android/key.properties
 android/keystore/
 *.jks
 *.keystore
+*.bak
+*.bak[0-9]*

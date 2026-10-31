@@ -2,7 +2,8 @@
   "module": "01",
   "week_titles": {
     "1": "计算机组成 / 操作系统 / 命令行 / 文件系统",
-    "2": "Git 进阶 / HTTP / 开发者工具"
+    "2": "Git 进阶 / HTTP / 开发者工具",
+    "3": "Python 基础（一）"
   },
   "items": {
     "w1d1": {
@@ -575,6 +576,293 @@
           "id": "w2d7-p6",
           "topic": "主动回忆与间隔复习",
           "desc": "闭卷默写、Anki 抽卡优于重复阅读，因为提取记忆的过程本身才强化记忆；间隔重复对抗遗忘曲线，是长期留存的关键。",
+          "level": 1
+        }
+      ]
+    },
+    "w3d1": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w3d1-p1",
+          "topic": "Python 解释器与执行方式",
+          "desc": "Python 是解释型语言，源码由解释器 CPython 逐行转成字节码交给虚拟机执行，不产生独立可执行文件。执行方式有三种：交互式 REPL 直接敲一行运行一行、python3 script.py 运行脚本文件、IDE 里点运行。理解这点才明白为什么 Python 改了代码要重新跑，而不是重新编译。",
+          "level": 2
+        },
+        {
+          "id": "w3d1-p2",
+          "topic": "环境安装与 Python 3 版本确认",
+          "desc": "安装后必须在终端执行 python3 --version 确认版本，Linux/macOS 自带 python2 时命令是 python3 而非 python。Windows 勾选 Add Python to PATH，否则命令行找不到。用 python3 交互模式下输入 exit() 或 Ctrl+D 退出。",
+          "level": 1
+        },
+        {
+          "id": "w3d1-p3",
+          "topic": "第一个程序 hello.py 与 print",
+          "desc": "print() 是内置函数，把括号里的内容输出到标准输出并自动换行。print('hello') 输出 hello；print('a','b') 用空格分隔输出 a b；想改分隔用 sep 参数，想改结尾换行用 end=''。字符串必须加引号，否则被当成变量名报 NameError。",
+          "level": 1
+        },
+        {
+          "id": "w3d1-p4",
+          "topic": "缩进即语法块",
+          "desc": "Python 用缩进表示代码块，不用大括号。同一代码块必须完全一致的缩进（官方约定 4 个空格），混用 Tab 和空格会报 IndentationError: unexpected indent 或 TabError。缩进错一层，逻辑就全错，这是 Python 新手最常见的崩溃点。",
+          "level": 2
+        },
+        {
+          "id": "w3d1-p5",
+          "topic": "注释与代码可读性",
+          "desc": "单行注释用 #，多行用三引号字符串充当文档注释。注释写为什么这么写，不写干了什么。函数内首行三引号字符串是 docstring，会被 help() 和 IDE 提示读取，属于规范的一部分。",
+          "level": 1
+        },
+        {
+          "id": "w3d1-p6",
+          "topic": "报错的读法",
+          "desc": "Python 报错从下往上读：最后一行是异常类型加原因，如 NameError: name 'x' is not defined；倒数第二行往上是指向出错文件的路径与行号，^ 标记具体列位。先定位行号再改，别整段重写。",
+          "level": 2
+        }
+      ]
+    },
+    "w3d2": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w3d2-p1",
+          "topic": "变量是名字不是盒子",
+          "desc": "Python 变量本质是贴在对象上的名字标签，赋值 = 是把名字绑到对象上，不是把值复制进盒子。a = [1,2]; b = a 之后两者指向同一个列表，改 b 改 a 也变。要真正复制得用 a.copy() 或 list(a)。",
+          "level": 3
+        },
+        {
+          "id": "w3d2-p2",
+          "topic": "动态类型与 type 检查",
+          "desc": "变量本身没有类型，对象才有类型，同一名字可先后绑到 int、str、list。用 type(x) 查看类型，isinstance(x, int) 做判断（对子类也成立，type 则严格相等）。Python 3 里 1/2 得 0.5，整除要用 //。",
+          "level": 2
+        },
+        {
+          "id": "w3d2-p3",
+          "topic": "变量命名规则与约定",
+          "desc": "合法字符是字母数字下划线、不能数字开头、区分大小写、不能用关键字。约定用蛇形 lower_snake_case 命变量与函数，常量大写 MAX_SIZE，类名用大驼峰。名字取有意义，别用 a1 a2。",
+          "level": 1
+        },
+        {
+          "id": "w3d2-p4",
+          "topic": "input 输入与类型转换",
+          "desc": "input('提示') 返回的一定是字符串，就算用户输 123 拿到的也是 '123'。要参与运算必须显式转换：int(input('年龄：'))。用户输入非数字时 int() 抛 ValueError，生产代码要 try/except 兜住。",
+          "level": 2
+        },
+        {
+          "id": "w3d2-p5",
+          "topic": "f-string 格式化",
+          "desc": "f'...{表达式}...' 在字符串里直接嵌变量或表达式，最直观。支持格式控制：f'{pi:.2f}' 保留两位小数、f'{n:,}' 千分位、f'{x:>10}' 右对齐补空格、f'{pct:.1%}' 转百分比。对比 % 和 str.format，f-string 是首选。",
+          "level": 2
+        },
+        {
+          "id": "w3d2-p6",
+          "topic": "数值运算与浮点误差",
+          "desc": "+ - * / // % ** 七种运算，% 取余可用于判奇偶 n%2==0。浮点是二进制近似，0.1+0.2 == 0.3 结果是 False（实际 0.30000000000000004），比较浮点要算差值 abs(a-b) < 1e-9，或涉及钱时用 decimal.Decimal。",
+          "level": 3
+        }
+      ]
+    },
+    "w3d3": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w3d3-p1",
+          "topic": "布尔值与真假判定",
+          "desc": "bool 只有 True/False（首字母大写）。真值规则：0、0.0、''、[]、{}、set()、None 都是假，其余为真。所以 if lst: 等价于 if len(lst)>0，是 Python 的惯用写法。and or not 参与逻辑运算，and/or 返回的是操作数本身不是布尔值，且短路求值。",
+          "level": 2
+        },
+        {
+          "id": "w3d3-p2",
+          "topic": "if / elif / else 分支结构",
+          "desc": "从上到下顺序判断，命中第一个为真的分支就跳出整条链，所以条件互斥且按从严到宽排序。elif 不是 else if 的简写而是同一层级的互斥分支。冒号不能少，分支体必须缩进。",
+          "level": 1
+        },
+        {
+          "id": "w3d3-p3",
+          "topic": "比较运算与链式比较",
+          "desc": "== 比值是否相等、is 比是否同一对象，判 None 必须用 is None 而不是 == None。支持链式比较 0 <= x < 100 等价于 0<=x and x<100，只算一次 x。字符串比较按字典序逐字符比 Unicode 码位。",
+          "level": 2
+        },
+        {
+          "id": "w3d3-p4",
+          "topic": "while 循环与退出条件",
+          "desc": "while 条件为真就重复执行，条件必须有被改变的路径否则死循环。break 立刻跳出整个循环，continue 跳过本轮剩余语句回到条件判断，else 子句在循环未被 break 时执行。猜数字游戏就是典型 while True + break 结构。",
+          "level": 2
+        },
+        {
+          "id": "w3d3-p5",
+          "topic": "for 与 range 遍历",
+          "desc": "for 直接遍历可迭代对象，不靠下标。range(n) 生成 0..n-1，range(a,b) 左闭右开，range(a,b,step) 带步长，step 为负可倒序。range 是惰性对象不占内存，list(range(5)) 才转成列表。九九乘法表的外层 1..9、内层 1..i 是不等长循环的典型写法。",
+          "level": 2
+        },
+        {
+          "id": "w3d3-p6",
+          "topic": "嵌套循环与循环变量的作用域",
+          "desc": "嵌套循环内层执行次数等于外层次数的乘积，公式=内层次数×外层次数。Python 的 for 循环变量在循环结束后仍留在当前作用域（不像 C 那样销毁），这是 Python 独有的坑。要提前跳出多层循环，用标志位或函数内 return。",
+          "level": 3
+        }
+      ]
+    },
+    "w3d4": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w3d4-p1",
+          "topic": "列表的创建与索引",
+          "desc": "列表用方括号，元素可不同类型、可嵌套、可变。索引从 0 开始，支持负数索引 -1 表示最后一个。越界访问抛 IndexError: list index out of range。len() 取长度。",
+          "level": 1
+        },
+        {
+          "id": "w3d4-p2",
+          "topic": "切片规则与拷贝陷阱",
+          "desc": "a[start:stop:step] 左闭右开，省略 start 从头、省略 stop 到尾，step 为负表示倒序 a[::-1] 翻转列表。切片返回新列表，是浅拷贝；嵌套列表里的子列表仍是同一对象，要深拷贝用 copy.deepcopy。修改切片可批量赋值替换。",
+          "level": 3
+        },
+        {
+          "id": "w3d4-p3",
+          "topic": "增删改查常用方法",
+          "desc": "增：append 尾部加一个、insert(i,x) 指定位置插入、extend 拼接可迭代对象。删：pop(i) 按索引弹出并返回、remove(x) 按值删第一个匹配（不存在抛 ValueError）、del a[i]、clear 清空。查：index(x) 返回值位置（找不到抛 ValueError）、count(x) 计数、in 判断存在。改：a[i]=x 直接赋值。",
+          "level": 2
+        },
+        {
+          "id": "w3d4-p4",
+          "topic": "排序 sort 与 sorted 的区别",
+          "desc": "a.sort() 原地排序、返回 None、只对列表可用；sorted(a) 返回新列表、不改原数据、任何可迭代对象都能用。都支持 reverse=True 降序和 key=函数 自定义排序依据，如按成绩排 sorted(students, key=lambda s: s['score'], reverse=True)。给字典列表排序缺 key 会报 TypeError。",
+          "level": 2
+        },
+        {
+          "id": "w3d4-p5",
+          "topic": "列表推导式",
+          "desc": "[表达式 for x in 可迭代 if 条件] 一行完成过滤加变换，如 [x*x for x in range(10) if x%2==0]。等价于 for+append 但更快更短。嵌套推导式按书写顺序从左到右展开，读不通时改回普通 for 循环。",
+          "level": 2
+        },
+        {
+          "id": "w3d4-p6",
+          "topic": "统计场景的算法组合",
+          "desc": "成绩统计器典型四步：遍历求 sum 与 len 算平均、max/min 求极值、sorted 排序取中位、列表推导过滤及格。内置 sum/len/max/min 是 C 实现，比手写循环快，能用内置就别循环。中位数要先排序再按奇偶分情况取中间值。",
+          "level": 2
+        }
+      ]
+    },
+    "w3d5": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w3d5-p1",
+          "topic": "字典的键值结构",
+          "desc": "字典用 {键: 值}，键必须可哈希（不可变：str/int/float/tuple），值任意。字典无重复键，后写覆盖先写；Python 3.7+ 保证插入顺序。查找是哈希表 O(1)，比列表遍历 O(n) 快得多，所以按名字查东西优先用字典。",
+          "level": 2
+        },
+        {
+          "id": "w3d5-p2",
+          "topic": "字典的增删改查",
+          "desc": "查：d[k] 不存在抛 KeyError，安全取值用 d.get(k, 默认值)。增改：d[k]=v 键存在即改、不存在即增。删：del d[k]、pop(k, 默认值) 弹出并返回。遍历：d.keys()、d.values()、d.items() 返回视图对象，for k,v in d.items() 是标准写法。",
+          "level": 2
+        },
+        {
+          "id": "w3d5-p3",
+          "topic": "setdefault 与计数惯用法",
+          "desc": "d.setdefault(k, []) 键不存在时设默认值再返回，键存在直接返回原值，是分组与计数的惯用法：d.setdefault(word, []).append(pos) 建倒排索引。更简洁的计数写法是 collections.Counter，传给 most_common(n) 直接拿到前 n 高频。",
+          "level": 3
+        },
+        {
+          "id": "w3d5-p4",
+          "topic": "集合 set 与去重运算",
+          "desc": "set 是无序不重复的可哈希元素集合，set(列表) 一行去重（丢掉原顺序）。支持 & 交、| 并、- 差、^ 对称差，用于求共同好友、差集等。空集合必须写 set() 不能写 {}（那是空字典）。",
+          "level": 2
+        },
+        {
+          "id": "w3d5-p5",
+          "topic": "词频统计实现路径",
+          "desc": "词频统计四步：读文本统一小写、按空格或正则切词、用字典或 Counter 累加计数、按值排序取前 N。排序用 sorted(cnt.items(), key=lambda kv: kv[1], reverse=True)。要过滤标点先 re.sub 清洗，要处理停用词先做停用词表剔除。",
+          "level": 2
+        },
+        {
+          "id": "w3d5-p6",
+          "topic": "字典的嵌套与更新坑",
+          "desc": "嵌套字典取值必须逐层存在，d['a']['b'] 在 a 不存在时抛 KeyError，可用 d.get('a', {}).get('b') 兜底。update() 是浅合并、同键覆盖。两个字典的合并还可 {**d1, **d2}（后覆盖前）。列表做 values 时要小心多键共享同一个列表对象。",
+          "level": 3
+        }
+      ]
+    },
+    "w3d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w3d6-p1",
+          "topic": "数据存储选择与持久化",
+          "desc": "命令行通讯录数据要跨次运行保留，最简单是存 JSON 文件：启动时 json.load 读成列表、退出时 json.dump 写回。内存里用列表存联系人、每条是 {name:..., phone:...} 字典。这是从「变量内存」迈向「持久化存储」的第一步。",
+          "level": 2
+        },
+        {
+          "id": "w3d6-p2",
+          "topic": "增删查改四功能的实现骨架",
+          "desc": "增：input 收姓名电话构造字典 append。删：按姓名找索引再 pop，找不到提示不存在。查：遍历列表比对姓名（或全字段模糊匹配）。改：先定位到那条字典再更新字段。四功能共用一个 while True 菜单 + input 选数字 + if/elif 分发，直到输 0 退出。",
+          "level": 2
+        },
+        {
+          "id": "w3d6-p3",
+          "topic": "函数拆分与职责单一",
+          "desc": "把 add/delete/search/update/load/save 各写成一个函数，main 只负责菜单与分发。好处：一处出错只查一个函数、名字即文档、后续可单独测试。函数参数传数据、返回值传结果，避免全用全局变量。",
+          "level": 2
+        },
+        {
+          "id": "w3d6-p4",
+          "topic": "输入校验与异常兜底",
+          "desc": "三个必须校验的点：菜单选项非数字要防 ValueError、手机号要正则校验格式、姓名为空要拦。统一写法是 try/except ValueError 给出友好提示并重新循环，而不是让程序崩掉。这就是「代码能跑」和「能给人用」的分界线。",
+          "level": 3
+        },
+        {
+          "id": "w3d6-p5",
+          "topic": "文件读写的编码与模式",
+          "desc": "open(path, 'r', encoding='utf-8') 显式指定 UTF-8，不给中文 Windows 下会乱码。推荐 with open(...) as f: 写法，块结束自动关闭文件。写 JSON 时 json.dump(data, f, ensure_ascii=False, indent=2) 保证中文可读。文件不存在时 load 要捕获 FileNotFoundError 返回空列表。",
+          "level": 2
+        },
+        {
+          "id": "w3d6-p6",
+          "topic": "命令行程序的可用性细节",
+          "desc": "一个能交付的命令行程序至少做到：菜单循环不退出、非法输入不崩、操作有成功/失败回显、数据落盘不丢、启动能读到上次数据。这五条就是验收标准，任一缺失都算半成品。",
+          "level": 1
+        }
+      ]
+    },
+    "w3d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w3d7-p1",
+          "topic": "闭卷重写通讯录的检验价值",
+          "desc": "闭卷重写不是重复劳动，是检验「知识是否在自己脑子里」的唯一标准。能看懂代码不等于能写出代码，重写时卡住的地方就是没学会的地方，比看十遍视频有效。检验标准：不查资料从空文件写到程序可运行。",
+          "level": 1
+        },
+        {
+          "id": "w3d7-p2",
+          "topic": "本周核心语法清单回忆",
+          "desc": "六大块：变量与动态类型、input 与 f-string、if/elif/else 与真值规则、while/for/range/break/continue、列表增删改查与切片排序、字典与集合。这六块是后续所有 Python 代码的地基，缺一块后面都写不动。",
+          "level": 2
+        },
+        {
+          "id": "w3d7-p3",
+          "topic": "常见坑集中复盘",
+          "desc": "七个高频坑：缩进混用 Tab 与空格报 TabError、input 忘了转 int 导致字符串拼接、列表赋值是引用共享改 b 波及 a、浮点比较用 == 失败、字典取不存在的键抛 KeyError、循环变量在循环后残留、range 左闭右开导致数组下标越界。每一条都值得写进 Anki。",
+          "level": 2
+        },
+        {
+          "id": "w3d7-p4",
+          "topic": "从「能跑」到「能交付」",
+          "desc": "能跑：路径顺利时输出正确。能交付：异常输入不崩、边界情况有处理、数据持久化、代码按功能拆函数、命名可读。这四级台阶是判断自己真实水平的标准，本周应停在第二级。",
+          "level": 2
+        },
+        {
+          "id": "w3d7-p5",
+          "topic": "Python 在前八周链路中的位置",
+          "desc": "W1 计算机组成与命令行、W2 Git 与 HTTP 是环境与工具底座，W3~W4 的 Python 是唯一主力编程语言，后面 W5 起的后端、爬虫、数据处理全建立在它之上。本周不牢，后面每一周都在还债。",
+          "level": 2
+        },
+        {
+          "id": "w3d7-p6",
+          "topic": "主动回忆与 Anki 卡片制作",
+          "desc": "一张好卡只考一个点、正面是问题背面是答案加例子，例如正面「input() 返回什么类型」背面「str，参与运算必须 int() 转换」。闭卷写作加间隔重复复习，比反复看视频的留存率高一个量级。",
           "level": 1
         }
       ]
