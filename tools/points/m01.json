@@ -3,7 +3,8 @@
   "week_titles": {
     "1": "计算机组成 / 操作系统 / 命令行 / 文件系统",
     "2": "Git 进阶 / HTTP / 开发者工具",
-    "3": "Python 基础（一）"
+    "3": "Python 基础（一）",
+    "4": "Python 基础（二）"
   },
   "items": {
     "w1d1": {
@@ -863,6 +864,293 @@
           "id": "w3d7-p6",
           "topic": "主动回忆与 Anki 卡片制作",
           "desc": "一张好卡只考一个点、正面是问题背面是答案加例子，例如正面「input() 返回什么类型」背面「str，参与运算必须 int() 转换」。闭卷写作加间隔重复复习，比反复看视频的留存率高一个量级。",
+          "level": 1
+        }
+      ]
+    },
+    "w4d1": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w4d1-p1",
+          "topic": "def 定义函数与调用",
+          "desc": "用 def 名字(参数): 定义，函数体靠缩进；定义只是把函数对象绑到名字上，不执行，调用时从内存找到函数对象对应代码块执行；不带括号的写法 f 打印出的是对象地址，调用必须写 f()。",
+          "level": 1
+        },
+        {
+          "id": "w4d1-p2",
+          "topic": "形参与实参、位置与关键字传参",
+          "desc": "函数定义里的叫形参，调用时传的叫实参；按位置传要求数量一致，按关键字传不受顺序限制，混用时位置参数必须在关键字参数前面，否则报 SyntaxError。",
+          "level": 2
+        },
+        {
+          "id": "w4d1-p3",
+          "topic": "默认参数、可变参数与返回值",
+          "desc": "默认参数靠后设，如 def f(a, b=10)；可变参数 *args 收成元组、**kwargs 收成字典；return 返回一个值，多个值用逗号会自动打包成元组，没写 return 时函数返回 None，不要靠 None 参与运算。",
+          "level": 2
+        },
+        {
+          "id": "w4d1-p4",
+          "topic": "默认参数的可变对象大坑",
+          "desc": "def f(lst=[]) 的默认值只在定义时求值一次，每次调用共用同一个列表，导致数据越积越多；正确写法是默认设 None，函数体内 if lst is None: lst = []。这是 Python 最常见的新手坑之一。",
+          "level": 3
+        },
+        {
+          "id": "w4d1-p5",
+          "topic": "局部变量、全局变量与作用域 LEGB",
+          "desc": "查找顺序是 Local、Enclosing、Global、Built-in；函数内部只读全局变量没问题，要改全局必须写 global 声明，否则会当局部变量处理并报 UnboundLocalError；嵌套函数改外层变量用 nonlocal。",
+          "level": 3
+        },
+        {
+          "id": "w4d1-p6",
+          "topic": "函数拆分与工具函数的职责单一",
+          "desc": "一个函数只做一件事，输入靠参数、输出靠 return，不靠全局变量传递；判断是否该拆的简单标准是能否用一句不含“并且”的话说清它的作用；本周产出的 10 个工具函数必须各自可单独测试。",
+          "level": 2
+        }
+      ]
+    },
+    "w4d2": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w4d2-p1",
+          "topic": "open 的模式与文件句柄",
+          "desc": "open(path, mode) 常用模式 r 读、w 覆盖写、a 追加、r+ 读写；w 会把文件清空，误用等于删数据；不加 b 是文本模式，加 b 是二进制模式；必须 close 释放句柄，否则数据可能没刷盘。",
+          "level": 2
+        },
+        {
+          "id": "w4d2-p2",
+          "topic": "with 语句自动关闭文件",
+          "desc": "with open(...) as f 即使在块内抛异常也能保证 close，等价于 try/finally；写法固定为 with open(path, 'r', encoding='utf-8') as f:，不要写成 f = with ...，也不要手动再 close。",
+          "level": 2
+        },
+        {
+          "id": "w4d2-p3",
+          "topic": "编码参数与乱码根因",
+          "desc": "不指定 encoding 时 Windows 用 GBK、Linux 用 UTF-8，跨平台必乱码；统一写 encoding='utf-8'；读取报 UnicodeDecodeError 通常是文件本身不是 UTF-8，可用 errors='ignore' 或先转码；Windows 下写文件还要注意换行符被自动转成 \\r\\n。",
+          "level": 3
+        },
+        {
+          "id": "w4d2-p4",
+          "topic": "读文件的三种方式",
+          "desc": "read() 一次读全部返回字符串，read(n) 读 n 个字符，readlines() 返回行列表带换行符；最常用的是 for line in f 逐行迭代，内存友好；line.strip() 去掉末尾换行，否则比较时会不相等。",
+          "level": 2
+        },
+        {
+          "id": "w4d2-p5",
+          "topic": "CSV 读写与 csv 模块",
+          "desc": "原生 split(',') 无法处理字段内含逗号的情况；标准做法是 import csv，用 csv.reader(f) 逐行读成列表、csv.writer(f).writerow(row) 写；读出来全是字符串，数字要手动 int()/float() 转换。",
+          "level": 2
+        },
+        {
+          "id": "w4d2-p6",
+          "topic": "FileNotFoundError 与文件存在性判断",
+          "desc": "打开不存在的文件（r 模式）抛 FileNotFoundError；不要靠 if os.path.exists 先判断再打开（存在竞态），直接 try: open 再 except FileNotFoundError 处理更可靠；w/a 模式会自动创建文件，不报这个错。",
+          "level": 3
+        }
+      ]
+    },
+    "w4d3": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w4d3-p1",
+          "topic": "try/except 的结构与异常匹配",
+          "desc": "try 里放可能出错的代码，except 后接异常类型匹配，按书写顺序从上往下匹配，命中第一个就跳出；except Exception as e 能拿到异常对象打印原因；finally 无条件执行，用于释放资源。",
+          "level": 1
+        },
+        {
+          "id": "w4d3-p2",
+          "topic": "裸 except 的危害与精确捕获",
+          "desc": "光写 except: 会吞掉包括 KeyboardInterrupt、SystemExit 在内的一切异常，导致 Ctrl+C 都停不下来且掩盖真实 bug；应该按类型精确捕获 ValueError、KeyError、FileNotFoundError，非预期异常要让它抛出来。",
+          "level": 3
+        },
+        {
+          "id": "w4d3-p3",
+          "topic": "常见内置异常类型辨析",
+          "desc": "ValueError 值不对（int('abc')）、TypeError 类型不对（'1'+1）、KeyError 字典键不存在、IndexError 列表越界、ZeroDivisionError 除零、AttributeError 属性不存在；出题时看清触发条件再选类型。",
+          "level": 2
+        },
+        {
+          "id": "w4d3-p4",
+          "topic": "else 分支与异常捕获范围",
+          "desc": "try/except/else/finally 四段：else 在 try 无异常时执行，用于放“成功后要做的事”，使 try 块尽量只有一句可能出错的语句；把大段逻辑塞进 try 会让 except 误抓到不相关的错误。",
+          "level": 3
+        },
+        {
+          "id": "w4d3-p5",
+          "topic": "raise 与自定义异常",
+          "desc": "用 raise ValueError('手机号格式错误') 主动抛异常；自定义异常写 class MyError(Exception): pass，继承 Exception；自定义异常的作用是让调用方能用类型区分业务错误，而不是靠解析错误字符串。",
+          "level": 2
+        },
+        {
+          "id": "w4d3-p6",
+          "topic": "健壮输入程序的重试循环模式",
+          "desc": "标准写法是 while True: 里 try: v=int(input(...)); break，except ValueError: print('请输入数字') 后继续循环；校验收敛在函数内，非法输入永远不把程序打崩，这是“健壮”的具体判据。",
+          "level": 2
+        }
+      ]
+    },
+    "w4d4": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w4d4-p1",
+          "topic": "import 的三种写法与命名空间",
+          "desc": "import m 用 m.f() 调用、from m import f 直接 f()、from m import f as g 起别名；import 把模块对象整体绑定到名字，from import 只绑定指定成员；同名函数被后导入的覆盖，可用别名避免冲突。",
+          "level": 1
+        },
+        {
+          "id": "w4d4-p2",
+          "topic": "模块的 __name__ 与主程序入口",
+          "desc": "脚本直接运行时 __name__ 等于 '__main__'，被 import 时等于模块名；因此把测试代码写在 if __name__ == '__main__': 下面，避免被导入时自动执行，这是模块可复用的前提。",
+          "level": 2
+        },
+        {
+          "id": "w4d4-p3",
+          "topic": "pip 安装与国内镜像源",
+          "desc": "pip install 包名 安装、pip list 查看、pip uninstall 卸载、pip freeze > requirements.txt 导出依赖；国内常用 -i https://pypi.tuna.tsinghua.edu.cn/simple 指定镜像加速，配好后可写入 pip.conf 持久生效。",
+          "level": 1
+        },
+        {
+          "id": "w4d4-p4",
+          "topic": "venv 虚拟环境与依赖隔离",
+          "desc": "python3 -m venv .venv 创建，source .venv/bin/activate 激活（Windows 是 .venv\\Scripts\\activate），deactivate 退出；虚拟环境把依赖装在项目目录内，避免 A 项目升级库搞崩 B 项目；requirements.txt 用于在新环境复现。",
+          "level": 2
+        },
+        {
+          "id": "w4d4-p5",
+          "topic": "包与目录结构的层级关系",
+          "desc": "包是带 __init__.py 的目录，包内可再套子包；import 路径按包目录层级书写，如 from pkg.sub import mod；__init__.py 在导入包时执行，可用来暴露常用接口或做初始化。",
+          "level": 3
+        },
+        {
+          "id": "w4d4-p6",
+          "topic": "模块搜索路径与同名文件遮蔽",
+          "desc": "import 时按 sys.path 顺序查找：脚本所在目录、PYTHONPATH、标准库、site-packages；自己在项目里建了 json.py 之类的同名文件会把标准库顶掉，导致标准库功能异常，这是极难排查的坑。",
+          "level": 3
+        }
+      ]
+    },
+    "w4d5": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w4d5-p1",
+          "topic": "class 定义类与实例化",
+          "desc": "class 类名: 定义类，类名大驼峰；obj = 类名() 创建实例；__init__ 是初始化方法，创建实例时自动调用，self 指代当前实例且必须写在首位但不是普通参数。",
+          "level": 1
+        },
+        {
+          "id": "w4d5-p2",
+          "topic": "实例属性与类属性",
+          "desc": "写在 __init__ 里用 self.x 赋的是实例属性，每个实例独立；写在 class 体内直接赋值的是类属性，全体实例共享；通过实例给同名类属性赋值时实际新建了实例属性，类属性不变，这一区分是常见考点。",
+          "level": 3
+        },
+        {
+          "id": "w4d5-p3",
+          "topic": "方法与 self 的含义",
+          "desc": "定义 def show(self): 后调用 obj.show() 时 Python 自动把 obj 传入 self，等价于 类名.show(obj)；忘写 self 会导致调用时报 takes 0 positional arguments but 1 was given，这类报错几乎都是漏写 self。",
+          "level": 2
+        },
+        {
+          "id": "w4d5-p4",
+          "topic": "继承与 super()",
+          "desc": "class Dog(Animal): 表示继承，子类自动获得父类的方法；子类重写 __init__ 时必须调 super().__init__(...) 完成父类初始化，否则父类属性缺失；方法查找沿 MRO（方法解析顺序）向上查找。",
+          "level": 2
+        },
+        {
+          "id": "w4d5-p5",
+          "topic": "魔法方法 __str__ 与 __repr__",
+          "desc": "不定义 __str__ 时 print(obj) 输出类似 <__main__.A object at 0x...> 的内存地址；定义 __str__ 返回字符串可让 print 友好显示，__repr__ 面向调试；面试常问二者区别：__str__ 给人看，__repr__ 给开发者看。",
+          "level": 2
+        },
+        {
+          "id": "w4d5-p6",
+          "topic": "用类重写通讯录的思路",
+          "desc": "把数据从全局列表搬进 self.contacts，把 add/delete/search/update 变成方法，外部只调方法不碰数据；好处是状态与行为封装在一起，可同时存在两个互不干扰的通讯录实例，这是从函数式到面向对象的核心变化。",
+          "level": 2
+        }
+      ]
+    },
+    "w4d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w4d6-p1",
+          "topic": "JSON 的结构与 Python 对象映射",
+          "desc": "JSON 对象对应 dict、数组对应 list、字符串对应 str、数字对应 int/float、true/false 对应 True/False、null 对应 None；JSON 的键必须是双引号字符串，不能是单引号或数字。",
+          "level": 2
+        },
+        {
+          "id": "w4d6-p2",
+          "topic": "json.dumps 与 json.loads 序列化",
+          "desc": "json.dumps(obj) 转字符串、json.loads(s) 转对象，两个 s 代表 string，在内存里来回；ensure_ascii=False 才不把中文转成 \\uXXXX，indent=2 美化缩进，这两项是导出可读 JSON 文件的标配。",
+          "level": 2
+        },
+        {
+          "id": "w4d6-p3",
+          "topic": "json.dump 与 json.load 文件读写",
+          "desc": "json.dump(obj, f) 直接写文件对象、json.load(f) 直接读文件对象，注意没有 s 的这组才是操作文件；写文件时模式用 w，且必须指定 encoding='utf-8'。",
+          "level": 2
+        },
+        {
+          "id": "w4d6-p4",
+          "topic": "记账本的数据模型设计",
+          "desc": "每条记录用一个字典 {日期, 类型, 金额, 备注}，整体是记录列表，顶层存 {'records': [...]} 方便以后扩展字段；金额统一存 float 或统一存分为单位的 int，避免浮点存储导致的精度问题。",
+          "level": 2
+        },
+        {
+          "id": "w4d6-p5",
+          "topic": "持久化时机与数据不丢的保证",
+          "desc": "启动时 json.load 读入，每次增删改后立即 json.dump 写回，而不是只在退出时写；只在退出时写会导致进程被杀时数据全丢；写文件建议先写临时文件再 os.replace 原子替换，防止写一半断电损坏。",
+          "level": 3
+        },
+        {
+          "id": "w4d6-p6",
+          "topic": "统计口径与报表输出",
+          "desc": "按类型汇总用 dict 累加或 collections.Counter，按月份汇总按日期字符串前 7 位切片分组；平均支出算 total/len 时注意 len 为 0 会抛 ZeroDivisionError，必须先判空。",
+          "level": 2
+        }
+      ]
+    },
+    "w4d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w4d7-p1",
+          "topic": "闭卷重写记账本的检验价值",
+          "desc": "与前两周一样，标准是不查资料从空文件写到能跑；函数定义、文件读写、异常处理、类这些点里任何一处写不顺，说明该点只是看过没掌握，这就是本周唯一有效的自测。",
+          "level": 1
+        },
+        {
+          "id": "w4d7-p2",
+          "topic": "本周语法清单回忆",
+          "desc": "六大块：def 参数与返回值 / 作用域 LEGB / 文件 open 与 with 与 encoding / try-except-else-finally 与 raise / import 与 pip 与 venv / class 属性方法与继承；能不看笔记口述这六块即达标。",
+          "level": 2
+        },
+        {
+          "id": "w4d7-p3",
+          "topic": "本周坑集中复盘",
+          "desc": "默认参数设可变对象、函数内改全局忘写 global、open 忘写 encoding 乱码、w 模式误清空文件、裸 except 吞异常、漏写 self、__init__ 里忘调 super()、json 中文变 \\uXXXX——这八条是本周最容易被扣分的点。",
+          "level": 2
+        },
+        {
+          "id": "w4d7-p4",
+          "topic": "从函数式到面向对象的分界",
+          "desc": "W3 的通讯录靠全局变量 + 函数堆出来，W4 的记账本要求把数据和操作收进类里；判断标准是能否同时创建两个实例而互不干扰，能做到就说明真正理解了封装。",
+          "level": 2
+        },
+        {
+          "id": "w4d7-p5",
+          "topic": "Python 两周一并的位置与后续依赖",
+          "desc": "W3 打语法地基，W4 打工程地基；后面的后端接口、爬虫、数据分析全部建立在这两周之上，函数与类的写法不扎实，后面所有代码都写不顺，所以这两周值得闭卷重写两遍。",
+          "level": 2
+        },
+        {
+          "id": "w4d7-p6",
+          "topic": "思维导图与主动回忆的用法",
+          "desc": "导图只画主干：文件、异常、模块、类四个分支各挂 3~5 个关键词，不抄代码；做完立刻用遮住分支默写一遍，能默出来才算过了这一遍；导图是回忆工具不是抄写工具。",
           "level": 1
         }
       ]
