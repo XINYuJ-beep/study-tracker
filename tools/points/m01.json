@@ -7,7 +7,8 @@
     "4": "Python 基础（二）",
     "5": "Python 进阶与工具",
     "6": "数据结构入门",
-    "7": "HTML"
+    "7": "HTML",
+    "8": "CSS"
   },
   "items": {
     "w1d1": {
@@ -2016,6 +2017,293 @@
           "topic": "本周错题归因：把错题拆成三类",
           "level": 3,
           "desc": "周日复盘时把本周错题按原因分三类，不许混着看。第一类记不住：当时会，现在想不起，靠 Anki 解决。第二类理解错：概念本身就搞反了，比如把 strong 和 b 当成一个东西、把 get 和 post 的幂等性记反，这类必须回去重看原视频对应片段，加卡片没用。第三类手生：道理都懂，写的时候漏了属性、拼错标签名，这类只能靠动手重写一遍解决。三类分开统计，哪类最多就是下周的重点。多数人的错误集中在第二类和第三类，却只做第一类的复习，这是最常见的自我欺骗，必须掐掉。"
+        }
+      ]
+    },
+    "w8d1": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w8d1-p1",
+          "topic": "选择器的四种基础形态与匹配顺序",
+          "desc": "CSS 选择器就是“在一棵 DOM 树上定位节点”的表达式，浏览器解析样式表后，把每条规则的选择器当作筛选条件，从右往左匹配。基础形态只有四种：标签选择器 div 命中所有 div；类选择器 .card 命中 class 包含 card 的元素；ID 选择器 #app 命中唯一元素；属性选择器 [type=\"text\"] 按属性匹配。优先级由特异性决定，.card 是 0-1-0，#app 是 1-0-0，标签是 0-0-1，所以 #app 一定压过 .card，无论书写顺序。同特异性才比先后，后写的赢。记住一句话：CSS 不比较“谁更具体”，只比较“谁特异性高”，特异性相同才轮到顺序。",
+          "level": 1
+        },
+        {
+          "id": "w8d1-p2",
+          "topic": "盒模型的四层结构与 box-sizing 的两套算法",
+          "desc": "每个元素都是一个盒子，由内到外四层：content（内容区）、padding（内边距）、border（边框）、margin（外边距）。默认 box-sizing 是 content-box，此时 width 只算 content，实际占位 = width + padding×2 + border×2，所以给一个 width:100px、padding:10px、border:1px 的 div，真实宽度是 122px，横排两个就会溢出换行。改成 box-sizing:border-box 后，width 直接等于 content+padding+border 的总和，写 100px 就是 100px，内部自动压缩 content。工程上统一在全局写 *, *::before, *::after { box-sizing: border-box; }，把“算宽度”这件事从心算变成直觉，这是所有现代布局方案（Flex、Grid）能正常工作的事实前提。",
+          "level": 1
+        },
+        {
+          "id": "w8d1-p3",
+          "topic": "外边距合并的三种典型场景",
+          "desc": "margin 合并只发生在垂直方向、块级、相邻关系上，水平方向的 margin 永远不会合并。三种场景必记：一、兄弟元素上下相邻，上元素 margin-bottom:20px、下元素 margin-top:30px，实际间距取较大值 30px，不是 50px；二、父子元素之间，父元素没有 border 或 padding 隔开时，子元素的 margin-top 会“穿透”出去变成父元素的 margin-top，表现为整块下移；三、空元素自己的 margin-top 与 margin-bottom 会合并成一条。规避手段：让父元素产生 BFC（overflow:hidden 或 display:flow-root），或者用 padding 代替子元素的 margin-top。布局时如果发现间距“对不上”，先怀疑 margin 合并，这是新手最爱踩的坑。",
+          "level": 2
+        },
+        {
+          "id": "w8d1-p4",
+          "topic": "行内元素与块级元素的盒模型差异",
+          "desc": "块级元素（div、p、h1）独占一行，width 默认撑满父容器，四向 padding 与 margin 全部生效。行内元素（span、a、strong）不独占行，width 与 height 直接失效，垂直方向的 padding 与 margin 不占布局空间、只影响视觉，但会压到相邻行，导致重叠。行内块（display:inline-block）介于两者之间：不独占行、能设宽高，但基线对齐会带一条“幽灵空白”——元素 img 下方莫名多出 3~4px 空隙，原因是基线下方留给字母下伸部分的空间。修复方式：给父元素 font-size:0，或给 img 加 display:block / vertical-align:middle。改 display 之前先想清楚要“是否独占行”和“能否设宽高”这两件事，答案就唯一了。",
+          "level": 2
+        },
+        {
+          "id": "w8d1-p5",
+          "topic": "padding 与 margin 的选型判断",
+          "desc": "两者都能造间距，但语义完全不同，选错会在后期改样式时连环爆炸。padding 属于元素自身，会带背景色、会吃掉 border-box 内部空间、点击元素时也算在响应区内；margin 属于元素外部，透明、不响应点击、兄弟之间会合并。判断法则：靠近背景、边框、可点击范围、需要撑开内部呼吸感的，用 padding；元素与元素之间的间隔、需要留出“外部空白”的，用 margin。还有一个硬约束：行内元素的垂直 padding 不推布局，想在行内造上下留白只能改行高（line-height）或改成 inline-block。工程上常见做法是容器用 padding 定内框、列表项之间用 margin-bottom 定间隔，一条规则贯穿全站，减少后期维护成本。",
+          "level": 2
+        },
+        {
+          "id": "w8d1-p6",
+          "topic": "本周 CSS 基础的三条硬线",
+          "desc": "第一，全局强制 box-sizing:border-box，只在特殊场景（例如要给一张图留出精确的内容区）时局部退回 content-box，并且必须写明注释说明原因。第二，尺寸单位优先用 rem/em 或百分比、vw/vh，px 只用于边框、阴影这类“细线级”固定值，这样字号缩放时整体布局不会散架。第三，写完任何一块布局都打开 DevTools 的盒模型面板，逐个点开元素看四层数值，比肉眼猜间距快十倍。这三条线不涉及高级技巧，但决定了后面 Flex、定位、响应式能不能顺利接上。",
+          "level": 3
+        }
+      ]
+    },
+    "w8d2": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w8d2-p1",
+          "topic": "Flex 容器与项目的职责划分",
+          "desc": "Flex 是一维布局模型，沿一条主轴排布。设为 display:flex 的元素叫“容器”，它的直接子元素叫“项目”。容器只管五件事：主轴方向（flex-direction: row / column）、换行（flex-wrap）、主轴对齐（justify-content）、交叉轴对齐（align-items）、多行时的行间对齐（align-content）。项目自己管三件事：占多少空间（flex-grow / flex-shrink / flex-basis，缩写 flex）、自身在交叉轴的对齐（align-self）、排列顺序（order）。这条职责线必须分清：给项目写 justify-content 一律无效，给容器写 flex-grow 也无效，值不生效九成是不在这条线上。flex-direction:row 时主轴水平、交叉轴垂直；column 时两者对调，all 判断都跟着换，这是最容易读错代码的地方。",
+          "level": 1
+        },
+        {
+          "id": "w8d2-p2",
+          "topic": "flex 缩写三值的真实语义",
+          "desc": "flex:1 是 flex:1 1 0% 的缩写，三个分量依次是 grow（多余空间怎么分）、shrink（空间不够怎么缩）、basis（分配前的基准尺寸）。flex:1 的关键在 basis 为 0，意味着“不管内容多宽，先按 0 算，剩余空间平均分”，所以三个 flex:1 的盒子宽度永远相等；而 flex:auto 等于 1 1 auto，basis 是内容宽度，结果是谁内容长谁就宽。flex:none 等于 0 0 auto，尺寸完全由内容和 width 决定，不伸不缩，是侧边栏定宽的常用写法。flex:1 1 200px 表示基准 200px，多出的空间按 1 份分，欠下时按 1 份缩。写 Flex 时先问自己“基准多少、要不要长、要不要缩”三问，写成三值形式而不是只写 flex:1，能省掉 80% 的宽度对不上的排查时间。",
+          "level": 1
+        },
+        {
+          "id": "w8d2-p3",
+          "topic": "三栏布局的两种正确写法",
+          "desc": "左右固定、中间自适应是 Flex 的经典题。写法一：容器 display:flex，左栏 width:200px、flex:none，右栏 width:200px、flex:none，中栏 flex:1（即 1 1 0%），中栏自动吃满剩余宽度，窗口缩放时只有中栏变化。写法二：用 flex:1 1 auto 加 min-width:0，但写法一更稳。必踩的坑是中栏放长文本或长单词时不换行、直接穿透溢出，因为 Flex 项目的 min-width 默认是 auto（不会小于内容最小宽度），修复只需给中栏加 min-width:0 或 overflow:hidden。另一个坑是顺序：想把中栏写在 HTML 最后、视觉上放中间，可以用 order，但 order 只改视觉顺序不改 DOM 顺序，会影响 Tab 键焦点顺序与读屏器朗读，能用源码顺序解决就别用 order。",
+          "level": 2
+        },
+        {
+          "id": "w8d2-p4",
+          "topic": "主轴与交叉轴对齐的组合与易错点",
+          "desc": "justify-content 控制主轴：flex-start 靠头、flex-end 靠尾、center 居中、space-between 两端对齐中间均分、space-around 每个项目两侧有相等留白（首尾留白是中间的一半）、space-evenly 所有间隔完全相等。align-items 控制交叉轴：stretch 是默认值，项目没设高度时被拉满容器；flex-start / flex-end / center 常用于垂直居中；baseline 按文字基线对齐，混合字号时很有用。垂直居中的最短写法就是容器两行：display:flex; align-items:center; justify-content:center。易错点：align-items:center 对已设固定 height 的项目是“居中”，但对没设高度的项目仍是 stretch 不居中，必须显式给高度；以及 flex-wrap:wrap 后 align-content 才有意义，不换行时它完全无效。",
+          "level": 2
+        },
+        {
+          "id": "w8d2-p5",
+          "topic": "flex-wrap 与 gap 的实操约束",
+          "desc": "flex-wrap:wrap 让项目在主轴放不下时换行，nowrap 是默认值、会强行挤压或溢出。换行后 align-content 才有意义（控制多行在交叉轴的分布），不换行时 align-content 无效、只有 align-items 有意义。间距现代写法用 gap（容器级属性，如 gap:16px 或 gap:12px 24px 分别代表行列），它只作用于项目之间、不作用于项目与容器边缘，这一点比给每个项目加 margin-right 再对最后一项 :last-child 清边距干净得多，也避免了 space-between 把首尾贴边的问题。兼容性上 gap 在容器 flex 上现代浏览器全支持，不需要回退，但旧版 Safari 14 以下仍有缺陷，做老端兼容时用 margin 方案。写响应式列表时最稳的是 flex-wrap:wrap + gap + 项目 flex:1 1 240px，天然自动折行。",
+          "level": 2
+        },
+        {
+          "id": "w8d2-p6",
+          "topic": "本周 Flex 的验收自查线",
+          "desc": "自查四面：一、容器上只写容器属性（display / flex-direction / flex-wrap / justify-content / align-items / align-content / gap），项目上只写项目属性（flex / align-self / order），不混写；二、中栏、长文本列的 Flex 项目都加 min-width:0，避免内容顶破布局；三、需要固定宽的侧边栏统一用 flex:none + width，需要自适应的用 flex:1，不混用 width 加 flex-grow；四、每个布局在 320px、768px、1440px 三个宽度下都拖一遍窗口，看有没有溢出、有没有被挤成零宽。加上周日闭卷默写 flex 三值语义与三栏布局代码，本周 Flex 就算真正掌握。",
+          "level": 3
+        }
+      ]
+    },
+    "w8d3": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w8d3-p1",
+          "topic": "position 五个取值的参照系差异",
+          "desc": "position 决定元素从哪里起步计算位置、以及是否脱离文档流。static 是默认值，按正常流排，top/left 无效。relative 相对“自己原本的位置”偏移，原位置仍占空间，偏移不影响兄弟布局，是给绝对子元素造参照系的常用手段。absolute 相对“最近的非 static 祖先”定位，没有则相对初始包含块，元素脱离文档流、不占原来的空间，宽度收缩为内容宽。fixed 相对视口定位，滚动不移动，常用于顶部导航、悬浮按钮，它的参照系还可以被祖先的 transform / filter / will-change 破坏——一加 transform:translateZ(0)，fixed 就会退化成相对该祖先定位，这是“固定头滚动后错位”的头号元凶。sticky 是滚动到阈值前像 relative、越过阈值后像 fixed，必须有 top/bottom 阈值才生效。",
+          "level": 1
+        },
+        {
+          "id": "w8d3-p2",
+          "topic": "绝对定位的水平垂直居中三行写法",
+          "desc": "让一个 absolute 元素在父容器里严格居中，最稳的写法是三步：父容器 position:relative；子元素 position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)。原理是先把自己的左上角推到容器中心点，再用 translate 把自身宽高的一半反向拉回，与自身尺寸无关，所以宽高动态变化也不会偏。老式写法用 left/right/top/bottom 全 0 加 margin:auto，要求元素有确定宽高才起作用。还有 flex 方案：父容器 display:flex; align-items:center; justify-content:center，子元素定位改回 static，这是最省心的做法。选型建议：只是居中就别上定位，直接 Flex；必须是浮在内容之上的弹窗才用 absolute 加 translate 组合。",
+          "level": 1
+        },
+        {
+          "id": "w8d3-p3",
+          "topic": "层叠上下文：z-index 大小不生效的真正原因",
+          "desc": "z-index 只在同一个层叠上下文内部比较大小，跨上下文时子元素的 z-index 再高也压不过别的上下文的父级。会新建层叠上下文的常见条件：根元素 html；position 非 static 且 z-index 不是 auto；opacity 小于 1；transform、filter、perspective 不为 none；will-change 指定了上述属性；isolation:isolate；flex/grid 项目的 z-index 不为 auto。实战表现：A 弹窗设了 z-index:9999 但被 z-index:10 的导航压住，因为导航父级有 transform 造了层叠上下文，弹窗被关在别的上下文档里。排查顺序：先看两者是否有共同祖先造了上下文，再把弹窗挂到 body 下（或用 portal 思路）统一比大小。",
+          "level": 2
+        },
+        {
+          "id": "w8d3-p4",
+          "topic": "优先级权重的计算与 !important 的边界",
+          "desc": "优先级是四元组比较：（行内样式，ID 数，类/属性/伪类数，标签/伪元素数）。.nav .item 是 0-2-0，#nav .item 是 1-1-0，后者赢；a:hover 是 0-1-1；:not() 本身不加权重但其内部选择器照算。!important 直接跳到最高层，同层多个 !important 再按特异性比，都带 !important 时后写的赢。合理用法只有两类：覆盖第三方库（如 UI 框架的默认样式）和临时紧急修补；负面后果是让后续所有人无法用正常特异性覆盖，形成“必须写更脏的 !important”的死循环。更稳的替代路径是提高特异性（给节点加类名）、用 :where() 把选择器权重归零、或把覆盖规则放在更靠后的样式表。规则判断顺序永远是：特异性 → 顺序 → 继承 → 默认值。",
+          "level": 2
+        },
+        {
+          "id": "w8d3-p5",
+          "topic": "transform 造层叠上下文与 fixed 失效的联动",
+          "desc": "transform 不是 none 时元素会同时做两件事：新建一个层叠上下文、成为后代 fixed 元素的包含块。这两个副作用在实战中经常一起爆：给一个列表容器加 transform:translateY(0) 想开启 GPU 加速，结果容器内的 fixed 悬浮按钮不再相对视口、滚动时跟着列表跑，同时列表内的弹窗 z-index 全部被关进同一个上下文里比大小。处理办法：需要 GPU 加速又想让子 fixed 正常工作，就把 fixed 元素移出该容器，挂到 body 直接子级；或者用 position:sticky 替代 fixed 做吸顶。写动画时另一条底线：只动 transform 和 opacity，不动 top/left/width，因为前者走合成层不触发重排、后者每帧重排，60fps 直接掉到 20fps。",
+          "level": 2
+        },
+        {
+          "id": "w8d3-p6",
+          "topic": "本周定位与层叠的四条硬规则",
+          "desc": "一、只要用 absolute，父级必须有 position:relative，且这条链上不能有人在中间偷偷加了 transform，否则参照系错位。二、任何 z-index 都要在同一层叠上下文的假设下核对，跨上下文比大小一定失败；排查顺序是先找共同祖先上的 transform / opacity / filter / isolation。三、样式滚动表禁止用 !important，只允许在两处：覆盖外部库、覆盖行内样式；其余场景用提高特异性或 :where() 解决。四、弹窗、下拉菜单、Toast 这类浮层统一挂到 body 下、用 z-index 分级表（导航 1000、下拉 1100、遮罩 1200、弹窗 1300、Toast 1400），全站只维护这一套数字。四步验一遍：导航滚动、弹窗开合、下拉在滚动容器内展开、移动端横竖屏切换，四个场景都不重叠、不穿模才算过。",
+          "level": 3
+        }
+      ]
+    },
+    "w8d4": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w8d4-p1",
+          "topic": "响应式三件套的分工与取舍",
+          "desc": "响应式不是单独一个 CSS 属性，而是 viewport 声明、相对单位与媒体查询三者配合：HTML 里必须写 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">，否则手机浏览器会按 980px 虚拟视口渲染再整体缩小，页面上任何媒体查询都算不准；CSS 中用 rem/vw/% 代替写死的 px，让尺寸随视口伸缩；最后用 @media 在断点处改写布局结构。三者的顺序是：viewport 解决“视口宽度是谁”，相对单位解决“小范围内弹性伸缩”，媒体查询解决“跨结构切换”。只做其中一两项都会出问题：只写媒体查询不加 viewport，手机上始终命中桌面断点；只用百分比不做断点，两栏在窄屏会被压成细条。",
+          "level": 1
+        },
+        {
+          "id": "w8d4-p2",
+          "topic": "移动优先与桌面优先的写法差异",
+          "desc": "移动优先指基础样式按窄屏写，用 min-width 的媒体查询逐级增强，断点形如 @media (min-width: 768px)；桌面优先反之，基础样式按宽屏写，用 max-width 逐级降级。移动优先的优势是手机端只需要解析基础规则、不需要覆盖桌面样式，加载与计算都更轻，且断点语义是“从多大开始变宽”，加新设备时兼容性更好；缺点是要先把窄屏想清楚。桌面优先的缺点是手机上要层层覆盖，容易出现样式污染和优先级打架。工程上统一选移动优先，断点写 min-width 并升序排列，<768 手机、768~1023 平板、>=1024 桌面是三段最常用的划分。",
+          "level": 1
+        },
+        {
+          "id": "w8d4-p3",
+          "topic": "媒体查询的语法与常用媒体特性",
+          "desc": "媒体查询写法是 @media 媒体类型 (特性: 值) and (特性: 值) { 规则 }，媒体类型可为 all/screen/print，and 连接多个条件，逗号表示“或”，not/only 用于取反与兼容老浏览器。常用特性：width/height 及其 min-/max- 前缀、orientation: portrait|landscape 判断横竖屏、hover: hover 区分有无悬停能力的设备、prefers-color-scheme: dark 读取系统深色模式、prefers-reduced-motion 尊重系统的“减少动态效果”。范围写法现代浏览器支持 (400px <= width <= 900px)，可读性优于 min-width 与 max-width 叠加。移动优先场景下统一用 min-width，避免 767/768 的 1px 缝隙问题。",
+          "level": 2
+        },
+        {
+          "id": "w8d4-p4",
+          "topic": "断点该怎么定：跟内容走，不跟设备走",
+          "desc": "断点的正确依据是内容开始变丑的宽度，不是 iPhone、iPad 的具体分辨率。做法是把浏览器从宽拉到窄，找到布局开始挤压、文字换行难看、按钮变形的那个像素，把它定为断点。经验区间：<576 单列手机，576~767 大屏手机与竖屏平板，768~1023 平板与折叠屏展开，1024~1439 笔记本，>=1440 桌面宽屏。断点数量控制在 3~4 个，每多一个断点就多一份样式维护成本与测试成本。定完必须实测：Chrome DevTools 的设备模拟只能看布局，触摸、滚动惯性、字体缩放要真机验证；重点回归 320px（小屏）与 768px 边界两侧，这两个位置最容易出横向滚动条。",
+          "level": 2
+        },
+        {
+          "id": "w8d4-p5",
+          "topic": "移动端适配的常见坑与修复手法",
+          "desc": "五个高频问题：一是出现横向滚动条，通常是某元素固定 width 超过视口、padding 撑破容器、或长英文/URL 未处理，修复用 max-width:100%、box-sizing:border-box、overflow-wrap:break-word，并用 * { box-sizing: border-box } 全局兜底；二是 1px 边框在 DPR=2/3 屏上看起来过粗，需用 transform: scaleY(0.5) 伪元素或 1px 的 border-image 方案；三是 100vh 在移动浏览器因地址栏收放而跳动，改用 100dvh 或 min-height:100vh 配合 flex；四是 font-size 小于 12px 在部分安卓机被强制放大，应改用 rem 并设 html 字号，或用 transform: scale 缩容器；五是固定定位元素被软键盘顶起，监听 visualViewport 高度变化做位移。",
+          "level": 2
+        },
+        {
+          "id": "w8d4-p6",
+          "topic": "本周响应式自查清单与验收口径",
+          "desc": "交付前按这张单子过一遍：① HTML 有 viewport meta 且 initial-scale=1；② 全局 box-sizing:border-box，无裸 px 宽度铺满；③ 断点用 min-width 升序，数量 <= 4；④ 320 / 375 / 768 / 1024 / 1440 五个宽度下截图，均无横向滚动条、无文字截断、无元素重叠；⑤ 图片统一 max-width:100%; height:auto，并按需加 srcset 或 <picture>；⑥ 点击区域不小于 44x44px；⑦ 深色模式与减少动画两个系统偏好下页面可读可操作；⑧ 真机至少测一台 iOS 与一台安卓。判定标准很直白：把浏览器窗口从最宽拖到最窄，全程不出现一次布局错乱，才算这周过线。",
+          "level": 3
+        }
+      ]
+    },
+    "w8d5": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w8d5-p1",
+          "topic": "CSS 自定义属性的定义、读取与作用域",
+          "desc": "自定义属性以 -- 开头，定义在任意选择器上，用 var(--name) 读取，形如 :root { --brand: #4d6bfe; } 配合 .btn { background: var(--brand); }。作用域规则和普通属性一致：定义在 :root 上全局可用，定义在某个容器上则只在该子树内生效，子元素可覆盖，天然支持主题分区。var() 支持回退值 var(--brand, #333)，第一个参数不存在时用第二个。关键特性是运行时可改：用 el.style.setProperty('--brand', '#f00') 就能即时切换主题，无需增删 class，这是 Sass 变量做不到的。命名建议带语义前缀（--color-primary、--space-md），不要用 --c1 这类无语义名。",
+          "level": 1
+        },
+        {
+          "id": "w8d5-p2",
+          "topic": "设计令牌与主题切换的工程落地",
+          "desc": "把颜色、间距、圆角、字号、阴影、层级六类基础值抽成令牌，集中定义在 :root 下，业务样式一律 var() 引用，禁止再写裸色值。主题切换有两种实现：一是 [data-theme=\"dark\"] 选择器上重新赋值同一批变量，JS 只切 body 的 data 属性；二是把多套令牌写在不同 class 上（.theme-dark）。前者更常见，因为属性选择器优先级低、易覆盖，且便于和 prefers-color-scheme 联动做默认值。落地的硬要求：所有可切换的属性都必须走变量，漏一个就会在深色模式下露出白底；变量定义要分层——原始色板（--blue-500）与语义令牌（--color-primary: var(--blue-500)）分开，换肤时只动语义层。",
+          "level": 2
+        },
+        {
+          "id": "w8d5-p3",
+          "topic": "transition 四要素与可动画属性的边界",
+          "desc": "transition 由四部分组成：transition-property 指定要过渡的属性，duration 指定时长，timing-function 指定缓动曲线，delay 指定延迟，缩写顺序为 property duration timing-function delay，最简写法 transition: all .2s ease。timing-function 常用 ease（默认，快起慢收）、ease-in/out、linear、cubic-bezier(.4,0,.2,1)（Material 标准曲线）。可平滑过渡的只有可插值的属性：长度、颜色、透明度、transform、filter 等；display、visibility 之外的离散属性、height:auto、以及从 none 到具体值的切换都不可插值，会直接跳变。性能上只有 transform 与 opacity 能走合成层不触发重排重绘，其余属性（width、top、margin）会触发 layout，动画卡顿大多源于此。",
+          "level": 1
+        },
+        {
+          "id": "w8d5-p4",
+          "topic": "过渡的触发条件与常见失效排查",
+          "desc": "transition 只在属性值发生变化时触发，且需要有明确的起始值与结束值。四种典型失效：一是元素首次渲染不算变化，页面加载时的入场动画必须用 @keyframes animation 或加一个初始 class 再在下一帧移除；二是从 display:none 切换到 block，元素重排导致起始状态丢失，正确做法是保留 display 只改 opacity/visibility，或配合 requestAnimationFrame 分两帧处理；三是过渡写在 :hover 上导致鼠标移出时无过渡，因为移出后该规则失效，应把 transition 写在默认状态、只把变化值写在 :hover；四是优先级更高的规则把属性覆盖，需要 devtools 里逐条看命中规则。排查顺序：确认属性可插值 → 确认起止值都非 auto/none → 确认 transition 在生效的规则上 → 确认无 !important 打断。",
+          "level": 2
+        },
+        {
+          "id": "w8d5-p5",
+          "topic": "animation、keyframes 与高帧率动效的写法",
+          "desc": "animation 用于多关键帧循环动画，写法 @keyframes name { 0% {…} 50% {…} 100% {…} } 配合 animation: name 1s ease-in-out infinite alternate。八个子属性中重点是 duration、iteration-count、direction（alternate 让奇偶次反向）、fill-mode（forwards 保留末帧）。与 transition 的分工：单次状态变化用 transition，多段轨迹、循环、自动播放用 animation。做流畅动效三条硬规则：① 只动 transform 与 opacity，位移用 translate3d 触发 GPU 合成，不要动 left/top；② 需要提前合成时加 will-change: transform，但用完要移除，长期挂着会吃显存；③ 动画期间避免读取 offsetHeight 等属性造成强制同步布局。60fps 意味着每帧 16.7ms，任何一次重排都可能掉帧。",
+          "level": 2
+        },
+        {
+          "id": "w8d5-p6",
+          "topic": "本周变量与动效自查清单",
+          "desc": "交付前逐条对照：① 全局没有裸色值，颜色/间距/圆角/字号全部走 var()；② 令牌分原始层与语义层两层，切换主题只动语义层；③ 主题切换用 data-theme 属性，一处赋值全部生效，无漏项；④ transition 只写在默认状态，且优先作用于 transform 与 opacity；⑤ 入场动画用 animation 而非 transition，无首帧跳变；⑥ 需要循环或往复的动效写了 iteration-count 与 direction；⑦ 系统开启“减少动态效果”时，通过 @media (prefers-reduced-motion: reduce) 关闭或缩短动画；⑧ Chrome Performance 面板录 3 秒，帧率稳定在 55 以上、无长任务。判定：动效看得见但不抢戏，去掉动效页面依然可用，才算过。",
+          "level": 3
+        }
+      ]
+    },
+    "w8d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w8d6-p1",
+          "topic": "还原设计稿的四步工作流",
+          "desc": "还原一张设计稿不要一上来就写样式，按四步走：第一步量结构，用笔把页面切成若干矩形块，标出每个块的宽高占比、内外边距、块与块的间距；第二步定骨架，用语义标签把块翻译成 header/main/section/footer，每个块先只写背景色和 border 把边界画出来；第三步填内容，图片和文字先进去，不管细样式；第四步对细节，逐块对齐字号、行高、圆角、阴影、颜色。为什么这个顺序重要：结构和内容没定就调细节，改一次结构意味着前面所有细节白调。实测经验是四步的时间分配大致 1:1:1:2，前两步快了后面必返工。",
+          "level": 1
+        },
+        {
+          "id": "w8d6-p2",
+          "topic": "从设计稿提取间距与字号体系",
+          "desc": "设计稿上的数值不是随便给的，通常成体系：间距多为 4 或 8 的倍数（4/8/12/16/24/32/48），字号多为 12/14/16/18/20/24/32 这样的阶梯。提取方法：把稿子上所有间距抄一遍，看出现频次最高的那几个值，一般不超过 5 个，这就是你的间距刻度；字号同理。落到代码上把它们定义成 CSS 变量 --space-1 到 --space-5、--fs-sm 到 --fs-xl，正文里只允许引用刻度，禁止写 padding: 13px 这种例外值。收益：改版时只调一处变量全站同步，且能避免出现 15px/17px 这种视觉上没差别、维护上纯添乱的数值。",
+          "level": 1
+        },
+        {
+          "id": "w8d6-p3",
+          "topic": "测量与标注：在浏览器里核对设计稿",
+          "desc": "拿到设计稿后最容易翻车的是“看起来一样但差 2px”。核对方法：页面写出来后用开发者工具的检查器逐一选中元素，看 computed 里的 width/height/padding/margin 实际值，和稿子上的标注比对；用截图工具叠加比对时，把设计稿降透明度铺在页面上再截屏，错位会立刻暴露。更彻底的做法是在页面临时加一行 * { outline: 1px solid rgba(255,0,0,.2); } 把每个盒子的边界画出来，肉眼即可判断对齐关系。注意事项：核对要看 computed 值而不是 sources 里写的值，因为 flex 收缩、百分比换算都会让最终尺寸和写的值不一致。",
+          "level": 2
+        },
+        {
+          "id": "w8d6-p4",
+          "topic": "用 Flex 搭页面骨架的常见结构",
+          "desc": "整页骨架的经典写法是一个纵向 Flex 容器：body 或最外层 .page 设 display:flex; flex-direction:column; min-height:100vh。里面分成 header（固定高，flex-shrink:0）、main（flex:1 吃掉剩余空间）、footer（固定高，flex-shrink:0）。main 内部要分左右两栏时再嵌一层横向 Flex，左栏 flex:0 0 240px 固定宽，右栏 flex:1 自适应。为什么用 min-height 而不是 height：height:100vh 在移动端会因为地址栏收放导致内容溢出或被裁，min-height 允许内容超长时页面自然撑高。这一套结构能覆盖 90% 的后台页和 80% 的官网首页。",
+          "level": 2
+        },
+        {
+          "id": "w8d6-p5",
+          "topic": "还原过程中最常见的四处偏差",
+          "desc": "第一处是行高：设计稿标 24px 行高不等于 line-height:24px 就够，如果字号 16、行高 24，line-height 应写 1.5 而不是 24px，否则子元素继承后按各自字号换算会全错。第二处是图片：图片默认是行内元素，底部会留 3~4px 空隙，必须加 display:block 或 vertical-align:top。第三处是百分比高度：父元素没有确定高度时子元素 height:50% 无效，这是还原时“高度设了没反应”的头号原因。第四处是字体渲染：不同系统默认字体不同，字宽会差，标注的换行位置对不上，应显式声明 font-family 兜底链，并接受 ±2px 的换行差异。",
+          "level": 2
+        },
+        {
+          "id": "w8d6-p6",
+          "topic": "本周还原稿验收清单",
+          "desc": "交付前逐条过：① 三个断点（手机/平板/桌面）各截一张图，与设计稿并排比对，主要区块位置一致；② 检查器里看每个容器，确认没有出现横向滚动条（document.documentElement.scrollWidth <= clientWidth）；③ 全站字体只用声明的兜底链，没有出现某个元素字体突然变成默认宋体；④ 所有间距和字号都来自变量刻度，grep 一遍样式文件里的裸 px 数值，数量应极少且每个都能解释；⑤ 图片全部 display:block，无底部空隙；⑥ 页面缩放到 200% 时内容不重叠不裁切；⑦ 删掉所有边框色和背景色后，区块仍能靠留白分辨层级。七条全过才算还原完成。",
+          "level": 3
+        }
+      ]
+    },
+    "w8d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w8d7-p1",
+          "topic": "默写 Flex 的属性分组",
+          "desc": "默写不是背单词，是按组背。第一组容器三件：display:flex、flex-direction、flex-wrap（可简写 flex-flow）。第二组主轴对齐：justify-content（flex-start/flex-end/center/space-between/space-around/space-evenly）。第三组交叉轴对齐：align-items（stretch/flex-start/flex-end/center/baseline）、align-content（多行时才生效）。第四组项目属性：flex-grow、flex-shrink、flex-basis（简写 flex）、align-self、order。默写标准：不查资料，白纸上按这四组默出全部取值，并且能给 justify-content 的五个取值各写一句话说明差别。默不出或顺序乱，说明只记住了效果没记住模型，回到容器与项目的职责划分那一条重看。",
+          "level": 1
+        },
+        {
+          "id": "w8d7-p2",
+          "topic": "默写检查的自我判分标准",
+          "desc": "写完不看答案，自己先判：分组正确但取值漏掉个别（如忘了 space-evenly），算及格，补记即可；分组混乱、把 align-self 归到容器属性，算不合格，必须重学；能默出但说不出 space-between 和 space-around 的差别（前者两端顶格、后者两端各留半个间隔），算半及格，去写一个三子元素的小页面验证一次；能默出并且能说出 flex:1 等价于 flex-grow:1; flex-shrink:1; flex-basis:0%，算满分。判分严一点：能默写不等于能写对，能解释才算真的懂。",
+          "level": 2
+        },
+        {
+          "id": "w8d7-p3",
+          "topic": "心图法：用一张导图串起本周 CSS",
+          "desc": "导图根节点写 CSS，向下分五支：盒模型（content/padding/border/margin、box-sizing）、布局（flex 容器与项目、position 五取值）、层叠（优先级四元组、层叠上下文、z-index）、响应式（viewport、相对单位、媒体查询、断点）、动效（自定义属性、transition、animation）。每支再挂两到三个关键结论，例如层叠支下挂“层叠上下文由 transform 或 z-index+position 创建”“!important 只用于兜底工具类”。导图不写代码、只写结论和触发条件，控制在 A4 一页。检验标准：闭眼能凭这张图回答任意一个“为什么我的样式不生效”的问题，并定位到对应分支。",
+          "level": 2
+        },
+        {
+          "id": "w8d7-p4",
+          "topic": "自测题：五个报错场景快速定位",
+          "desc": "① 设了 width:300px 结果实际 340px——查 box-sizing 与 padding/border 是否被计入；② 子元素 margin-top 把父元素一起顶下去——外边距合并，给父元素加 padding 或 overflow:hidden；③ 绝对定位元素跑到意料之外的位置——检查祖先链上最近的非 static 定位元素是谁；④ z-index 设到 9999 还是被盖住——查是否处于不同的层叠上下文，父级是否创建了上下文把它封在内部；⑤ 媒体查询写了不生效——查 meta viewport 是否存在、查询里 空格与 and 是否写对、被后面的同优先级规则覆盖。每条能在一分钟内定位，本周算过。",
+          "level": 2
+        },
+        {
+          "id": "w8d7-p5",
+          "topic": "把 CSS 写进可复用的个人模板",
+          "desc": "本周结束后建一个 base.css 模板，后续所有页面直接引。内容分四段：第一段 reset，统一 margin/padding 清零、box-sizing:border-box、图片 display:block；第二段令牌，定义颜色、间距、字号、圆角、阴影五组 CSS 变量；第三段骨架，.page/.header/.main/.footer 的 Flex 结构；第四段工具类，.flex-center/.flex-between/.ellipsis 三个高频类。规则：模板只放跨项目通用的东西，项目特有的样式一律不进模板，否则模板会越滚越大变成垃圾场。每次做新项目时改模板只允许增补变量刻度，不允许增补组件样式。",
+          "level": 2
+        },
+        {
+          "id": "w8d7-p6",
+          "topic": "本周 CSS 周复习收口标准",
+          "desc": "过一遍五条：① 白纸默写 Flex 属性四分组，能说出 justify-content 五取值差别；② 不查资料写出绝对定位居中三行代码；③ 能解释 z-index 失效的三种原因并各给一个修复；④ 能写出手机 375、平板 768、桌面 1440 三档媒体查询并在真机或浏览器设备模拟里各验一次；⑤ 导图一页成型，能覆盖本周全部结论。五条里任一条做不到，不要进 W9，因为 JS 阶段会大量操作 DOM 样式，CSS 模型没吃透，后面调样式的时间会翻倍。这五条就是本周的验收线，过了再动 JavaScript。",
+          "level": 3
         }
       ]
     }
