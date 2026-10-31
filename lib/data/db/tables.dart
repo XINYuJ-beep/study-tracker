@@ -1,7 +1,7 @@
 /// 十张本地表的建表 SQL 与表名常量（sqflite 版，已移除 drift）。
 ///
 /// 说明：
-/// - 表结构完全等价于原 drift 定义，schemaVersion 仍为 1。
+/// - 表结构完全等价于原 drift 定义；schemaVersion 现为 4（v3 到 v4 的迁移见 kMigrateV3ToV4）。
 /// - review_queue 不是表，也不是视图；它是 cards 与 concepts
 ///   在 Dart 层合并后的逻辑队列（见 question_repo.dueReview）。
 /// ====================================
@@ -129,7 +129,7 @@ const List<String> kMigrateV2ToV3 = <String>[
 /// - due_date：下次到期时间（毫秒），null = 还没排期
 /// - ease：SM-2 难度因子，默认 2.5，答错 -0.2，下限 1.3
 ///
-/// 老数据（276 道内置题）回填规则：
+/// 老数据（v3 阶段基数 276 道；现题库 321 道）回填规则：
 /// - question_type = 'single'（旧题全是四选一）
 /// - stage = 0、ease = 2.5（从零开始排程，首次答题即进入 SM-2）
 /// - item_id 空串（旧题只有 week 维度，无条目级归属；按天投放不会取到它们，

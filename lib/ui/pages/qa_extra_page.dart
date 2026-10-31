@@ -369,7 +369,6 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
   bool _answered = false;
   int _right = 0;
   int _wrongPoolSize = 0;
-  int _currentWeek = 0;
 
   @override
   void initState() {
@@ -434,7 +433,6 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
       _loading = false;
       _items = picked;
       _wrongPoolSize = wrongPool;
-      _currentWeek = week;
       _index = 0;
       _picked = -1;
       _answered = false;

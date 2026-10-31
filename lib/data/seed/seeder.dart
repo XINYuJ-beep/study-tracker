@@ -186,7 +186,6 @@ class Seeder {
       final itemIds = <String>{};
 
       for (final m in modulesJson) {
-        final moduleId = m['id'] as String;
         final weeks = (m['weeks'] as List<dynamic>).cast<Map<String, dynamic>>();
         for (final w in weeks) {
           final weekNo = w['week'] as int;

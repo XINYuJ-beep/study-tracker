@@ -25,7 +25,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants.dart';
-import '../../data/repo/plan_repo.dart';
 import '../../data/repo/question_repo.dart';
 import '../../core/providers.dart';
 import 'qa_extra_page.dart';

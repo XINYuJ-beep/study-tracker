@@ -219,6 +219,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       final result = await seeder.seedIfNeeded();
       await _load();
       _showResult(result, '导入完成');
+      return null;
     });
   }
 
@@ -258,6 +259,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ' 项',
       );
       _showResult(result, '重导完成');
+      return null;
     });
   }
 
