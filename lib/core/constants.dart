@@ -46,7 +46,7 @@ class AppConstants {
   /// 记忆卡片数
   static const int expectedCards = 736;
   /// 选择题数
-  static const int expectedMcqs = 276;
+  static const int expectedMcqs = 321;
   /// 概念词条数
   static const int expectedConcepts = 368;
   /// 阶段（直播/课程）数
@@ -56,7 +56,7 @@ class AppConstants {
 
   // ---------- 数据版本（首启导入判断）----------
   /// 当前内置数据的版本号，JSON 有改动就 +1，首启比对后决定是否重导
-  static const int dataVersion = 9;
+  static const int dataVersion = 10;
   /// app_settings 表里存数据版本号的 key
   static const String keyDataVersion = 'data_version';
 
@@ -90,6 +90,10 @@ class AppConstants {
   static const int reviewGraduatedStage = 7;
   /// 初始难度因子
   static const double initialEase = 2.5;
+  /// 答错一次扣减的难度因子
+  static const double easePenalty = 0.2;
+  /// 难度因子下限（低于此值不再扣，防止题目难度爆炸）
+  static const double easeMin = 1.3;
 
   // ---------- 白板抽背 ----------
   /// 每轮抽几个概念

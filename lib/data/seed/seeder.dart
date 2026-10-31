@@ -289,10 +289,13 @@ class Seeder {
           'question': q['question'] as String,
           'options': jsonEncode(options),
           'answer': answer,
+          'explain': q['explain'] as String?,
           'source_ref': (q['source_ref'] as String?) ?? 'builtin:questions',
+          // v4 按天投放：item_id 空串 = 周综合卷；day 0 = 无天归属
+          'item_id': (q['item_id'] as String?) ?? '',
+          'day': (q['day'] as int?) ?? 0,
         });
       }
-
       final conceptRows = <Map<String, Object?>>[];
       for (final c in concepts.cast<Map<String, dynamic>>()) {
         final term = (c['term'] as String?)?.trim() ?? '';

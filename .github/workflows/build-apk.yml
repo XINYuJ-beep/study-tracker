@@ -84,12 +84,21 @@ jobs:
           echo "--- keystore sha256 ---"
           sha256sum android/keystore/study.jks
 
-          cat > android/key.properties <<EOF
-          storePassword=$KEYSTORE_PASSWORD
-          keyPassword=$KEY_PASSWORD
-          keyAlias=$KEY_ALIAS
-          storeFile=study.jks
-          EOF
+          # printf writes line by line so run-block indentation never leaks into key names
+          printf '%s\n' \
+            "storePassword=$KEYSTORE_PASSWORD" \
+            "keyPassword=$KEY_PASSWORD" \
+            "keyAlias=$KEY_ALIAS" \
+            "storeFile=study.jks" \
+            "storeType=PKCS12" > android/key.properties
+
+          # self-check: exactly 5 keys, no leading whitespace, all keys present
+          test "$(wc -l < android/key.properties)" -eq 5 || { echo "bad line count"; exit 1; }
+          if grep -qE '^[[:space:]]' android/key.properties; then echo 'leading whitespace found'; exit 1; fi
+          for k in storePassword keyPassword keyAlias storeFile storeType; do
+            grep -q "^${k}=" android/key.properties || { echo "missing ${k}"; exit 1; }
+          done
+
           echo "--- key.properties (passwords masked) ---"
           sed -e 's/^storePassword=.*/storePassword=***/' \
               -e 's/^keyPassword=.*/keyPassword=***/' android/key.properties

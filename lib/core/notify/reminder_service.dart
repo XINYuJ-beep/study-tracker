@@ -2,20 +2,20 @@
 ///
 /// 职责三件：
 ///   1. Android 13+ 动态申请 POST_NOTIFICATIONS；拒绝不崩溃、不阻塞。
-///   2. 用 WorkManager 注册每日周期任务，到点在后台算「还剩几条 / 预计几分钟」并推通知。
+///   2. 用 flutter_local_notifications 的 zonedSchedule 预排每日通知，到点由系统闹钟唤醒直接弹出。
 ///   3. 每天最多一条、错过不补发（用 app_settings 里 last_notified_day 去重）。
 ///
 /// 设计口径：
-/// - 通知文案必须实时准确，不能在 App 前台预先算好存死；
-///   因此选择 WorkManager 后台任务而不是 zonedSchedule 预排。
+/// - 通知文案在「每次 App 启动 / 每次重设提醒」时实时算一次，到点由系统按排程弹出；
+///   不再引入 WorkManager 后台隔离进程（其 pigeon 产物的 Kotlin metadata 会触发 D8/ng4 崩溃）。
 /// - 用户关掉提醒 / 拒绝权限时，任务照样注册但内部直接 return，避免反复申请打扰。
 library;
 
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:workmanager/workmanager.dart';
+import 'package:timezone/data/latest_all.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../constants.dart';
 import '../date_utils.dart';
@@ -25,9 +25,6 @@ import '../../data/repo/question_repo.dart';
 import '../../data/repo/plan_repo.dart';
 import '../../data/repo/settings_repo.dart';
 
-/// WorkManager 里这条任务的唯一名字。改名会导致旧任务残留，别动。
-const String kDailyReminderTask = 'study_tracker_daily_reminder';
-
 /// 通知渠道 id。
 const String kReminderChannelId = 'daily_reminder';
 
@@ -36,21 +33,6 @@ const int kReminderNotificationId = 1001;
 
 /// 通知点击后回到 App 的负载（目前只用于识别来源）。
 const String kReminderPayload = 'open_today';
-
-/// 顶层入口：WorkManager 后台 isolate 只能调顶层函数，不能是类方法。
-/// 这里 new 一个独立的 AppDatabase，不复用 UI isolate 里的那个实例。
-@pragma('vm:entry-point')
-void reminderDispatcher() {
-  Workmanager().executeTask((String task, Map<String, dynamic>? input) async {
-    try {
-      await ReminderService().runDailyJob(AppDatabase());
-    } catch (e) {
-      // 后台任务抛异常会让系统认为失败并重试，这里吞掉，避免反复唤醒。
-      if (kDebugMode) debugPrint('[REMINDER] job error: ' + e.toString());
-    }
-    return true;
-  });
-}
 
 /// 提醒服务。UI 侧用 [init] / [schedule] / [cancel] / [requestPermission]。
 class ReminderService {
@@ -87,7 +69,7 @@ class ReminderService {
             AndroidFlutterLocalNotificationsPlugin>();
     await android?.createNotificationChannel(channel);
 
-    await Workmanager().initialize(reminderDispatcher);
+    tzdata.initializeTimeZones();
     _inited = true;
   }
 
@@ -114,78 +96,93 @@ class ReminderService {
   }
 
   /// 注册每日提醒。[hour]/[minute] 为本地时间。
-  /// 重复注册是安全的：同名任务会被替换，不会叠加。
-  Future<void> schedule({required int hour, required int minute}) async {
+  /// 用 zonedSchedule 预排：每天同一时刻重复，App 不需要常驻。
+  /// 重复调用只会替换同 id 的那一条，不会叠加。
+  /// [database] 为空时用兜底文案（启动早期 DB 尚未就绪的场景）。
+  Future<void> schedule({
+    required int hour,
+    required int minute,
+    AppDatabase? database,
+  }) async {
     if (!Platform.isAndroid) return;
-    await Workmanager().cancelByUniqueName(kDailyReminderTask);
-    // 算到下一个目标时刻还要多久，作为首次延迟。
-    final DateTime now = DateTime.now();
-    DateTime next = DateTime(now.year, now.month, now.day, hour, minute);
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime next =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
     if (!next.isAfter(now)) {
       next = next.add(const Duration(days: 1));
     }
-    final Duration initialDelay = next.difference(now);
-    await Workmanager().registerPeriodicTask(
-      kDailyReminderTask,
-      kDailyReminderTask,
-      initialDelay: initialDelay,
-      frequency: const Duration(hours: 24),
-      constraints: Constraints(networkType: NetworkType.notRequired),
-      existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
+    final String body = database == null
+        ? '今天还有任务没打卡，点开看看'
+        : await _buildBody(database);
+    await _plugin.zonedSchedule(
+      kReminderNotificationId,
+      kAppName,
+      body,
+      next,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          kReminderChannelId,
+          '每日打卡提醒',
+          channelDescription: '每天提醒一次今天还剩多少条没打卡',
+          importance: Importance.defaultImportance,
+          priority: Priority.defaultPriority,
+          autoCancel: true,
+          onlyAlertOnce: true,
+        ),
+      ),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      payload: kReminderPayload,
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 
   /// 取消每日提醒。
   Future<void> cancel() async {
     if (!Platform.isAndroid) return;
-    await Workmanager().cancelByUniqueName(kDailyReminderTask);
+    await _plugin.cancel(kReminderNotificationId);
   }
 
-  /// 后台任务实际执行体：算数 -> 去重 -> 推通知。
-  /// 也可在 App 启动时直接调用用于自测。
-  Future<void> runDailyJob(AppDatabase database) async {
-    final settings = SettingsRepo(database);
-
-    // 1. 开关关着就不做任何事。
-    final bool enabled = await settings.reminderEnabled();
-    if (!enabled) return;
-
-    // 2. 每天最多一条：今天已经推过就直接退出。
-    final String todayKey = _dayKey(DateTime.now());
-    final String? lastDay = await settings.lastNotifiedDay();
-    if (lastDay == todayKey) return;
-
-    // 3. 算数：未完成条目数 + 到期复习数。
+  /// 算出当前该推的文案（不写 last_notified_day，纯计算）。
+  Future<String> _buildBody(AppDatabase database) async {
     final questionRepo = QuestionRepo(database);
     final conceptRepo = ConceptRepo(database);
     final PlanRepo planRepo = PlanRepo(database);
     final int remaining = (await planRepo.todayPendingItems()).length;
     final int dueCards = await questionRepo.dueReviewCount();
     final int dueConcepts = await conceptRepo.dueConceptCount();
-
     final int total = remaining + dueCards + dueConcepts;
-    // 全部做完就不打扰。
     if (total <= 0) {
-      await settings.setLastNotifiedDay(todayKey);
-      return;
+      return '今天的任务都完成了，明天见';
     }
-
-    // 4. 预计分钟：剩余条目按日均 minutes 估算，复习按每张 1 分钟。
     final int estMinutes = await planRepo.todayEstimateMinutes() +
         dueCards +
         dueConcepts;
-
-    // 5. 文案严格按 SPEC 第 14 章。
-    final String title = kAppName;
     var body = '今天计划 ' + total.toString() + ' 条，还没打卡';
     if (estMinutes > 0) {
       body = body + '，预计 ' + estMinutes.toString() + ' 分钟';
     }
+    return body;
+  }
+
+  /// 立即推一条（自测入口）：算数 -> 去重 -> 推通知。
+  Future<void> runDailyJob(AppDatabase database) async {
+    final settings = SettingsRepo(database);
+
+    final bool enabled = await settings.reminderEnabled();
+    if (!enabled) return;
+
+    final String todayKey = _dayKey(DateTime.now());
+    final String? lastDay = await settings.lastNotifiedDay();
+    if (lastDay == todayKey) return;
+
+    final String body = await _buildBody(database);
 
     if (!Platform.isAndroid) return;
     await _plugin.show(
       kReminderNotificationId,
-      title,
+      kAppName,
       body,
       const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -194,7 +191,6 @@ class ReminderService {
           channelDescription: '每天提醒一次今天还剩多少条没打卡',
           importance: Importance.defaultImportance,
           priority: Priority.defaultPriority,
-          // 只用大图标，不额外塞小图标资源，避免缺资源导致通知不显示。
           autoCancel: true,
           onlyAlertOnce: true,
         ),
@@ -202,7 +198,6 @@ class ReminderService {
       payload: kReminderPayload,
     );
 
-    // 6. 记下今天已推，防止同日重复。
     await settings.setLastNotifiedDay(todayKey);
   }
 

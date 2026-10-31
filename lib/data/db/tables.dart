@@ -119,12 +119,42 @@ const List<String> kMigrateV2ToV3 = <String>[
   "UPDATE mcqs SET source_ref = 'builtin:questions' WHERE source_ref = ''",
 ];
 
+/// schemaVersion 3 -> 4 的迁移语句。
+///
+/// 为 mcqs 接入「按天投放 + SM-2 复习」，追加 6 列：
+/// - item_id：所属条目（如 M01W01D1），按天投放靠它精确定位到某天的 6 道题
+/// - day：周一..周日 = 1..7，冗余存一份，避免每次 JOIN items 取 day
+/// - question_type：single/multi/judge/reverse，标题型（单选/多选/判断/反向）
+/// - stage：SM-2 档位 0..7，7 = 毕业不再复习（与 cards 完全一致）
+/// - due_date：下次到期时间（毫秒），null = 还没排期
+/// - ease：SM-2 难度因子，默认 2.5，答错 -0.2，下限 1.3
+///
+/// 老数据（276 道内置题）回填规则：
+/// - question_type = 'single'（旧题全是四选一）
+/// - stage = 0、ease = 2.5（从零开始排程，首次答题即进入 SM-2）
+/// - item_id 空串（旧题只有 week 维度，无条目级归属；按天投放不会取到它们，
+///   它们仍然可以通过 mcqsByWeek 按周练习，行为不变）
+/// - day = 0（表示「无天归属」）
+const List<String> kMigrateV3ToV4 = <String>[
+  "ALTER TABLE mcqs ADD COLUMN item_id TEXT NOT NULL DEFAULT ''",
+  "ALTER TABLE mcqs ADD COLUMN day INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE mcqs ADD COLUMN question_type TEXT NOT NULL DEFAULT 'single'",
+  "ALTER TABLE mcqs ADD COLUMN stage INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE mcqs ADD COLUMN due_date INTEGER",
+  "ALTER TABLE mcqs ADD COLUMN ease REAL NOT NULL DEFAULT 2.5",
+  "UPDATE mcqs SET question_type = 'single' WHERE question_type = ''",
+];
+
 /// 性能索引（SPEC 第 16 节：checkins(item_id)、checkins(date) 建索引）
 const List<String> kCreateIndexes = <String>[
   'CREATE INDEX IF NOT EXISTS idx_checkins_item ON checkins (item_id)',
   'CREATE INDEX IF NOT EXISTS idx_checkins_date ON checkins (date)',
   'CREATE INDEX IF NOT EXISTS idx_cards_due ON cards (due_date)',
   'CREATE INDEX IF NOT EXISTS idx_items_week ON items (week)',
+  // 按天投放：WHERE item_id = ?（每天 6 道题）
+  'CREATE INDEX IF NOT EXISTS idx_mcqs_item ON mcqs (item_id)',
+  // SM-2 每日取到期题：WHERE stage < 7 AND due_date <= ?
+  'CREATE INDEX IF NOT EXISTS idx_mcqs_due ON mcqs (due_date)',
 ];
 
 /// ====================================
@@ -146,9 +176,18 @@ CREATE TABLE IF NOT EXISTS cards (
 )''';
 
 /// ====================================
-/// 表 6: mcqs (276 道选择题)
+/// 表 6: mcqs (目标 4140 道选择题 = 644 item × 6 + 92 周综合卷 × 3)
+///
 /// wrong_count / right_streak: 连对 2 次移出错题本
 /// options 存 JSON 字符串数组，answer 是 0..3 的下标
+///
+/// v4 新增（按天投放 + SM-2）：
+/// item_id       所属条目，按天投放靠它精确取某天的 6 道；周综合卷为空串
+/// day           1..7 = 周一..周日；0 = 无天归属（老数据/综合卷）
+/// question_type single / multi / judge / reverse
+/// stage         SM-2 档位 0..7，7 = 毕业（与 cards 同构）
+/// due_date      下次到期毫秒；null = 未排期
+/// ease          SM-2 难度因子，默认 2.5，下限 1.3
 const String sqlCreateMcqs = '''
 CREATE TABLE IF NOT EXISTS mcqs (
   id            TEXT NOT NULL PRIMARY KEY,
@@ -160,7 +199,13 @@ CREATE TABLE IF NOT EXISTS mcqs (
   explain       TEXT,
   wrong_count   INTEGER NOT NULL DEFAULT 0,
   right_streak  INTEGER NOT NULL DEFAULT 0,
-  source_ref    TEXT NOT NULL DEFAULT ''
+  source_ref    TEXT NOT NULL DEFAULT '',
+  item_id       TEXT NOT NULL DEFAULT '',
+  day           INTEGER NOT NULL DEFAULT 0,
+  question_type TEXT NOT NULL DEFAULT 'single',
+  stage         INTEGER NOT NULL DEFAULT 0,
+  due_date      INTEGER,
+  ease          REAL NOT NULL DEFAULT 2.5
 )''';
 
 /// ====================================
@@ -467,6 +512,13 @@ class Mcq {
     this.explain,
     required this.wrongCount,
     required this.rightStreak,
+    this.sourceRef = '',
+    this.itemId = '',
+    this.day = 0,
+    this.questionType = 'single',
+    this.stage = 0,
+    this.dueDate,
+    this.ease = 2.5,
   });
 
   final String id;
@@ -476,8 +528,30 @@ class Mcq {
   final String options;
   final int answer;
   final String? explain;
+
+  /// 错题本：错过的次数
   final int wrongCount;
+  /// 错题本：连续答对次数，达到 rightStreakToClear 后移出错题本
   final int rightStreak;
+
+  /// 题目出处，形如 `builtin:questions` / `llm:W1D1` / `manual`
+  final String sourceRef;
+
+  /// 所属条目（如 M01W01D1），按天投放靠它精确定位；周综合卷为空串
+  final String itemId;
+  /// 1..7 = 周一..周日；0 = 无天归属（老数据 / 周综合卷）
+  final int day;
+  /// single / multi / judge / reverse
+  final String questionType;
+
+  /// SM-2 档位 0..7，7 = 毕业不再复习
+  final int stage;
+  /// 下次到期毫秒，null = 未排期
+  final DateTime? dueDate;
+  /// SM-2 难度因子，默认 2.5，答错 -0.2，下限 1.3
+  final double ease;
+
+  bool get isGraduated => stage >= 7;
 
   factory Mcq.fromMap(Map<String, Object?> m) => Mcq(
         id: m['id'] as String,
@@ -487,8 +561,15 @@ class Mcq {
         options: m['options'] as String,
         answer: m['answer'] as int,
         explain: m['explain'] as String?,
-        wrongCount: m['wrong_count'] as int,
-        rightStreak: m['right_streak'] as int,
+        wrongCount: (m['wrong_count'] as int?) ?? 0,
+        rightStreak: (m['right_streak'] as int?) ?? 0,
+        sourceRef: (m['source_ref'] as String?) ?? '',
+        itemId: (m['item_id'] as String?) ?? '',
+        day: (m['day'] as int?) ?? 0,
+        questionType: (m['question_type'] as String?) ?? 'single',
+        stage: (m['stage'] as int?) ?? 0,
+        dueDate: _msToDt(m['due_date'] as int?),
+        ease: (m['ease'] as num?)?.toDouble() ?? 2.5,
       );
 
   Map<String, Object?> toMap() => <String, Object?>{
@@ -501,7 +582,41 @@ class Mcq {
         'explain': explain,
         'wrong_count': wrongCount,
         'right_streak': rightStreak,
+        'source_ref': sourceRef,
+        'item_id': itemId,
+        'day': day,
+        'question_type': questionType,
+        'stage': stage,
+        'due_date': _dtToMs(dueDate),
+        'ease': ease,
       };
+
+  Mcq copyWith({
+    int? wrongCount,
+    int? rightStreak,
+    int? stage,
+    DateTime? dueDate,
+    double? ease,
+    bool clearDueDate = false,
+  }) =>
+      Mcq(
+        id: id,
+        week: week,
+        module: module,
+        question: question,
+        options: options,
+        answer: answer,
+        explain: explain,
+        wrongCount: wrongCount ?? this.wrongCount,
+        rightStreak: rightStreak ?? this.rightStreak,
+        sourceRef: sourceRef,
+        itemId: itemId,
+        day: day,
+        questionType: questionType,
+        stage: stage ?? this.stage,
+        dueDate: clearDueDate ? null : (dueDate ?? this.dueDate),
+        ease: ease ?? this.ease,
+      );
 }
 
 /// --------------------------------------------------

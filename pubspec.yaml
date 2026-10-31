@@ -25,11 +25,19 @@ dependencies:
 
   # 国际化 / 日期格式化
   flutter_local_notifications: ^17.2.4
-  workmanager: ^0.10.10
+  # 时区（zonedSchedule 预排每日通知必需：TZDateTime / initializeTimeZones）
+  timezone: ^0.9.4
   intl: ^0.19.0
 
   # 图表
   fl_chart: ^0.70.2
+
+# 依赖覆盖：锁定 path_provider_android 到 2.2.23（不引入 jni 插件的最后一个分支）
+# 原因：2.3.x 起 path_provider_android 通过 jni 引入 CMake/C 原生构建，
+#       而本构建机 NDK prebuilt 仅有 linux-x86_64（x86_64 二进制在 aarch64 上 SIGILL），
+#       SDK 内置 cmake/ninja 同为此问题。锁 2.2.23 后 Android 侧不再有原生构建环节。
+dependency_overrides:
+  path_provider_android: 2.2.23
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
 import 'package:sqflite/sqflite.dart' show ConflictAlgorithm;
-import '../../core/constants.dart';
 import '../../core/date_utils.dart';
 import '../db/app_database.dart';
 import '../db/tables.dart';
-import 'plan_repo.dart';
 
 /// 某一天（以凌晨 4 点为日界）的打卡汇总。
 class DaySummary {
@@ -57,7 +55,6 @@ class CheckinRepo {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
-
   /// 打卡并写入实际用时与备注。
   ///
   /// [minutes] 不传则回退到 items.minutes（预估用时），保证统计口径不为 0。
@@ -251,7 +248,8 @@ class CheckinRepo {
 
   /// 今天已打卡条数。
   Future<int> todayCount() async {
-    final ids = await doneIdsOfDay(_clock());
+    final DateTime now = _clock();
+    final ids = await doneIdsOfDay(now);
     return ids.length;
   }
 
@@ -302,9 +300,10 @@ class CheckinRepo {
   }
 
   /// 把任意时间点归一化到「凌晨 4 点日界」所属的那一天。
-  DateTime _normalize(DateTime t) =>
-      t.hour < AppConstants.dayBoundaryHour
-          ? t.subtract(const Duration(days: 1))
-          : t;
+  /// 日界归一已由 startOfDay() 承担，此处必须为恒等。
+  /// 历史 bug：这里重复做了一次 4 点回退，与 startOfDay() 叠加，
+  /// 导致传入已归一的零点时被连续减 2 天（写入 10-29、
+  /// 查询 10-31）。参见 2026-10-31 真机取证 [DBP] TAP 日志。
+  DateTime _normalize(DateTime t) => t;
 
 }

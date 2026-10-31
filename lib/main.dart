@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,34 +18,15 @@ import 'ui/pages/settings_page.dart';
 import 'ui/pages/stats_page.dart';
 import 'ui/pages/today_page.dart';
 
-Future<void> main() async {
+/// 启动入口。
+///
+/// 铁律：runApp 必须是第一个不被阻塞的动作。
+/// 只要 runApp 之前有任何一个 await 挂住（比如 MethodChannel 在真机上不返回），
+/// Widget 树就永远不建，界面会永久停在原生 LaunchTheme 启动图，且不崩溃。
+/// 所以这里所有初始化全部丢到 _bootstrap 里，首帧之后再跑。
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final db = AppDatabase();
-
-  // 首启导数据。失败不闪退，页面仍能起来，设置页可以重试。
-  // 成功静默，只在失败时留一行日志。
-  try {
-    final r = await Seeder(db).seedIfNeeded();
-    if (!r.ok && kDebugMode) {
-      debugPrint('[SEED] failed fatal=${r.fatalError} ${r.failures()}');
-    }
-  } catch (e) {
-    if (kDebugMode) debugPrint('[SEED] throw $e');
-  }
-
-  // 通知服务：建渠道 + 注册后台分发器。失败不影响启动。
-  try {
-    await ReminderService().init();
-    final SettingsRepo settings = SettingsRepo(db);
-    final (int, int) t = await settings.reminderTime();
-    if (await settings.reminderEnabled()) {
-      await ReminderService().schedule(hour: t.$1, minute: t.$2);
-    } else {
-      await ReminderService().cancel();
-    }
-  } catch (e) {
-    if (kDebugMode) debugPrint('[REMINDER] init error: $e');
-  }
 
   runApp(
     ProviderScope(
@@ -51,6 +34,45 @@ Future<void> main() async {
       child: const StudyTrackerApp(),
     ),
   );
+
+  unawaited(_bootstrap(db));
+}
+
+/// 首帧之后的初始化。每一步都独立兜底 + 超时，
+/// 任何一步卡死或抛错都不影响已经起来的界面。
+Future<void> _bootstrap(AppDatabase db) async {
+  // 1) 首启导数据
+  try {
+    final r = await Seeder(db).seedIfNeeded().timeout(const Duration(seconds: 30));
+    if (!r.ok && kDebugMode) {
+      debugPrint('[SEED] failed fatal=' + (r.fatalError ?? '') + ' ' + r.failures().join(';'));
+    }
+  } on TimeoutException {
+    debugPrint('[SEED] timeout 30s, skipped');
+  } catch (e) {
+    debugPrint('[SEED] throw ' + e.toString());
+  }
+
+  // 2) 通知服务
+  try {
+    await ReminderService().init().timeout(const Duration(seconds: 10));
+
+    final SettingsRepo settings = SettingsRepo(db);
+    final (int, int) t = await settings.reminderTime().timeout(const Duration(seconds: 10));
+    final bool enabled = await settings.reminderEnabled().timeout(const Duration(seconds: 10));
+
+    if (enabled) {
+      await ReminderService()
+          .schedule(hour: t.$1, minute: t.$2, database: db)
+          .timeout(const Duration(seconds: 10));
+    } else {
+      await ReminderService().cancel().timeout(const Duration(seconds: 10));
+    }
+  } on TimeoutException {
+    debugPrint('[REMINDER] timeout, skipped');
+  } catch (e) {
+    debugPrint('[REMINDER] init error: ' + e.toString());
+  }
 }
 
 /// 应用根。只负责主题 + 路由。

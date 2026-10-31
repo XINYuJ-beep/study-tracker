@@ -228,8 +228,7 @@ class QuestionRepo {
     );
     return rows.map(_toMcq).toList();
   }
-
-  /// 按模块取选择题。
+/// 按模块取选择题。
   Future<List<McqQuestion>> mcqsByModule(String module) async {
     final rows = await db.query(
       T.mcqs,
@@ -238,6 +237,71 @@ class QuestionRepo {
     );
     return rows.map(_toMcq).toList();
   }
+
+  /// 【按天投放】取某个条目（= 某周某天）名下的全部选择题。
+  ///
+  /// 这是「剥夺用户挑题权」的核心入口：UI 只调这一个，
+  /// 用户看到的就是 W(n)Dk 那天的固定 6 道，不能提前、不能跨天。
+  /// 返回按 id 排序，保证每次打开顺序一致（选项位置在数据侧已打散）。
+  Future<List<McqQuestion>> mcqsByItem(String itemId) async {
+    if (itemId.isEmpty) return const <McqQuestion>[];
+    final rows = await db.query(
+      T.mcqs,
+      where: 'item_id = ?',
+      whereArgs: <Object?>[itemId],
+      orderBy: 'id ASC',
+    );
+    return rows.map(_toMcq).toList();
+  }
+
+  /// 【按天投放 + 进度】取某周某天（day 1..7）的题目。
+  ///
+  /// 给「本周课表」用：一次拿到周一..周日每天的题量与已完成量。
+  Future<List<McqQuestion>> mcqsByWeekDay(int week, int day) async {
+    if (day < 1 || day > 7) return const <McqQuestion>[];
+    final rows = await db.query(
+      T.mcqs,
+      where: 'week = ? AND day = ?',
+      whereArgs: <Object?>[week, day],
+      orderBy: 'id ASC',
+    );
+    return rows.map(_toMcq).toList();
+  }
+
+  /// 【SM-2】取今日到期的选择题（含从未答过、stage 未毕业、due_date 已到）。
+  ///
+  /// 口径与 dueReview() 一致：due_date 为空的老题不进复习队列，
+  /// 只有真正答过一次、被写入首次 due_date 之后才进入 SM-2 循环。
+  Future<List<McqQuestion>> dueMcqs({int limit = 0}) async {
+    final today = effectiveToday();
+    final end = startOfDay(today).add(const Duration(days: 1));
+    final endMs = end.millisecondsSinceEpoch;
+    final rows = await db.raw(
+      'SELECT * FROM ${T.mcqs} '
+      'WHERE stage < ? AND due_date IS NOT NULL AND due_date < ? '
+      'ORDER BY due_date ASC, id ASC',
+      <Object?>[AppConstants.reviewGraduatedStage, endMs],
+    );
+    final list = rows.map(_toMcq).toList();
+    if (limit > 0 && list.length > limit) {
+      return list.sublist(0, limit);
+    }
+    return list;
+  }
+
+  /// 【SM-2】今日到期选择题数量（首页角标用，不拉全量）。
+  Future<int> dueMcqCount() async {
+    final today = effectiveToday();
+    final end = startOfDay(today).add(const Duration(days: 1));
+    final endMs = end.millisecondsSinceEpoch;
+    final rows = await db.raw(
+      'SELECT COUNT(*) AS c FROM ${T.mcqs} '
+      'WHERE stage < ? AND due_date IS NOT NULL AND due_date < ?',
+      <Object?>[AppConstants.reviewGraduatedStage, endMs],
+    );
+    return (rows.first['c'] as int?) ?? 0;
+  }
+
 
   McqQuestion _toMcq(Map<String, Object?> r) {
     var opts = <String>[];
@@ -279,34 +343,85 @@ class QuestionRepo {
     return rows.map(_toMcq).toList();
   }
 
-  /// 记录一次作答：对则 rightStreak+1（达到阈值后清出错题本），错则 wrongCount+1 且连对清零。
+  /// 记录一次作答，并推进 SM-2 排程。
+  ///
+  /// 口径（全库唯一，与 cards / concepts 一致）：
+  /// - 答对：right_streak + 1；stage + 1（上限毕业档）；
+  ///   stage 达到 7 -> due_date 置空即毕业，不再进入复习队列；
+  ///   否则 due_date = 今天 + reviewIntervals[stage-1] 天。
+  /// - 答错：wrong_count + 1；right_streak 清零；ease - 0.2（下限 1.3）；
+  ///   stage 退回 0（重新从 1 天间隔起步，避免难句越滚越远）。
+  ///
+  /// 首次作答（stage=0 且 due_date 为空）同样走这条路径，
+  /// 于是新题答对第一次就会排到明天，进入复习闭环。
   Future<void> recordAnswer(String mcqId, bool correct) async {
     final rows = await db.query(
       T.mcqs,
       where: 'id = ?',
-      whereArgs: [mcqId],
+      whereArgs: <Object?>[mcqId],
       limit: 1,
     );
     if (rows.isEmpty) return;
     final row = rows.first;
 
+    final int wrongCount = (row['wrong_count'] as int?) ?? 0;
+    final int rightStreak = (row['right_streak'] as int?) ?? 0;
+    final int stage = (row['stage'] as int?) ?? 0;
+    final double ease = (row['ease'] as num?)?.toDouble() ??
+        AppConstants.initialEase;
+
     if (correct) {
-      final streak = (row['right_streak'] as int) + 1;
-      await db.update(
-        T.mcqs,
-        {'right_streak': streak},
-        where: 'id = ?',
-        whereArgs: [mcqId],
-      );
+      final int nextStreak = rightStreak + 1;
+      final int nextStage = stage + 1;
+      if (nextStage >= AppConstants.reviewGraduatedStage) {
+        // 毕业：不再排期
+        await db.update(
+          T.mcqs,
+          <String, Object?>{
+            'right_streak': nextStreak,
+            'stage': AppConstants.reviewGraduatedStage,
+            'due_date': null,
+          },
+          where: 'id = ?',
+          whereArgs: <Object?>[mcqId],
+        );
+      } else {
+        // 档位越界保护：reviewIntervals 长度 = reviewGraduatedStage
+        final int idx = nextStage - 1;
+        final int days = AppConstants.reviewIntervals[idx];
+        final int dueMs = startOfDay(
+          effectiveToday(),
+        ).add(Duration(days: days)).millisecondsSinceEpoch;
+        await db.update(
+          T.mcqs,
+          <String, Object?>{
+            'right_streak': nextStreak,
+            'stage': nextStage,
+            'due_date': dueMs,
+          },
+          where: 'id = ?',
+          whereArgs: <Object?>[mcqId],
+        );
+      }
     } else {
+      final double nextEase = (ease - AppConstants.easePenalty) <
+              AppConstants.easeMin
+          ? AppConstants.easeMin
+          : ease - AppConstants.easePenalty;
+      final int dueMs = startOfDay(
+        effectiveToday(),
+      ).add(const Duration(days: 1)).millisecondsSinceEpoch;
       await db.update(
         T.mcqs,
-        {
-          'wrong_count': (row['wrong_count'] as int) + 1,
+        <String, Object?>{
+          'wrong_count': wrongCount + 1,
           'right_streak': 0,
+          'stage': 0,
+          'ease': nextEase,
+          'due_date': dueMs,
         },
         where: 'id = ?',
-        whereArgs: [mcqId],
+        whereArgs: <Object?>[mcqId],
       );
     }
   }

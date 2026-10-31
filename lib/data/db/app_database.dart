@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:flutter/foundation.dart' show debugPrint;
 
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -7,13 +9,14 @@ import 'package:sqflite/sqflite.dart';
 import '../../core/constants.dart';
 import 'tables.dart';
 
-/// sqflite 数据库封装：10 张表，schemaVersion 3。
+/// sqflite 数据库封装：10 张表，schemaVersion 4。
 ///
 /// 与原 drift 版保持完全一致的外部契约：
 /// - 类名仍是 AppDatabase，无参构造；
 /// - 数据库文件名仍是 study_tracker.sqlite，路径仍在应用文档目录；
 /// - 打开后执行 PRAGMA foreign_keys = ON；
-/// - version = 3，onCreate 建全部表 + 索引；onUpgrade 链式补 v1->v2、v2->v3 迁移。
+/// - version = 4，onCreate 建全部表 + 索引；
+///   onUpgrade 链式补 v1->v2、v2->v3、v3->v4 迁移。
 ///
 /// 差异：drift 的 db.select/into/update 语法全部去掉，
 /// 改成 sqflite 的 db.query/insert/update/rawQuery。
@@ -26,7 +29,12 @@ class AppDatabase {
   static const String fileName = 'study_tracker.sqlite';
 
   /// schema 版本号
-  static const int schemaVersion = 3;
+  ///
+  /// v2：checkins 补 minutes / note
+  /// v3：cards / mcqs 补 source_ref
+  /// v4：mcqs 补 item_id / day / question_type / stage / due_date / ease
+  ///     （按天投放 + SM-2 复习所需）
+  static const int schemaVersion = 4;
 
   /// 打开（或复用）底层连接。所有 repo 都通过它拿 Database。
   Future<Database> get database async {
@@ -40,8 +48,22 @@ class AppDatabase {
   }
 
   Future<Database> _open() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final String path = p.join(dir.path, fileName);
+    // path_provider 首次调用走 MethodChannel，在部分机型/目标 SDK 上可能
+    // 长时间不返回。这里加硬超时并退回私有临时目录，保证 db 一定能开、
+    // 首页一定能渲染，绝不把首帧堵死在目录获取上。
+    String dirPath;
+    try {
+      final dir = await getApplicationDocumentsDirectory()
+          .timeout(const Duration(seconds: 5));
+      dirPath = dir.path;
+    } catch (e) {
+      debugPrint('[DB] documents dir failed: $e, fallback to temp');
+      final Directory fallback = await Directory.systemTemp
+          .createTemp('study_tracker_db')
+          .timeout(const Duration(seconds: 5));
+      dirPath = fallback.path;
+    }
+    final String path = p.join(dirPath, fileName);
     return openDatabase(
       path,
       version: schemaVersion,
@@ -73,6 +95,14 @@ class AppDatabase {
             await db.execute(sql);
           }
         }
+        // v3 -> v4：mcqs 补 item_id / day / question_type / stage / due_date / ease，
+        // 让选择题支持「按天投放 + SM-2 复习」；老题回填 single + stage 0 + ease 2.5。
+        if (from < 4) {
+          for (final String sql in kMigrateV3ToV4) {
+            await db.execute(sql);
+          }
+        }
+        // 索引每级升级后统一补跑（IF NOT EXISTS，重复执行无副作用）。
         for (final String sql in kCreateIndexes) {
           await db.execute(sql);
         }
