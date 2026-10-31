@@ -33,12 +33,17 @@ def die(msg):
     print('FAIL', msg)
     sys.exit(1)
 
-
 def week_of(item_key):
     # 键形如 w5d3 -> '5'
     if not (item_key.startswith('w') and 'd' in item_key):
         die('非法 item 键名: %r' % item_key)
     return item_key[1:item_key.index('d')]
+
+
+def key_order(item_key):
+    """排序键：(week号, day号)，纯数值序"""
+    return (int(week_of(item_key)), int(item_key.split('d')[-1]))
+
 
 
 def verify_week(d, expect_points=None):
@@ -101,18 +106,34 @@ def verify_week(d, expect_points=None):
     return total
 
 
-def merge(week_file):
+def merge(week_file, replace=False):
     w = json.load(open(week_file, encoding='utf-8'))
     verify_week(w, expect_points=len(w['items']) * PER_ITEM)
-
     src_path = 'tools/points/m01.json'
     src = json.load(open(src_path, encoding='utf-8'))
     src.setdefault('week_titles', {})[str(w['week'])] = w['week_title']
+    added = []
+    replaced = []
     for k, v in w['items'].items():
         if k in src['items']:
-            die('%s 已存在于 m01.json，拒绝覆盖' % k)
-        src['items'][k] = v
-
+            if not replace:
+                die('%s 已存在于 m01.json，拒绝覆盖（如需重写已有周，加 --replace）' % k)
+            # 覆盖模式：保留主库原 form，只替换 points
+            old_form = src['items'][k].get('form')
+            if old_form and v.get('form') and old_form != v.get('form'):
+                print('FORM_OVERRIDE_KEPT', k, 'src=%s file=%s -> 保留 src' % (old_form, v.get('form')))
+                v = dict(v)
+                v['form'] = old_form
+            src['items'][k] = v
+            replaced.append(k)
+        else:
+            src['items'][k] = v
+            added.append(k)
+    # 键序重排：(week, day) 数值序
+    src['items'] = {k: src['items'][k]
+                    for k in sorted(src['items'], key=key_order)}
+    print('ADDED', len(added), added if len(added) <= 10 else added[:10] + ['...'])
+    print('REPLACED', len(replaced), replaced if len(replaced) <= 10 else replaced[:10] + ['...'])
     # 原子写：先写临时文件再替换
     fd, tmp = tempfile.mkstemp(dir='tools/points', suffix='.tmp')
     os.close(fd)
@@ -166,7 +187,9 @@ if __name__ == '__main__':
         die('用法见文件头 docstring')
     path = args[0]
     if '--merge' in args:
-        merge(path)
+        merge(path, replace=('--replace' in args))
+    elif '--replace' in args:
+        merge(path, replace=True)
     elif '--verify' in args:
         verify_source(path)
     else:
