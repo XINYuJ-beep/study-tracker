@@ -1,0 +1,36 @@
+{"id": "q037", "week": 13, "module": "02", "question": "TypeScript 相比 JavaScript 增加了什么？", "options": ["浏览器", "运行时", "静态类型系统", "数据库"], "answer": 2, "explain": "编译期检查类型。", "source_ref": "builtin:questions"}
+{"id": "q038", "week": 13, "module": "02", "question": "为什么通常禁用 `any`？", "options": ["它运行更慢", "它只能存字符串", "它不能被编译", "它会让类型检查失效"], "answer": 3, "explain": "等于放弃类型安全。", "source_ref": "builtin:questions"}
+{"id": "q039", "week": 13, "module": "02", "question": "interface 用来描述什么？", "options": ["对象的结构", "函数调用栈", "网络协议", "循环"], "answer": 0, "explain": "也可描述函数、类。", "source_ref": "builtin:questions"}
+{"id": "q040", "week": 14, "module": "02", "question": "泛型的主要作用是？", "options": ["提高运行速度", "让类型参数化，复用逻辑且保类型", "替代接口", "自动生成文档"], "answer": 1, "explain": "如 Array<T>。", "source_ref": "builtin:questions"}
+{"id": "q041", "week": 14, "module": "02", "question": "联合类型 `string | number` 表示？", "options": ["二者同时", "任意类型", "二者之一", "既不是 string 也不是 number"], "answer": 2, "explain": "需要用类型收窄来区分。", "source_ref": "builtin:questions"}
+{"id": "q042", "week": 14, "module": "02", "question": "类型收窄常见手段是？", "options": ["强制转换", "删除类型", "注释", "typeof / in / instanceof 判断"], "answer": 3, "explain": "让联合类型缩小到具体分支。", "source_ref": "builtin:questions"}
+{"id": "q043", "week": 15, "module": "02", "question": "Vite 开发启动快的主要原因是？", "options": ["利用浏览器原生 ESM，按需编译", "CDN 加速", "不打包", "用 C++ 重写"], "answer": 0, "explain": "生产构建仍用 Rollup。", "source_ref": "builtin:questions"}
+{"id": "q044", "week": 15, "module": "02", "question": "package.json 的作用是？", "options": ["存图片", "声明依赖与脚本", "配置文件服务器", "存源码"], "answer": 1, "explain": "npm 生态的核心清单。", "source_ref": "builtin:questions"}
+{"id": "q045", "week": 15, "module": "02", "question": "环境变量常用于？", "options": ["存源码", "区分开发/生产配置", "压缩图片", "加密代码"], "answer": 1, "explain": "不要把密钥提交进仓库。", "source_ref": "builtin:questions"}
+{"id": "q046", "week": 16, "module": "02", "question": "组件的核心思想是？", "options": ["替代数据库", "减少 HTTP 请求", "把所有代码写一个文件", "把 UI 拆成可复用单元"], "answer": 3, "explain": "组件 = 结构 + 样式 + 逻辑。", "source_ref": "builtin:questions"}
+{"id": "q047", "week": 16, "module": "02", "question": "Props 通常是？", "options": ["数据库字段", "全局变量", "父传子的只读数据", "子改父的数据"], "answer": 2, "explain": "单向数据流的基础。", "source_ref": "builtin:questions"}
+{"id": "q048", "week": 16, "module": "02", "question": "生命周期钩子用来？", "options": ["定义样式", "在特定时机执行代码", "发请求的替代", "编译代码"], "answer": 1, "explain": "如挂载后请求数据。", "source_ref": "builtin:questions"}
+{"id": "q049", "week": 17, "module": "02", "question": "状态管理解决的问题是？", "options": ["管理数据库", "提高网速", "压缩图片", "跨组件共享与同步数据"], "answer": 3, "explain": "避免层层传 props。", "source_ref": "builtin:questions"}
+{"id": "q050", "week": 17, "module": "02", "question": "单向数据流的好处是？", "options": ["数据流向清晰、易调试", "运行更快", "写得更少", "不用状态"], "answer": 0, "explain": "状态变化可追踪。", "source_ref": "builtin:questions"}
+{"id": "q051", "week": 17, "module": "02", "question": "计算属性（computed）的特点是？", "options": ["依赖变化时自动重算并缓存", "每次渲染都重算", "不能返回值", "只能存字符串"], "answer": 0, "explain": "派生状态，避免重复计算。", "source_ref": "builtin:questions"}
+{"id": "q052", "week": 18, "module": "02", "question": "前端路由的本质是？", "options": ["压缩资源", "修改数据库", "根据 URL 渲染不同组件", "向服务器请求新页面"], "answer": 2, "explain": "不刷新页面切换视图。", "source_ref": "builtin:questions"}
+{"id": "q053", "week": 18, "module": "02", "question": "路由守卫常用于？", "options": ["生成文档", "缓存接口", "登录鉴权与权限控制", "压缩图片"], "answer": 2, "explain": "跳转前拦截判断。", "source_ref": "builtin:questions"}
+{"id": "q054", "week": 18, "module": "02", "question": "axios 拦截器可以做什么？", "options": ["建表", "统一加 token、处理错误", "编译代码", "画图"], "answer": 1, "explain": "请求/响应两侧都能拦截。", "source_ref": "builtin:questions"}
+{"id": "q055", "week": 19, "module": "02", "question": "全局状态适合放什么？", "options": ["样式", "用户信息、主题、权限等跨页数据", "组件内部临时变量", "静态图片"], "answer": 1, "explain": "局部状态不要上升为全局。", "source_ref": "builtin:questions"}
+{"id": "q056", "week": 19, "module": "02", "question": "状态持久化通常借助？", "options": ["localStorage / 数据库", "Cookie 以外的网络", "CPU 缓存", "内存"], "answer": 0, "explain": "刷新不丢。", "source_ref": "builtin:questions"}
+{"id": "q057", "week": 19, "module": "02", "question": "避免不必要的重渲染，常见做法是？", "options": ["把所有状态放一起", "多用全局变量", "关闭 diff", "细化状态粒度、使用 memo"], "answer": 3, "explain": "状态越集中，影响面越大。", "source_ref": "builtin:questions"}
+{"id": "q058", "week": 20, "module": "02", "question": "组件库的主要价值是？", "options": ["替代框架", "自动测试", "统一交互与视觉，提升开发效率", "减少代码体积"], "answer": 2, "explain": "如 Element、Ant Design。", "source_ref": "builtin:questions"}
+{"id": "q059", "week": 20, "module": "02", "question": "主题定制一般通过什么实现？", "options": ["改源码", "改数据库", "CSS 变量 / 设计 token", "换浏览器"], "answer": 2, "explain": "便于暗色模式和品牌色。", "source_ref": "builtin:questions"}
+{"id": "q060", "week": 20, "module": "02", "question": "常见响应式断点大约是？", "options": ["没有断点", "100 / 200", "768 / 1024 / 1280", "5000"], "answer": 2, "explain": "按内容需要定，不必照搬。", "source_ref": "builtin:questions"}
+{"id": "q061", "week": 21, "module": "02", "question": "单元测试主要测什么？", "options": ["整个系统", "网络", "数据库", "单个函数或组件的逻辑"], "answer": 3, "explain": "快、隔离、可重复。", "source_ref": "builtin:questions"}
+{"id": "q062", "week": 21, "module": "02", "question": "E2E 测试的特点是？", "options": ["不需要浏览器", "只测样式", "只测函数", "从用户视角走完整流程"], "answer": 3, "explain": "慢但接近真实使用。", "source_ref": "builtin:questions"}
+{"id": "q063", "week": 21, "module": "02", "question": "测试覆盖率说明什么？", "options": ["性能", "代码质量", "代码被测试执行的比例", "安全性"], "answer": 2, "explain": "高覆盖率不等于高质量。", "source_ref": "builtin:questions"}
+{"id": "q064", "week": 22, "module": "02", "question": "代码分割的主要目的是？", "options": ["减少请求数", "减少代码行数", "减小首屏加载体积", "加快编译"], "answer": 2, "explain": "按路由/组件懒加载。", "source_ref": "builtin:questions"}
+{"id": "q065", "week": 22, "module": "02", "question": "虚拟列表解决什么问题？", "options": ["网络加速", "缓存接口", "长列表只渲染可视区域", "图片压缩"], "answer": 2, "explain": "大幅减少 DOM 数量。", "source_ref": "builtin:questions"}
+{"id": "q066", "week": 22, "module": "02", "question": "HTTP 缓存常见的两个头是？", "options": ["Cache-Control / ETag", "Host / Origin", "Token / JWT", "Cookie / Session"], "answer": 0, "explain": "强缓存与协商缓存。", "source_ref": "builtin:questions"}
+{"id": "q067", "week": 23, "module": "02", "question": "后台管理最常见的权限模型是？", "options": ["RBAC 基于角色", "DAC", "无权限", "MAC"], "answer": 0, "explain": "用户-角色-权限三层。", "source_ref": "builtin:questions"}
+{"id": "q068", "week": 23, "module": "02", "question": "通用表格组件通常要支持？", "options": ["只展示", "分页、排序、筛选", "只编辑", "只导出"], "answer": 1, "explain": "封装后复用性最高。", "source_ref": "builtin:questions"}
+{"id": "q069", "week": 23, "module": "02", "question": "表单校验应该放在？", "options": ["只后端", "不校验", "只前端", "前端即时校验 + 后端强校验"], "answer": 3, "explain": "前端体验，后端安全。", "source_ref": "builtin:questions"}
+{"id": "q070", "week": 24, "module": "02", "question": "构建产物通常放在哪？", "options": ["桌面", "src 目录", "dist / build 目录", "node_modules"], "answer": 2, "explain": "部署的是产物不是源码。", "source_ref": "builtin:questions"}
+{"id": "q071", "week": 24, "module": "02", "question": "HTTPS 相比 HTTP 多了什么？", "options": ["不需要域名", "更快", "TLS 加密与身份验证", "更省流量"], "answer": 2, "explain": "防窃听、防篡改。", "source_ref": "builtin:questions"}
+{"id": "q072", "week": 24, "module": "02", "question": "CI 的作用是？", "options": ["自动写代码", "自动设计 UI", "自动部署数据库", "每次提交自动构建和测试"], "answer": 3, "explain": "尽早发现集成问题。", "source_ref": "builtin:questions"}

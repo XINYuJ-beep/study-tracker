@@ -1,0 +1,36 @@
+{"id": "q145", "week": 49, "module": "05", "question": "数组随机访问的时间复杂度是？", "options": ["O(n²)", "O(n)", "O(log n)", "O(1)"], "answer": 3, "explain": "连续内存 + 下标计算。", "source_ref": "builtin:questions"}
+{"id": "q146", "week": 49, "module": "05", "question": "链表在头部插入的时间复杂度是？", "options": ["O(log n)", "O(n²)", "O(n)", "O(1)"], "answer": 3, "explain": "改指针即可。", "source_ref": "builtin:questions"}
+{"id": "q147", "week": 49, "module": "05", "question": "时间复杂度 O(n²) 通常出现在？", "options": ["二分", "一次遍历", "哈希查找", "双重循环"], "answer": 3, "explain": "如冒泡排序。", "source_ref": "builtin:questions"}
+{"id": "q148", "week": 50, "module": "05", "question": "哈希冲突的常见解决方式是？", "options": ["二分", "排序", "链地址法、开放寻址", "递归"], "answer": 2, "explain": "Java HashMap 用链表+红黑树。", "source_ref": "builtin:questions"}
+{"id": "q149", "week": 50, "module": "05", "question": "二叉搜索树中序遍历的结果是？", "options": ["降序", "随机", "升序", "层序"], "answer": 2, "explain": "左-根-右。", "source_ref": "builtin:questions"}
+{"id": "q150", "week": 50, "module": "05", "question": "堆常用于实现？", "options": ["链表", "哈希表", "图", "优先队列"], "answer": 3, "explain": "取最大/最小 O(log n)。", "source_ref": "builtin:questions"}
+{"id": "q151", "week": 51, "module": "05", "question": "B+ 树适合做索引的原因是？", "options": ["矮胖、范围查询友好", "不需要磁盘", "支持哈希", "节点只存数据"], "answer": 0, "explain": "减少磁盘 IO。", "source_ref": "builtin:questions"}
+{"id": "q152", "week": 51, "module": "05", "question": "Trie 适合什么场景？", "options": ["最短路径", "排序", "前缀匹配、自动补全", "事务"], "answer": 2, "explain": "按字符分层。", "source_ref": "builtin:questions"}
+{"id": "q153", "week": 51, "module": "05", "question": "并查集适合解决？", "options": ["加密", "连通性问题", "哈希", "排序"], "answer": 1, "explain": "路径压缩 + 按秩合并。", "source_ref": "builtin:questions"}
+{"id": "q154", "week": 52, "module": "05", "question": "BFS 通常借助什么结构？", "options": ["堆", "哈希", "队列", "栈"], "answer": 2, "explain": "层序遍历。", "source_ref": "builtin:questions"}
+{"id": "q155", "week": 52, "module": "05", "question": "Dijkstra 不能处理？", "options": ["无向图", "负权边", "有向图", "正权边"], "answer": 1, "explain": "负权用 Bellman-Ford。", "source_ref": "builtin:questions"}
+{"id": "q156", "week": 52, "module": "05", "question": "拓扑排序要求图是？", "options": ["二分图", "完全图", "有向无环图", "无向图"], "answer": 2, "explain": "有环则无拓扑序。", "source_ref": "builtin:questions"}
+{"id": "q157", "week": 53, "module": "05", "question": "快速排序平均时间复杂度是？", "options": ["O(log n)", "O(n log n)", "O(n)", "O(n²)"], "answer": 1, "explain": "最坏 O(n²)。", "source_ref": "builtin:questions"}
+{"id": "q158", "week": 53, "module": "05", "question": "归并排序的特点是？", "options": ["原地排序", "稳定，额外 O(n) 空间", "不稳定", "最坏 O(n)"], "answer": 1, "explain": "分治 + 合并。", "source_ref": "builtin:questions"}
+{"id": "q159", "week": 53, "module": "05", "question": "冒泡排序最坏复杂度是？", "options": ["O(n²)", "O(n log n)", "O(n)", "O(1)"], "answer": 0, "explain": "相邻交换。", "source_ref": "builtin:questions"}
+{"id": "q160", "week": 54, "module": "05", "question": "二分查找的前提是？", "options": ["数据无序", "数据是树", "数据有序", "数据是链表"], "answer": 2, "explain": "无序需先排序。", "source_ref": "builtin:questions"}
+{"id": "q161", "week": 54, "module": "05", "question": "递归必须有？", "options": ["循环", "数组", "指针", "终止条件"], "answer": 3, "explain": "否则栈溢出。", "source_ref": "builtin:questions"}
+{"id": "q162", "week": 54, "module": "05", "question": "回溯的本质是？", "options": ["深度优先 + 撤销选择", "动态规划", "广度优先", "贪心"], "answer": 0, "explain": "走不通就回退。", "source_ref": "builtin:questions"}
+{"id": "q163", "week": 55, "module": "05", "question": "动态规划的两个前提是？", "options": ["排序 + 查找", "递归 + 迭代", "贪心 + 分治", "最优子结构 + 重叠子问题"], "answer": 3, "explain": "状态转移 + 记忆化。", "source_ref": "builtin:questions"}
+{"id": "q164", "week": 55, "module": "05", "question": "01 背包中每个物品？", "options": ["必须选", "可选无限次", "按重量排序", "只能选 0 或 1 次"], "answer": 3, "explain": "完全背包才是无限次。", "source_ref": "builtin:questions"}
+{"id": "q165", "week": 55, "module": "05", "question": "状态转移方程的作用是？", "options": ["描述子问题之间如何推导", "建表", "排序", "加密"], "answer": 0, "explain": "DP 的核心。", "source_ref": "builtin:questions"}
+{"id": "q166", "week": 56, "module": "05", "question": "贪心算法要求？", "options": ["必须递归", "一定最优", "必须排序", "局部最优能推出全局最优"], "answer": 3, "explain": "需证明或找反例。", "source_ref": "builtin:questions"}
+{"id": "q167", "week": 56, "module": "05", "question": "区间调度通常按什么排序？", "options": ["结束时间", "开始时间", "随机", "长度"], "answer": 0, "explain": "结束早的优先。", "source_ref": "builtin:questions"}
+{"id": "q168", "week": 56, "module": "05", "question": "贪心失效的典型场景是？", "options": ["区间调度", "0-1 背包", "找零（特定面额）", "霍夫曼编码"], "answer": 1, "explain": "0-1 背包要用 DP。", "source_ref": "builtin:questions"}
+{"id": "q169", "week": 57, "module": "05", "question": "进程和线程的区别是？", "options": ["没有区别", "线程独立地址空间", "进程更轻", "进程有独立地址空间，线程共享"], "answer": 3, "explain": "线程是调度单位。", "source_ref": "builtin:questions"}
+{"id": "q170", "week": 57, "module": "05", "question": "死锁的四个必要条件不包括？", "options": ["请求并保持", "循环等待", "互斥", "可剥夺"], "answer": 3, "explain": "四条件：互斥、请求保持、不可剥夺、循环等待。", "source_ref": "builtin:questions"}
+{"id": "q171", "week": 57, "module": "05", "question": "时间片轮转属于？", "options": ["非抢占", "批处理", "抢占式调度", "静态优先级"], "answer": 2, "explain": "轮流执行固定时间片。", "source_ref": "builtin:questions"}
+{"id": "q172", "week": 58, "module": "05", "question": "虚拟内存的作用是？", "options": ["加快 CPU", "让进程以为自己有连续大内存", "压缩数据", "增加硬盘"], "answer": 1, "explain": "分页映射 + 换出。", "source_ref": "builtin:questions"}
+{"id": "q173", "week": 58, "module": "05", "question": "分页的好处是？", "options": ["消除外部碎片", "消除所有碎片", "减少内存", "加快 CPU"], "answer": 0, "explain": "内部碎片仍存在。", "source_ref": "builtin:questions"}
+{"id": "q174", "week": 58, "module": "05", "question": "LRU 淘汰的是？", "options": ["最近使用的页", "随机页", "最久未使用的页", "最大页"], "answer": 2, "explain": "最近最少使用。", "source_ref": "builtin:questions"}
+{"id": "q175", "week": 59, "module": "05", "question": "第三范式主要消除？", "options": ["所有依赖", "传递依赖", "部分依赖", "索引"], "answer": 1, "explain": "2NF 消除部分依赖。", "source_ref": "builtin:questions"}
+{"id": "q176", "week": 59, "module": "05", "question": "MVCC 解决什么问题？", "options": ["读写不阻塞", "加速索引", "压缩数据", "分布式事务"], "answer": 0, "explain": "快照读。", "source_ref": "builtin:questions"}
+{"id": "q177", "week": 59, "module": "05", "question": "可重复读隔离级别能避免？", "options": ["幻读（InnoDB 大部分）", "脏读", "所有问题", "不可重复读"], "answer": 3, "explain": "脏读在 RC 就已避免。", "source_ref": "builtin:questions"}
+{"id": "q178", "week": 60, "module": "05", "question": "限流算法不包括？", "options": ["令牌桶", "快速排序", "漏桶", "滑动窗口"], "answer": 1, "explain": "排序不是限流。", "source_ref": "builtin:questions"}
+{"id": "q179", "week": 60, "module": "05", "question": "缓存与数据库一致性常见策略是？", "options": ["只写缓存", "先删库", "不处理", "先更新库再删缓存"], "answer": 3, "explain": "延迟双删可缓解。", "source_ref": "builtin:questions"}
+{"id": "q180", "week": 60, "module": "05", "question": "短链系统的核心是？", "options": ["压缩", "加密", "排序", "ID 生成 + 映射存储 + 跳转"], "answer": 3, "explain": "Base62 编码。", "source_ref": "builtin:questions"}

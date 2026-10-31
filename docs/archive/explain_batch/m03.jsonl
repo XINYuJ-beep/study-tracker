@@ -1,0 +1,36 @@
+{"id": "q073", "week": 25, "module": "03", "question": "Node.js 适合哪类场景？", "options": ["CPU 密集型计算", "驱动开发", "I/O 密集型高并发", "图形渲染"], "answer": 2, "explain": "单线程事件循环。", "source_ref": "builtin:questions"}
+{"id": "q074", "week": 25, "module": "03", "question": "Node 的事件循环作用？", "options": ["编译代码", "非阻塞地调度回调", "内存回收", "多核并行"], "answer": 1, "explain": "把 I/O 交给系统。", "source_ref": "builtin:questions"}
+{"id": "q075", "week": 25, "module": "03", "question": "npm 的作用是？", "options": ["管理依赖与脚本", "编译 C++", "画图", "运行数据库"], "answer": 0, "explain": "package.json + node_modules。", "source_ref": "builtin:questions"}
+{"id": "q076", "week": 26, "module": "03", "question": "Express 中间件的 next() 作用是？", "options": ["交给下一个中间件", "结束请求", "重启服务", "抛错"], "answer": 0, "explain": "不调用会挂起。", "source_ref": "builtin:questions"}
+{"id": "q077", "week": 26, "module": "03", "question": "错误处理中间件的参数个数是？", "options": ["4 个（err, req, res, next）", "3 个", "2 个", "任意"], "answer": 0, "explain": "Express 靠参数个数识别。", "source_ref": "builtin:questions"}
+{"id": "q078", "week": 26, "module": "03", "question": "路由参数 `:id` 通过什么获取？", "options": ["req.params.id", "req.body.id", "req.header.id", "req.query.id"], "answer": 0, "explain": "query 用 req.query。", "source_ref": "builtin:questions"}
+{"id": "q079", "week": 27, "module": "03", "question": "PUT 和 PATCH 的区别？", "options": ["PUT 整体替换，PATCH 局部更新", "PUT 局部，PATCH 整体", "完全一样", "都不能更新"], "answer": 0, "explain": "PUT 幂等整体替换。", "source_ref": "builtin:questions"}
+{"id": "q080", "week": 27, "module": "03", "question": "幂等指的是？", "options": ["执行多次结果与一次相同", "不能重复", "执行很快", "必须登录"], "answer": 0, "explain": "GET/PUT/DELETE 幂等，POST 不幂等。", "source_ref": "builtin:questions"}
+{"id": "q081", "week": 27, "module": "03", "question": "创建资源成功通常返回？", "options": ["200 OK", "404", "201 Created", "500"], "answer": 2, "explain": "配合 Location 头。", "source_ref": "builtin:questions"}
+{"id": "q082", "week": 28, "module": "03", "question": "主键的作用是？", "options": ["存索引", "唯一标识一行且非空", "外键", "加速所有查询"], "answer": 1, "explain": "InnoDB 主键即聚簇索引。", "source_ref": "builtin:questions"}
+{"id": "q083", "week": 28, "module": "03", "question": "外键的作用是？", "options": ["保证引用完整性", "加密数据", "分表", "加速查询"], "answer": 0, "explain": "也可用应用层保证。", "source_ref": "builtin:questions"}
+{"id": "q084", "week": 28, "module": "03", "question": "索引的本质是？", "options": ["日志", "缓存", "数据副本", "额外的数据结构加速查找"], "answer": 3, "explain": "代价是写入变慢、占空间。", "source_ref": "builtin:questions"}
+{"id": "q085", "week": 29, "module": "03", "question": "以下哪种写法会让索引失效？", "options": ["WHERE YEAR(created_at)=2026", "WHERE id=1", "WHERE age>18", "ORDER BY id"], "answer": 0, "explain": "对列用函数会失效。", "source_ref": "builtin:questions"}
+{"id": "q086", "week": 29, "module": "03", "question": "事务隔离级别最高的是？", "options": ["Read Committed", "Read Uncommitted", "Serializable", "Repeatable Read"], "answer": 2, "explain": "最高但并发最低。", "source_ref": "builtin:questions"}
+{"id": "q087", "week": 29, "module": "03", "question": "EXPLAIN 主要看什么？", "options": ["表名", "是否走索引、扫描行数", "字段类型", "SQL 长度"], "answer": 1, "explain": "type/key/rows 是关键。", "source_ref": "builtin:questions"}
+{"id": "q088", "week": 30, "module": "03", "question": "ORM 的作用是？", "options": ["建索引", "用对象操作数据库表", "压缩数据", "加密数据"], "answer": 1, "explain": "减少手写 SQL。", "source_ref": "builtin:questions"}
+{"id": "q089", "week": 30, "module": "03", "question": "N+1 查询问题指？", "options": ["查询 0 次", "索引过多", "连接池过大", "一次列表后又逐条查关联"], "answer": 3, "explain": "用 join 或批量查询解决。", "source_ref": "builtin:questions"}
+{"id": "q090", "week": 30, "module": "03", "question": "数据库迁移（migration）用来？", "options": ["迁移服务器", "备份数据", "版本化管理表结构变更", "分库"], "answer": 2, "explain": "可回滚、可协作。", "source_ref": "builtin:questions"}
+{"id": "q091", "week": 31, "module": "03", "question": "密码存储应该？", "options": ["Base64", "明文存储", "加盐哈希，不存明文", "加密可逆"], "answer": 2, "explain": "bcrypt/argon2。", "source_ref": "builtin:questions"}
+{"id": "q092", "week": 31, "module": "03", "question": "JWT 由哪三部分组成？", "options": ["Header.Payload.Signature", "账号.密码.盐", "URL.Method.Body", "ID.Token.Key"], "answer": 0, "explain": "Payload 可解码，不能放敏感信息。", "source_ref": "builtin:questions"}
+{"id": "q093", "week": 31, "module": "03", "question": "RBAC 的核心是？", "options": ["用户绑角色，角色绑权限", "每个用户单独配权限", "只分管理员", "按 IP 授权"], "answer": 0, "explain": "易维护。", "source_ref": "builtin:questions"}
+{"id": "q094", "week": 32, "module": "03", "question": "缓存穿透指？", "options": ["缓存预热", "查不存在的数据，绕过缓存打库", "缓存雪崩", "缓存击穿"], "answer": 1, "explain": "布隆过滤器或缓存空值。", "source_ref": "builtin:questions"}
+{"id": "q095", "week": 32, "module": "03", "question": "缓存雪崩指？", "options": ["单个热点 key 过期", "大量 key 同时过期", "缓存容量大", "缓存命中率高"], "answer": 1, "explain": "过期时间加随机值。", "source_ref": "builtin:questions"}
+{"id": "q096", "week": 32, "module": "03", "question": "分布式锁常用什么实现？", "options": ["数据库主键", "文件锁", "线程锁", "Redis SETNX + 过期时间"], "answer": 3, "explain": "注意锁续期与误删。", "source_ref": "builtin:questions"}
+{"id": "q097", "week": 33, "module": "03", "question": "文件上传必须校验？", "options": ["用户等级", "文件名长度", "类型、大小、内容", "上传时间"], "answer": 2, "explain": "防 webshell 与超大文件。", "source_ref": "builtin:questions"}
+{"id": "q098", "week": 33, "module": "03", "question": "对象存储适合存什么？", "options": ["数据库表", "代码", "日志索引", "图片、视频等静态资源"], "answer": 3, "explain": "如 OSS/S3。", "source_ref": "builtin:questions"}
+{"id": "q099", "week": 33, "module": "03", "question": "断点续传的核心是？", "options": ["一次传完", "压缩后传", "加密后传", "分片 + 记录已传分片"], "answer": 3, "explain": "大文件常用。", "source_ref": "builtin:questions"}
+{"id": "q100", "week": 34, "module": "03", "question": "消息队列的主要作用是？", "options": ["压缩数据", "加速数据库", "异步解耦、削峰", "替代缓存"], "answer": 2, "explain": "生产者与消费者解耦。", "source_ref": "builtin:questions"}
+{"id": "q101", "week": 34, "module": "03", "question": "死信队列用来？", "options": ["存日志", "存放无法消费的消息", "存正常消息", "存配置"], "answer": 1, "explain": "便于排查与补偿。", "source_ref": "builtin:questions"}
+{"id": "q102", "week": 34, "module": "03", "question": "消息重复消费时应该？", "options": ["忽略", "删库", "重启", "业务保证幂等"], "answer": 3, "explain": "用唯一键或状态机。", "source_ref": "builtin:questions"}
+{"id": "q103", "week": 35, "module": "03", "question": "后端分层的常见结构是？", "options": ["Controller-Service-Repository", "View-Model", "A-B-C", "无分层"], "answer": 0, "explain": "职责清晰、易测试。", "source_ref": "builtin:questions"}
+{"id": "q104", "week": 35, "module": "03", "question": "接口文档的作用是？", "options": ["存代码", "约定前后端契约", "存数据库", "美化界面"], "answer": 1, "explain": "OpenAPI/Swagger。", "source_ref": "builtin:questions"}
+{"id": "q105", "week": 35, "module": "03", "question": "单元测试应该覆盖？", "options": ["所有 UI", "核心业务逻辑", "所有配置", "第三方库"], "answer": 1, "explain": "优先覆盖易错分支。", "source_ref": "builtin:questions"}
+{"id": "q106", "week": 36, "module": "03", "question": "Dockerfile 的作用是？", "options": ["监控容器", "定义镜像构建步骤", "编排多容器", "运行容器"], "answer": 1, "explain": "Compose 才负责编排。", "source_ref": "builtin:questions"}
+{"id": "q107", "week": 36, "module": "03", "question": "日志应该记录什么？", "options": ["不记", "只记错误", "只记成功", "时间、级别、请求 ID、关键上下文"], "answer": 3, "explain": "便于排查链路。", "source_ref": "builtin:questions"}
+{"id": "q108", "week": 36, "module": "03", "question": "上线前必须做的是？", "options": ["备份与回滚方案", "关监控", "删日志", "改端口"], "answer": 0, "explain": "出问题能退回去。", "source_ref": "builtin:questions"}

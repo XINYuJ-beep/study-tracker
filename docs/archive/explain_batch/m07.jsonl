@@ -1,0 +1,36 @@
+{"id": "q217", "week": 73, "module": "07", "question": "矩阵乘法 (m×n)·(n×p) 的结果是？", "options": ["p×p", "m×p", "m×n", "n×n"], "answer": 1, "explain": "左列数等于右行数。", "source_ref": "builtin:questions"}
+{"id": "q218", "week": 73, "module": "07", "question": "特征值描述的是？", "options": ["行列式", "矩阵大小", "秩", "变换中方向不变的缩放因子"], "answer": 3, "explain": "Av=λv。", "source_ref": "builtin:questions"}
+{"id": "q219", "week": 73, "module": "07", "question": "矩阵的秩反映？", "options": ["线性无关的行/列数", "逆矩阵", "元素个数", "行列式"], "answer": 0, "explain": "秩 = 有效维度。", "source_ref": "builtin:questions"}
+{"id": "q220", "week": 74, "module": "07", "question": "条件概率 P(A|B) 表示？", "options": ["A 与 B 同时发生", "B 发生下 A 的概率", "A 的补集", "A 或 B"], "answer": 1, "explain": "P(AB)/P(B)。", "source_ref": "builtin:questions"}
+{"id": "q221", "week": 74, "module": "07", "question": "贝叶斯定理用于？", "options": ["压缩", "用先验与似然更新后验", "排序", "加密"], "answer": 1, "explain": "P(A|B) ∝ P(B|A)P(A)。", "source_ref": "builtin:questions"}
+{"id": "q222", "week": 74, "module": "07", "question": "期望描述的是？", "options": ["最小取值", "最大取值", "方差", "随机变量的平均取值"], "answer": 3, "explain": "加权平均。", "source_ref": "builtin:questions"}
+{"id": "q223", "week": 75, "module": "07", "question": "梯度指向？", "options": ["随机方向", "函数增长最快的方向", "不变方向", "下降最快方向"], "answer": 1, "explain": "所以下降用负梯度。", "source_ref": "builtin:questions"}
+{"id": "q224", "week": 75, "module": "07", "question": "链式法则用于？", "options": ["矩阵乘法", "复合函数求导", "概率", "积分"], "answer": 1, "explain": "反向传播的基础。", "source_ref": "builtin:questions"}
+{"id": "q225", "week": 75, "module": "07", "question": "学习率过大可能导致？", "options": ["收敛更快且稳定", "震荡不收敛", "过拟合", "梯度消失"], "answer": 1, "explain": "过小则收敛慢。", "source_ref": "builtin:questions"}
+{"id": "q226", "week": 76, "module": "07", "question": "监督学习的特点是？", "options": ["无模型", "有标签", "无数据", "无标签"], "answer": 1, "explain": "学 x→y 映射。", "source_ref": "builtin:questions"}
+{"id": "q227", "week": 76, "module": "07", "question": "线性回归的损失通常是？", "options": ["KL", "Hinge", "均方误差", "交叉熵"], "answer": 2, "explain": "MSE。", "source_ref": "builtin:questions"}
+{"id": "q228", "week": 76, "module": "07", "question": "过拟合的表现是？", "options": ["训练好、验证差", "训练不动", "都好", "都差"], "answer": 0, "explain": "正则化/早停。", "source_ref": "builtin:questions"}
+{"id": "q229", "week": 77, "module": "07", "question": "决策树划分的依据通常是？", "options": ["随机", "梯度", "距离", "信息增益/基尼指数"], "answer": 3, "explain": "选择使纯度提升最大的特征。", "source_ref": "builtin:questions"}
+{"id": "q230", "week": 77, "module": "07", "question": "随机森林的「随机」体现在？", "options": ["随机损失", "样本采样与特征采样", "随机学习率", "随机初始化"], "answer": 1, "explain": "Bagging + 特征子集。", "source_ref": "builtin:questions"}
+{"id": "q231", "week": 77, "module": "07", "question": "SVM 的核心思想是？", "options": ["最小化损失", "聚类", "降维", "最大化分类间隔"], "answer": 3, "explain": "支持向量决定边界。", "source_ref": "builtin:questions"}
+{"id": "q232", "week": 78, "module": "07", "question": "类别不平衡时更适合看？", "options": ["MSE", "R²", "F1 / AUC", "准确率"], "answer": 2, "explain": "准确率会被多数类带偏。", "source_ref": "builtin:questions"}
+{"id": "q233", "week": 78, "module": "07", "question": "交叉验证的作用是？", "options": ["更稳地评估泛化能力", "加速训练", "减少数据", "增加特征"], "answer": 0, "explain": "K 折轮流验证。", "source_ref": "builtin:questions"}
+{"id": "q234", "week": 78, "module": "07", "question": "精确率和召回率的权衡体现在？", "options": ["同时降", "同时升", "提高阈值精确率升、召回率降", "无关"], "answer": 2, "explain": "PR 曲线。", "source_ref": "builtin:questions"}
+{"id": "q235", "week": 79, "module": "07", "question": "激活函数的作用是？", "options": ["加速收敛", "引入非线性", "减少参数", "正则化"], "answer": 1, "explain": "否则多层等价于一层。", "source_ref": "builtin:questions"}
+{"id": "q236", "week": 79, "module": "07", "question": "反向传播基于？", "options": ["排序", "链式法则", "随机搜索", "贪心"], "answer": 1, "explain": "逐层求梯度。", "source_ref": "builtin:questions"}
+{"id": "q237", "week": 79, "module": "07", "question": "交叉熵常用于？", "options": ["降维", "回归任务", "聚类", "分类任务"], "answer": 3, "explain": "配合 softmax。", "source_ref": "builtin:questions"}
+{"id": "q238", "week": 80, "module": "07", "question": "卷积层提取的是？", "options": ["概率", "类别", "局部特征", "全局统计"], "answer": 2, "explain": "边缘、纹理。", "source_ref": "builtin:questions"}
+{"id": "q239", "week": 80, "module": "07", "question": "池化的作用是？", "options": ["降维并保留主要信息", "归一化", "增加参数", "分类"], "answer": 0, "explain": "最大/平均池化。", "source_ref": "builtin:questions"}
+{"id": "q240", "week": 80, "module": "07", "question": "迁移学习适合？", "options": ["数据无限时", "只做回归", "无标签时", "数据少时复用预训练模型"], "answer": 3, "explain": "冻结 backbone 微调。", "source_ref": "builtin:questions"}
+{"id": "q241", "week": 81, "module": "07", "question": "RNN 适合处理？", "options": ["序列数据", "图", "表格", "图像"], "answer": 0, "explain": "文本、语音、时序。", "source_ref": "builtin:questions"}
+{"id": "q242", "week": 81, "module": "07", "question": "LSTM 解决什么问题？", "options": ["数据不平衡", "长依赖与梯度消失", "过拟合", "欠拟合"], "answer": 1, "explain": "门控机制。", "source_ref": "builtin:questions"}
+{"id": "q243", "week": 81, "module": "07", "question": "梯度消失的后果是？", "options": ["训练太快", "远处信息学不到", "参数爆炸", "内存溢出"], "answer": 1, "explain": "长序列难建模。", "source_ref": "builtin:questions"}
+{"id": "q244", "week": 82, "module": "07", "question": "自注意力的核心是？", "options": ["卷积", "循环", "池化", "计算 Q 与 K 的相似度加权 V"], "answer": 3, "explain": "全局依赖。", "source_ref": "builtin:questions"}
+{"id": "q245", "week": 82, "module": "07", "question": "多头注意力的作用是？", "options": ["减少参数", "从多个子空间捕捉关系", "增加层数", "加速"], "answer": 1, "explain": "并行多组注意力。", "source_ref": "builtin:questions"}
+{"id": "q246", "week": 82, "module": "07", "question": "位置编码解决？", "options": ["注意力本身无序", "过拟合", "梯度消失", "显存"], "answer": 0, "explain": "注入位置信息。", "source_ref": "builtin:questions"}
+{"id": "q247", "week": 83, "module": "07", "question": "Dataset 与 DataLoader 的分工是？", "options": ["反过来", "都一样", "都不用", "Dataset 取样本，DataLoader 组 batch"], "answer": 3, "explain": "支持打乱与并行。", "source_ref": "builtin:questions"}
+{"id": "q248", "week": 83, "module": "07", "question": "优化器的作用是？", "options": ["计算损失", "按梯度更新参数", "加载数据", "保存模型"], "answer": 1, "explain": "SGD/Adam。", "source_ref": "builtin:questions"}
+{"id": "q249", "week": 83, "module": "07", "question": "保存模型通常保存？", "options": ["state_dict", "源码", "数据集", "日志"], "answer": 0, "explain": "加载时先建结构。", "source_ref": "builtin:questions"}
+{"id": "q250", "week": 84, "module": "07", "question": "建模第一步通常是？", "options": ["建立简单基线", "上最复杂模型", "调参", "部署"], "answer": 0, "explain": "先跑通再优化。", "source_ref": "builtin:questions"}
+{"id": "q251", "week": 84, "module": "07", "question": "模型评估应使用？", "options": ["全部数据", "独立测试集", "验证集当测试", "训练集"], "answer": 1, "explain": "避免数据泄漏。", "source_ref": "builtin:questions"}
+{"id": "q252", "week": 84, "module": "07", "question": "模型部署为 API 的常见框架是？", "options": ["React", "Vue", "Nginx", "FastAPI"], "answer": 3, "explain": "轻量、自带文档。", "source_ref": "builtin:questions"}

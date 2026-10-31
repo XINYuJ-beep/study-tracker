@@ -1,0 +1,36 @@
+{"id": "q181", "week": 61, "module": "06", "question": "词法分析的输出是？", "options": ["token 流", "字节码", "语法树", "机器码"], "answer": 0, "explain": "字符流 → token。", "source_ref": "builtin:questions"}
+{"id": "q182", "week": 61, "module": "06", "question": "正则表达式常用于？", "options": ["代码生成", "描述词法规则", "链接", "语法分析"], "answer": 1, "explain": "也可手写状态机。", "source_ref": "builtin:questions"}
+{"id": "q183", "week": 61, "module": "06", "question": "有限自动机的作用是？", "options": ["加密", "识别字符串是否符合规则", "压缩", "排序"], "answer": 1, "explain": "DFA/NFA。", "source_ref": "builtin:questions"}
+{"id": "q184", "week": 62, "module": "06", "question": "语法分析的输出是？", "options": ["机器码", "token 流", "符号表", "抽象语法树 AST"], "answer": 3, "explain": "递归下降或 LR。", "source_ref": "builtin:questions"}
+{"id": "q185", "week": 62, "module": "06", "question": "递归下降适合什么文法？", "options": ["二义文法", "正则文法", "LL(1)", "LR(1)"], "answer": 2, "explain": "自顶向下。", "source_ref": "builtin:questions"}
+{"id": "q186", "week": 62, "module": "06", "question": "AST 的作用是？", "options": ["表示程序结构，供后续处理", "存字符串", "存路径", "存字节"], "answer": 0, "explain": "解释器/编译器都基于它。", "source_ref": "builtin:questions"}
+{"id": "q187", "week": 63, "module": "06", "question": "解释器执行的是？", "options": ["直接遍历 AST 或字节码", "汇编", "机器码", "链接产物"], "answer": 0, "explain": "无需生成目标文件。", "source_ref": "builtin:questions"}
+{"id": "q188", "week": 63, "module": "06", "question": "作用域决定什么？", "options": ["文件大小", "变量在哪里可见", "代码运行速度", "网络端口"], "answer": 1, "explain": "词法作用域为主。", "source_ref": "builtin:questions"}
+{"id": "q189", "week": 63, "module": "06", "question": "闭包在解释器里需要保存？", "options": ["全局变量", "机器码", "定义时的环境", "栈指针"], "answer": 2, "explain": "环境链。", "source_ref": "builtin:questions"}
+{"id": "q190", "week": 64, "module": "06", "question": "Kotlin 空安全的体现是？", "options": ["类型区分可空与非空", "禁止 null", "自动判空", "运行时检查"], "answer": 0, "explain": "String? 需 ?. 或 !!。", "source_ref": "builtin:questions"}
+{"id": "q191", "week": 64, "module": "06", "question": "协程相比线程的优势是？", "options": ["更快 CPU", "更轻量、可挂起不阻塞", "更省内存以外无优势", "更安全"], "answer": 1, "explain": "结构化并发。", "source_ref": "builtin:questions"}
+{"id": "q192", "week": 64, "module": "06", "question": "data class 自动生成？", "options": ["网络请求", "equals/hashCode/toString/copy", "权限", "布局"], "answer": 1, "explain": "省样板代码。", "source_ref": "builtin:questions"}
+{"id": "q193", "week": 65, "module": "06", "question": "Activity 生命周期中可见但不可交互的是？", "options": ["onCreate", "onDestroy", "onStop", "onStart 之后 onResume 之前"], "answer": 3, "explain": "onPause 后仍部分可见。", "source_ref": "builtin:questions"}
+{"id": "q194", "week": 65, "module": "06", "question": "Intent 的作用是？", "options": ["组件间通信与跳转", "存数据", "发网络", "画界面"], "answer": 0, "explain": "显式/隐式。", "source_ref": "builtin:questions"}
+{"id": "q195", "week": 65, "module": "06", "question": "Jetpack Compose 的特点是？", "options": ["XML 布局", "声明式 UI", "命令式", "WebView"], "answer": 1, "explain": "可组合函数。", "source_ref": "builtin:questions"}
+{"id": "q196", "week": 66, "module": "06", "question": "Android 签名的作用是？", "options": ["加速安装", "标识开发者、保证完整性", "压缩 APK", "加密数据"], "answer": 1, "explain": "丢了签名无法覆盖升级。", "source_ref": "builtin:questions"}
+{"id": "q197", "week": 66, "module": "06", "question": "危险权限需要？", "options": ["运行时动态申请", "不用申请", "只写清单", "只写代码"], "answer": 0, "explain": "Android 6.0 起。", "source_ref": "builtin:questions"}
+{"id": "q198", "week": 66, "module": "06", "question": "APK 打包前要改？", "options": ["包名不能改", "图标不能改", "versionCode / versionName", "权限不能改"], "answer": 2, "explain": "versionCode 必须递增。", "source_ref": "builtin:questions"}
+{"id": "q199", "week": 67, "module": "06", "question": "Swift 可选类型表示？", "options": ["一定存在", "值可能存在也可能为 nil", "一定是字符串", "一定是 0"], "answer": 1, "explain": "Optional<T>。", "source_ref": "builtin:questions"}
+{"id": "q200", "week": 67, "module": "06", "question": "协议（protocol）类似？", "options": ["结构体", "接口", "类", "枚举"], "answer": 1, "explain": "可被类/结构体实现。", "source_ref": "builtin:questions"}
+{"id": "q201", "week": 67, "module": "06", "question": "结构体是值类型意味着？", "options": ["赋值时复制", "不能有属性", "不能有方法", "引用共享"], "answer": 0, "explain": "类是引用类型。", "source_ref": "builtin:questions"}
+{"id": "q202", "week": 68, "module": "06", "question": "SwiftUI 的编程范式是？", "options": ["声明式", "命令式", "函数式以外都不是", "面向过程"], "answer": 0, "explain": "描述 UI 状态。", "source_ref": "builtin:questions"}
+{"id": "q203", "week": 68, "module": "06", "question": "@State 用于？", "options": ["全局状态", "持久化", "网络请求", "视图内部可变状态"], "answer": 3, "explain": "变化触发重绘。", "source_ref": "builtin:questions"}
+{"id": "q204", "week": 68, "module": "06", "question": "视图组合的方式是？", "options": ["继承", "字符串拼接", "XML", "嵌套 View 与修饰符"], "answer": 3, "explain": "小视图拼大视图。", "source_ref": "builtin:questions"}
+{"id": "q205", "week": 69, "module": "06", "question": "iOS 应用沙盒意味着？", "options": ["只能访问自己容器内的文件", "不能存文件", "能访问任意文件", "只能联网"], "answer": 0, "explain": "Documents/Library/tmp。", "source_ref": "builtin:questions"}
+{"id": "q206", "week": 69, "module": "06", "question": "TestFlight 用于？", "options": ["代码签名", "分发测试版本", "崩溃分析", "上架审核"], "answer": 1, "explain": "内部/外部测试。", "source_ref": "builtin:questions"}
+{"id": "q207", "week": 69, "module": "06", "question": "归档（Archive）的作用是？", "options": ["备份代码", "清理缓存", "压缩图片", "生成可分发的构建"], "answer": 3, "explain": "上传 App Store。", "source_ref": "builtin:questions"}
+{"id": "q208", "week": 70, "module": "06", "question": "ArkTS 与 TypeScript 的关系是？", "options": ["基于 TS 扩展", "TS 基于 ArkTS", "ArkTS 是 Java", "完全不同"], "answer": 0, "explain": "保留类型系统并加约束。", "source_ref": "builtin:questions"}
+{"id": "q209", "week": 70, "module": "06", "question": "鸿蒙 UI 的写法是？", "options": ["XML", "命令式", "HTML", "声明式"], "answer": 3, "explain": "build() 里描述 UI。", "source_ref": "builtin:questions"}
+{"id": "q210", "week": 70, "module": "06", "question": "鸿蒙状态装饰器 @State 的作用是？", "options": ["发请求", "路由", "存数据库", "驱动 UI 更新"], "answer": 3, "explain": "类似其他框架的响应式状态。", "source_ref": "builtin:questions"}
+{"id": "q211", "week": 71, "module": "06", "question": "UIAbility 的作用是？", "options": ["编译器", "承载页面与生命周期", "网络库", "数据库"], "answer": 1, "explain": "一个 Ability 对应窗口。", "source_ref": "builtin:questions"}
+{"id": "q212", "week": 71, "module": "06", "question": "Stage 模型相比 FA 的优势是？", "options": ["不用代码", "更清晰的组件化与生命周期", "更快", "更省电"], "answer": 1, "explain": "官方主推。", "source_ref": "builtin:questions"}
+{"id": "q213", "week": 71, "module": "06", "question": "服务卡片由哪个扩展能力实现？", "options": ["ServiceExtensionAbility", "FormExtensionAbility", "DataShareExtensionAbility", "UIAbility"], "answer": 1, "explain": "桌面卡片。", "source_ref": "builtin:questions"}
+{"id": "q214", "week": 72, "module": "06", "question": "三端打包的共同点是？", "options": ["都用同一套代码", "都需要签名与版本号", "都只能上架一个市场", "都不需要签名"], "answer": 1, "explain": "签名体系各异。", "source_ref": "builtin:questions"}
+{"id": "q215", "week": 72, "module": "06", "question": "跨端方案的主要取舍是？", "options": ["安全 vs 速度", "开发效率 vs 原生体验", "成本 vs 内存", "没有取舍"], "answer": 1, "explain": "按业务选。", "source_ref": "builtin:questions"}
+{"id": "q216", "week": 72, "module": "06", "question": "兼容性测试主要覆盖？", "options": ["只看一款机型", "不测", "只看最新系统", "不同屏幕、系统版本、权限"], "answer": 3, "explain": "折叠屏也要覆盖。", "source_ref": "builtin:questions"}

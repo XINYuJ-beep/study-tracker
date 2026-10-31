@@ -1,0 +1,24 @@
+{"id": "q253", "week": 85, "module": "08", "question": "Token 是？", "options": ["密码", "一种货币", "模型处理的最小文本单位", "缓存"], "answer": 2, "explain": "分词后的片段。", "source_ref": "builtin:questions"}
+{"id": "q254", "week": 85, "module": "08", "question": "温度调高会？", "options": ["更确定", "更快", "更短", "输出更随机"], "answer": 3, "explain": "低温度趋近贪心。", "source_ref": "builtin:questions"}
+{"id": "q255", "week": 85, "module": "08", "question": "幻觉指？", "options": ["显存不足", "模型崩溃", "训练失败", "生成看似合理但错误的内容"], "answer": 3, "explain": "用 RAG 与校验缓解。", "source_ref": "builtin:questions"}
+{"id": "q256", "week": 86, "module": "08", "question": "量化（4bit）的主要目的是？", "options": ["增加参数", "提高精度", "加快训练", "降低显存占用"], "answer": 3, "explain": "牺牲少量精度。", "source_ref": "builtin:questions"}
+{"id": "q257", "week": 86, "module": "08", "question": "Embedding 的作用是？", "options": ["加密", "把文本映射成向量", "压缩图片", "分词"], "answer": 1, "explain": "用于检索与聚类。", "source_ref": "builtin:questions"}
+{"id": "q258", "week": 86, "module": "08", "question": "显存不足时优先考虑？", "options": ["量化或换更小模型", "加大 batch", "提高精度", "增加层数"], "answer": 0, "explain": "也可用 CPU offload。", "source_ref": "builtin:questions"}
+{"id": "q259", "week": 87, "module": "08", "question": "Few-shot 指的是？", "options": ["蒸馏", "给几个示例再让模型回答", "零样本", "微调"], "answer": 1, "explain": "示例提升稳定性。", "source_ref": "builtin:questions"}
+{"id": "q260", "week": 87, "module": "08", "question": "CoT（思维链）的作用是？", "options": ["减少 token", "降低成本", "加速", "让模型分步推理"], "answer": 3, "explain": "适合多步问题。", "source_ref": "builtin:questions"}
+{"id": "q261", "week": 87, "module": "08", "question": "结构化输出通常要求？", "options": ["图片", "JSON 等固定格式", "音频", "自由文本"], "answer": 1, "explain": "便于程序解析。", "source_ref": "builtin:questions"}
+{"id": "q262", "week": 88, "module": "08", "question": "RAG 的核心流程是？", "options": ["压缩模型", "微调模型", "强化学习", "检索相关文档再生成"], "answer": 3, "explain": "检索 + 生成。", "source_ref": "builtin:questions"}
+{"id": "q263", "week": 88, "module": "08", "question": "文档切分过大会导致？", "options": ["更快", "噪声多、检索不准", "没有影响", "更省 token"], "answer": 1, "explain": "按语义边界切。", "source_ref": "builtin:questions"}
+{"id": "q264", "week": 88, "module": "08", "question": "RAG 中「引用」的作用是？", "options": ["加速", "加密", "压缩", "让回答可追溯"], "answer": 3, "explain": "降低幻觉。", "source_ref": "builtin:questions"}
+{"id": "q265", "week": 89, "module": "08", "question": "向量检索的相似度常用？", "options": ["哈希", "正则", "编辑距离", "余弦相似度"], "answer": 3, "explain": "也可用内积。", "source_ref": "builtin:questions"}
+{"id": "q266", "week": 89, "module": "08", "question": "ANN 索引的作用是？", "options": ["加密", "压缩", "近似最近邻，加速检索", "精确匹配"], "answer": 2, "explain": "HNSW/IVF。", "source_ref": "builtin:questions"}
+{"id": "q267", "week": 89, "module": "08", "question": "混合检索通常结合？", "options": ["无", "向量 + 关键词", "表格 + 图", "图片 + 音频"], "answer": 1, "explain": "BM25 + 向量。", "source_ref": "builtin:questions"}
+{"id": "q268", "week": 90, "module": "08", "question": "Agent 与普通对话模型的区别是？", "options": ["参数更多", "速度更快", "能调用工具并多步规划", "不需要提示"], "answer": 2, "explain": "工具 + 规划 + 记忆。", "source_ref": "builtin:questions"}
+{"id": "q269", "week": 90, "module": "08", "question": "工具调用通常需要模型输出？", "options": ["结构化参数", "自然语言", "音频", "图片"], "answer": 0, "explain": "function calling。", "source_ref": "builtin:questions"}
+{"id": "q270", "week": 90, "module": "08", "question": "Agent 的记忆一般分为？", "options": ["内存与硬盘", "训练与推理", "输入与输出", "短期对话与长期存储"], "answer": 3, "explain": "向量库常做长期记忆。", "source_ref": "builtin:questions"}
+{"id": "q271", "week": 91, "module": "08", "question": "多智能体的常见模式是？", "options": ["只做分类", "角色分工 + 协作", "单模型重复调用", "随机"], "answer": 1, "explain": "规划者/执行者/评审者。", "source_ref": "builtin:questions"}
+{"id": "q272", "week": 91, "module": "08", "question": "多 Agent 系统的主要成本是？", "options": ["token 与调用次数", "网络带宽", "磁盘", "内存"], "answer": 0, "explain": "需控制轮次。", "source_ref": "builtin:questions"}
+{"id": "q273", "week": 91, "module": "08", "question": "评估 Agent 效果常用？", "options": ["只看延迟", "只看 token", "只看成本", "任务成功率 + 人工评分"], "answer": 3, "explain": "端到端评测。", "source_ref": "builtin:questions"}
+{"id": "q274", "week": 92, "module": "08", "question": "系统设计中缓存的主要作用是？", "options": ["提高一致性", "加密", "减少代码", "降延迟、降后端压力"], "answer": 3, "explain": "空间换时间。", "source_ref": "builtin:questions"}
+{"id": "q275", "week": 92, "module": "08", "question": "简历中项目描述推荐用？", "options": ["流水账", "STAR：背景/任务/行动/结果", "只写技术栈", "只写公司"], "answer": 1, "explain": "结果要量化。", "source_ref": "builtin:questions"}
+{"id": "q276", "week": 92, "module": "08", "question": "面试被问不会的问题，较好的做法是？", "options": ["编造", "沉默", "转移话题", "说出思路与已知边界"], "answer": 3, "explain": "展示思考过程。", "source_ref": "builtin:questions"}

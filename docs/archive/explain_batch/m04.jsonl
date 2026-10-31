@@ -1,0 +1,36 @@
+{"id": "q109", "week": 37, "module": "04", "question": "`chmod 755` 表示？", "options": ["所有者 rwx，组和其他 r-x", "只有所有者可读", "所有人 rwx", "无权限"], "answer": 0, "explain": "7=rwx，5=r-x。", "source_ref": "builtin:questions"}
+{"id": "q110", "week": 37, "module": "04", "question": "SSH 默认端口是？", "options": ["22", "80", "443", "3306"], "answer": 0, "explain": "改端口可减少扫描。", "source_ref": "builtin:questions"}
+{"id": "q111", "week": 37, "module": "04", "question": "systemctl 用来？", "options": ["管理服务启停与开机自启", "管理文件", "管理用户", "管理网络"], "answer": 0, "explain": "systemctl status/start/enable。", "source_ref": "builtin:questions"}
+{"id": "q112", "week": 38, "module": "04", "question": "反向代理的作用是？", "options": ["接收请求转发给后端", "管理数据库", "编译代码", "执行后端代码"], "answer": 0, "explain": "隐藏后端、做 TLS 终止。", "source_ref": "builtin:questions"}
+{"id": "q113", "week": 38, "module": "04", "question": "负载均衡的常见策略是？", "options": ["只连一台", "轮询、加权、最少连接", "按文件名", "随机删库"], "answer": 1, "explain": "upstream 配置。", "source_ref": "builtin:questions"}
+{"id": "q114", "week": 38, "module": "04", "question": "Nginx 处理静态资源的优势是？", "options": ["高并发、低内存", "能编译", "能建表", "能跑 Java"], "answer": 0, "explain": "常配合缓存头。", "source_ref": "builtin:questions"}
+{"id": "q115", "week": 39, "module": "04", "question": "镜像和容器的关系是？", "options": ["镜像运行在容器里", "容器是模板", "镜像是模板，容器是运行实例", "完全相同"], "answer": 2, "explain": "容器 = 镜像 + 可写层。", "source_ref": "builtin:questions"}
+{"id": "q116", "week": 39, "module": "04", "question": "多阶段构建的目的是？", "options": ["增加层数", "加快启动", "加密镜像", "减小最终镜像体积"], "answer": 3, "explain": "构建阶段与运行阶段分离。", "source_ref": "builtin:questions"}
+{"id": "q117", "week": 39, "module": "04", "question": "数据卷（volume）用来？", "options": ["压缩镜像", "加速网络", "加密数据", "持久化容器数据"], "answer": 3, "explain": "容器删了数据还在。", "source_ref": "builtin:questions"}
+{"id": "q118", "week": 40, "module": "04", "question": "Compose 的作用是？", "options": ["用一个 yaml 编排多容器", "压缩镜像", "编译镜像", "监控容器"], "answer": 0, "explain": "适合本地与小型部署。", "source_ref": "builtin:questions"}
+{"id": "q119", "week": 40, "module": "04", "question": "服务依赖用哪个字段声明？", "options": ["ports", "depends_on", "volumes", "links"], "answer": 1, "explain": "注意 readiness 仍需健康检查。", "source_ref": "builtin:questions"}
+{"id": "q120", "week": 40, "module": "04", "question": "环境变量一般放在哪？", "options": [".env 文件 + compose 引用", "数据库", "Dockerfile 注释", "README"], "answer": 0, "explain": "密钥不要提交。", "source_ref": "builtin:questions"}
+{"id": "q121", "week": 41, "module": "04", "question": "CI 的核心是？", "options": ["频繁集成并自动构建测试", "自动运维", "自动设计", "自动写代码"], "answer": 0, "explain": "早发现集成问题。", "source_ref": "builtin:questions"}
+{"id": "q122", "week": 41, "module": "04", "question": "CD 指？", "options": ["持续交付/部署", "持续设计", "持续调试", "持续开发"], "answer": 0, "explain": "交付=可随时发布，部署=自动上线。", "source_ref": "builtin:questions"}
+{"id": "q123", "week": 41, "module": "04", "question": "流水线失败后应该？", "options": ["修复后重跑，必要时回滚", "忽略", "删仓库", "改测试"], "answer": 0, "explain": "红即停。", "source_ref": "builtin:questions"}
+{"id": "q124", "week": 42, "module": "04", "question": "A 记录指向什么？", "options": ["IPv4 地址", "端口", "域名", "邮箱"], "answer": 0, "explain": "AAAA 指 IPv6，CNAME 指域名。", "source_ref": "builtin:questions"}
+{"id": "q125", "week": 42, "module": "04", "question": "证书的作用是？", "options": ["压缩图片", "备份数据", "加速网站", "证明身份并加密传输"], "answer": 3, "explain": "Let's Encrypt 免费。", "source_ref": "builtin:questions"}
+{"id": "q126", "week": 42, "module": "04", "question": "CDN 的核心是？", "options": ["存数据库", "执行后端代码", "就近缓存静态资源", "编译代码"], "answer": 2, "explain": "降低延迟、分担源站。", "source_ref": "builtin:questions"}
+{"id": "q127", "week": 43, "module": "04", "question": "TCP 三次握手的顺序是？", "options": ["SYN → ACK → FIN", "FIN → ACK", "SYN → SYN+ACK → ACK", "ACK → SYN → ACK"], "answer": 2, "explain": "确认双方收发能力。", "source_ref": "builtin:questions"}
+{"id": "q128", "week": 43, "module": "04", "question": "UDP 的特点是？", "options": ["必须握手", "可靠有序", "有拥塞控制", "无连接、不保证可靠、低延迟"], "answer": 3, "explain": "适合音视频、游戏。", "source_ref": "builtin:questions"}
+{"id": "q129", "week": 43, "module": "04", "question": "子网掩码的作用是？", "options": ["路由", "压缩", "加密", "划分网络号与主机号"], "answer": 3, "explain": "决定网段范围。", "source_ref": "builtin:questions"}
+{"id": "q130", "week": 44, "module": "04", "question": "HTTP/2 的关键改进是？", "options": ["单连接单请求", "更长头部", "明文传输", "多路复用"], "answer": 3, "explain": "一个连接并行多流。", "source_ref": "builtin:questions"}
+{"id": "q131", "week": 44, "module": "04", "question": "协商缓存依赖哪组头？", "options": ["ETag / If-None-Match", "Token / JWT", "Host / Origin", "Cookie / Set-Cookie"], "answer": 0, "explain": "304 表示未修改。", "source_ref": "builtin:questions"}
+{"id": "q132", "week": 44, "module": "04", "question": "HTTPS 握手的主要目的是？", "options": ["建表", "压缩数据", "协商密钥并验证证书", "分配 IP"], "answer": 2, "explain": "之后用对称加密传输。", "source_ref": "builtin:questions"}
+{"id": "q133", "week": 45, "module": "04", "question": "XSS 的本质是？", "options": ["暴力破解", "窃取数据库", "伪造 DNS", "把脚本注入页面执行"], "answer": 3, "explain": "转义输入 + CSP。", "source_ref": "builtin:questions"}
+{"id": "q134", "week": 45, "module": "04", "question": "CSRF 利用的是？", "options": ["服务器漏洞", "浏览器自动携带 Cookie", "DNS 劫持", "弱密码"], "answer": 1, "explain": "SameSite + Token + Referer 校验。", "source_ref": "builtin:questions"}
+{"id": "q135", "week": 45, "module": "04", "question": "防 SQL 注入最有效的是？", "options": ["隐藏报错", "转义引号", "拼接字符串", "参数化查询"], "answer": 3, "explain": "预编译语句。", "source_ref": "builtin:questions"}
+{"id": "q136", "week": 46, "module": "04", "question": "日志级别从高到低通常是？", "options": ["ERROR > WARN > INFO > DEBUG", "DEBUG 最高", "INFO 最高", "没有级别"], "answer": 0, "explain": "生产一般 INFO 以上。", "source_ref": "builtin:questions"}
+{"id": "q137", "week": 46, "module": "04", "question": "监控指标四黄金信号是？", "options": ["QPS、TPS、RT、PV", "日活、留存、转化、GMV", "延迟、流量、错误、饱和度", "CPU、内存、磁盘、网络"], "answer": 2, "explain": "Google SRE 提法。", "source_ref": "builtin:questions"}
+{"id": "q138", "week": 46, "module": "04", "question": "告警设计的关键是？", "options": ["可行动、不噪音", "越多越好", "关掉", "只发邮件"], "answer": 0, "explain": "每条告警都应对应动作。", "source_ref": "builtin:questions"}
+{"id": "q139", "week": 47, "module": "04", "question": "全栈项目联调时最常见的错误来源是？", "options": ["字体", "浏览器版本", "前后端字段名/类型不一致", "屏幕尺寸"], "answer": 2, "explain": "先对齐接口契约。", "source_ref": "builtin:questions"}
+{"id": "q140", "week": 47, "module": "04", "question": "接口返回统一结构的好处是？", "options": ["更省流量", "更安全", "更快", "前端处理一致、易排查"], "answer": 3, "explain": "如 code/data/message。", "source_ref": "builtin:questions"}
+{"id": "q141", "week": 47, "module": "04", "question": "鉴权信息一般放在哪？", "options": ["Cookie 之外的文件", "请求头 Authorization", "请求体", "URL 参数"], "answer": 1, "explain": "Bearer token。", "source_ref": "builtin:questions"}
+{"id": "q142", "week": 48, "module": "04", "question": "上线前压测的目的是？", "options": ["找出容量瓶颈", "美化界面", "增加功能", "减少代码"], "answer": 0, "explain": "关注 QPS、RT、错误率。", "source_ref": "builtin:questions"}
+{"id": "q143", "week": 48, "module": "04", "question": "回滚方案的核心是？", "options": ["重启网络", "改数据库", "删日志", "能快速恢复到上一版本"], "answer": 3, "explain": "镜像/版本保留。", "source_ref": "builtin:questions"}
+{"id": "q144", "week": 48, "module": "04", "question": "线上问题排查第一步是？", "options": ["回滚", "改代码", "看日志和监控定位范围", "重启"], "answer": 2, "explain": "先定位再动手。", "source_ref": "builtin:questions"}
