@@ -9,7 +9,8 @@
     "6": "数据结构入门",
     "7": "HTML",
     "8": "CSS",
-    "9": "JavaScript 基础"
+    "9": "JavaScript 基础",
+    "10": "JavaScript DOM 与事件"
   },
   "items": {
     "w1d1": {
@@ -2591,6 +2592,293 @@
           "id": "w9d7-p6",
           "topic": "闭卷日的三条硬线",
           "desc": "第一条，闭卷就是闭卷，不许开浏览器、不许翻笔记、不许问 AI。闭卷的价值不在于写出正确代码，而在于精确暴露你哪一步想不起来——那一步就是你的真空区。一开资料，真空区就被填成了一个模糊的「我大概知道」，下周你依然不会。第二条，卡住超过十分钟立刻跳过并记下卡点，不许死磕。写到一半发现方向错了要重写，这很正常，但超过十分钟的卡点通常是知识缺口而不是思路问题，死磕只会把九十分钟全耗在一个函数上。第三条，写完必须对照标准答案逐行比，比完把差异写成一到三条结论记进笔记，不写结论等于没比。结论的格式固定为「我以为 X，实际是 Y，原因是 Z」，写不出 Z 说明还没真懂，这条卡要重做。三条硬线守住了，W9 收尾才有意义；守不住，一周四十二个知识点只是被看过一遍，不是被掌握。",
+          "level": 3
+        }
+      ]
+    },
+    "w10d1": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w10d1-p1",
+          "topic": "用选择器精准取到元素",
+          "desc": "querySelector 返回匹配的第一个元素、querySelectorAll 返回静态 NodeList，两者都接受 CSS 选择器，所以 #id、.class、[data-x]、li:nth-child(2)、div > span 全部能用。要分清 querySelectorAll 拿到的是静态快照，后面再往页面插新节点它不会自己变长；getElementsByClassName 和 getElementsByTagName 拿到的是 HTMLCollection，是活的。取不到元素时返回 null 或空列表，直接读 .textContent 会抛错，所以取完先判空再操作。",
+          "level": 1
+        },
+        {
+          "id": "w10d1-p2",
+          "topic": "querySelectorAll 的类型细节",
+          "desc": "querySelectorAll 返回 NodeList，可以用 forEach、entries、keys、values 遍历，也可以 for...of，但不支持 map 和 filter，要转成真数组得写 Array.from(list) 或 [...list]。它没有 HTMLCollection 的 item 和 namedItem，但能用下标取。NodeList 在跨文档、跨 iframe 时不能直接复用，这点在做组件时容易被坑。量小的时候直接 [...list] 转数组最省心，量大又只做遍历就别转，转换本身有开销。",
+          "level": 1
+        },
+        {
+          "id": "w10d1-p3",
+          "topic": "读取与修改文本和属性",
+          "desc": "读文本用 textContent，它拿全部后代文本、不解析 HTML，比 innerText 快且不受 CSS 隐藏影响；要带格式渲染就用 innerHTML，但它会把字符串当 HTML 解析，用户输入直接塞进去就是 XSS。改属性有 setAttribute、getAttribute、removeAttribute 和 dataset 四条路：标准属性如 id、href、src 可以直接点访问；自定义属性统一走 data-*，页面写 data-user-id，JS 里读 el.dataset.userId，命名会自动转成小驼峰，写时驼峰也会转回连字符。",
+          "level": 2
+        },
+        {
+          "id": "w10d1-p4",
+          "topic": "innerHTML 之外的安全写法",
+          "desc": "innerHTML 慢的原因每次赋值都要重新解析并重建子树，还可能丢事件监听和输入框焦点。安全且高效的替代是 textContent 写纯文本，或者用 document.createElement 加 append 拼节点，批量插入更快的做法是用 DocumentFragment 暂存再一次性 appendChild，只触发一次重排。实在要拼 HTML 就用 insertAdjacentHTML，限定在元素四个方位插入，不摧毁内部已有结构。凡是字符串里含用户输入，一律走 textContent 或手动转义。",
+          "level": 2
+        },
+        {
+          "id": "w10d1-p5",
+          "topic": "classList 与 style 的正确操作",
+          "desc": "classList 提供 add、remove、toggle、contains、replace，比直接拼 className 字符串安全，不会留下多余空格或误删同名类。toggle 支持第二个参数强制指定增删。改内联样式走 el.style.属性名，属性名要用小驼峰如 fontSize，写成 CSS 里的 font-size 会失效；要一次覆盖多条可以用 el.style.cssText，但它会整体替换原有内联样式。日常优先用加类名控制样式，内联样式只留给需要由 JS 实时计算的值，比如拖拽位置。",
+          "level": 2
+        },
+        {
+          "id": "w10d1-p6",
+          "topic": "批量渲染时的性能与 DOM 更新策略",
+          "desc": "浏览器渲染分重排 reflow 和重绘 repaint 两步，改尺寸位置触发重排，改颜色背景只触发重绘，重排代价远高于重绘。要避免在循环里逐条改样式或逐条插入，正确做法是把读数集中做、写数集中做，读完立刻写会造成强制同步布局。批量插入用 DocumentFragment 或先拼字符串再一次 innerHTML，插入前先把容器从文档里摘下、改完再挂回，也能省掉大量重排。列表上千条时改走虚拟滚动，只渲染可视区域。",
+          "level": 3
+        }
+      ]
+    },
+    "w10d2": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w10d2-p1",
+          "topic": "事件监听三要素与注册方式",
+          "desc": "addEventListener(类型, 回调, 配置) 是标准写法，回调第一个参数是事件对象。配置里 capture 控制捕获阶段触发，once 让监听只跑一次自动注销，passive 声明不会调 preventDefault 从而让滚动不被阻塞。对比老写法 onclick 只能挂一个，addEventListener 能对同一元素同一类型挂多个且按注册顺序执行；onclick 赋值会互相覆盖，而且移除时必须传引用同名函数，匿名函数挂上去就再也删不掉。移除用 removeEventListener，三个参数必须与注册时一致才生效。",
+          "level": 1
+        },
+        {
+          "id": "w10d2-p2",
+          "topic": "事件流的捕获与冒泡",
+          "desc": "事件从 window 一路向下传到目标元素叫捕获，从目标再向上回到 window 叫冒泡，中间节点都会依次收到。addEventListener 默认在冒泡阶段执行，加 capture: true 或在第三个参数传 true 就改到捕获阶段。stopPropagation 只阻止事件继续传递，stopImmediatePropagation 还会阻止同元素上后续监听。preventDefault 阻止的是默认行为，比如链接跳转、表单提交，与冒泡无关，两者别混。冒泡阶段拿到的事件 e.target 才是真正被点的元素，e.currentTarget 是当前绑定的元素。",
+          "level": 2
+        },
+        {
+          "id": "w10d2-p3",
+          "topic": "事件委托的机制与适用场景",
+          "desc": "把监听挂在父容器上，靠冒泡统一处理，再用 e.target 是否落在目标选择器内来分支。好处一是动态新增的子元素自动生效，不用重新绑定；二是监听数从 N 个降到一个，对长列表省内存。判断归属用 target.closest(选择器)，它从自身往上找最近的匹配祖先，比循环判断 tagName 稳。要注意 target 可能是子节点里的 span 或图标，closest 正好能吃掉这层差异。破坏委托的坑是 stopPropagation，任何中间节点吞掉事件，父级就收不到。",
+          "level": 2
+        },
+        {
+          "id": "w10d2-p4",
+          "topic": "自定义事件与一次性交互的收口",
+          "desc": "要解耦组件间通信可以自定义事件，用 new CustomEvent(名字, {detail: 数据, bubbles: true, cancelable: true}) 派发，接收方照样 addEventListener。bubbles 必须显式开，否则事件不会冒泡到父级。复杂交互要处理边界：拖拽必须同时监听 mousemove 和 mouseup，并且 mouseup 挂在 document 而非被拖元素，否则鼠标移出元素后事件就断了；弹窗打开要锁背景滚动、关闭要解绑全局监听，避免监听堆积导致一次点击触发多次。",
+          "level": 2
+        },
+        {
+          "id": "w10d2-p5",
+          "topic": "事件对象的常用字段与坐标",
+          "desc": "事件对象上最常用的是 target、currentTarget、type 三个，做判断和打日志都靠它们。鼠标事件带 clientX、clientY 相对视口，pageX、pageY 加了滚动距离，offsetX、offsetY 相对目标元素。做拖拽一般用 clientX 配 getBoundingClientRect 算相对位置，混用 page 和 client 会差出一个 scrollY。键盘事件看 key 和 code：key 是字符语义会随输入法与大小写变，code 是物理键位适合做游戏或快捷键。还有 timeStamp 用来做节流、defaultPrevented 判断默认行为是否已被拦，触摸事件坐标在 touches、changedTouches 里取。",
+          "level": 3
+        },
+        {
+          "id": "w10d2-p6",
+          "topic": "事件监听的清理与内存泄漏",
+          "desc": "元素被移除后如果监听还指着外部闭包，整条引用链都不会被回收。单页应用切换视图必须手动 removeEventListener，或者用 AbortController 的 signal 一次性注销一批：addEventListener 第三个参数传 {signal}，abort 时全部自动摘掉，比记一堆函数引用干净得多。反复渲染的列表如果每次都 addEventListener 且不清，一次点击会触发多次回调，表现为重复提交。定时器同理，setInterval 必须在卸载时 clearInterval。",
+          "level": 3
+        }
+      ]
+    },
+    "w10d3": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w10d3-p1",
+          "topic": "从 Form 元素取值的标准方法",
+          "desc": "表单元素自身有 elements 集合，可以用 form.elements.名字 或 form.名字 直接取控件，比 querySelector 稳定。text、password、textarea 读 value；checkbox 和 radio 读 checked，且必须遍历同名组找出被选中的那个；select 读 value 拿到选中项 value，多选要遍历 selectedOptions。获取全部数据最省事的是 new FormData(form)，然后 Object.fromEntries 转成对象，它天然只收带 name 的控件。注意 submit 事件的处理函数里要 preventDefault，否则浏览器会真正提交并刷新页面。",
+          "level": 1
+        },
+        {
+          "id": "w10d3-p2",
+          "topic": "校验时机与错误提示的落位",
+          "desc": "校验分三层：输入时给软提示，用 input 事件但做防抖，比如延迟三百毫秒；失焦时做硬校验，用 blur 事件，此时用户已经写完一段；提交时做全量拦截，在 submit 里统一跑一遍再决定放行。错误提示不要用 alert 打断流程，应该在校验失败时给输入框加错误类，同时在该字段下方插入一条错误文本，用 aria-invalid 和 aria-describedby 关联，方便读屏软件。一次只提示最先出错的那个字段并 focus 过去，体验最好。",
+          "level": 2
+        },
+        {
+          "id": "w10d3-p3",
+          "topic": "常见校验规则的具体实现",
+          "desc": "必填写 value.trim() 是否为空，注意零和空格要分清，纯空格算空。邮箱不必写超长正则，用 /^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/ 就够挡住明显错的，真正的验证只能靠发验证码邮件。手机号国内用 /^1[3-9]\\d{9}$/。长度用 minLength 和 maxLength 检查，数值范围注意 value 是字符串要先转 Number 再比，否则会出现 10 小于 9 的字符串比较错误。密码强度按规则逐条给勾选状态，比只给一个总错更好懂。",
+          "level": 2
+        },
+        {
+          "id": "w10d3-p4",
+          "topic": "HTML5 原生校验 API 的取舍",
+          "desc": "原生属性 required、type=email、type=url、pattern、min、max、step 由浏览器直接校验，form.checkValidity() 返回整体是否通过，单个控件有 checkValidity 和 reportValidity，还有 validity 对象能读到具体是哪条规则不满足，如 valueMissing、patternMismatch、tooShort。setCustomValidity 可以注入自定义错误。优点是零代码、无障碍和提示气泡自动有；缺点是各浏览器提示样式不可控、文案是本地化写死的，做设计感强的表单通常关掉 novalidate 自己实现，但保留这些属性做语义声明。",
+          "level": 2
+        },
+        {
+          "id": "w10d3-p5",
+          "topic": "防重复提交与边界场景收口",
+          "desc": "提交后必须立刻禁用提交按钮并标记提交中，防止连点产生多条数据，用 finally 里恢复状态，别只在成功分支恢复否则失败后按钮永久锁死。还要覆盖网络超时、重复返回值、用户中途刷新这几个场景。校验逻辑要单独抽成一个纯函数，输入表单数据返回错误对象，这样能被实时校验、提交拦截和单元测试三处复用，也方便后续把规则挪到后端共用。所有用户输入进页面前一律转义或用 textContent，堵住 XSS。",
+          "level": 3
+        },
+        {
+          "id": "w10d3-p6",
+          "topic": "失焦与实时校验的配合节奏",
+          "desc": "实时校验不是每次按键都报错，那会被用户骂。正确节奏：input 事件只做轻微的正向反馈（如密码强度条、字数计数），blur 事件才做完整校验并展示错误，submit 时再全量校验一遍兜底。原因在于用户输入到一半，格式必然不合规，此时弹红字纯属干扰。错误提示要挂在字段旁边而不是 alert，且第一次报错后应改为 input 实时消错——让用户边改边看到提示消失，而不是等下一次提交。",
+          "level": 3
+        }
+      ]
+    },
+    "w10d4": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w10d4-p1",
+          "topic": "localStorage 的读写删三件套与返回值",
+          "desc": "localStorage 是同步 API，只认字符串。setItem(key, value) 会把 value 强转成字符串，传数字 123 存进去取出来是字符串 123，传对象存进去得到的是 [object Object]，这是新手第一个坑。getItem(key) 在 key 不存在时返回 null 而不是 undefined，所以判断有没有值时要用 === null 而不是 if(!v)，否则空字符串也会被误判成没有。removeItem(key) 删单个 key，clear() 清空整个域下的数据，注意 clear 会连别的模块的数据一起删，线上基本不用。遍历用 Object.keys(localStorage) 拿到全部 key，或者 for 循环配 key(i) 和 length。localStorage 容量约 5MB，超出抛 QuotaExceededError，必须 try/catch 兜住，因为 Safari 无痕模式下 setItem 直接抛异常，能让整段代码挂掉。",
+          "level": 1
+        },
+        {
+          "id": "w10d4-p2",
+          "topic": "JSON 序列化的存与取及容错",
+          "desc": "存对象必须走 JSON.stringify，取必须走 JSON.parse，两步缺一不可。写入写成 localStorage.setItem(k, JSON.stringify(obj))，读取写成 JSON.parse(localStorage.getItem(k))。这里有两个必踩的坑：一是首次运行 getItem 返回 null，JSON.parse(null) 返回 null 不报错，但要立刻判空再往下用；二是历史数据被污染或手工改过，JSON.parse 会抛 SyntaxError，必须包 try/catch，解析失败时返回一个默认值并顺手 removeItem 清掉脏数据。Date 对象序列化后变成字符串，取回来要手动 new Date(str) 还原；undefined 和函数在 stringify 时直接被丢掉；循环引用会抛 TypeError。写入前可以先测一次 stringify 的体积，超过 1MB 的单个 key 建议拆分。",
+          "level": 2
+        },
+        {
+          "id": "w10d4-p3",
+          "topic": "sessionStorage 与 Cookie 的分工",
+          "desc": "三者按生命周期和传输方式分工。sessionStorage 存在当前标签页，标签关闭即清空，刷新还在，适合存表单草稿、多步流程的中间态，多标签页之间互不共享。localStorage 同域永久保存，除非手动清或用户清缓存，适合存主题、登录态标记、用户偏好。Cookie 容量只有 4KB 左右，但每次同域 HTTP 请求都会自动带上，所以只该存服务端必须读到的东西，比如 session id；前端业务数据往 Cookie 塞会拖慢每个请求。Cookie 还能设 HttpOnly 防 XSS 读取、设 Secure 只在 HTTPS 发、设 SameSite 控跨站携带。取值的 API 也完全不同：storage 走 getItem，Cookie 要自己解析 document.cookie 那个分号串。",
+          "level": 2
+        },
+        {
+          "id": "w10d4-p4",
+          "topic": "用结构化数据建模本地存储",
+          "desc": "不要给每个字段散开一个 key，那样读写十次就是十次 API 调用，还容易漏改。正确做法是把一个业务对象整体挂在单个 key 下，形如 store[\"todo\"] = {version, items:[...]}。加 version 字段是为了将来结构变了能做迁移，读到旧版本号就走一段升级逻辑再写回。所有读写收口成一组函数：load() 负责 getItem + parse + 默认值兜底 + 校验字段类型；save(data) 负责 stringify + try/catch + 容量异常提示；update(fn) 负责 load 后交给 fn 改再 save。业务代码只调这层，不直接碰 localStorage，这样换存储方案（换 IndexedDB 或上云）只改一个文件。数组里的元素最好带唯一 id，增删按 id 操作而不是按索引，避免拖拽排序后删错。",
+          "level": 2
+        },
+        {
+          "id": "w10d4-p5",
+          "topic": "跨标签页同步与 storage 事件",
+          "desc": "同一个域下的多个标签页共享 localStorage，但一个页面改了，别的页面不会自动刷新界面，必须靠 storage 事件。window.addEventListener(\"storage\", e => {...}) 只在其他标签页修改时触发，改自己的那个页面不触发，这点常被误判成失效。事件对象里 e.key 是被改的 key（clear() 时为 null），e.oldValue 是旧值，e.newValue 是新值，e.url 是发起修改的页面地址。拿到 e.key 后按 key 分派刷新逻辑，只重建受影响的那块 UI，别整页 reload。要防回环：收到事件后不要立刻再写回去，否则两个标签页互相触发形成死循环。性能上事件不保证顺序也不做合并，高频写入要做节流。另外 storage 事件不跨 iframe 之外的窗口，也不跨不同子域。",
+          "level": 3
+        },
+        {
+          "id": "w10d4-p6",
+          "topic": "把本地存储做成可替换的适配层",
+          "desc": "直接把 localStorage 调散在业务代码里，迟早要还债：换存储引擎、加加密、加过期时间、加命名空间前缀，每一处都得改。做法是抽一个 storage 适配器对象，内部实现 get/set/remove/clear 四个方法，外部只依赖这四个。加前缀就在适配器里统一拼 key，形如 app:v1:todo，避免和同域别的应用撞名。加过期时间就在写入时存 {v, exp}，读取时比对 Date.now()，过期了就 remove 并返回 null，这样能模拟 TTL。要加密就只在适配器里对 value 做一次对称加密，业务侧无感。做内存降级也在这层：先探测 localStorage 是否可用（试着 setItem 再 removeItem，Safari 无痕会抛异常），不可用就切到内存 Map 实现，保证功能不崩。这一层的接口一旦定下就别改签名，改了就是全站改造。",
+          "level": 3
+        }
+      ]
+    },
+    "w10d5": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w10d5-p1",
+          "topic": "script 标签加载模块的必备属性与作用域",
+          "desc": "浏览器默认把 script 当传统脚本，不支持 import/export，必须在标签上写 type=\"module\" 才会按 ES Module 解析，否则报 Uncaught SyntaxError: Cannot use import statement outside a module。加了 type=\"module\" 后自带四条改变：一、自动 defer，HTML 解析完才执行，不用再手写 defer，也天然不阻厦渲染；二、严格模式，没声明的赋值直接报错，this 在模块顶层是 undefined 而不是 window；三、模块顶层有自己的作用域，var/function 都不会污染 window，全局只能靠 export 往外给；四、写外链时 src 路径要带文件后缀且不能用 file:// 打开，必须走 http 服务（python3 -m http.server 即可），否则被 CORS 拦住。内联模块也不能再用 document.write。课练时先用 type=\"module\" 把一个函数拆出去，看控制台是否报错，报错就是没加属性。",
+          "level": 1
+        },
+        {
+          "id": "w10d5-p2",
+          "topic": "export 的两种写法与输出时机",
+          "desc": "export 分两类：命名导出 export const a = 1 或 export function f(){} 或 export { x, y }，一个模块可以有任意多个；默认导出 export default something，一个模块最多一个。关键差异：命名导出的名字必须被导入方用对（可用 as 改名），且导出的是活绑定，模块内部改了变量，导入方看到的值也跟着变；export default 导出的是一份值的快照，改内部变量导入方看不到。写法上 export 语句必须写在模块顶层，不能写在 if 或函数里；export { x } 可以在文件末尾集中写，比逐个加 export 更清晰。实际项目里推荐优先用命名导出：可读性强、IDE 能自动补全、重构改名不会失效；需要导出一个主体对象（如组件、单个主函数）时再用 default。混用时导入方要分清 import Foo, { a, b } from 两个位置各放什么。",
+          "level": 2
+        },
+        {
+          "id": "w10d5-p3",
+          "topic": "import 的形式与只做副作用的引入",
+          "desc": "三种常用形式：import { a, b as c } from \"./m.js\" 导入命名导出并用 as 改名防冲突；import Foo from \"./m.js\" 导入默认导出，名字可自取；import * as ns from \"./m.js\" 打包成命名空间对象，访问时写 ns.a、ns.f()，适合导出很多且名字不定的场景。第四种 import \"./style.css\" 或 import \"./init.js\" 只引入不取任何东西，专用于副作用：注册事件、打补丁、初始化环境。路径规则：相对路径必须以 ./ 或 ../ 开头，写 \"utils.js\" 会被当包名去找；可省略 .js 的只有打包工具，浏览器里不能省；import 语句必须写在模块顶层，且会被提升到代码最前面执行，不能写在 if 里，也不能用表达式拼路径。导入是不允许改值的：给 import 进来的变量赋值会报 Assignment to constant variable。",
+          "level": 2
+        },
+        {
+          "id": "w10d5-p4",
+          "topic": "模块的加载时机与循环依赖",
+          "desc": "ES Module 的加载分三个阶段：先解析所有 import 把整张依赖图拉下来，再执行各模块的顶层代码，最后回到入口。因为 import 会被提升，加在语句后面的 import 也会先执行，所以不要指望先定义变量再 import 能生效——模块顶层代码只在第一次被引用时执行一次，结果被缓存，重复 import 同一个模块不会再跑一遍（这正是单例模式的天然实现）。循环依赖场景（a 引 b、b 又引 a）：因为 export 是活绑定，拿到的不是 undefined 而是一个可后续求得的值，但访问过早会报 ReferenceError: Cannot access before initialization（涉及 let/const）或拿到 undefined（涉及 var）。解法：把共享部分抽到第三个模块；或把互相调用的代码改成函数体内部才执行，不要写在顶层。真遇到循环依赖，先怀疑是模块边界切错了。",
+          "level": 2
+        },
+        {
+          "id": "w10d5-p5",
+          "topic": "动态 import 与按需加载",
+          "desc": "静态 import 只能写在顶层、打包时全量打进主包，页面上首屏不需要的模块（图表库、富文本编辑器、导出功能）全塞进去就是白吃首屏时间。这时用动态 import()：它返回一个 Promise，可以在任何地方、任何条件里写，import(\"./chart.js\").then(m => m.render(el))，或者 await import(...) 配 async 函数。它会在调用时才发网请求去拉模块文件，天然实现按需加载与代码分块（打包工具会把它单独切一个 chunk）。实战三种用法：一、点击按钮才加载重型库；二、根据设备或权限分支加载不同实现；三、路由懒加载。注意错误处理：动态 import 发的是网络请求，断网或路径错会 reject，必须 .catch 或 try/catch，并把报错提示到 UI 上；加载中的状态要自己管（加载中/成功/失败三态）。",
+          "level": 3
+        },
+        {
+          "id": "w10d5-p6",
+          "topic": "拆分模块的边界与实际目录结构",
+          "desc": "模块化不是把代码切碎就行，边界划错比不分模块更难维护。判断标准：一个模块只对外暴露它能做的事，内部细节（变量、辅助函数）一律不导出；模块之间只能单向依赖，出现双向依赖就说明职责重叠；共享的工具函数集中放一处，不要每个模块各写一份。推荐的分层：utils/（纯函数、无副作用、可测）、store/（数据读写与状态，只依赖 utils）、ui/（DOM 渲染与事件绑定，依赖前两者）、main.js（入口，把三者串起来）。命名规范：文件用小写加短横线，如 form-validate.js；默认导出只在文件代表单一主体时用（如一个类）；一个文件超过 300 行先怀疑是否需要拆。课练验收标准：能说清每个文件负责什么、不引入某个文件是否编译失败（说明依赖是真存在）、随机删一个文件能看到报错位置而不是整个页面白屏。",
+          "level": 3
+        }
+      ]
+    },
+    "w10d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w10d6-p1",
+          "topic": "项目骨架：一个 index.html 加一个脚本文件",
+          "desc": "先定文件结构再写代码，是避免写到一半推倒重建的关键。做法：新建 todo 目录，里面只放两个文件——index.html 负责结构，app.js 负责全部逻辑；样式先写进 index.html 的 style 标签，等逻辑跑通再拆分。index.html 骨架四块：header 放标题和输入框、form 包住输入框和按钮、ul 挂待办列表、footer 放剩余计数和清理按钮。app.js 从第一行就开启严格模式，用 const 取到四个 DOM 节点（输入框、表单、列表、计数），取不到就在控制台报错。判定标准：打开页面不报错、节点全部取到、列表为空。这一条不写业务逻辑，只把骨架立起来——骨架立稳，后面五条才有地方挂。",
+          "level": 1
+        },
+        {
+          "id": "w10d6-p2",
+          "topic": "新增待办：表单提交与防重复同时处理",
+          "desc": "新增用表单的 submit 事件而不是按钮的 click，原因有两个：键盘回车能直接提交、浏览器原生校验能直接用。处理流程：监听 form 的 submit，第一行必须 preventDefault 阻止页面刷新；取输入框的值后先 trim，再判空；空值直接 return，不要给用户弹窗；非空则生成一条待办对象 {id, text, done:false, createdAt}，id 用 Date.now() 加随机数避免同毫秒冲突。然后 push 进数组，重新渲染列表，最后把输入框清空并 focus 回去，方便连续输入。防重复只做一层：输入文本完全相同且未完成时给输入框加红框提示，不弹窗不拦截。注意不要用 innerHTML 拼接用户输入，必须用 createElement 加 textContent 写入。",
+          "level": 2
+        },
+        {
+          "id": "w10d6-p3",
+          "topic": "勾选与删除：事件委托一次绑全",
+          "desc": "列表项是动态生成的，所以监听绝对不能绑在 li 上，否则每加一条就要绑一次、删一条还要解绑。做法：只在 ul 上绑一个 click，通过 event.target.closest('li') 找到被点的整条，再判断点到的是勾选框还是删除按钮。勾选框改变 done 状态，删除按钮把该条从数组里移除，两者都走同一个 id 查找入口，改完数组统一重新渲染。为什么统一重渲染而不是局部改 DOM：条数少时重渲染成本几乎为零，而局部改要维护 DOM 与数组两份状态，很容易不同步。这也是本项目最容易写错的地方，状态只留数组一份。",
+          "level": 2
+        },
+        {
+          "id": "w10d6-p4",
+          "topic": "渲染函数：单一出口与安全写入",
+          "desc": "整个项目只能有一个渲染函数 render()，它的唯一输入是内存里的待办数组，唯一输出是页面。三件事按顺序做：清空列表（用 innerHTML 置空或 replaceChildren）、按数组顺序创建 li、更新底部计数。li 的结构固定为勾选框、文本、删除按钮三段，勾选中的条目加类名 done，样式由 CSS 负责划掉和变灰，不用脚本改样式。文本一律用 textContent 写入，禁用 innerHTML，这样即使用户输入尖括号也只是一段文字，不会有注入风险。渲染函数不做任何数据修改，只读数组；修改数据的地方只允许在事件处理里。输入只读，输出只写，这是让代码可维护的底线。",
+          "level": 2
+        },
+        {
+          "id": "w10d6-p5",
+          "topic": "本地持久化：存取两条边界必须写",
+          "desc": "刷新不丢靠 localStorage，但要写对两条边界。第一条是读：页面初始化时取 localStorage.getItem，结果可能是 null，也可能因为用户手动改过而变成非法 JSON，所以必须 try/catch 包住 JSON.parse，解析失败就退回空数组，并顺手把脏数据清掉。第二条是写：每次数据变化后调用 JSON.stringify 存回，key 用一个固定前缀加版本号（如 todo-v1），方便将来改结构时做迁移而不误伤别的数据。不要每次渲染都写，只在数据数组真正变化后写一次。验收方式：加一条、勾一条、删一条，然后刷新页面，状态必须原样保留。",
+          "level": 3
+        },
+        {
+          "id": "w10d6-p6",
+          "topic": "验收清单：动手前就知道要测什么",
+          "desc": "写完不等于做完，项目类条目必须过一遍固定清单。功能测六项：空输入不能加、回车能加、点击能勾、勾后再点能取消、删除能删、刷新后状态不丢。边界测四项：超长文本不撑破布局、快速连续点两次删除不报错、手动清掉 localStorage 后刷新不白屏、一条都不剩时显示空状态提示。代码自查三项：控制台零报错、没有 innerHTML 拼接用户输入、事件监听总数不超过三个。全部通过才算这条做完。这个习惯的价值在于把验收标准前置到动手之前，写的时候就知道哪里会被检查。",
+          "level": 3
+        }
+      ]
+    },
+    "w10d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w10d7-p1",
+          "topic": "闭卷前先列清单：这周真正练过什么",
+          "desc": "闭卷之前先花十分钟把这一周练过的东西列成一张清单，别急着敲键盘。清单只写动作，不写概念：查询元素、改文本、改样式、加删除、绑事件、拦冒泡、读表单值、判断空值、防重复提交、存 localStorage、取 localStorage、拆模块。写完之后在这张清单上做两件事：第一，把每个动作后面标上不查资料也能写出来的对勾；第二，把没把握的圈出来。闭卷重写的时候，有对勾的部分直接写，圈出来的部分才是你要重新看的地方。这叫先划范围再动手，比一上来就翻书效率高得多。",
+          "level": 1
+        },
+        {
+          "id": "w10d7-p2",
+          "topic": "闭卷重写待办：从空文件到能跑",
+          "desc": "关掉所有资料，从空目录开始：新建一个 index.html，新建一个 app.js，用 script 标签引进去，浏览器打开必须不报错。然后把待办清单从零写到能跑：一个输入框加一个按钮做新增，一个 ul 做列表，每条后面带一个删除按钮，点一下checkbox能把这条标成已完成并加删除线。这一遍你一定会卡在某个地方，卡住的地方不要立刻去查，先在纸上写清楚自己卡在哪一步、缺哪个 API、想不起哪个属性名。写清楚之后再查，查到的答案当场补回清单。整个重写过程控制在两小时以内，跑不通也要把卡点记录完整，因为卡点清单才是你这次闭卷真正的收获。",
+          "level": 2
+        },
+        {
+          "id": "w10d7-p3",
+          "topic": "先写数据层：数组与渲染分离",
+          "desc": "先想清楚数据长什么样，再写界面。每一条待办就是一个对象，至少要有三个字段：文本内容、是否完成、一个唯一标识。所有待办放在一个数组里，这个数组就是唯一的数据源。页面上的列表不要用字符串拼 HTML 再塞进 innerHTML，而是写一个单独的渲染函数：它接收数组，清空列表容器，然后按顺序为每条数据创建元素并挂上去。这样新增、删除、勾选之后，你只需要改数组，再调用一次渲染函数，界面自然就跟着变了。这套单向流程是后面所有前端框架的底座，现在手写一遍，以后看任何框架都能一眼看穿它在干什么。",
+          "level": 2
+        },
+        {
+          "id": "w10d7-p4",
+          "topic": "事件绑定与委托：一绑全通",
+          "desc": "不要给每个删除按钮单独绑一次事件。列表是动态生成的，每新增一条就绑一次，删除的时候还得解绑，很容易绑重、绑漏、绑到已经不存在的元素上。正确做法是把监听器绑在外层的列表容器上，利用事件冒泡：点击事件从按钮往上冒到容器，容器里的事件对象里有 target，从 target 往上找最近的按钮，再从按钮身上取到这条待办的唯一标识，最后去数组里删掉对应那一条。一次绑定，全程有效，新增一百条也不用重新绑。另外记得在冒泡路径上分清事件的当前目标和目标元素，这两个属性名字很像但含义完全不同，写混了就会删错条目。",
+          "level": 2
+        },
+        {
+          "id": "w10d7-p5",
+          "topic": "localStorage 存取与边界情况",
+          "desc": "存和取是两条独立的边界，必须分开想。存的时候要考虑的是一致性和时机：数据结构是什么、什么时候写、写之前要不要先转成字符串、如果转换失败怎么办。取的时候要考虑的是空和脏：第一次打开页面根本没有数据，拿了会返回 null，不判空直接解析就会抛错；用户手动清过缓存，或者版本升级字段变了，拿到的旧数据可能是坏格式，必须用 try 包住解析，失败就回退成空数组，不能让整个页面白屏。还有一个坑：存进去的是数组，取出来的永远是字符串，必须显式解析回来。写完这一步，你的待办刷新页面之后还在，整个项目才算真的落地。",
+          "level": 3
+        },
+        {
+          "id": "w10d7-p6",
+          "topic": "自测清单与导图复盘",
+          "desc": "动手前先把验收标准写死在纸上，写完照着测，别凭感觉说做好了。至少覆盖这些：新增空内容要拦住、新增重复内容要拦住、新增成功后输入框要清空、删除后列表和数组同时少一条、勾选后状态要保留、刷新页面后数据和勾选状态都还在、清空缓存后页面能正常打开不白屏、连续快速点击新增按钮不会出现重复条目。每一条都要真的点一遍，不能靠看代码推断。测完把没过的那几条单独抽出来，写清楚现象、期望和原因。最后再画一张导图：中心写待办清单，往外四个分支分别写数据、渲染、事件、存储，每个分支下面挂这一周对应的知识点。这张图就是你下周复习的唯一入口。",
           "level": 3
         }
       ]
