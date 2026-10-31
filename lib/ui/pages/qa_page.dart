@@ -58,6 +58,8 @@ class _QaPageState extends ConsumerState<QaPage> {
 
   // ---------- 选择题状态 ----------
   int _learnedWeek = 0;
+  /// 【P3】当前到期（due_date 已到）的选择题条数，用于 UI 展示今日到期量。
+  int _mcqDueCount = 0;
   List<McqQuestion> _mcqList = const [];
   int _mcqIndex = 0;
   int? _mcqPicked;
@@ -92,6 +94,15 @@ class _QaPageState extends ConsumerState<QaPage> {
     });
   }
 
+  /// 【P3】按天投放：到期队列优先，新题补位。
+  ///
+  /// 取题分两条腿：
+  ///   1) SM-2 到期队列 —— dueMcqs() 返回 due_date 已到的题，按 due_date 升序，
+  ///      内部顺序原样保留（越早到期越先考），不再二次打乱。
+  ///   2) 新题补位 —— due_date 为 NULL 的题永远进不了到期队列，
+  ///      所以到期题不够 [goal] 条时，从已学周次随机抽题补足，错题优先。
+  ///
+  /// 每日条数取 settings 的 daily_goal（与打卡目标同源），缺省 3。
   Future<void> _loadMcq() async {
     final planRepo = ref.read(planRepoProvider);
     final qRepo = ref.read(questionRepoProvider);
@@ -102,36 +113,58 @@ class _QaPageState extends ConsumerState<QaPage> {
       week = 0;
     }
 
-    // 已学周次：第 1 ~ week 周。
-    final all = <McqQuestion>[];
-    final seen = <String>{};
+    final goal = await _readMcqDailyGoal();
+
+    // 第 1 条腿：SM-2 到期队列，按 due_date 升序原样保留。
+    final due = <McqQuestion>[];
     try {
-      final focused = await qRepo.focusedMcqs();
-      for (final q in focused) {
-        if (seen.add(q.id)) all.add(q);
-      }
-      for (var w = 1; w <= week; w++) {
-        final list = await qRepo.mcqsByWeek(w);
-        for (final q in list) {
-          if (seen.add(q.id)) all.add(q);
-        }
-      }
+      due.addAll(await qRepo.dueMcqs());
     } catch (_) {
-      // 兜底：保持已有结果。
+      // 到期队列读失败不阻断，走补位。
+    }
+    final picked = <McqQuestion>[];
+    final used = <String>{};
+    for (final q in due) {
+      if (picked.length >= goal) break;
+      if (used.add(q.id)) picked.add(q);
     }
 
-    all.shuffle();
-    // 错题前置。
-    all.sort((a, b) {
-      final aWrong = a.rightStreak < AppConstants.rightStreakToClear ? 0 : 1;
-      final bWrong = b.rightStreak < AppConstants.rightStreakToClear ? 0 : 1;
-      return aWrong.compareTo(bWrong);
-    });
-    final picked = all.take(10).toList();
+    // 第 2 条腿：到期不够 goal 时，用已学周次的新题补位（错题优先）。
+    if (picked.length < goal && week > 0) {
+      final pool = <McqQuestion>[];
+      final seen = <String>{};
+      try {
+        final focused = await qRepo.focusedMcqs();
+        for (final q in focused) {
+          if (seen.add(q.id)) pool.add(q);
+        }
+        for (var w = 1; w <= week; w++) {
+          final list = await qRepo.mcqsByWeek(w);
+          for (final q in list) {
+            if (seen.add(q.id)) pool.add(q);
+          }
+        }
+      } catch (_) {
+        // 兜底：保持已有结果。
+      }
+      pool.removeWhere((q) => used.contains(q.id));
+      pool.shuffle();
+      // 错题前置：只在补位段内生效。
+      pool.sort((a, b) {
+        final aWrong = a.rightStreak < AppConstants.rightStreakToClear ? 0 : 1;
+        final bWrong = b.rightStreak < AppConstants.rightStreakToClear ? 0 : 1;
+        return aWrong.compareTo(bWrong);
+      });
+      for (final q in pool) {
+        if (picked.length >= goal) break;
+        if (used.add(q.id)) picked.add(q);
+      }
+    }
 
     if (!mounted) return;
     setState(() {
       _learnedWeek = week;
+      _mcqDueCount = due.length;
       _mcqList = picked;
       _mcqIndex = 0;
       _mcqPicked = null;
@@ -140,6 +173,26 @@ class _QaPageState extends ConsumerState<QaPage> {
       _mcqFinished = picked.isEmpty;
       _mcqLoaded = true;
     });
+  }
+
+  /// 每日投放条数：读 settings.daily_goal，缺省 AppConstants.dailyGoalDefault。
+  Future<int> _readMcqDailyGoal() async {
+    try {
+      final db = ref.read(databaseProvider);
+      final rows = await db.query(
+        'app_settings',
+        columns: <String>['value'],
+        where: 'key = ?',
+        whereArgs: <Object?>['daily_goal'],
+        limit: 1,
+      );
+      if (rows.isEmpty) return AppConstants.dailyGoalDefault;
+      final int? v = int.tryParse((rows.first['value'] as String?) ?? '');
+      if (v == null || v <= 0) return AppConstants.dailyGoalDefault;
+      return v;
+    } catch (_) {
+      return AppConstants.dailyGoalDefault;
+    }
   }
 
   // ================= 自检卡交互 =================
@@ -479,7 +532,7 @@ class _QaPageState extends ConsumerState<QaPage> {
           Text('共 ${_mcqList.length} 题', style: theme.textTheme.titleSmall),
           const Spacer(),
           Text(
-            _learnedWeek == 0 ? '尚未开始学习' : '已学第 1~$_learnedWeek 周',
+            _learnedWeek == 0 ? '尚未开始学习' : ('已学第 1~$_learnedWeek 周' + (_mcqDueCount > 0 ? ' - $_mcqDueCount 道到期' : '')),
             style: theme.textTheme.bodySmall,
           ),
         ],
