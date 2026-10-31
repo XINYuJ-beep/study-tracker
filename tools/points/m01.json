@@ -1164,37 +1164,37 @@
         {
           "id": "w5d1-p1",
           "topic": "列表推导式语法与求值顺序",
-          "desc": "[expr for x in iterable if cond]：先遍历 iterable，逐个判定 if cond（过滤），再对通过者求 expr。等价于 for 循环 + append，但快且是一个表达式。嵌套 [x*y for x in xs for y in ys] 外层在前内层在后，等价于外层 for 在外、内层 for 在里。",
+          "desc": "列表推导式的完整语法是 [表达式 for 变量 in 可迭代对象 if 条件]，其中方括号表示结果是一个列表，for 子句从可迭代对象里逐个取元素绑定到变量，可选的 if 子句做过滤，只有条件为真的元素才把表达式的结果放进结果列表。求值顺序是：先从左到右遍历可迭代对象，每取一个元素先判断 if 条件，条件通过才计算最左边的表达式，然后追加到结果列表。整个过程等价于先建一个空列表，再用 for 循环逐个 append，但列表推导式在 CPython 里由 LIST_APPEND 字节码驱动，省掉了 Python 层循环的变量查找与函数调用开销，通常比手写 for + append 快一到三倍。需要注意三点：第一，推导式有自己独立的局部作用域，不会像 for 循环那样把循环变量泄漏到外层，Python 3 里推导式结束后变量名不再存在；第二，嵌套的 for 子句按书写顺序从左到右执行，等价于嵌套循环且外层在前；第三，多个 if 子句是逻辑与的关系，全部通过才计算表达式。理解顺序的关键是把推导式读成一句人话：把满足条件的元素变成某个值，装进列表。写复杂推导式时先写成 for 循环，确认逻辑正确再压平成推导式，超过两层 for 或多重 if 就该老实写循环，可读性优先。",
           "level": 1
         },
         {
           "id": "w5d1-p2",
           "topic": "推导式的适用与不该用的场合",
-          "desc": "适合：一层遍历 + 简单表达式 + 最多一个 if。不适合：带副作用（print/写文件/发请求）、多层嵌套超过两层、逻辑超过一行——那类一律改普通 for 或拆函数，否则可读性崩塌。推导式里不能写语句语句（赋值/return），只能写表达式。",
+          "desc": "推导式适合三种场景：做映射（把每个元素变换成另一个值，如把字符串列表转成大写）、做过滤（按条件挑出一部分元素，如取出所有偶数）、以及映射加过滤的组合。它不适合这几种情况：需要副作用时（比如在循环里 print、写文件、发请求），因为推导式的返回值是列表，副作用混在里面会让人读不懂意图；逻辑分支复杂时（if-elif-else 多层嵌套），压进一行只会更难读；需要提前 break 或 continue 时，推导式没有 break 和 continue 的对应语法，硬凑只能用 if 过滤近似，语义容易走样；要累计的状态跨元素传递时（比如计算前缀和、去重后保持首次出现顺序），推导式的每个元素是独立的，无法拿到前一个元素的结果。判断边界有一条实用标准：如果压成一行之后，别人不能在一眼内说出这一行在做什么，就退回 for 循环。工程上还有一条更硬的标准：如果推导式那一行超过 100 个字符，或者需要换行，就该拆。别为了炫技把三层循环塞进一个表达式，代码是给人看的，机器读什么都一样快。",
           "level": 1
         },
         {
           "id": "w5d1-p3",
           "topic": "字典推导式与集合推导式",
-          "desc": "{k: v for k, v in pairs} 建字典；{x for x in xs} 建集合会自动去重且无序。常见用法：{name: score for name, score in rows if score >= 60} 过滤建表；{v: k for k, v in d.items()} 反转映射（前提是值唯一，否则后者覆盖前者、静默丢失）。",
+          "desc": "字典推导式的语法是 {键表达式: 值表达式 for 变量 in 可迭代对象 if 条件}，冒号左边是键、右边是值，用花括号包裹，结果是一个 dict。集合推导式的语法是 {表达式 for 变量 in 可迭代对象 if 条件}，只有一个表达式、没有冒号，用花括号包裹，结果是一个 set。两者的求值顺序与列表推导式一致：遍历、过滤、计算、写入。语义差异在于容器特性：字典的键必须可哈希且唯一，后出现的同名键会覆盖先出现的值，所以字典推导式天然适合「把一组记录转成 id 到记录的映射」，重复 id 时最后一条胜出，这个行为常常正是想要的反查结构；集合自动去重且无序，适合「从一串数据里抽出所有出现过的标签」这类去重诉求。需要注意两个坑：第一，集合推导式 {x for x in ...} 和字典推导式只差一个冒号，写错时不会报语法错而是得到另一种类型，例如 {k: v} 误写成 {k, v} 会变成集合，要盯紧冒号；第二，直接用 {} 得到的是空字典不是空集合，空集合必须写 set()。选择要点：要键值映射用字典推导式，只要去重后的成员用集合推导式，要保留顺序又要去重就用字典推导式（Python 3.7 起字典有序）再取 keys()，这是保序去重的标准写法。",
           "level": 2
         },
         {
           "id": "w5d1-p4",
           "topic": "lambda 的本质与边界",
-          "desc": "lambda 是无名函数、只包一个表达式、返回值就是该表达式结果，等价于 def 写一行的函数。不能写多语句、不能有 docstring。真正用途是当参数传给需要 callable 的接口：sorted(rows, key=lambda r: r[1])、max(xs, key=lambda x: x[1])、map/filter。不要写 x = lambda: ... 这种赋值方式，PEP8 明确反对，该用 def。",
+          "desc": "lambda 是匿名的单表达式函数，语法是 lambda 参数列表: 表达式，它等价于一个 def 定义的函数，函数体只有 return 后面那个表达式，没有语句、没有 return 关键字、不能有注释、不能多行。本质上有三条要说清：第一，lambda 返回的是一个函数对象，可以赋值给变量、可以当参数传、可以放进列表和字典，但把它赋值给变量名（f = lambda x: x+1）在 PEP 8 里是不推荐的，那种情况应该直接 def，因为 def 写出来的函数有名字、有文档字符串、方便调试回溯；第二，lambda 的函数体是表达式不是语句，所以不能写 if 语句，但可以用条件表达式 a if cond else b 实现分支；第三，默认参数、可变参数、关键字参数都能用，闭包也能用，但闭包捕获的是引用而非值，在循环里创建 lambda 时极容易踩坑，标准做法是用默认参数把当次的值固定住，例如 lambdas = [lambda x, i=i: x+i for i in range(3)]。使用边界：lambda 的最佳舞台是给 sorted 的 key、max 和 min 的 key、map 和 filter 的转换函数这类一行就能讲清的场合；只要超过一行逻辑、要复用于多处、或者需要名字出现在报错信息里，就写 def。",
           "level": 2
         },
         {
           "id": "w5d1-p5",
           "topic": "sorted key 排序、多级排序与 reverse",
-          "desc": "sorted(seq, key=fn, reverse=True) 返回新 list，原 seq 不变；list.sort() 原地改、返回 None。key 只接受单参数的 fn，多级排序靠返回元组：sorted(rows, key=lambda r: (-r[1], r[0])) 按分数降序、同分按名字升序——元组逐项比较，第 1 项相同才看第 2 项。记住 list.sort() 的返回值是 None，写 x = lst.sort() 会得到 None。",
+          "desc": "sorted 的语法是 sorted(可迭代对象, key=函数, reverse=布尔值)，返回一个新的排好序的列表，原对象不变；而列表自带的 list.sort() 是原地排序，返回 None，这是最常见的误用坑——写 x = lst.sort() 会得到 None。key 参数接收一个只接受一个位置的函数，sorted 会对每个元素调用它，用返回的值作为排序依据，原元素本身不参与比较，这就是「按身高排序而不是按人排序」的含义。多级排序的标准写法是让 key 返回元组，元组按元素顺序逐位比较，例如按分数降序、同分按姓名升序写成 key=lambda t: (-t[\"score\"], t[\"name\"])，这里用负号实现降序，因为同一元组内的元素没法分别指定升降序。更清晰的替代方案是用 operator.itemgetter 或 attrgetter，性能也更好：key=itemgetter(1, 0) 表示先按第二列再按第一列。需要注意的细节有四个：第一，reverse=True 是把整个比较结果反转，如果混用负号又加 reverse 会两次反转得到意外结果；第二，排序是稳定的，相同键值的元素保持原有相对顺序，这条性质可以用于多轮排序（先按次要条件排，再按主要条件排）；第三，key 函数对每个元素只调用一次，所以里面不要放耗时或带副作用的操作；第四，对不可比较的混合类型排序会抛 TypeError，例如数字和 None 混排，此时需要给 key 兜底一个固定的缺省值。",
           "level": 2
         },
         {
           "id": "w5d1-p6",
           "topic": "map/filter/zip 与生成器表达式",
-          "desc": "map(fn, xs) / filter(fn, xs) 返回迭代器（Python 3），不是 list，要用就直接 for，要存就 list(...)；iterator 只能迭代一次，用完即空。zip(a, b) 按最短截断，长的那边多余元素丢弃。生成器表达式 (x*2 for x in xs) 与列表推导式语法只差括号，但惰性求值、不占内存，适合大数据或接 next()/sum()。",
+          "desc": "map(函数, 可迭代对象) 把函数逐个作用到元素上，返回一个惰性迭代器；filter(函数, 可迭代对象) 保留函数返回真值的元素，也返回迭代器；zip(可迭代对象1, 可迭代对象2, ...) 把多个可迭代对象按位置配对成元组，以最短的那个为准。三者在 Python 3 里都是惰性的，返回的不是列表，这一点是新手最大的坑：直接 print(map(...)) 得到的是一个 map 对象的内存地址，必须用 list() 或 for 消耗掉才能看到结果，而且迭代器只能消费一次，第二次取就是空的。zip 的常见配套是 zip(*矩阵) 用来转置，以及 dict(zip(键列表, 值列表)) 用来构造字典；Python 3.10 起 zip 支持 strict=True，长度不一致时直接抛 ValueError，这比静默截断更安全，处理业务数据时应开启。生成器表达式与列表推导式语法几乎一样，只是把方括号换成圆括号，例如 (x*x for x in range(10))，区别在内存行为：列表推导式立即把全部结果算出来放进内存，生成器表达式只分配一个生成器对象，边算边吐，适合数据量大或只需要流式处理的场景，代价是不能下标访问、不能求 len、只能遍历一次。选择原则：数据量小且需要反复访问就用列表推导式，数据量大或只走一遍就用生成器表达式；map 和 filter 能用推导式替代时优先推导式，可读性更好；zip 用于平行数组的配对，需要按位置批量组合时选它。",
           "level": 3
         }
       ]
@@ -1205,37 +1205,37 @@
         {
           "id": "w5d2-p1",
           "topic": "datetime 的核心四类与不可变",
-          "desc": "datetime.datetime（日期+时间）、date（仅日期）、time（仅时间）、timedelta（时间差）。对象不可变，所有“修改”都返回新对象：dt.replace(hour=0)。取当下用 datetime.datetime.now()，取 UTC 用 datetime.datetime.now(datetime.timezone.utc) 或 datetime.datetime.utcnow()。取字段用 dt.year / dt.month / dt.day / dt.weekday()（周一是 0）。",
+          "desc": "datetime 模块里有四个核心类型，各有明确的职责边界：date 只表示年月日，没有时分秒；time 只表示时分秒微秒，不绑定日期；datetime 是 date 与 time 的合体，既掌握日期也掌握时刻；timedelta 表示两个时间点之间的一段间隔，不是时间点本身。这四个类型的共同点是全部不可变，一旦创建就无法修改，所有看起来像修改的操作——例如 replace、加减运算——都会返回一个新对象而不是原地改变旧对象，这一点和字符串完全一致。因此写 dt.day = 5 会直接抛 AttributeError，正确写法是 dt = dt.replace(day=5)。第二个要点是朴素对象与带时区对象的区别：不带 tzinfo 的是 naive datetime，它没有时区概念，只能当作本地时间用；带 tzinfo 的是 aware datetime，可以和 UTC 正确换算。两者不能直接比较大小，混在一起做减法会抛 TypeError，报错信息是 can't subtract offset-naive and offset-aware datetimes。要避免这个陷阱，统一原则是：涉及跨时区、跨机器、跨存储的时间一律用 aware 对象，全链路以 UTC 为基准，只在展示给用户的那一刻转成本地时区。第三个要点是 now() 与 utcnow() 的取舍，utcnow() 返回的仍是 naive 对象，容易误用，更推荐的写法是 datetime.now(timezone.utc)，返回值带 UTC 时区信息。第四个要点是精度，datetime 最小到微秒，而 time.time() 返回浮点秒，二者换算时必须显式转换，不要隱式混用。掌握这四条，后面所有格式化、解析、时间差计算的坑都能提前绕开。",
           "level": 1
         },
         {
           "id": "w5d2-p2",
           "topic": "strftime/strptime 格式化与解析",
-          "desc": "dt.strftime('%Y-%m-%d %H:%M:%S') 把 datetime 转字符串；datetime.datetime.strptime(s, '%Y-%m-%d') 把字符串转 datetime，格式串必须与实际串严格匹配，不匹配抛 ValueError。%Y 四位年、%m 补零月、%d 补零日、%H 24 小时、%M 分、%S 秒。两者方向相反，记住 s 开头的是 strptime（str→time）。",
+          "desc": "strftime 把 datetime 对象转成字符串，strptime 把字符串转回 datetime 对象，两者共用同一套格式占位符，但方向相反，名字里的 f 代表 format、p 代表 parse，这是最容易记混的一点。常用占位符必须背熟：%Y 是四位年，%m 是补零两位月，%d 是补零两位日，%H 是二十四小时制补零，%M 分钟，%S 秒，%f 微秒六位，%j 是本年第几天，%A 是星期全名，%a 是星期缩写，%B 是月份全名，%b 是月份缩写，%z 是带冒号的时区偏移如 +0800，%Z 是时区名。核心坑在于 locale：%A、%a、%B、%b 这些名字是语言相关的，服务器 locale 不同解析结果就不同，生产环境里必须避免依赖这些占位符做解析，改用 ISO 8601 的纯数字格式。第二个坑是 %y 两位年份的世纪推断规则，它默认落在 1969 到 2068 这个窗口内，超过窗口的年份会解析错，所以永远优先用 %Y。第三个坑是 strptime 的格式串必须与输入完全对齐，多一个空格、少一个冒号都抛 ValueError，错误信息只说 time data does not match format，不会告诉你错在哪一位，排查时要逐段截取验证。第四个实践要点是输出格式优先用 ISO 8601 标准写法 dt.isoformat()，它无需记忆格式串、可排序、可跨语言解析，存数据库和走网络都首选它；需要人看的界面再单独用 strftime 加工成人话格式。第五个要点是精确到毫秒或纳秒的需求超出 datetime 精度时，应改用 time 模块的 perf_counter 或第三方库，不要用浮点运算硬凑。",
           "level": 1
         },
         {
           "id": "w5d2-p3",
           "topic": "timedelta 计算与日期加减",
-          "desc": "d2 - d1 得 timedelta，取 .days / .total_seconds()；d + timedelta(days=3) / d - timedelta(hours=2) 得新日期。常见坑：timedelta.days 只取整天、不含时间部分，要精确秒数用 total_seconds()。注意 timedelta 不支持月/年单位，加一个月要自己处理月末（1 月 31 日加 1 个月不是 2 月 31 日）。",
+          "desc": "timedelta 表示一段时长，构造参数全部是可选的关键字：days、seconds、microseconds、milliseconds、minutes、hours、weeks，内部统一归一到天、秒、微秒三个字段存储，所以 td.seconds 永远是 0 到 86399 之间的值、不会是负数，负数体现在 td.days 上，这是新手最容易判断错的地方。两个 datetime 相减得到 timedelta，datetime 加减 timedelta 得到新 datetime，timedelta 之间可以加减、可以和数字乘除、可以取负，这些运算都是返回新对象。实际使用有三条必须掌握的写法。第一，求秒数用 td.total_seconds()，不要自己拼 td.days 乘 86400 再加 td.seconds，因为这样会漏掉微秒部分。第二，判断先后用比较运算符，不要用 timedelta 是否大于零来间接判断，语义更清晰。第三，把时长格式化成易读文案时是纯算术活，例如要输出两小时十三分，用 divmod(td.total_seconds(), 3600) 依次拆解，或者直接把小时数写成 int(dt2 - dt1 总秒数 // 3600) 这类明确链路，不要依赖 str(td) 的默认输出，因为默认输出是天、时、分、秒四段式且省略为零的字段，不适合直接展示。边界坑集中在三处：一是夏令时切换当天做加减，如果用的是 naive 本地时间会算出结果偏差一小时，用 aware 时间加 timedelta 则按绝对时长推进、结果正确；二是跨月跨年加减没有 months 参数，加一个月必须自己用 replace 处理月末溢出，例如 1 月 31 日加一个月要显式钳到 2 月 28 日，否则会抛异常；三是超长时间跨度，timedelta 最大只支持到 999999999 天量级，正常业务碰不到，但用天文或科学场景时要注意精度丢失。",
           "level": 2
         },
         {
           "id": "w5d2-p4",
           "topic": "os.path 与 pathlib 的分工",
-          "desc": "os.path：join（拼路径，自动处理分隔符）、basename（文件名）、dirname（目录）、splitext（拆主名与扩展名）、exists / isfile / isdir。pathlib：Path('/a') / 'b.txt' 用 / 运算符拼路径，p.name、p.stem、p.suffix、p.parent、p.exists()、p.mkdir(parents=True, exist_ok=True)、p.glob('*.py')。新代码优先 pathlib，os.path 用于兼容旧代码。",
+          "desc": "os.path 是字符串风格的老接口，pathlib 是面向对象的新接口，二者能力重叠，现代代码统一用 pathlib 更可取，但读别人代码必须两套都认识。对照记忆的方式是功能一一映射：拼接路径 os.path.join 对应用斜杠运算符 Path / 'name'；取文件名 os.path.basename 对应 p.name；取目录名 os.path.dirname 对应 p.parent；取扩展名 os.path.splitext 对应 p.suffix 与 p.stem 两个属性；判断存在 os.path.exists 对应 p.exists()；判断是文件或目录分别对应 p.is_file() 与 p.is_dir()；取绝对路径 os.path.abspath 对应 p.resolve()；按模式列目录 glob.glob 对应 p.glob 与 p.rglob。pathlib 的核心优势有三个。第一，跨平台自动处理分隔符，Windows 的反斜杠与类 Unix 的斜杠不需要自己判断，写 / 运算符就够，也不用手写 os.sep。第二，路径对象自带状态，不需要把字符串在函数间传来传去再反复解析，减少拼错分隔符一类低级错误。第三，链式写法可读性明显更好，例如打印目录下所有 Python 文件的行数，可以写成 for p in Path(root).rglob('*.py') 然后 p.read_text() 直接读，不需要三层嵌套。需要留心的差异也有三处：一是 pathlib 对象与字符串不相等，Path('a') != 'a'，传给需要字符串的旧 API 必须显式 str(p)；二是 resolve() 会解析软链并访问文件系统，路径不存在时在 Python 3.6 之后默认不抛错但行为有版本差异，需要严格校验时加 strict=True；三是 p.parent 与 p.parents[0] 等价但语义不同，后者返回可迭代序列，取上上级目录用 p.parent.parent 或 p.parents[1]。工程原则一句话：新代码一律用 pathlib，与旧库交互的边界处统一转 str，别在同一个流程里混用两种风格。",
           "level": 2
         },
         {
           "id": "w5d2-p5",
           "topic": "os 遍历、目录创建与批量重命名",
-          "desc": "os.listdir(d) 只列一层；os.walk(d) 递归返回 (root, dirs, files) 三元组；os.makedirs(p, exist_ok=True) 建多层目录且不因已存在而报错。批量重命名核心：先 list 全部名字再做映射，不要边遍历边改（否则可能重名覆盖、或文件被跳过）。改名前先算好新名是否冲突，冲突就拒绝执行。",
+          "desc": "批量文件操作是脚本自动化最高频的场景，标准写法由五个环节构成。第一环是把任务范围确定清楚，用 os.listdir 只拿一层，用 os.walk 递归三层返回 dirpath、dirnames、filenames，用 glob 按模式筛，用 pathlib 的 rglob 做递归模式匹配；只想统计不遍历深层时优先 listdir 加过滤，避免遍历整棵树浪费时间。第二环是过滤条件，先用 os.path.splitext 取扩展名做白名单判断，再按文件名规则筛，过滤条件写成显式列表而不是散落在 if 里的魔法字符串。第三环是建目录，用 os.makedirs(path, exist_ok=True) 一次建完整条路径，exist_ok 必须给 True，否则目录已存在就抛 FileExistsError、脚本无法重复执行；注意这里要的是 makedirs 不是 mkdir，mkdir 只能建一层。第四环是批量重命名，核心是 os.rename 或 pathlib 的 p.rename，重命名前必须先算好完整目标名再执行，不能边遍历边改目录内容，因为 os.walk 和 listdir 返回的顺序不保证稳定，边改边遍历可能重复处理或漏处理。正确做法是分两趟：第一趟遍历收集所有待改的 旧路径新路径 对，并为每个文件名做一份打印预览；第二趟确认全部目标名无冲突、无重名后再统一执行 rename。第五环是幂等与日志，每个 rename 前用 os.path.exists 校验目标是否已存在，控制台打印 改前到改后 的对照，异常发生时用 try 包住单个文件的处理而不是整批，遇到失败继续处理下一个并累积错误列表，最后统一汇报。整个流程还有两个通用细节：一是路径里出现中文时确认文件系统编码，Python 3 在 Linux 与 macOS 上默认 UTF-8 无需处理，Windows 上需要注意控制台编码而非文件系统编码；二是操作范围始终用绝对路径表示，脚本开头就把根目录 resolve 成绝对路径变量，避免因为当前工作目录不同而误操作。",
           "level": 1
         },
         {
           "id": "w5d2-p6",
           "topic": "批量重命名的安全做法与坑",
-          "desc": "三步走：①收集 (旧路径, 新路径) 列表；②检查新路径集合内无重复、且不与现有文件冲突；③用 os.rename 或 Path.rename 执行。坑：重命名中途失败会留下半改状态，所以先打印变更清单再执行；扩展名大小写混用要统一；中文文件名在 Linux 下是 UTF-8 字节，跨系统（Windows GBK）会乱码。要可回滚就记日志。",
+          "desc": "重命名看似简单，实际上有一组互相耦合的坑，必须按顺序排除。第一个坑是同名数据覆盖。os.rename 在类 Unix 系统上会静默覆盖已存在的目标文件，在 Windows 上反而抛 FileExistsError，两端行为不一致；解决办法是执行前对每个目标路径做存在性检查，并在冲突时走一套兜底策略：要么跳过并记入冲突清单，要么按顺序追加编号 001、002 自动避让，绝不能不看就直接 rename。第二个坑是循环改名。把 a 改成 b、b 改成 c 这种链式方案，直接顺序执行会把 a 的内容覆盖掉 b 的原始内容；正确做法是先把所有源文件改成一马甲临时名，例如加前缀 .tmp_ 加时间戳，等全部改到临时名之后，再把临时名搬到最终名，这样整个过程不存在源与目标的冲突。第三个坑是大小写不敏感文件系统。Windows 与 macOS 默认不区分大小写，把 readme.md 改成 README.md 在大小写不敏感的系统上 rename 可能直接失败或静默不动，标准做法是走两步改名：先改成 README.md.tmp，再改回 README.md。第四个坑是改名后的相对引用断裂。如果改的是代码文件、配置文件或数据文件，里面可能写了相对路径或 import 名，改名之后运行时报错，所以对代码类文件做批量改名必须先 grep 引用再动手。第五个坑是权限与占用。文件被其他进程打开时，Linux 下改名通常允许，但 Windows 下会抛 PermissionError；另外目录的写权限决定能否改名，读权限不够则连列目录都失败，因此脚本开头应对根目录做一次 os.access write 检查，把问题前置暴露。第六个坑是不可逆性。rename 没有回收站，删错就是真的没了，所以脚本的设计原则是：先 dry-run 模式只打印计划不执行，确认无误后再加参数真跑，同时对涉及的重要目录在动手前做 tar 打包备份。最后一条工程纪律是：任何批量文件操作的脚本都必须把 计划、执行、失败清单 三段输出清晰打印，这样事后能靠日志还原到底改了什么。",
           "level": 3
         }
       ]
@@ -1246,37 +1246,37 @@
         {
           "id": "w5d3-p1",
           "topic": "requests 基本请求与响应对象",
-          "desc": "requests.get(url, params={'q':'x'}, headers={...}, timeout=5)；resp.status_code 是 HTTP 状态码，resp.text 是字符串，resp.json() 直接解 JSON，resp.content 是 bytes。必带 timeout，否则可能永久卡死。resp.raise_for_status() 在 4xx/5xx 时抛 HTTPError，好过手动比 status_code。",
+          "desc": "【是什么】用 requests 调一个公开接口，最短可用代码只有四步：import requests、拼 URL 带参数、r = requests.get(url, params=..., timeout=...)、读 r.status_code 和 r.json()。返回的 Response 对象是惰性的，请求在 get 调用那一刻就已经发完，之后读 .text / .json() 只是解析已下载的内容。\n【为什么】新手最常见的误区是把 requests.get 当成“拿到数据的动作”，实际上它是“发出请求并等待完整响应”的动作，超时没设就会一直挂。所以最小闭环必须包含 timeout 参数，哪怕只给 5 秒——这不是可选优化，是保命参数。\n【怎么用】典型写法：r = requests.get('https://api.open-meteo.com/v1/forecast', params={'latitude':39.9,'longitude':116.4,'current':'temperature_2m'}, timeout=10)；随后 if r.status_code == 200: data = r.json()。params 用 dict 传，requests 会自动做 URL 编码并拼成 a=1&b=2，不需要手动 urllib.parse.quote。中文、空格、斜杠这些特殊字符都在这一层被正确处理。\n【边界】不要判断 r.ok 就以为万事大吉，4xx 和 5xx 都会被 ok 判 False，但你自己写业务逻辑时用 status_code 判断更明确。json() 在内容不是合法 JSON 时会抛 requests.exceptions.JSONDecodeError，返回 HTML 错误页时就会踩到。\n【易错】① 忘写 timeout 是头号事故；② 把 params 手动拼进 URL 字符串导致编码错误；③ 用 r.text 读 JSON 再 json.loads，多一层还可能因编码猜错出乱码，直接用 r.json() 更稳。",
           "level": 1
         },
         {
           "id": "w5d3-p2",
           "topic": "超时、重试与异常链",
-          "desc": "timeout=(连接超时, 读取超时) 可分开设。网络层异常：requests.exceptions.Timeout、ConnectionError、HTTPError、RequestException（父类，全捕获用这个）。重试要点：只对网络错误和 5xx 重试，4xx 重试没意义；要指数退避（1s/2s/4s），最多 3 次，超了就抛；不要用 while True 无限重试，会变成压测对方接口。",
+          "desc": "【是什么】requests 的异常是分层的，从根到叶大致是：RequestException → ConnectionError / Timeout / HTTPError / TooManyRedirects。其中 Timeout 又是 ConnectTimeout 和 ReadTimeout 的父类。理解这棵树才知道该 catch 谁。\n【为什么】网络调用失败是常态而不是异常，脚本能不能跑一夜不断，取决于你有没有把失败当作预期路径来处理。只 catch Exception 会把代码 bug 一起吞掉，只 catch ConnectionError 会漏掉超时。\n【怎么用】工程写法：分两层。第一层用 try/except 精确捕获：except requests.exceptions.Timeout 表示慢，可以重试；except requests.exceptions.ConnectionError 表示网络断或 DNS 失败，重试也可能无效；except requests.exceptions.HTTPError 需要 r.raise_for_status() 触发，表示服务器返回了 4xx/5xx。第二层加退避重试：for i in range(3)，捕获可重试异常后 time.sleep(2**i)，最后仍失败则抛出。\n【边界】HTTP 429（限流）和 503 适合重试，400/401/404 重试没有意义，重试只会浪费配额。重试必须配超时，否则单次重试自身就挂死。生产环境建议用 urllib3 的 Retry 挂在 requests.adapters.HTTPAdapter 上，比手写循环更完整（能处理连接池、backoff、重定向次数）。\n【易错】① 只 catch Timeout 却漏了 ConnectTimeout 之外的 ReadTimeout——它们是子类，父类 Timeout 可以一起接住；② 重试不加 sleep 造成雪崩；③ 忘了 raise_for_status() 导致 4xx 被当成正常返回解析出空数据。",
           "level": 2
         },
         {
           "id": "w5d3-p3",
           "topic": "公共 API 的无认证调用与限流",
-          "desc": "示例：http://api.open-meteo.com/v1/forecast?latitude=39.9&longitude=116.4&current=temperature_2m（免费无 key）；https://api.github.com/users/octocat（无 key 每分钟 60 次）。限流看响应头 X-RateLimit-Remaining / Retry-After，耗尽前要停。国内可用：高德/和风天气、聚合数据，后者需注册 key。",
+          "desc": "【是什么】公共气象类接口（如 open-meteo）不要求 API Key，直接带经纬度就能取数，但“免认证”不等于“无限制”，它们通常按 IP 做限流，超出返回 429 或直接拒绝。\n【为什么】学习阶段用免 key 接口是正确选择：省去密钥管理和泄露风险，能把注意力放在请求构造和数据处理上。但必须建立“配额意识”，否则批量抓取时就撞墙。\n【怎么用】以 open-meteo 为例，一次请求可以带多个参数：latitude、longitude、current（当前实况）、hourly、daily、timezone、forecast_days。字段用逗号分隔，返回 JSON，时间字段是 ISO 8601 字符串。合理做法是一次请求取回多天多字段，而不是循环逐字段请求——一次拿全比十次拿碎更省配额也更快。\n【边界】免认证接口通常不保证 SLA，数据可能缺失或字段改名。写代码时对缺失字段用 .get() 取值并给默认值，不要用 data['current']['temperature_2m'] 这种硬取。服务端也可能按分钟/日/月限流，具体数字以官网文档为准，不要凭记忆写死。\n【易错】① 循环里逐小时单独请求，几百次直接把配额打爆；② 没设 timezone 参数，返回时间全是 UTC，跟本地时间差 8 小时对不上；③ 把返回字段名记错，KeyError 后误以为是网络问题。",
           "level": 1
         },
         {
           "id": "w5d3-p4",
           "topic": "请求头、UA 与 JSON 响应解析",
-          "desc": "headers={'User-Agent': 'mycli/1.0'}——不带 UA 某些站点直接 403。POST JSON：requests.post(url, json={'k':'v'})，json= 会自动设 Content-Type: application/json 并序列化；不要同时手写 data=json.dumps(...) 又忘设 header。resp.json() 解析失败抛 requests.exceptions.JSONDecodeError，先看 resp.text 前 200 字判断返回了什么（常见是 HTML 错误页）。",
+          "desc": "【是什么】requests 有两个独立的字典：headers 控制请求头，json 参数负责把 dict 序列化为 JSON 并自动设置 Content-Type: application/json。二者不是一回事。\n【为什么】有些服务端会拒绝空 User-Agent 的请求（返回 403 或直接断开），有些会把默认的 python-requests/2.x 当成爬虫拦掉。用 json= 而不是 data=json.dumps() 能省掉手写编码和头设置。\n【怎么用】GET 请求：headers={'User-Agent':'Mozilla/5.0 ...','Accept':'application/json'}。POST JSON：requests.post(url, json={'q':'x'}, headers=headers, timeout=10)。POST 表单则是 data={'a':'1'}，此时 Content-Type 自动为 application/x-www-form-urlencoded。这两条路不能混，混了服务端就解析不出参数。\n【边界】请求头里的 Accept-Encoding 由 requests 自己管，手写覆盖可能拿到你没解压能力的内容。自定义头名不区分大小写，但值必须合法不能含换行。批量请求时把 headers 存在一个常量 dict 复用，比每次重写省心且不易漏。\n【易错】① POST 把 dict 传给 data= 导致服务端收到表单而非 JSON；② json= 和 data= 同时传，行为以先处理者为准，结果不可预期；③ 把鉴权 token 写死在脚本里并提交到 git。",
           "level": 2
         },
         {
           "id": "w5d3-p5",
           "topic": "会话对象 Session 复用连接",
-          "desc": "s = requests.Session() 后 s.get(...) 复用 TCP 连接与 Cookie，多个请求串行时明显快。Session 适合：同一站点多请求、需要保持登录态。注意：Session 不是线程安全的，多线程各建各的；用完 s.close()。",
+          "desc": "【是什么】requests.Session() 是可复用的会话对象，它在多个请求之间保持连接池、Cookie 和默认配置（headers、认证、超时适配器）。用 with requests.Session() as s: 这种上下文写法最稳。\n【为什么】直接 requests.get 每次都会新建一个 Session，意味着每次重新 TCP 握手和 TLS 握手。对同一域名连续请求 N 次，用 Session 能把 N 次握手压成 1 次，速度提升在 TLS 上尤其明显（部分场景快数倍）。\n【怎么用】典型模式：s = requests.Session()；s.headers.update({'User-Agent':'...'})；s.params 可设默认查询参数；s.trust_env 控制是否读系统代理环境变量。批量拉取同一 API 的多次调用全部走 s.get，最后 s.close()。需要设置重试策略时：s.mount('https://', HTTPAdapter(max_retries=Retry(total=3, backoff_factor=1))) 。\n【边界】Session 不是线程安全的，多线程共享一个 Session 连接池可能出问题，每个线程建自己的会话。Cookie 会随会话自动累积，跨用户场景用同一个 Session 会串号。长时间运行的脚本里 Session 持有的连接可能已被对端关闭，遇到 BrokenPipe 需要重建会话。\n【易错】① 用 Session 但每次都传不同的 headers 覆盖了默认值，等于没用；② 忘了 close，连接池资源不释放；③ 在多线程里共享同一个 Session 又不加任何锁，偶发请求串数据。",
           "level": 3
         },
         {
           "id": "w5d3-p6",
           "topic": "调 API 的健壮封装（本次实战目标）",
-          "desc": "封装函数应包含：参数校验、timeout、异常分类捕获（返回结构化错误而非崩溃）、日志、可选重试、返回值归一（统一成 dict/None，不把 Response 对象漏到上层）。目标形态：def fetch_weather(city) -> dict，内部处理网络/解析/空数据三类失败，失败返回 {'ok': False, 'err': '...' }，成功返回 {'ok': True, 'temp': 12.3}。",
+          "desc": "【是什么】健壮封装的目标：调用方只关心“传参数 → 拿数据”，不关心超时、重试、状态码、解析、报错长什么样。封装成一个返回 dict 或抛出自定义异常的函数。\n【为什么】裸写 requests 会让业务代码里塞满 try/except 和 status_code 判断，一旦接口换了或者要加日志，就要满地改。封一层之后改一处顶全局，而且能让测试用 mock 替掉网络层。\n【怎么用】函数签名建议：def fetch_weather(lat, lon, timeout=10, retries=3) -> dict。内部结构分四段：① 构造 params；② 循环尝试，捕获 Timeout/ConnectionError 做退避重试；③ r.raise_for_status()，非 2xx 抛异常；④ 解析 JSON，字段用 .get() 取并做类型校验，缺字段抛自定义错误而不是静默返回空。返回值只给调用方需要的干净数据，原始 Response 不外泄。\n【边界】重试次数和总耗时要有上限，比如 3 次 × 10 秒 = 30 秒封顶，不要写成无限重试。日志里记录 request_id 或 URL 和耗时，不要把完整的鉴权头打出来。对不可重试的错误（401/404）直接失败，不做无意义的循环。\n【易错】① 封装层把异常全吞掉返回 None，调用方无法区分“没数据”和“出错了”；② 返回 Response 对象让调用方自己解析，等于没封装；③ 重试逻辑写在最外层，每次重试都重建 Session，放弃连接复用。",
           "level": 3
         }
       ]
@@ -1287,37 +1287,37 @@
         {
           "id": "w5d4-p1",
           "topic": "argparse 最小骨架",
-          "desc": "parser = argparse.ArgumentParser(description='...')；parser.add_argument('name', help='...') 位置参数；parser.add_argument('--count', type=int, default=3, help='...') 可选参数；args = parser.parse_args() 后取 args.name / args.count。--help 和 -h 自动生成，不用手写。",
+          "desc": "【是什么】argparse 是 Python 标准库自带的命令行参数解析模块，用来把一个脚本从「改代码里的变量」升级成「在终端里传参数」。最小骨架只有四行：import argparse、parser = argparse.ArgumentParser(description=...)、parser.add_argument(...)、args = parser.parse_args()。跑完 args 就是一个 Namespace 对象，用 args.字段名 取值。\n【为什么】写死的变量每换一次参数就要改源码、重新保存、重新运行，既慢又容易改错；命令行参数让同一个脚本不修改就能反复用不同输入，这才是「工具」和「练习代码」的区别。argparse 还自带了 -h 帮助、参数缺失报错、类型转换失败报错，这三样如果手写要写几十行。\n【怎么用】典型写法：先建 parser 并给 description（-h 时会显示）；然后逐个 add_argument；最后 parse_args() 一次解析。取值时注意字段名规则：add_argument 的 dest 默认由长选项名去掉 -- 并把中间的 - 换成 _，例如 --city-name 取到 args.city_name。给默认值的参数用 default=，必填的用 required=True，给说明用 help=，这些都会出现在 -h 输出里。\n【边界】必须在脚本最外层 or __main__ 里调用 parse_args()，如果直接写在模块顶层，别人 import 这个文件时会顺手解析对方的命令行参数并可能直接退出进程。想既当库又当脚本，就把主逻辑放到 main(args) 里，用 if __name__ == '__main__' 包住解析调用。\n【易错】不写 if __name__ == '__main__' 导致 import 即解析；description 留空使 -h 输出像个哑巴；把 args 里取到的值再手工 split 一遍（argparse 已经给了列表）；用位置参数写可选内容导致顺序死板，该用 -- 选项。",
           "level": 1
         },
         {
           "id": "w5d4-p2",
           "topic": "位置参数与可选参数的区别",
-          "desc": "位置参数按顺序必填、不给就报错；可选参数以 -- 开头、可给 default 或 required=True（设了 required 就等于必填）。短选项 -c 长选项 --count 可同时注册：add_argument('-c', '--count', ...)，取用时用 args.count（取长名）。记：解析后属性名是去 __ 的长名。",
+          "desc": "【是什么】位置参数（positional）在 add_argument 时不加前缀，按出现顺序绑定，必填；可选参数（optional）以 - 或 -- 开头，按名字绑定，默认可有可无。同一个脚本里两者可以混用，例如 git commit -m \"msg\"：commit 是位置参数，-m 是可选项。\n【为什么】取舍标准只有一个——这个东西是不是「每次都必须给，且顺序天然确定」。必须给的输入（文件路径、城市名、目标目录）适合位置参数；开关、覆盖默认值的调节项（--verbose、--limit、--out）适合可选参数。全用位置参数会让顺序成为隐性契约，加一个参数就可能把旧命令全废掉。\n【怎么用】位置参数：add_argument('path')，想接受多个就 nargs='+'（至少一个）或 nargs='*'（可为空）。可选参数：add_argument('--limit', type=int, default=20)，布尔开关用 action='store_true'，这样不传是 False、传了是 True，不要写成 --verbose True 那种别扭形式。互斥的两项用 mutually_exclusive_group()，argparse 会自动帮你拒绝同时给的情况。\n【边界】nargs='*' 的位置参数会贪婪吃参数，和后面的位置参数抢食，容易出现「我明明给了值却被塞进上一个参数」的怪现象；这种情况下改用可选参数更安全。可选参数支持 --limit 20 和 --limit=20 两种写法，位置参数只认裸值。\n【易错】把必填项写成 optional 却忘了 required=True，结果程序带着 None 往下跑半炷香才崩；布尔开关写成 type=bool，因为 bool('False') 是 True，永远开关不掉；位置参数名和可选参数名撞车导致取值混乱。",
           "level": 1
         },
         {
           "id": "w5d4-p3",
           "topic": "type/choices/default 与参数校验",
-          "desc": "type=int 做类型转换，转换失败 argparse 自己报错退出（退出码 2），不用自己 try。choices=['a','b'] 限定取值范围。nargs='+' 接受一个或多个（得 list）；nargs='?' 可选单个。action='store_true' 做布尔开关（出现即 True，不出现 False），不用带值。",
+          "desc": "【是什么】type 指定解析时的转换函数，choices 限定取值集合，default 指定缺省值。三者合起来承担了命令行层的第一道校验：能在进入业务逻辑之前就把垃圾输入挡掉，并给出人能看懂的报错。\n【为什么】命令行拿到的永远是字符串。不写 type，args.limit 就是 '20' 而不是 20，后面一个 if args.limit > 10 直接 TypeError；不写 choices，用户传 --mode 大 就要在业务代码里写一堆 if 兜底，报错还藏在几百行之后。把校验放在入口，错误信息离用户最近，定位成本最低。\n【怎么用】数字用 type=int 或 type=float；路径用 type=pathlib.Path，argparse 会直接给你 Path 对象；自定义转换写个小函数（失败时抛 argparse.ArgumentTypeError，报错信息会原样显示）；取值有限就 choices=['json','csv']，传非法值时 argparse 会列出所有合法值。default 也要和 type 保持同一类型，否则不传时拿到的是字符串、传了是整数，两条路径行为不一致。\n【边界】type 只是个转换器，不做范围检查——type=int 管不了负数，需要范围就用自定义函数或在业务里判。default 为 None 时想区分「用户没给」和「用户给了空」，可以用 default=argparse.SUPPRESS，这样没给时该属性根本不存在，用 hasattr 判断。\n【易错】default 写成字符串而 type 是 int，导致逻辑分叉；type=bool 的老问题；choices 里混了 int 和 str 两种类型，用户永远匹配不上；自定义转换函数直接抛 ValueError，argparse 不会把它包装成友好的参数错误。",
           "level": 2
         },
         {
           "id": "w5d4-p4",
           "topic": "子命令 subparsers",
-          "desc": "sub = parser.add_subparsers(dest='cmd')；p_get = sub.add_parser('get')；p_get.add_argument('key')。解析后 args.cmd 判断走哪个分支。适合“一个工具多种动作”：git commit / git push 就是这个结构。dest 必须写，否则无法分支。",
+          "desc": "【是什么】subparsers 让一个脚本挂多个子命令，形如 mytool fetch --city X、mytool report --week 5。它本质是在主 parser 下建一个特殊的分发器，每个子命令拥有自己独立的参数集，解析结果里带一个字段标识当前是哪条子命令。\n【为什么】当功能超过三四个时，把所有参数堆在一个 parser 里会变成灾难：--city 只对 fetch 有意义却出现在 report 的帮助里，用户看不懂，你自己也会写一堆 if 去猜「这次到底想干啥」。子命令把参数空间切开，每个子命令只暴露自己的参数，帮助信息自然分层。\n【怎么用】sub = parser.add_subparsers(dest='cmd', required=True)；然后 f = sub.add_parser('fetch', help=...)，在 f 上 add_argument 就是 fetch 独有的；每个子命令用 f.set_defaults(func=do_fetch) 挂上处理函数；解析后 args.func(args) 一行分发，主程序就此闭环。required=True 必须写，否则不传子命令时 dest 是 None，args.func 不存在直接 AttributeError。\n【边界】公共参数（--verbose、--config）如果放在主 parser 上，必须写在子命令之前才生效（mytool --verbose fetch 可以，mytool fetch --verbose 不行），除非在子 parser 上重复声明。子命令的帮助不显示在主 -h 里，只能靠 add_parser 的 help 参数给一行摘要。\n【易错】忘了 dest 或 required，导致空调用崩溃；把公共参数只放在主 parser 却写在子命令后面；在 set_defaults 里挂函数却忘了最后调用，导致解析完什么都没发生；试图在同一次调用里执行两个子命令（不支持，要逐次调用）。",
           "level": 3
         },
         {
           "id": "w5d4-p5",
           "topic": "退出码与 stderr 输出规范",
-          "desc": "正常结束 sys.exit(0)；出错 sys.exit(1)（或 >0 的其它值）。错误信息打到 stderr：print('err: ...', file=sys.stderr)，这样管道重定向时 stdout 保持干净、只有数据。这条是 CLI 工具能否被脚本复用的关键：stdout 只放结果，stderr 只放日志与错误。",
+          "desc": "【是什么】退出码是进程结束时返回给调用方的整数，0 表示成功，非 0 表示失败（惯例 1 一般错误、2 参数错误）。stdout 走正常数据输出，stderr 走日志、警告、错误信息。两者分离，才能让管道和重定向正常工作。\n【为什么】命令行工具不是只有人在看，还有 shell 脚本、cron、CI 在看。管道 a | b 只把 stdout 传下去，如果错误信息也打 stdout，b 会把它当数据吃掉，排查时信息就丢了；if mytool; then 依赖的正是退出码，永远返回 0 会让上游以为成功，错误被静默吞掉。argparse 参数错误自动返回 2，而 raise SystemExit(1) 或 sys.exit(1) 由你自己决定业务失败。\n【怎么用】成功路径自然结束（返回 0）；可预期的失败在 catch 之后 sys.exit(1)；参数级错误交给 argparse。打错误信息用 print(..., file=sys.stderr) 或 logging 的 StreamHandler(默认就是 stderr)。想同时保留机器可读输出，就把 JSON 打 stdout、进度和告警打 stderr，这样 mytool > result.json 拿到的仍是干净 JSON。\n【边界】print 的缓冲会让人误判：stdout 重定向到文件时是块缓冲，程序崩溃前最后几行可能没落盘，用 python -u 或 sys.stdout.flush() 解决；stderr 默认无缓冲。退出码语义在 Windows 和 POSIX 上大体一致，但超过 255 会被截断。\n【易错】用 print 打错误信息（信息进了数据流）；捕获异常后继续往下跑，最终返回 0（假成功最致命）；把日志级别设成 DEBUG 导致正常使用时满屏噪音走 stderr；忘记在唯一出口写 exit，走不同分支返回不同码却不自知。",
           "level": 2
         },
         {
           "id": "w5d4-p6",
           "topic": "CLI 工具的结构与可测试性",
-          "desc": "main(argv=None) 函数 + if __name__ == '__main__': sys.exit(main())。把参数解析和业务逻辑分离：parse_args() 只负责解析，do_work(args) 做实际事，这样测试时可直接构造 args 调 do_work，不必走命令行。不要把全部逻辑塞在模块顶层。",
+          "desc": "【是什么】一个能长期维护的 CLI 至少三层：解析层（build_parser 只管定义参数）、业务层（fetch_weather(city, timeout) 这种纯函数，参数是普通 Python 值）、入口层（main() 负责解析、调业务、处理退出码与异常）。三层分离之后，业务层可以在不碰命令行的前提下被单元测试直接调用。\n【为什么】把业务逻辑写在解析之后、缩进在同一个函数里，测试就得伪造 sys.argv、捕获 SystemExit、读 stdout——又慢又脆。业务函数接受普通参数、返回普通结构，测试就是一行 assert，覆盖率上去了，改参数名也不会让测试全红。\n【怎么用】build_parser() -> ArgumentParser 只做声明，返回 parser；业务函数不 import argparse，输入是 str/int/Path，输出是 dict 或数据类；main(argv=None) 接受参数列表（默认取 sys.argv[1:]），这样测试可以 main(['fetch','--city','Beijing'])，无需动环境；if __name__ == '__main__': sys.exit(main())。想测退出码就断言 main 的返回值。\n【边界】刻意做成三层会多一些函数，小脚本（三十行以内）不必硬套；但当脚本要接定时任务、要被别的脚本调用时，分层的收益立刻显现。业务函数里不要直接 print，改为返回结果、由入口层决定怎么输出，否则输出格式和业务逻辑焊死。\n【易错】argv=None 写成 argv=sys.argv 导致测试无法注入（默认值在定义时求值，且含程序名）；业务函数偷偷读 os.environ，测试环境不可控；main 里 sys.exit 而不是 return，测试进程被杀；把 parser 做成模块级全局对象，多次调用互相污染。",
           "level": 3
         }
       ]
@@ -1328,37 +1328,37 @@
         {
           "id": "w5d5-p1",
           "topic": "断点调试的两种入口",
-          "desc": "IDE行号断点；命令行 python -m pdb 脚本.py，命令 l 看代码 n 下一行 s 进入函数 c 继续 p 打印变量 q 退出。断点命中时暂停在该行执行之前",
+          "desc": "【是什么】断点调试就是在某一行代码上挂一个暂停开关，程序跑到那里就停下，把当时所有变量的值摊开给你看。Python 有两个入口：一是 pdb 模块，在代码里写 import pdb; pdb.set_trace() 或者从 Python 3.7 起直接写 breakpoint()，程序执行到这一行就掉进交互式调试器；二是编辑器的图形调试器，VS Code 按 F9 在行号左侧点红点，PyCharm 点行号旁边，然后以 Debug 模式启动，程序撞到红点就停。两者底层是同一套 pdb 协议，区别只在操作方式：一个敲命令，一个点鼠标。【为什么】初学者几乎都靠 print 打天下，写一句跑一遍，看到值不对再删掉，来回折腾七八轮。这样做的问题不是效率低，而是你只能看到自己想得到的东西。真实的 bug 往往藏在你没想到的地方，你没 print 的变量才是凶手。断点调试把整个作用域一次性摊开，局部变量、全局变量、当前调用栈全部可见，你能直接看到那个你根本没想到要打印的变量是什么鬼样子。【怎么用】最省事的用法是 breakpoint()。在怀疑的那几行上面插一句 breakpoint()，正常 python xxx.py 跑，程序到那里就停住，终端出现 (Pdb) 提示符。常用命令就六个：n 执行下一行（不进入函数）、s 执行下一行（进入函数）、c 继续跑到下一个断点或结束、p 变量名 打印某个值、l 显示当前位置前后代码、q 退出。图形调试器等价按键是 F10 单步跳过、F11 单步进入、F5 继续。【边界】breakpoint() 只能放在语句位置，不能塞进表达式中间，所以不能在列表推导式里插断点，这种地方只能改用 print 或者把逻辑拆出来。另外在异步代码、多线程代码里，断点会让整个线程停住，其他线程还在跑，看到的状态可能是半更新的，这时候更该用日志而不是断点。生产环境绝对不能留 breakpoint()，因为它会让进程卡死在等输入上，服务直接挂住。【易错】第一个坑是把 breakpoint 拼成 break_point 或者 breakpoint 后面加了括号但没 import 任何东西就乱试，其实 breakpoint 是内置函数，什么都不用 import。第二个坑是在 for 循环里插断点忘了循环几百次，每次都要手动 c，正确做法是在 breakpoint 前面加个 if 条件，只在特定那次停下。第三个坑是调试完只删掉了断点行但忘了删 pdb.set_trace() 那行 import，被 lint 报未使用导入。",
           "level": 2
         },
         {
           "id": "w5d5-p2",
           "topic": "print调试的局限与替代",
-          "desc": "污染标准输出、无法看到调用栈。替代品是 logging.debug、pdb 的栈帧、以及 traceback.format_exc() 取完整回溯文本",
+          "desc": "【是什么】print 调试就是在代码里插入 print 语句，把中间变量的值输出到终端。它是最原始也最普及的调试手段，不需要任何工具、任何配置、任何学习成本。所谓过渡信号，是指某些现象出现时，说明你该从 print 换成断点或日志了：比如同一段代码你加了第三次 print、比如你需要同时看五个以上变量的值、比如你在循环里打印出几百行输出自己都找不到重点、比如你开始写 print 之后还要再写一行 print 来区分是哪个 print 打的。【为什么】print 调试并不是坏习惯，它是调试的起点而不是终点。它真正的优势在于快速和二值性：只需要确认「这个变量到底是不是 None」，一行 print(v is None) 就够，比开调试器快十倍。它的劣势在于信息带宽极窄和不可持久。带宽窄是指一次只能看一个值，想看相关的一组值就要写多行；不可持久是指程序结束后输出就没了，第二天再想复现还得重跑。当你的问题从「这个值对不对」升级成「这条执行路径为什么会走到这里」，print 就彻底不够用了。【怎么用】判断是否该升级有个具体标准：如果你为了搞清一个问题插入了超过三行 print，或者需要打印超过三轮才能定位，就该换成断点。另外两个明确的升级信号是：一，你需要看调用栈（谁调用了这个函数），print 拿不到，必须用 traceback 或者调试器；二，你需要看某个变量在什么时候被改掉了，print 只能看到改后的值，看不到改的瞬间。这两类问题必然要靠断点或日志。【边界】print 在调试第三方库或者框架内部逻辑时几乎无效，因为你不能改它的源码（改了下次升级就丢），这时候只能靠日志配置把第三方库的日志级别调出来。print 在并发程序里也不可靠，多线程同时打印会让输出交错混乱，看起来像数据错乱其实只是打印竞争，反而把你带偏。还有一类隐藏问题：print 会拖慢程序，如果你在高频循环里打印，可能把原本 0.1 秒的程序拖成十秒，从而掩盖掉时序相关的 bug。【易错】第一个坑是把 print 结果当真：print 输出的是那一刻的快照，如果变量是列表或者字典，之后它被原地修改，你回头看输出会以为一开始就是这个值。第二个坑是 print 到 stderr 和 stdout 混着用导致输出顺序错乱，尤其在管道重定向时，正确答案是调试信息走 stderr。第三个坑是提交代码时忘了删 print，更糟的是用 print 打印了敏感数据比如密码和 token，直接进了日志和提交历史。",
           "level": 2
         },
         {
           "id": "w5d5-p3",
           "topic": "logging五级别与传播",
-          "desc": "DEBUG小于INFO小于WARNING小于ERROR小于CRITICAL，默认只输出WARNING及以上，需 basicConfig 指定 level=logging.DEBUG。子logger默认向上传播，propagate False 可关闭",
+          "desc": "【是什么】logging 模块用级别来区分消息的重要性，从低到高共五级：DEBUG（调试细节）、INFO（正常运行的关键节点）、WARNING（还能跑但不对劲）、ERROR（某个操作失败了）、CRITICAL（整个程序要挂了）。每级对应一个数字：10、20、30、40、50。设置级别时，低于该级别的消息会被直接丢弃，高于等于的才会输出。传播机制是指 logger 有层级关系，点号分隔即为父子，比如 app.db 是 app 的子 logger。子 logger 记录一条消息后，会先交给自己的 handler 处理，再向上冒泡到父 logger 的 handler 再处理一遍，一直冒到 root。【为什么】print 最大的问题是没法按需开关。上线之后你想关掉所有调试输出，用 print 就得一个个删；用 logging 只要把级别从 DEBUG 提到 INFO，所有调试消息立刻消失，代码一行不改。传播机制解决的是另一个问题：你可以给根 logger 配一个 handler 输出到文件，那么所有模块的日志自动都进这个文件，不需要每个模块各自配置。反过来，如果某个模块输出太吵，你可以单独把它的级别调高或者关掉 propagate，不影响其他模块。【怎么用】标准写法是每个模块顶部 logger = logging.getLogger(__name__)，这样 logger 名就是模块路径，层级关系自动生成。主程序入口调一次 logging.basicConfig(level=logging.INFO, format=...)，这是全局配置。记录用 logger.info、logger.warning 这类方法，不要用 logging.info 直接调模块级函数，因为那是往 root 里写，模块名信息就丢了。如果要输出到文件，用 basicConfig(filename=...) 或者自己建 FileHandler 挂到 logger 上。【边界】basicConfig 只在第一次调用时生效，第二次调用什么都不做，这是设计如此，所以不要指望在多个地方调 basicConfig 来改配置，要改就手动操作 root logger 的 handlers 列表。传播机制有个容易踩的坑：如果子 logger 和父 logger 都挂了 handler，且子 logger 的 propagate 没关，同一条日志会被输出两遍。这在配置了多个 handler 的工程里非常常见，看到日志重复先查 propagate。【易错】最常见错误是把级别用反：用 WARNING 打印正常流程信息，用 DEBUG 打错误，导致日志看起来满屏都是警告但真正的问题被淹没。第二个错误是用 f-string 直接拼字符串：logger.info(f\"处理 {items}\") 在级别不够时仍然会执行格式化，性能白费，正确写法是 logger.info(\"处理 %s\", items) 交给 logging 惰性格式化。第三个错误是拿 logging 当 print 的替代品却不设级别，全用默认的 WARNING，结果 INFO 一条都不出，以为代码没跑到。",
           "level": 2
         },
         {
           "id": "w5d5-p4",
           "topic": "handler与formatter分工",
-          "desc": "Logger只负责按级别过滤，Handler决定输出目的地 StreamHandler走stderr FileHandler写文件，Formatter决定格式。basicConfig 与手动 addHandler 只能选一条，重复调用 basicConfig 第二次起无效",
+          "desc": "【是什么】logging 的三大件分工明确：logger 负责接收记录并判断级别要不要放行；handler 负责把放行的记录送到目的地，比如 StreamHandler 送到终端、FileHandler 写到文件、RotatingFileHandler 写到文件并在超限时自动切分；formatter 负责把一条 LogRecord 对象渲染成最终那行文本，决定行里有没有时间、有没有级别、有没有模块名。三者是链式关系：logger 放行后交给手上的每个 handler，每个 handler 再用自己的 formatter 格式化后输出。【为什么】这套拆分不是为了好看，是为了让同一批日志能同时以不同形态去不同地方。开发时你想在终端看到彩色简短的输出，上线时你想在文件里写带完整时间的详细记录，同时还想把 ERROR 单独发到告警系统。这三种需求对应同一批日志事件，只有拆成多个 handler 加各自独立的 formatter 才能同时满足，否则你就得写三份日志代码。【怎么用】标准配置四步：一，logger = logging.getLogger(名字)；二，handler = logging.StreamHandler() 或者 FileHandler(路径, encoding=\"utf-8\")；三，handler.setFormatter(logging.Formatter(\"%(asctime)s [%(levelname)s] %(name)s: %(message)s\", datefmt=\"%Y-%m-%d %H:%M:%S\"))；四，logger.addHandler(handler) 并 logger.setLevel(logging.DEBUG)。如果还想让 ERROR 去别的地方，再建一个 handler 并 handler.setLevel(logging.ERROR) 只收错误。FileHandler 一定要传 encoding=\"utf-8\"，不传在中文环境下会按系统默认编码写，容易乱码或者直接报编码错误。【边界】handler 不要重复添加，同一个 handler 加两次会导致每行日志输出两遍，工程里常见于模块被 reload 或者配置函数被调用多次。判断方法是在 addHandler 前用 if not logger.handlers 包一层。handler 还有一个少见的坑是资源不释放：FileHandler 打开的文件句柄如果进程不退出就一直占着，在 Windows 上会导致文件删不掉，所以关键节点要 handler.close()。RotatingFileHandler 的 maxBytes 是按字节算的，写中文时一个汉字三字节，按行数估算会严重偏差。【易错】第一个坑是 formatter 里的字段名写错，比如写成 %(levelName)s 或者 %(asctime) 少了 s，结果是格式化异常而不是日志缺失，异常还会被 logging 自己吞掉打到 stderr，很难发现。第二个坑是给 handler 设了级别却忘了给 logger 设级别，logger 默认 WARNING，导致 DEBUG 根本没有进入 chain，handler 级别设得再低也没用，两个级别都要设对。第三个坑是 FileHandler 的 mode 默认是 a 追加，如果你希望每次启动覆盖，必须显式传 mode=\"w\"。",
           "level": 3
         },
         {
           "id": "w5d5-p5",
           "topic": "读栈定位真因",
-          "desc": "从最后一行读异常类型与消息，自下而上找第一个属于自己的栈帧。禁止裸 except 吞异常，改用 logging.exception 记录完整栈",
+          "desc": "【是什么】读栈就是读 traceback，也就是报错时终端打印出来那一坨从「Traceback (most recent call last):」开始的内容。它的结构是从上到下依次是调用链的每一层，最上面是最外层的调用者，最下面是最深的那一层，最后一行是异常类型和消息。真正的错误发生在最底层，但根因往往在上层：底层只是被喂了错的数据或者错的参数。读栈的核心不是看哪里报错，而是顺着调用链往回看到底是谁把错误的东西传进来的。【为什么】初学者看到一屏 traceback 第一反应是慌，然后直接看最后一行「KeyError: 某某」，接着去那行代码加个 if 就完事。这样修的是症状不是病。比如一个 KeyError 出现在十层调用深的地方，真正的问题可能是第一层读配置时字段名拼错了。如果你只在最底层加默认值兜住，程序不崩了，但用的还是错数据，会在别的地方以另一副面孔再次崩掉。顺栈往回看，才是在找病的源头。【怎么用】四步固定流程：一，看最后一行确定异常类型和值，这决定了问题的大类（是类型错、是键不存在、是空值、还是网络超时）；二，看倒数第二块代码位置，那是真正抛出的地方；三，向上逐层看每一层的代码行，问自己「这一层传进去的参数对不对」，通常会在某一层发现传下来的东西和期望不符；四，找到那一层之后，再往上确认那个错值是在哪一层造出来的。定位完成之后再动手改，改的是造错值的那一层，不是抛出异常的那一层。【边界】读栈有三个盲区。一，异常被 try/except 吞掉后重新抛出的，原始栈信息可能丢失，只能看到最后一层，这时候要靠 raise ... from e 保留链条。二，异步代码的栈会跨 event loop，看起来调用链断裂，需要看异常里的 task 名称而不是行号顺序。三，涉及第三方库时，栈里会有一半是库内部的帧，那些帧不用细看，重点看自己代码的帧。另外多线程下异常只在那个线程的栈里打印，主线可能看起来一切正常，要找线程自己的 traceback。【易错】第一个坑是从下往上看时只盯最底下那层，忽略了往上三层的参数错误。第二个坑是把循环或者递归里的重复帧当成不同问题，实际上那是同一行代码被调用了多次，只用看最内层那一次。第三个坑是看到 FileNotFoundError 就去加 try/except 兜住，但真正的问题是路径拼接时用了相对路径而当前工作目录不对，兜住等于把 bug 藏起来。第四个坑是打印异常时只打 str(e)，把栈信息丢了，应该用 traceback.format_exc() 或者 logger.exception 保住完整栈。",
           "level": 3
         },
         {
           "id": "w5d5-p6",
           "topic": "调试笔记六项固定结构",
-          "desc": "现象描述、复现步骤、二分定位过程、根因、修法、同类风险点。缺任何一项都不算写完调试笔记",
+          "desc": "【是什么】调试笔记是指在排完一个 bug 之后，用固定格式记下来的六项内容：一，现象（看到什么，报错原文、异常类型、复现步骤）；二，环境（Python 版本、依赖版本、操作系统、哪台机器）；三，假设（当时猜的几个可能原因）；四，验证过程（每个假设用什么方法验的，结果如何）；五，真因（最后确认的根因，一句话）；六，修法与教训（怎么改的，以后怎么避免同类问题）。六项固定，顺序固定，缺项就说明这次排错没排透。【为什么】不记笔记的代价在两周后才会显现：同一个坑第二次踩，你只记得「好像遇到过」，想不起当时是怎么解的，于是重新排一遍。更糟的是团队协作时，别人遇到同样的报错搜不到任何记录。固定六项结构的作用是让笔记可检索、可复用、可对比：现象字段可以按报错原文搜，环境字段能快速排除版本差异，真因和修法字段能直接当解决方案用。结构固定比自己随手记的自由格式胜在一致性。【怎么用】落成文件而不是留在脑子里，推荐一个 Markdown 文件按日期倒序追加，每条用一个二级标题写清日期加一句话标题。现象字段必须抄报错原文，不要翻译成自己的话，因为原文才可搜索。环境字段用 python -V 和 pip list 的实际输出，不要凭记忆写。假设字段列出至少两条，只有一条说明你没思考过别的可能。验证过程写你实际做了什么命令、看到什么输出。真因字段一句话，超过两句说明还没定位准。修法字段贴 diff 或者关键的改动前后代码。【边界】这套结构只适合非平凡的 bug，如果一个拼写错误三十秒就修好了，写六项纯属浪费时间，这种情况只需要在修法里记一句。笔记的详细程度和执行成本成反比，写得越重越坚持不下去，所以真因和修法两项必须有，现象和环境在某些场景可以简化。另外笔记不是文档，不需要润色成给别人看的文章，写给自己和未来的同事能看懂就够。【易错】第一个坑是只记修法不记现象，结果下次遇到同样报错搜不到，因为搜索时你搜的是报错内容不是修法。第二个坑是真因写成了现象的重述，比如真因写「KeyError 找不到 config 键」，这不是真因是现象，真因应该是「配置文件模板里的字段名是 database_url 而代码读的是 db_url」。第三个坑是记在聊天记录或者临时草稿里，不落到工程目录，三个月后彻底失联。第四个坑是假设字段空着，说明这次是撞运气修好的，这种修法最容易复发。",
           "level": 1
         }
       ]
@@ -1369,37 +1369,37 @@
         {
           "id": "w5d6-p1",
           "topic": "项目四层拆法",
-          "desc": "main负责参数解析收city，fetch_weather负责取数，transform压成三到五个字段，format_output负责输出。四层单向依赖，禁止在main里混写requests和print",
+          "desc": "【是什么】拿到一个需求就写代码，是新手最容易死的地方。项目四层拆法是把一个需求从上至下拆成四层：第一层是目标（要解决什么问题，用户一句话能说清），第二层是能力（为了达成目标必须具备哪几种能力，比如取数、计算、展示），第三层是函数（每种能力对应一个或几个函数，一个函数只做一件事），第四层是语句（函数体里的具体代码）。四层的顺序是自顶向下，越往下越具体，上一层的每个格子都要被下一层填满，不能有悬空的能力，也不能有无主的函数。【为什么】因为写代码时的思维必须和调试时的思维分开。写的时候如果一边想结构一边抠分号，两件事互相打断，最后结构是长出来的、不是设计出来的，长歪了只能推倒。四层拆法的作用是先画骨架再长肉：层级定完，编码就变成填空题，每个函数该写什么、该返回什么、该被谁调用都是明文写好的，你只需要把中文翻译成 Python。【怎么用】具体动作是找一张纸或一个文本文件，横着写四行标题：目标、能力、函数、语句。第一行只写一句话。第二行列三条到五条能力，每条能力都是动词开头的短语，比如取数、归一化、算分、打印。第三行给每条能力配函数名和签名，写清输入是什么、输出是什么、出错返回什么。第四行才动手写代码，写一个勾一个。如果发现某条能力写不出函数、或者某个函数喂不饱任何能力，说明第二层拆错了，回到第二层重拆，不要硬着头皮往下写。【边界】四层拆法适合两百行以内的单文件工具。如果项目大到要分多个模块、多个进程、要联网、要持久化，四层不够用，得再加上接口层和数据层，那是另一个话题。另外四层拆法不解决需求本身是否正确的问题，需求错了拆得再漂亮也是白拆。【易错】第一个坑是把函数层写成能力层的复读机，一个函数名叫 do_everything，什么都干，等于没拆。第二个坑是跳过第三层直接写语句，写着写着发现重复代码一大堆，回头补函数比重写还累。第三个坑是拆完之后不回头核对，第一层改了口径但下面三层还是旧逻辑，最后交付的是一个自洽但答非所问的程序。",
           "level": 3
         },
         {
           "id": "w5d6-p2",
           "topic": "参数设计要覆盖实际用法",
-          "desc": "位置参数city必填；days为可选整型参数默认1；json开关为store_true布尔；unit用choices限定只接受c或f默认c，非法值由argparse报错并以退出码2退出",
+          "desc": "【是什么】参数设计的核心是三件事：哪些参数必须有，哪些可以有默认值，哪些参数错了要立刻报错而不是默默返回错误结果。必须有的参数放前面且不给默认值，缺了就抛异常；有合理默认值的参数放后面，比如城市默认北京、单位默认摄氏度；取值有限的参数用白名单校验，不在名单里就直接报错退出。这三件事合起来决定了你的函数是好用还是难用。【为什么】因为参数是函数和外部世界的唯一契约。参数设计得含糊，调用方就会乱传，乱传之后函数内部要么崩溃要么返回脏数据，而脏数据比崩溃更难查——崩溃至少有堆栈，脏数据只会在三个函数之后以莫名其妙的形式爆出来。把校验前移到入口，能把错误定位在发生的那一刻，省掉大量回溯成本。【怎么用】写函数的时候先确定签名，签名里每个参数问三个问题：不传行不行、传错了要不要报错、类型是什么。答案用代码表达出来：不传不行就不给默认值；传错要报错就在函数开头校验；类型不确定就先转再校验。例如 def get_weather(city, unit=\"celsius\", timeout=10)，然后开头写 if unit not in (\"celsius\",\"fahrenheit\"): raise ValueError(...)。再进一步，如果参数多到五个以上，就改成传一个配置字典或者一个 dataclass，避免位置参数串位。【边界】校验不是越多越好。内部函数之间的调用，参数由上一层的校验保证过了，就不必在每个小函数里重复校验，那只是噪音。真正需要重校验的是三个口子：用户输入、网络返回、文件内容。这三处是脏数据进入系统的门，管住门就够了。【易错】第一个坑是可变默认值，def f(items=[]) 里的空列表在多次调用之间共享，第二次调用拿着上一次的残留，这类 bug 极难复现。正确做法是默认写 None，函数体里再 if items is None: items = []。第二个坑是用 0 或者空字符串表示没传，导致合法值（比如温度 0 度）被当成没传。第三个坑是把校验放在算完之后，前面白算一遍还可能已经写脏了外部状态。",
           "level": 3
         },
         {
           "id": "w5d6-p3",
           "topic": "健壮性三件套",
-          "desc": "请求必须写timeout元组(连接3秒读取10秒)，必须调用raise_for_status，必须分别捕获requests.RequestException与ValueError，报错给中文提示并返回非零退出码，禁止把traceback摊给用户",
+          "desc": "【是什么】健壮性三件套是所有联网程序必须有的三道保险：超时限定一次请求最多等多久，重试规定失败之后再试几次、间隔多久，异常兜底保证无论失败多少次程序都不会带着半空数据往下跑。三件套顺序固定，超时在最内层，重试包住超时，兜底在最外层。【为什么】因为网络是世界范围内最不可靠的东西。请求发出去可能永远不回，可能回一半断掉，可能对方返回 500，也可能返回一个 200 但内容是错误页。这三类失败的处理方式不同：永不回需要超时来止损，瞬时抖动需要重试来消化，彻底失败需要兜底来保证程序还能输出一个明确的失败结果而不是崩溃。缺任何一件，程序都会在某天线上炸掉。【怎么用】超时用 requests.get(url, timeout=(3,10))，元组分别是连接超时和读取超时，三秒连不上说明网络根本不通，十秒读不到说明对方处理太慢，两个都给才不会无限等。重试用循环加退避：for i in range(3)，失败后 time.sleep(2**i) 做指数退避，第三次还失败就放弃。兜底用 try/except 包住整个流程，except 里返回一个结构固定的失败结果，比如 {\"ok\": False, \"error\": 描述}，让上层能区分成功和失败而不是拿到 None 就崩。【边界】重试只对幂等且有意义的操作有效。GET 请求重试安全，写操作重试可能造成重复下单。另外重试次数不是越多越好，三次足够，重试十次只会把一次失败放大成十次超时，在对方已经挂掉的时候雪上加霜。超时也不能设太短，三秒连不上就放弃在网络抖动的情况下会误判。【易错】第一个坑是只写 try 不写具体异常类型，except 一把抓会把 KeyboardInterrupt 也吞掉，程序停不下来。第二个坑是重试时不等待，连续三次一毫秒打完，等于没重试。第三个坑是兜底返回 None，调用方拿到 None 后继续往下算，报的是后面某个不相干的行，真因被埋。正确做法是永远返回结构化的结果对象。",
           "level": 3
         },
         {
           "id": "w5d6-p4",
           "topic": "输出两副面孔",
-          "desc": "面向人的输出，一行一条对齐城市名温度描述并带单位；面向机器的输出，json开关打开时只print一行json.dumps(ensure_ascii=False)，可被jq解析。同一个函数内分支，不另写一套代码",
+          "desc": "【是什么】程序输出分两种用途：给人看的和给机器看的。给人看的追求可读，用中文、用对齐、用单位、用一句话总结；给机器看的追求可解析，用 JSON、用固定字段、用不带感情的纯数据。同一个程序往往两副面孔都要有，通过一个开关切换，比如 --json 参数决定输出人话还是输出 JSON。【为什么】因为这两种输出如果混在一起，两边都会坏。混进中文的 JSON 让下游脚本解析失败，混进 JSON 的人话让用户看不懂。更隐蔽的问题是，人看的输出会随心情改动措辞，一旦下游依赖了这段措辞，你改一个字就断一个管道。分开之后，人话可以随便优化，JSON 只要维持字段兼容就永远不断。【怎么用】写一个统一出口函数，参数决定格式。比如 def emit(data, as_json=False)，as_json 为真时 print(json.dumps(data, ensure_ascii=False, indent=2))，为假时按人话逐行打印。所有分支只允许通过这个出口输出，不允许在业务逻辑里零散 print。错误输出走 stderr 且永远给人看，成功数据走 stdout 且跟随开关。这样下游可以这么用：程序 --json 2>/dev/null | jq .data，把错误提示留在屏幕上、把数据接进管道。【边界】人话输出不要承担数据传递的责任。如果你发现自己在用 awk 或 sed 去截取人话输出里的数字，说明这个程序早该加 JSON 开关了。反过来 JSON 也不要承担解释的责任，JSON 里塞大段中文说明会让下游解析变脆。【易错】第一个坑是成功和失败都写 stdout，导致管道拿到错误内容却以为是数据。第二个坑是 json.dumps 不写 ensure_ascii=False，中文全部变成反斜杠 u 编码，人完全看不懂。第三个坑是不同情形输出不同字段，字段有时候有有时候没有，下游每加一种情况就要改一次代码。固定 schema 永远有这个字段，只是值可能是 null，这才是稳的。",
           "level": 2
         },
         {
           "id": "w5d6-p5",
           "topic": "open-meteo实测口径",
-          "desc": "先请求geocoding-api的search接口带name与count=1拿经纬度，再请求api.open-meteo.com的forecast接口带current参数指定temperature_2m与weather_code。weather_code是数字，需要自维护字典映射为中文",
+          "desc": "【是什么】open-meteo 是一个免注册、免密钥的公共天气 API，返回 JSON。它的调用口径是：地址 https://api.open-meteo.com/v1/forecast，必填参数 latitude 和 longitude，常用参数 current 指定要哪些当前指标（比如 temperature_2m、relative_humidity_2m、wind_speed_10m），另一组参数 timezone 指定时区（比如 Asia/Shanghai），不传时区返回的是 UTC 时间，跟你手机上的时间差八小时。【为什么】这些细节必须实测记住，因为写文档的人最容易在这里想当然。三个点最容易错：一是字段名带下标的写法（temperature_2m 里的 2m 表示离地两米），拼错一个字符服务端会静默忽略而不报错，返回的 JSON 里根本没有这个字段，你拿 KeyError 而不是清晰的错误提示；二是单位由另一个参数 temperature_unit 控制，默认摄氏度，传 fahrenheit 变成华氏度，不核对单位就会把华氏度当摄氏度展示，数值差一倍多；三是时区不传不报错，只是时间全是 UTC，一个粗心的程序会把下午两点当成早上六点展示。【怎么用】先手工在浏览器里打一遍请求，把返回的 JSON 原样看一遍，确认字段名和嵌套层级，尤其注意 current 是一层字典，指标在 current 字段下面而不是在顶层。代码里取值前先做两个判断：状态码是不是 200，键在不在字典里。写 data[\"current\"][\"temperature_2m\"] 之前用 get 链式取值并给默认值，避免任何一处缺失直接崩。【边界】免密钥不等于无限量。公共接口按 IP 有软性频率限制，个人调试一天几百次完全没问题，但做批量抓取或者给别人跑服务需要先看它的使用条款。另外数据精度是网格插值，城市尺度够用，不能拿来做街道级或楼宇级判断。【易错】第一个坑是把 latitude 和 longitude 写反，服务端不会报错，会老老实实返回南极或者北冰洋的天气，你看到零下四十度还以为接口有问题。第二个坑是只看当前温度不管体感温度和风速，实际使用时用户会觉得不准。第三个坑是不做本地缓存，每刷一次界面打一次接口，一旦被限流就全部显示失败，正确做法是缓存十五分钟。",
           "level": 3
         },
         {
           "id": "w5d6-p6",
           "topic": "可运行的四条判据",
-          "desc": "正常城市能输出；不存在的城市返回非零退出码；json开关输出能被python -m json.tool解析；断网时三秒内给可读提示而不是卡死",
+          "desc": "【是什么】一个程序算不算写好，不看代码漂不漂亮，只看四条判据：第一，从零环境能跑起来，也就是照着 README 的步骤复制粘贴命令，不额外查资料就能跑出结果；第二，正常输入有正确输出；第三，非法输入有清晰提示且程序不崩；第四，断网或者对方挂掉时程序能退出且说明原因。四条全过，这个程序才算可运行。【为什么】因为代码在你自己电脑上能跑，和在别人的电脑上能跑，是两件事。四条判据是把这两件事拉平的最低标准。尤其第三条和第四条，它们是线上事故的高发区——正常路径人人都会测，异常路径几乎没人测，而用户遇到的全是异常路径。【怎么用】交付前按顺序过一遍：新建一个空目录，照 README 从头敲一遍命令，全程不靠记忆补参数；跑一次正常输入；跑一次空输入、一次超长输入、一次中文输入、一次乱码输入；拔网线或者把接口地址改成不存在的域名跑一次。四条有任何一条不过就回去改，不要带着过。这四步做完再做代码整理，顺序不能反。【边界】四条判据是交付下限不是质量上限。已经稳定运行的小工具不必每次大改都重走全流程，但涉及入口、参数、网络地址的改动必须走。【易错】第一个坑是拿自己熟悉的环境当标准，README 里写的一些步骤其实依赖你早就装好的环境变量，别人照抄跑不起来。第二个坑是只测最理想的输入，用户第一次就输中文空格，程序直接崩。第三个坑是异常时代码确实没崩但什么也没输出，用户不知道发生了什么，这跟崩溃在体验上没区别。",
           "level": 1
         }
       ]
@@ -1410,37 +1410,37 @@
         {
           "id": "w5d7-p1",
           "topic": "闭卷默写get_json封装",
-          "desc": "写 get_json(url, **params) 返回dict。评分点四：必须写timeout；必须raise_for_status；必须捕获json解析异常；归一化返回成功给数据本体失败给ok为False带err。缺timeout或缺异常处理直接不及格",
+          "desc": "【是什么】闭卷默写 get_json 指的是：合上所有教程和上一周的代码，从空白文件开始，只靠脑子里记住的步骤写出一个可运行的联网取数函数。它检验的不是你读没读懂，而是你能不能在没有提示的情况下把 requests、超时、异常、JSON 解析、返回值结构这五件事一次性串成一段能跑的代码。【为什么】因为看懂和自己写出来之间隔着一条很宽的沟。看着代码觉得每一步都懂，属于认知层面的理解；闭卷从零写，要求每一步的细节都在记忆里，比如超时参数是元组还是数字、r.json() 之前要不要先判状态码、raise_for_status 和手动判 status_code 谁先谁后。这些细节只有在默写时才会暴露缺口。【怎么用】具体做法是准备一个空文件 net.py，不查资料，按顺序写出四块：第一块导入 requests 和 json；第二块定义 get_json(url, timeout=(3,10))，用 with 或 try 包住 requests.get；第三块调 raise_for_status 再 r.json()；第四块用 try/except 捕获 requests.Timeout、requests.ConnectionError、ValueError 三类，失败返回结构固定的失败字典。写完再对照资料核对，把写错的地方单独记成一条清单。【边界】默写要求的是能跑通主干，不要求一字不差匹配资料。变量名、函数名可以不同，四块的顺序不能乱。另外默写只覆盖单次请求，重试、缓存、并发不在这一条的要求范围内。【易错】第一个坑是写完不跑，只看一眼觉得对就翻资料，等于自欺。第二个坑是默写时偷偷瞄一眼，那默写的诊断价值就没了。第三个坑是默写卡住时死磕，超过五分钟写不下去就记下卡点直接跳过，先把整段的骨架写完再回头补。",
           "level": 3
         },
         {
           "id": "w5d7-p2",
           "topic": "五类语法主动回忆",
-          "desc": "推导式、lambda与sorted的key、datetime与timedelta、pathlib、argparse。每类写一条最易忘的细节，例如weekday周一为0、timedelta不支持月和年、store_true是不带值的布尔开关",
+          "desc": "【是什么】主动回忆是拿一张白纸，凭记忆把五类高频语法各写一个最小示例：列表推导式、字典推导式、lambda、sorted 的 key、生成器表达式。不要求写完整程序，只要求写出语法形态，并口头解释每一处的求值顺序和返回值类型。【为什么】因为被动重读资料会产生熟悉感，而熟悉感和掌握是两回事。语法这类知识的特点是容易看懂、容易忘、出错时又特别难查，唯一可靠的判断方式是合上资料自己写一遍。写不出来的地方，就是下次考试或写项目时会卡住的地方。【怎么用】五类各写三行：第一行写最小示例，比如 [x*2 for x in range(5)]；第二行写等价的 for 循环，用来验证自己理解的是求值过程而不是背下的形态；第三行写一个边界，比如 [x/y for y in range(3)] 里 y=0 会抛什么错。写完把五条对着资料核一遍，错的画圈，第二天专门复习画圈的。【边界】主动回忆只覆盖语法形态和基本求值，不覆盖性能优化和底层实现。比如推导式和生成器表达式在内存上的差别可以提一句，但不必在这一条里展开。【易错】第一个坑是只写示例不写等价循环，写出来的可能是背下来的模板。第二个坑是五类只挑自己熟的写，跳过不熟的，这正好跳过了诊断的意义。第三个坑是回忆完不核对，错的东西被再记一遍，比不复习更糟。",
           "level": 3
         },
         {
           "id": "w5d7-p3",
           "topic": "五个易错点复述",
-          "desc": "对列表调用sort再赋值会得到None；strptime格式不匹配立刻抛ValueError；os.walk返回根目录与目录列表与文件列表三元组；requests不写timeout会永久挂住；subparsers不写dest就拿不到子命令名",
+          "desc": "【是什么】五个易错点复述是把本周踩过或差点踩的五个坑，各用两三句话讲清三件事：什么情况下会触发、触发后表现成什么样、正确写法是什么。要求用口头能讲出来的话，不是抄资料原文。【为什么】因为能讲明白和能认出来是两码事，而项目里最需要的是能认出来。当程序报了一个奇怪的结果，脑子里如果存的是自己组织过的因果链，几秒就能定位到可疑点；如果存的是别人的原文句子，往往对不上号。复述的过程就是把原文翻译成自己的因果链。【怎么用】按固定模板写每条：触发场景一句话、错误表现一句话、根因一句话、正确做法一行代码。本周五个坑建议从这些里挑：可变默认值 items=[]、推导式里用闭包变量、strptime 格式与字符串不匹配、timeout 传成单个数字导致读超时不可控、except 一把抓吞掉所有异常。挑自己真踩过的，写不出就说明这条还没掌握。【边界】五个是上限不是指标，写得出三个真踩过的，比凑五个抄来的强。另外复述不替代动手改代码，讲得清但没改过，真遇到时仍然会照样踩。【易错】第一个坑是复述时说“大概就是那个意思”，说不清的就是没掌握，要标出来。第二个坑是只写正确做法不写错误表现，等于不知道自己要防什么。第三个坑是五个坑全是从资料里抄的，没有一条是自己踩过的，这种复述脑子里留不住。",
           "level": 3
         },
         {
           "id": "w5d7-p4",
           "topic": "Anki卡片写法原则",
-          "desc": "一卡一问。正面写为什么必须写timeout不写会怎样，背面写默认无限等待应写连接3秒读取10秒。禁止一卡塞多个问题，禁止整段复制代码当卡片",
+          "desc": "【是什么】Anki 卡片原则说的是：每张卡片只问一个问题、只考一个知识点，答案短到能在一屏内看完。判断标准很直接，如果一件事情中间需要停一下想两步，就该拆成两张卡。【为什么】因为卡片的功能是高频重复检索，而不是阅读材料。一张卡里塞三个点，复习时实际是在心里连续答三题，答错时无法判断错在哪一步，记忆强度会被平均掉，最后三个点都记不牢。拆成单点后，每张卡的答案非对即错，复习节奏稳定，到期调度也准确。【怎么用】写卡的动作分三步：先写出想问的那个点，用问句形式；再写出能在三秒内想起的答案，一行到两行；最后反过来问自己“如果把答案遮住，我能一口气说出来吗”，能就留，不能就拆。举例：问“requests 超时用元组时两个元素分别是什么”，答“连接超时、读取超时”，这种就是合格的单点卡；问“requests 怎么处理超时和重试”，这种一张卡装两件事，不合格。【边界】单点原则只管记忆类内容，不管理解和推理。像“为什么推导式里不该用可变对象”这类需要展开推理的，卡片只放结论，展开的部分放进笔记。另外卡片不是越多越好，一周二三十张能稳定复习的量，比一百张积压要强。【易错】第一个坑是把整段讲义抄进卡片背面，复习变成读文章。第二个坑是题干太宽泛，比如“讲一下 Python 异常处理”，这种卡永远答不完整，永远判不了对错。第三个坑是建了卡不复，Anki 的价值全在按期复习，建完就放着等于零。",
           "level": 2
         },
         {
           "id": "w5d7-p5",
           "topic": "W5与W4的能力分界",
-          "desc": "W4是函数与模块与异常的结构能力，W5是更紧的语法加标准库加requests加argparse加logging，验收标准是能独立交付一个别人能直接用的小工具",
+          "desc": "【是什么】W5 与 W4 的能力分界可以一句话概括：W4 是单点工具会用，W5 是把多个单点组合成一个能对外提供服务的小程序。W4 结束时你会写推导式、会格式化时间、会发请求、会解析参数，每一项单独拿出来都能跑；W5 结束时这些能力要能拼成一个命令行工具，输入一个城市名，输出当天的天气数据。【为什么】因为真实项目的难度不在单个知识点，而在组合处的接缝。接缝上的问题，单点练习里根本不会出现：命令行参数传进来的城市名带空格怎么处理、时间字段拿到的时区跟本地差八小时怎么换算、网络失败时要不要让程序退出码非零。这些只有做过一次完整组合才会遇到。【怎么用】判断自己站在哪一边，用三个动作自测：第一，能不能在二十分钟内从空文件写到一个能跑的命令行程序，不回看资料；第二，程序能不能同时支持人看的输出和机器解析的 JSON；第三，网络不通时程序是崩掉还是给出一句清楚的报错并以非零码退出。三条全过就站在 W5 之后，缺一条就还在中间。【边界】W5 的组合规模控制在单文件、两三百行、无持久化、无并发。多模块组织、数据库读写、异步并发属于后面阶段，不在这一条的分界里。【易错】第一个坑是把“每个单点都会”当成“能组合”，实际组装时会发现在接缝上全是没处理的分支。第二个坑是跳过命令行壳，直接在脚本里写死参数，这样永远练不到参数解析与输出格式这两块。第三个坑是追求功能多而不追求跑通，两三百行的程序加五个功能，最后一条都没验收。",
           "level": 2
         },
         {
           "id": "w5d7-p6",
           "topic": "周复习闭环四步",
-          "desc": "闭卷默写封装、对照plan.json的week5目标自评、给五个易错点各造一道选择题自测、没吃透的进Anki。四步全做完才算这一周结束",
+          "desc": "【是什么】周复习闭环是每周结束时固定走的四步：第一步把本周所有出错的地方收拢成一张错题清单；第二步合上资料，用自己的话把每一条错题的根因讲一遍；第三步挑最关键的几条，从空文件重写一遍最小可运行代码；第四步把清单和重写结果归档，作为下一周开工前五分钟的回顾材料。【为什么】因为复习如果不闭环，就会变成“看一遍就过”。四步的分工是：错题清单负责挑出薄弱点，复述负责把知识变成自己的因果链，重写负责验证手还记得，留档负责让知识点有跨周的连续性。少了任何一步，复习都会退回到重读资料的错觉里。【怎么用】时间上控制在四十分钟内：第一步十分钟收清单，按出现次数从多到少排；第二步十分钟，每条讲三十秒；第三步十五分钟，只重写前三条中最关键的一条；第四步五分钟，把清单写进一个按周命名的 md 文件，末尾加一句“下周开工先看这三条”。【边界】四步的强度随内容调整：如果本周没有明显错题，第二步可以省略，直接用第三步重写验证手感。但第一步和第四步不能省，它们是闭环的两端。【易错】第一个坑是跳过错题清单直接从第一步跳到看资料，看完感觉良好但下周照样错。第二个坑是清单写了不留档，下周全凭记忆，等于每周从零开始。第三个坑是第三步重写时又翻资料，那重写的验证作用就没了。",
           "level": 1
         }
       ]
