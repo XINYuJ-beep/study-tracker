@@ -1,0 +1,294 @@
+{
+  "module": "01",
+  "week": 5,
+  "week_title": "Python 进阶与工具",
+  "items": {
+    "w5d1": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w5d1-p1",
+          "topic": "列表推导式语法与求值顺序",
+          "desc": "[expr for x in iterable if cond]：先遍历 iterable，逐个判定 if cond（过滤），再对通过者求 expr。等价于 for 循环 + append，但快且是一个表达式。嵌套 [x*y for x in xs for y in ys] 外层在前内层在后，等价于外层 for 在外、内层 for 在里。",
+          "level": 1
+        },
+        {
+          "id": "w5d1-p2",
+          "topic": "推导式的适用与不该用的场合",
+          "desc": "适合：一层遍历 + 简单表达式 + 最多一个 if。不适合：带副作用（print/写文件/发请求）、多层嵌套超过两层、逻辑超过一行——那类一律改普通 for 或拆函数，否则可读性崩塌。推导式里不能写语句语句（赋值/return），只能写表达式。",
+          "level": 1
+        },
+        {
+          "id": "w5d1-p3",
+          "topic": "字典推导式与集合推导式",
+          "desc": "{k: v for k, v in pairs} 建字典；{x for x in xs} 建集合会自动去重且无序。常见用法：{name: score for name, score in rows if score >= 60} 过滤建表；{v: k for k, v in d.items()} 反转映射（前提是值唯一，否则后者覆盖前者、静默丢失）。",
+          "level": 2
+        },
+        {
+          "id": "w5d1-p4",
+          "topic": "lambda 的本质与边界",
+          "desc": "lambda 是无名函数、只包一个表达式、返回值就是该表达式结果，等价于 def 写一行的函数。不能写多语句、不能有 docstring。真正用途是当参数传给需要 callable 的接口：sorted(rows, key=lambda r: r[1])、max(xs, key=lambda x: x[1])、map/filter。不要写 x = lambda: ... 这种赋值方式，PEP8 明确反对，该用 def。",
+          "level": 2
+        },
+        {
+          "id": "w5d1-p5",
+          "topic": "sorted key 排序、多级排序与 reverse",
+          "desc": "sorted(seq, key=fn, reverse=True) 返回新 list，原 seq 不变；list.sort() 原地改、返回 None。key 只接受单参数的 fn，多级排序靠返回元组：sorted(rows, key=lambda r: (-r[1], r[0])) 按分数降序、同分按名字升序——元组逐项比较，第 1 项相同才看第 2 项。记住 list.sort() 的返回值是 None，写 x = lst.sort() 会得到 None。",
+          "level": 2
+        },
+        {
+          "id": "w5d1-p6",
+          "topic": "map/filter/zip 与生成器表达式",
+          "desc": "map(fn, xs) / filter(fn, xs) 返回迭代器（Python 3），不是 list，要用就直接 for，要存就 list(...)；iterator 只能迭代一次，用完即空。zip(a, b) 按最短截断，长的那边多余元素丢弃。生成器表达式 (x*2 for x in xs) 与列表推导式语法只差括号，但惰性求值、不占内存，适合大数据或接 next()/sum()。",
+          "level": 3
+        }
+      ]
+    },
+    "w5d2": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w5d2-p1",
+          "topic": "datetime 的核心四类与不可变",
+          "desc": "datetime.datetime（日期+时间）、date（仅日期）、time（仅时间）、timedelta（时间差）。对象不可变，所有“修改”都返回新对象：dt.replace(hour=0)。取当下用 datetime.datetime.now()，取 UTC 用 datetime.datetime.now(datetime.timezone.utc) 或 datetime.datetime.utcnow()。取字段用 dt.year / dt.month / dt.day / dt.weekday()（周一是 0）。",
+          "level": 1
+        },
+        {
+          "id": "w5d2-p2",
+          "topic": "strftime/strptime 格式化与解析",
+          "desc": "dt.strftime('%Y-%m-%d %H:%M:%S') 把 datetime 转字符串；datetime.datetime.strptime(s, '%Y-%m-%d') 把字符串转 datetime，格式串必须与实际串严格匹配，不匹配抛 ValueError。%Y 四位年、%m 补零月、%d 补零日、%H 24 小时、%M 分、%S 秒。两者方向相反，记住 s 开头的是 strptime（str→time）。",
+          "level": 1
+        },
+        {
+          "id": "w5d2-p3",
+          "topic": "timedelta 计算与日期加减",
+          "desc": "d2 - d1 得 timedelta，取 .days / .total_seconds()；d + timedelta(days=3) / d - timedelta(hours=2) 得新日期。常见坑：timedelta.days 只取整天、不含时间部分，要精确秒数用 total_seconds()。注意 timedelta 不支持月/年单位，加一个月要自己处理月末（1 月 31 日加 1 个月不是 2 月 31 日）。",
+          "level": 2
+        },
+        {
+          "id": "w5d2-p4",
+          "topic": "os.path 与 pathlib 的分工",
+          "desc": "os.path：join（拼路径，自动处理分隔符）、basename（文件名）、dirname（目录）、splitext（拆主名与扩展名）、exists / isfile / isdir。pathlib：Path('/a') / 'b.txt' 用 / 运算符拼路径，p.name、p.stem、p.suffix、p.parent、p.exists()、p.mkdir(parents=True, exist_ok=True)、p.glob('*.py')。新代码优先 pathlib，os.path 用于兼容旧代码。",
+          "level": 2
+        },
+        {
+          "id": "w5d2-p5",
+          "topic": "os 遍历、目录创建与批量重命名",
+          "desc": "os.listdir(d) 只列一层；os.walk(d) 递归返回 (root, dirs, files) 三元组；os.makedirs(p, exist_ok=True) 建多层目录且不因已存在而报错。批量重命名核心：先 list 全部名字再做映射，不要边遍历边改（否则可能重名覆盖、或文件被跳过）。改名前先算好新名是否冲突，冲突就拒绝执行。",
+          "level": 1
+        },
+        {
+          "id": "w5d2-p6",
+          "topic": "批量重命名的安全做法与坑",
+          "desc": "三步走：①收集 (旧路径, 新路径) 列表；②检查新路径集合内无重复、且不与现有文件冲突；③用 os.rename 或 Path.rename 执行。坑：重命名中途失败会留下半改状态，所以先打印变更清单再执行；扩展名大小写混用要统一；中文文件名在 Linux 下是 UTF-8 字节，跨系统（Windows GBK）会乱码。要可回滚就记日志。",
+          "level": 3
+        }
+      ]
+    },
+    "w5d3": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w5d3-p1",
+          "topic": "requests 基本请求与响应对象",
+          "desc": "requests.get(url, params={'q':'x'}, headers={...}, timeout=5)；resp.status_code 是 HTTP 状态码，resp.text 是字符串，resp.json() 直接解 JSON，resp.content 是 bytes。必带 timeout，否则可能永久卡死。resp.raise_for_status() 在 4xx/5xx 时抛 HTTPError，好过手动比 status_code。",
+          "level": 1
+        },
+        {
+          "id": "w5d3-p2",
+          "topic": "超时、重试与异常链",
+          "desc": "timeout=(连接超时, 读取超时) 可分开设。网络层异常：requests.exceptions.Timeout、ConnectionError、HTTPError、RequestException（父类，全捕获用这个）。重试要点：只对网络错误和 5xx 重试，4xx 重试没意义；要指数退避（1s/2s/4s），最多 3 次，超了就抛；不要用 while True 无限重试，会变成压测对方接口。",
+          "level": 2
+        },
+        {
+          "id": "w5d3-p3",
+          "topic": "公共 API 的无认证调用与限流",
+          "desc": "示例：http://api.open-meteo.com/v1/forecast?latitude=39.9&longitude=116.4&current=temperature_2m（免费无 key）；https://api.github.com/users/octocat（无 key 每分钟 60 次）。限流看响应头 X-RateLimit-Remaining / Retry-After，耗尽前要停。国内可用：高德/和风天气、聚合数据，后者需注册 key。",
+          "level": 1
+        },
+        {
+          "id": "w5d3-p4",
+          "topic": "请求头、UA 与 JSON 响应解析",
+          "desc": "headers={'User-Agent': 'mycli/1.0'}——不带 UA 某些站点直接 403。POST JSON：requests.post(url, json={'k':'v'})，json= 会自动设 Content-Type: application/json 并序列化；不要同时手写 data=json.dumps(...) 又忘设 header。resp.json() 解析失败抛 requests.exceptions.JSONDecodeError，先看 resp.text 前 200 字判断返回了什么（常见是 HTML 错误页）。",
+          "level": 2
+        },
+        {
+          "id": "w5d3-p5",
+          "topic": "会话对象 Session 复用连接",
+          "desc": "s = requests.Session() 后 s.get(...) 复用 TCP 连接与 Cookie，多个请求串行时明显快。Session 适合：同一站点多请求、需要保持登录态。注意：Session 不是线程安全的，多线程各建各的；用完 s.close()。",
+          "level": 3
+        },
+        {
+          "id": "w5d3-p6",
+          "topic": "调 API 的健壮封装（本次实战目标）",
+          "desc": "封装函数应包含：参数校验、timeout、异常分类捕获（返回结构化错误而非崩溃）、日志、可选重试、返回值归一（统一成 dict/None，不把 Response 对象漏到上层）。目标形态：def fetch_weather(city) -> dict，内部处理网络/解析/空数据三类失败，失败返回 {'ok': False, 'err': '...' }，成功返回 {'ok': True, 'temp': 12.3}。",
+          "level": 3
+        }
+      ]
+    },
+    "w5d4": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w5d4-p1",
+          "topic": "argparse 最小骨架",
+          "desc": "parser = argparse.ArgumentParser(description='...')；parser.add_argument('name', help='...') 位置参数；parser.add_argument('--count', type=int, default=3, help='...') 可选参数；args = parser.parse_args() 后取 args.name / args.count。--help 和 -h 自动生成，不用手写。",
+          "level": 1
+        },
+        {
+          "id": "w5d4-p2",
+          "topic": "位置参数与可选参数的区别",
+          "desc": "位置参数按顺序必填、不给就报错；可选参数以 -- 开头、可给 default 或 required=True（设了 required 就等于必填）。短选项 -c 长选项 --count 可同时注册：add_argument('-c', '--count', ...)，取用时用 args.count（取长名）。记：解析后属性名是去 __ 的长名。",
+          "level": 1
+        },
+        {
+          "id": "w5d4-p3",
+          "topic": "type/choices/default 与参数校验",
+          "desc": "type=int 做类型转换，转换失败 argparse 自己报错退出（退出码 2），不用自己 try。choices=['a','b'] 限定取值范围。nargs='+' 接受一个或多个（得 list）；nargs='?' 可选单个。action='store_true' 做布尔开关（出现即 True，不出现 False），不用带值。",
+          "level": 2
+        },
+        {
+          "id": "w5d4-p4",
+          "topic": "子命令 subparsers",
+          "desc": "sub = parser.add_subparsers(dest='cmd')；p_get = sub.add_parser('get')；p_get.add_argument('key')。解析后 args.cmd 判断走哪个分支。适合“一个工具多种动作”：git commit / git push 就是这个结构。dest 必须写，否则无法分支。",
+          "level": 3
+        },
+        {
+          "id": "w5d4-p5",
+          "topic": "退出码与 stderr 输出规范",
+          "desc": "正常结束 sys.exit(0)；出错 sys.exit(1)（或 >0 的其它值）。错误信息打到 stderr：print('err: ...', file=sys.stderr)，这样管道重定向时 stdout 保持干净、只有数据。这条是 CLI 工具能否被脚本复用的关键：stdout 只放结果，stderr 只放日志与错误。",
+          "level": 2
+        },
+        {
+          "id": "w5d4-p6",
+          "topic": "CLI 工具的结构与可测试性",
+          "desc": "main(argv=None) 函数 + if __name__ == '__main__': sys.exit(main())。把参数解析和业务逻辑分离：parse_args() 只负责解析，do_work(args) 做实际事，这样测试时可直接构造 args 调 do_work，不必走命令行。不要把全部逻辑塞在模块顶层。",
+          "level": 3
+        }
+      ]
+    },
+    "w5d5": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w5d5-p1",
+          "topic": "断点调试的两种入口",
+          "desc": "IDE行号断点；命令行 python -m pdb 脚本.py，命令 l 看代码 n 下一行 s 进入函数 c 继续 p 打印变量 q 退出。断点命中时暂停在该行执行之前",
+          "level": 2
+        },
+        {
+          "id": "w5d5-p2",
+          "topic": "print调试的局限与替代",
+          "desc": "污染标准输出、无法看到调用栈。替代品是 logging.debug、pdb 的栈帧、以及 traceback.format_exc() 取完整回溯文本",
+          "level": 2
+        },
+        {
+          "id": "w5d5-p3",
+          "topic": "logging五级别与传播",
+          "desc": "DEBUG小于INFO小于WARNING小于ERROR小于CRITICAL，默认只输出WARNING及以上，需 basicConfig 指定 level=logging.DEBUG。子logger默认向上传播，propagate False 可关闭",
+          "level": 2
+        },
+        {
+          "id": "w5d5-p4",
+          "topic": "handler与formatter分工",
+          "desc": "Logger只负责按级别过滤，Handler决定输出目的地 StreamHandler走stderr FileHandler写文件，Formatter决定格式。basicConfig 与手动 addHandler 只能选一条，重复调用 basicConfig 第二次起无效",
+          "level": 3
+        },
+        {
+          "id": "w5d5-p5",
+          "topic": "读栈定位真因",
+          "desc": "从最后一行读异常类型与消息，自下而上找第一个属于自己的栈帧。禁止裸 except 吞异常，改用 logging.exception 记录完整栈",
+          "level": 3
+        },
+        {
+          "id": "w5d5-p6",
+          "topic": "调试笔记六项固定结构",
+          "desc": "现象描述、复现步骤、二分定位过程、根因、修法、同类风险点。缺任何一项都不算写完调试笔记",
+          "level": 1
+        }
+      ]
+    },
+    "w5d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w5d6-p1",
+          "topic": "项目四层拆法",
+          "desc": "main负责参数解析收city，fetch_weather负责取数，transform压成三到五个字段，format_output负责输出。四层单向依赖，禁止在main里混写requests和print",
+          "level": 3
+        },
+        {
+          "id": "w5d6-p2",
+          "topic": "参数设计要覆盖实际用法",
+          "desc": "位置参数city必填；days为可选整型参数默认1；json开关为store_true布尔；unit用choices限定只接受c或f默认c，非法值由argparse报错并以退出码2退出",
+          "level": 3
+        },
+        {
+          "id": "w5d6-p3",
+          "topic": "健壮性三件套",
+          "desc": "请求必须写timeout元组(连接3秒读取10秒)，必须调用raise_for_status，必须分别捕获requests.RequestException与ValueError，报错给中文提示并返回非零退出码，禁止把traceback摊给用户",
+          "level": 3
+        },
+        {
+          "id": "w5d6-p4",
+          "topic": "输出两副面孔",
+          "desc": "面向人的输出，一行一条对齐城市名温度描述并带单位；面向机器的输出，json开关打开时只print一行json.dumps(ensure_ascii=False)，可被jq解析。同一个函数内分支，不另写一套代码",
+          "level": 2
+        },
+        {
+          "id": "w5d6-p5",
+          "topic": "open-meteo实测口径",
+          "desc": "先请求geocoding-api的search接口带name与count=1拿经纬度，再请求api.open-meteo.com的forecast接口带current参数指定temperature_2m与weather_code。weather_code是数字，需要自维护字典映射为中文",
+          "level": 3
+        },
+        {
+          "id": "w5d6-p6",
+          "topic": "可运行的四条判据",
+          "desc": "正常城市能输出；不存在的城市返回非零退出码；json开关输出能被python -m json.tool解析；断网时三秒内给可读提示而不是卡死",
+          "level": 1
+        }
+      ]
+    },
+    "w5d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w5d7-p1",
+          "topic": "闭卷默写get_json封装",
+          "desc": "写 get_json(url, **params) 返回dict。评分点四：必须写timeout；必须raise_for_status；必须捕获json解析异常；归一化返回成功给数据本体失败给ok为False带err。缺timeout或缺异常处理直接不及格",
+          "level": 3
+        },
+        {
+          "id": "w5d7-p2",
+          "topic": "五类语法主动回忆",
+          "desc": "推导式、lambda与sorted的key、datetime与timedelta、pathlib、argparse。每类写一条最易忘的细节，例如weekday周一为0、timedelta不支持月和年、store_true是不带值的布尔开关",
+          "level": 3
+        },
+        {
+          "id": "w5d7-p3",
+          "topic": "五个易错点复述",
+          "desc": "对列表调用sort再赋值会得到None；strptime格式不匹配立刻抛ValueError；os.walk返回根目录与目录列表与文件列表三元组；requests不写timeout会永久挂住；subparsers不写dest就拿不到子命令名",
+          "level": 3
+        },
+        {
+          "id": "w5d7-p4",
+          "topic": "Anki卡片写法原则",
+          "desc": "一卡一问。正面写为什么必须写timeout不写会怎样，背面写默认无限等待应写连接3秒读取10秒。禁止一卡塞多个问题，禁止整段复制代码当卡片",
+          "level": 2
+        },
+        {
+          "id": "w5d7-p5",
+          "topic": "W5与W4的能力分界",
+          "desc": "W4是函数与模块与异常的结构能力，W5是更紧的语法加标准库加requests加argparse加logging，验收标准是能独立交付一个别人能直接用的小工具",
+          "level": 2
+        },
+        {
+          "id": "w5d7-p6",
+          "topic": "周复习闭环四步",
+          "desc": "闭卷默写封装、对照plan.json的week5目标自评、给五个易错点各造一道选择题自测、没吃透的进Anki。四步全做完才算这一周结束",
+          "level": 1
+        }
+      ]
+    }
+  }
+}
