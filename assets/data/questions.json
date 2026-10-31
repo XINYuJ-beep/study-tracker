@@ -8798,7 +8798,7 @@
     "O(1)"
    ],
    "answer": 3,
-   "explain": "连续内存 + 下标计算。",
+   "explain": "答案是 O(1)。数组在内存里是连续排布，用下标直接算出地址就能跳到目标元素，跟数据量多少无关。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8813,7 +8813,7 @@
     "O(1)"
    ],
    "answer": 3,
-   "explain": "改指针即可。",
+   "explain": "答案是 O(1)。链表头插只需新建节点改两个指针，不用挪动任何已有元素，所以是常数时间。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8828,7 +8828,7 @@
     "双重循环"
    ],
    "answer": 3,
-   "explain": "如冒泡排序。",
+   "explain": "答案是双重循环。嵌套两层循环各跑一遍 n，代价就是 n 乘 n，冒泡、选择、插入排序都属于这一类。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8843,7 +8843,7 @@
     "递归"
    ],
    "answer": 2,
-   "explain": "Java HashMap 用链表+红黑树。",
+   "explain": "答案是链地址法和开放寻址。冲突后要么挂成链表，要么按探测规则找下一个空位，扩容时看负载因子。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8858,7 +8858,7 @@
     "层序"
    ],
    "answer": 2,
-   "explain": "左-根-右。",
+   "explain": "答案是升序。中序遍历按左子树、根、右子树的顺序访问，二叉搜索树恰好满足左边的都比根小。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8873,7 +8873,7 @@
     "优先队列"
    ],
    "answer": 3,
-   "explain": "取最大/最小 O(log n)。",
+   "explain": "答案是优先队列。堆顶永远是最大或最小值，插入和弹出都是 O(log n)，很适合做任务调度。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8888,7 +8888,7 @@
     "节点只存数据"
    ],
    "answer": 0,
-   "explain": "减少磁盘 IO。",
+   "explain": "答案是矮胖和范围查询友好。三层就能装下千万行，叶子节点按顺序串起来，范围查询顺着链扫就够了。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8903,7 +8903,7 @@
     "事务"
    ],
    "answer": 2,
-   "explain": "按字符分层。",
+   "explain": "答案是前缀匹配和自动补全。共用前缀的词走同一批节点，查一个前缀就顺带拿到所有候选，不用全表扫。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8918,7 +8918,7 @@
     "排序"
    ],
    "answer": 1,
-   "explain": "路径压缩 + 按秩合并。",
+   "explain": "答案是连通性问题。合并两个集合、查询两点是否相通都是接近 O(1)，配路径压缩和按秩合并后更快。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8933,7 +8933,7 @@
     "栈"
    ],
    "answer": 2,
-   "explain": "层序遍历。",
+   "explain": "答案是队列。BFS 一层一层往外扩，先进先出才能保证同层节点先处理完再进下一层，配 visited 防重复。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8948,7 +8948,7 @@
     "正权边"
    ],
    "answer": 1,
-   "explain": "负权用 Bellman-Ford。",
+   "explain": "答案是负权边。Dijkstra 贪心前提是选出的点路径已最短，负权会让后出现的小代价路径推翻它，改用 Bellman-Ford。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8963,7 +8963,7 @@
     "无向图"
    ],
    "answer": 2,
-   "explain": "有环则无拓扑序。",
+   "explain": "答案是有向无环图。有环就存在互相依赖，排不出合法先后顺序，所以入度法最后必须把所有点都消掉。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8978,7 +8978,7 @@
     "O(n²)"
    ],
    "answer": 1,
-   "explain": "最坏 O(n²)。",
+   "explain": "答案是 O(n log n)。每次从基准点对半分，递归深度 log n，每层扫一遍 n，最坏情况退化成 O(n²)。",
    "source_ref": "builtin:questions"
   },
   {
@@ -8993,7 +8993,7 @@
     "最坏 O(n)"
    ],
    "answer": 1,
-   "explain": "分治 + 合并。",
+   "explain": "答案是稳定且需要额外 O(n) 空间。归并是把两段有序序列合成一段，额外数组放合并结果，相等元素顺序不变。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9008,7 +9008,7 @@
     "O(1)"
    ],
    "answer": 0,
-   "explain": "相邻交换。",
+   "explain": "答案是 O(n²)。每轮只把最大值冒到末尾，比较和交换次数都是 n 的平方量级，优化加标志位可提前结束。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9023,7 +9023,7 @@
     "数据是链表"
    ],
    "answer": 2,
-   "explain": "无序需先排序。",
+   "explain": "答案是数据有序。二分靠中间值判断目标在哪半边，无序就只能全扫，所以要先用一次排序换多次查找。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9038,7 +9038,7 @@
     "终止条件"
    ],
    "answer": 3,
-   "explain": "否则栈溢出。",
+   "explain": "答案是终止条件。没有出口会一层层压栈直到栈溢出，写递归先想清楚什么时候返回，再写递推。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9053,7 +9053,7 @@
     "贪心"
    ],
    "answer": 0,
-   "explain": "走不通就回退。",
+   "explain": "答案是深度优先加撤销选择。先一路往下选，走不通就退回上一步把状态还原，再试下一个分支。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9068,7 +9068,7 @@
     "最优子结构 + 重叠子问题"
    ],
    "answer": 3,
-   "explain": "状态转移 + 记忆化。",
+   "explain": "答案是最优子结构和重叠子问题。大问题的最优解由小问题的最优解拼成，且小问题被反复用到，所以值得存表。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9083,7 +9083,7 @@
     "只能选 0 或 1 次"
    ],
    "answer": 3,
-   "explain": "完全背包才是无限次。",
+   "explain": "答案是每个物品只能选 0 或 1 次。所以倒序遍历容量，装完就不能再装同一件，选了无限次的是完全背包。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9098,7 +9098,7 @@
     "加密"
    ],
    "answer": 0,
-   "explain": "DP 的核心。",
+   "explain": "答案是描述子问题之间如何推导。它把大问题的解写成小问题的组合，抓住方程，代码只是照写出来。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9113,7 +9113,7 @@
     "局部最优能推出全局最优"
    ],
    "answer": 3,
-   "explain": "需证明或找反例。",
+   "explain": "答案是局部最优能推出全局最优。贪心每步都选当下最好的，但必须能证明这个结论，否则要用反例否定它。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9128,7 +9128,7 @@
     "长度"
    ],
    "answer": 0,
-   "explain": "结束早的优先。",
+   "explain": "答案是按结束时间排序。结束越早腾出的时间越多，后面能塞进更多区间，选开始时间反而容易早早占满。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9143,7 +9143,7 @@
     "霍夫曼编码"
    ],
    "answer": 1,
-   "explain": "0-1 背包要用 DP。",
+   "explain": "答案是 0-1 背包。每步按性价比挑物品会出现装不下的空位，局部最优导致整体不是最优，只能上动态规划。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9158,7 +9158,7 @@
     "进程有独立地址空间，线程共享"
    ],
    "answer": 3,
-   "explain": "线程是调度单位。",
+   "explain": "答案是进程有独立地址空间，线程共享。进程是资源分配单位，线程是调度单位，一个进程崩了不影响别的进程。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9173,7 +9173,7 @@
     "可剥夺"
    ],
    "answer": 3,
-   "explain": "四条件：互斥、请求保持、不可剥夺、循环等待。",
+   "explain": "答案是四项里唯一反面的可剥夺。互斥、请求并保持、不可剥夺、循环等待，四个同时成立才会死锁。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9188,7 +9188,7 @@
     "静态优先级"
    ],
    "answer": 2,
-   "explain": "轮流执行固定时间片。",
+   "explain": "答案是抢占式调度。每个进程跑一个固定时间片，用完就被挂起换下一个，谁也不能长时间霸着 CPU。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9203,7 +9203,7 @@
     "增加硬盘"
    ],
    "answer": 1,
-   "explain": "分页映射 + 换出。",
+   "explain": "答案是让进程以为自己有连续的大内存。地址空间靠分页映射到物理页，内存不够就把不用的页换到磁盘。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9218,7 +9218,7 @@
     "加快 CPU"
    ],
    "answer": 0,
-   "explain": "内部碎片仍存在。",
+   "explain": "答案是消除外部碎片。固定大小的页框随便放，不会留下零散的小空洞，但页内浪费的内部碎片还在。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9233,7 +9233,7 @@
     "最大页"
    ],
    "answer": 2,
-   "explain": "最近最少使用。",
+   "explain": "答案是最久未使用的页。依据是最近用过的很可能马上再用，最久没碰的优先换出，实现常用哈希表加双向链表。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9248,7 +9248,7 @@
     "索引"
    ],
    "answer": 1,
-   "explain": "2NF 消除部分依赖。",
+   "explain": "答案是传递依赖。比如学号决定系名、系名又决定系主任，这条链要拆表，2NF 消的是部分依赖。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9263,7 +9263,7 @@
     "分布式事务"
    ],
    "answer": 0,
-   "explain": "快照读。",
+   "explain": "答案是读写不阻塞。靠版本快照让读操作看到事务开始时的数据，不用加锁，读和写能同时进行不互相等。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9278,7 +9278,7 @@
     "不可重复读"
    ],
    "answer": 3,
-   "explain": "脏读在 RC 就已避免。",
+   "explain": "答案是不可重复读。同一事务里两次读同一行结果一致，脏读在更低的读已提交级别就已经解决了。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9293,7 +9293,7 @@
     "滑动窗口"
    ],
    "answer": 1,
-   "explain": "排序不是限流。",
+   "explain": "答案是快速排序。限流靠令牌桶、漏桶、滑动窗口控制通过速率，排序跟流量控制毫无关系。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9308,7 +9308,7 @@
     "先更新库再删缓存"
    ],
    "answer": 3,
-   "explain": "延迟双删可缓解。",
+   "explain": "答案是先更新数据库再删缓存。顺序反了容易读到旧值，删完再补一次延迟双删，降低并发下写回旧数据的概率。",
    "source_ref": "builtin:questions"
   },
   {
@@ -9323,7 +9323,7 @@
     "ID 生成 + 映射存储 + 跳转"
    ],
    "answer": 3,
-   "explain": "Base62 编码。",
+   "explain": "答案是 ID 生成、映射存储加跳转。长链接转成短码存进 KV，访问短码查出原址做 302 重定向。",
    "source_ref": "builtin:questions"
   },
   {
