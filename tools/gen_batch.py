@@ -100,7 +100,11 @@ def load_bank(week):
     with open(p, encoding='utf-8') as f:
         for ln, line in enumerate(f, 1):
             if line.strip():
-                rows.append((ln, json.loads(line)))
+                r = json.loads(line)
+                if str(r.get('item_id', '')).endswith('exam'):
+                    r['item_id'] = ''
+                    r['day'] = 0
+                rows.append((ln, r))
     return rows
 
 
@@ -108,7 +112,7 @@ def validate_week(week, rows, module_data, existing_mcq, anchor=True):
     errs = []
     items = module_data.get('items', {})
     pat = re.compile(r'w%dd[1-7]' % week)
-    wk_items = sorted([k for k in items if pat.fullmatch(k)], key=lambda x: int(x[3:]))
+    wk_items = sorted([k for k in items if pat.fullmatch(k)], key=lambda x: int(x.split('d')[1]))
     expect_total = len(wk_items) * PER_ITEM + EXAM
     if len(rows) != expect_total:
         errs.append('总量 %d != %d（%d item ×%d + %d）' % (len(rows), expect_total, len(wk_items), PER_ITEM, EXAM))
