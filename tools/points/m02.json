@@ -1,0 +1,1159 @@
+{
+  "module": "02",
+  "week_titles": {
+    "13": "TypeScript 基础",
+    "14": "TypeScript 进阶",
+    "15": "前端工程化",
+    "16": "Vue 组件基础"
+  },
+  "items": {
+    "w13d1": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w13d1-p1",
+          "topic": "类型注解的作用",
+          "desc": "给变量、函数参数和返回值标上类型，TypeScript 编译器就能在编译期检查传参是否匹配。它不改变运行时行为，编译后类型全部被擦除。作用有三：一是提前暴露拼写错误和参数个数错误；二是让编辑器提供补全和跳转；三是类型本身就是文档，读函数签名就能知道怎么调用。记住这条，后面理解「为什么 TS 报错但 JS 能跑」就通了。",
+          "level": 1
+        },
+        {
+          "id": "w13d1-p2",
+          "topic": "基础类型有哪些",
+          "desc": "string、number、boolean、null、undefined、symbol、bigint、object，加上两个特殊类型 any 和 unknown。any 关闭检查，unknown 是安全版 any——必须先做类型判断才能用。数组有两种写法 number[] 和 Array<number>，函数类型写成 (a: number) => string。",
+          "level": 1
+        },
+        {
+          "id": "w13d1-p3",
+          "topic": "any 与 unknown 的区别",
+          "desc": "any 是「关掉类型检查」：任何值都赋给 any，any 也能调用任何属性、任何方法，所以写 any 的地方编译器一律不报错，错误要等运行时才炸。unknown 是「安全的上限类型」：它能接收任何值，但不能直接调属性、不能直接赋给具体类型的变量，必须先做类型收窄（typeof、instanceof、自定义守卫）才能使用。一句话记：any 是往下传染，unknown 是先拦后放。实际项目对外来数据（接口返回、JSON.parse 结果、第三方回调参数）优先用 unknown，逼自己写守卫。",
+          "level": 2
+        },
+        {
+          "id": "w13d1-p4",
+          "topic": "函数参数与返回值",
+          "desc": "函数参数与返回值是类型注解最值钱的两个位置。参数注解写在形参后面（name: string），返回值注解写在参数表右括号后（function add(a: number, b: number): number）。这层注解的意义是：调用方传错类型的实参、被调方返回错类型的值，都在编译期报错，而不必等到运行时靠打印排查。注意几个细节：可选参数写 a?: number，等价于 a: number | undefined，且必须排在必选参数之后；默认参数 b: number = 1 会让 b 被推断为非 undefined 的 number；返回 void 表示不关心返回值，返回 never 表示函数永不正常返回（抛异常或死循环）。",
+          "level": 2
+        },
+        {
+          "id": "w13d1-p5",
+          "topic": "类型推断规则",
+          "desc": "类型推断是 TS 在你没写注解时自己猜类型，规则分三条主线。第一条是变量初始化：let n = 1 推成 number，const n = 1 推成字面量 1，因为 const 不可重新赋值，类型可以窄到定值。第二条是函数返回值：根据 return 语句反推，多个 return 分支会合并成联合类型；函数没有 return 就是 void。第三条是对象与数组：字面量对象的属性会被推成可变的宽类型（string 而不是字面量），数组会推成元素类型的数组而不是定长元组。最坑的两处是：let 声明的对象属性可以被赋值成任意同类型值，所以宽化（widening）经常悄悄吃掉你想要的窄类型；回调函数的参数如果不写注解，上下文类型（contextual typing）会从调用处反推，看着像没写其实写了。实用结论是：能靠推断就别写注解，但函数导出、公共 API、复杂对象一定要写，因为推断结果会随实现变化，写死注解等于给自己上锁。",
+          "level": 3
+        },
+        {
+          "id": "w13d1-p6",
+          "topic": "tsconfig 编译配置",
+          "desc": "tsconfig.json 是编译总控。常用项：target 决定编译到哪个 JS 版本，module 定模块体系，strict 开全套严格检查，outDir 定输出目录，rootDir 定源码目录，include 和 exclude 控制编译范围，noEmit 只检查不产出文件。命令行用 tsc --init 生成模板，tsc -w 开监听模式实时编译。",
+          "level": 3
+        }
+      ]
+    },
+    "w13d2": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w13d2-p1",
+          "topic": "接口定义对象结构",
+          "desc": "接口描述的是一类对象该长什么样：有哪些属性、各是什么类型、能不能省略、能不能改。写 interface User { id: number; name: string } 之后，任何声明成 User 的对象都必须同时具备 id 和 name，多一个属性在直接赋值字面量时会报错，少一个必定报错。接口是纯编译期概念，编译产物里什么都没留下，所以它不产生运行时开销，也不能用 instanceof 判断。它的核心价值是把结构约定从各处散落的代码里抽出来集中定义，改结构只改一处。实际使用中三个要点：一是接口可合并（同名 interface 声明会自动合并，适合给第三方库做扩展，type 做不到）；二是接口能描述函数、数组、可索引、可构造几乎所有对象形状；三是接口名建议加前缀 I 或直接用业务名词，项目里统一就行。接口和 type 在大多数场景能互换，需要合并声明或描述对象结构时用 interface，需要联合、交叉、条件类型时用 type。",
+          "level": 1
+        },
+        {
+          "id": "w13d2-p2",
+          "topic": "可选属性与只读属性",
+          "desc": "可选属性和只读属性是接口里最常用的两个修饰符，都写在属性名后面。可选属性加问号：name?: string，表示这个属性存在时必须是 string，不存在也合法，等价于 name: string | undefined 但有细微差别——可选属性可以整条不写，而显式写 undefined 的类型必须把键写出来。打开 exactOptionalPropertyTypes 后，这两种才严格区分。访问可选属性必须先把 undefined 排除，否则 strict 模式下直接报错，写法是 if (u.name !== undefined) 或 u.name ?? '匿名'。只读属性加 readonly：readonly id: number，赋值发生在初始化那一刻，之后任何赋值都报错。注意 readonly 是编译期约束不是运行时冻结，Object.freeze 才是运行时手段，且 readonly 只在编译期生效，通过 as any 仍能绕过。数组的只读要用 ReadonlyArray<T> 或 readonly T[]，后者会让 push/pop 全部报错，适合做函数入参防止被改动。",
+          "level": 1
+        },
+        {
+          "id": "w13d2-p3",
+          "topic": "接口继承与扩展",
+          "desc": "用 extends 复用其他接口：interface Admin extends User { role: string }，一个接口可同时 extends 多个。也可以用交叉类型实现组合：type Admin = User & { role: string }。两者功能相似，但接口能声明合并、能被 class implements，交叉类型更灵活，适合临时拼类型。",
+          "level": 2
+        },
+        {
+          "id": "w13d2-p4",
+          "topic": "索引签名",
+          "desc": "索引签名用来描述「一批名字不确定但类型相同的属性」，写法 [key: string]: number，意思是任何字符串下标的取值都是 number。它有三个必须记住的规则：一、索引签名的值类型必须能覆盖同对象里所有显式属性的类型，比如同时写 name: string 和 [k: string]: number 会报错，因为 name 不满足 number；二、下标只能是 string、number、symbol 及其组合；三、用 number 下标访问时，TypeScript 实际按 string 处理。典型用途是缓存表、计数字典、配置项集合。如果想要更精确的形状，就不要用索引签名，改用 Record<K, V> 或映射类型。",
+          "level": 2
+        },
+        {
+          "id": "w13d2-p5",
+          "topic": "函数类型在接口中",
+          "desc": "在接口里也能直接写函数类型，这是给对象规定「方法签名」的标准做法。两种写法等价：第一种是方法式 `login(user: string): boolean`，第二种是属性式 `login: (user: string) => boolean`。两者在类型检查上几乎一样，但有一处关键差别：方法式是双变的（bivariant），属性式在 strictFunctionTypes 下是逆变的（contravariant）。通俗讲，给回调、给事件处理器这种「别人传给你的函数」用属性式，类型更严格更安全；给自己类里定义的普通方法用方法式更省事。还有两个常见误区：一是类实现接口时必须用 `implements` 而不是 `extends`，extends 是继承类会带来实现；二是接口里不能写函数体，只写签名，写实现就报错。需要多签名时不是重载写在接口内，而是接口本身可以多次声明同名方法被合并成重载集。",
+          "level": 3
+        },
+        {
+          "id": "w13d2-p6",
+          "topic": "结构化类型兼容",
+          "desc": "结构化类型（鸭子类型）兼容规则是 TypeScript 类型系统的地基：判断两个类型是否兼容只看结构是否吻合，不看声明来源，不看类名。只要目标类型要求的成员源类型都有、且类型兼容，就认为可赋值。这就带来一个反直觉现象——把带多余属性的对象字面量直接赋给一个接口变量会报「多余的属性」错误，但如果先赋给一个中间变量再传进去就不报错。原因是新鲜度检查（excess property check）只对字面量做。理解这条，才能解释「为什么我的对象明明有这些字段还是赋值失败」这类问题。",
+          "level": 3
+        }
+      ]
+    },
+    "w13d3": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w13d3-p1",
+          "topic": "函数重载的写法",
+          "desc": "重载让你给同一个函数名写多个签名，最后一个实现签名对外不可见。写法固定三段：先是若干条重载签名，每条只有参数和返回值，没有函数体；最后一条是实现签名，参数类型要能兼容前面所有重载，通常写成宽松的 any 或联合类型，返回值也写宽松。调用方只看得到重载签名，看不到实现签名，所以实现签名参数写太窄就会编译报错。重载只对「参数个数或类型不同导致返回类型也不同」的场景有意义，比如 `createElement(tag: 'div'): HTMLDivElement` 与 `createElement(tag: 'span'): HTMLSpanElement`。如果只是参数类型不同但返回值一样，用联合类型加类型收窄更简单，不必上重载。三条常见坑：重载顺序从具体到宽泛，宽泛写前面会吃掉后面的；箭头函数不能写重载，要用函数声明或重载对象类型；重载签名数量不设上限但超过三四个基本说明设计该拆了。",
+          "level": 1
+        },
+        {
+          "id": "w13d3-p2",
+          "topic": "重载与联合类型的取舍",
+          "desc": "重载（overload）适合「同一个函数，返回类型随入参类型变化」的场景：先写若干行只有签名的声明，最后写一行实现签名，调用处只会看到前面的声明。联合类型适合「返回类型统一、只是入参形态不同」的场景，一个签名配内部收窄就够了。怎么选有个简单判据：如果不同入参需要返回不同且调用方会用到的类型，用重载；如果返回类型一致、只是接受多种入参，用联合类型。反过来说，能用联合类型就不要上重载，重载的代价是声明多、实现与声明容易脱节、错误提示更难读。",
+          "level": 1
+        },
+        {
+          "id": "w13d3-p3",
+          "topic": "泛型的基本作用",
+          "desc": "泛型的核心作用是让函数的输入输出之间保持类型关联，而不是把它变成 any。反例先看清楚：如果不加泛型写 `function first(arr: any[]): any`，调用方拿到的返回值是 any，一路 any 下去类型系统就废了；写成 `arr: string[]` 又只能处理字符串。加泛型写 `function first<T>(arr: T[]): T`，传 number[] 就返回 number，传 string[] 就返回 string，一次编写任意类型都拿到正确类型。这就是泛型真正的价值：不是「能接收多种类型」，而是「记住是哪种类型并把它往下传」。所以判断一段代码是不需要泛型，就看函数内部是否把某个参数类型又用在了返回值、其他参数或内部变量上；如果类型只出现在一个地方，泛型是多余的，直接用具体类型更清楚。",
+          "level": 2
+        },
+        {
+          "id": "w13d3-p4",
+          "topic": "泛型参数与实参推断",
+          "desc": "泛型参数 T 是形参，调用时传进来的真实类型是实参，推断就是 TS 自动帮你填这个实参的过程。多数情况不用手写 `<string>`，因为编译器能从传入的实参反推出 T。比如 `function wrap<T>(v: T): T[]` 调 `wrap(1)` 时 T 被推成 number；调 `wrap('a')` 推成 string 字面量。推断失败的典型场景是泛型只出现在返回值里，`function make<T>(): T` 调 `make()` 时没有任何输入可推，T 只能落到 unknown，必须显式写 `make<string>()`。多个泛型参数时按位置从左到右推断，无法推出的就变成 unknown。使用推断还是显式写：能推断就让它推断，代码更干净；接口返回值、公共 API、复杂联合类型建议显式标注，因为推断结果可能宽化成字面量或 unknown。想强制不让推断变宽，可以给 T 加 extends 约束或用 as const。",
+          "level": 2
+        },
+        {
+          "id": "w13d3-p5",
+          "topic": "泛型约束 extends",
+          "desc": "泛型约束用 `extends` 限定 T 必须具备哪些成员，本质是「给泛型参数画一个下限」。不写约束时 T 是 unknown 的待遇，函数体里 `arg.length` 直接报错；写 `function len<T extends { length: number }>(arg: T)` 之后就能安全访问 length。约束有三层用途：第一是允许访问成员，这是最基本的；第二是参与推断，`<T extends string>` 会让传进来的字面量保留更窄的类型；第三是用 `keyof` 做关联约束，`function get<T, K extends keyof T>(obj: T, key: K): T[K]` 能保证 key 一定属于 obj 且返回值类型精确对应，这是类型体操最常用的骨架。多个条件用交叉写法 `<T extends A & B>`。注意约束不是运行时校验，传错类型是编译期报错，跑起来的对象没有被检查过。还有一处：默认类型写在约束后面 `<T extends string = 'a'>`，顺序不能反。",
+          "level": 3
+        },
+        {
+          "id": "w13d3-p6",
+          "topic": "泛型的常见误用",
+          "desc": "泛型的三种典型误用：一、把泛型当万能标签，函数体里根本没用到 T，只是把它当成一个装饰写在参数上，此时 T 会被推断成 unknown 或任意类型，泛型完全白写；二、该用具体类型的地方硬造泛型，比如只需要 string 的函数写成 function f<T extends string>(x: T)，结果调用处类型推断变成字面量类型，反而难用；三、约束写成 extends any 或 extends object 这种不起作用的约束，等于没约束，泛型参数依然能传入不合法的结构。正确姿势是：先确定入口类型与出口类型需要保持什么关系，再用泛型把这个关系表达出来，最后加必要约束把非法实参挡住。",
+          "level": 3
+        }
+      ]
+    },
+    "w13d4": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w13d4-p1",
+          "topic": "联合类型的定义",
+          "desc": "联合类型用竖线表示「或」：type ID = string | number，表示 ID 要么是 string 要么是 number，它只允许使用两个成员的公共成员。交叉类型用 & 表示「且」：type Staff = Employee & { dept: string }，表示同时具备两边的全部成员，缺一个就报错。两者最容易被搞混的地方是：对象类型做交叉相当于字段合并（后出现的同名属性类型取交集，可能是 never）；做联合则是二选一。交叉更多用于扩展或混入，联合更多用于状态分支。注意交叉同名属性类型冲突时会静默变成 never，而不是报错。",
+          "level": 1
+        },
+        {
+          "id": "w13d4-p2",
+          "topic": "交叉类型的定义",
+          "desc": "交叉类型用 & 把多个类型拼成一个，语义是「同时满足」。type Staff = Employee & { dept: string } 表示这个对象既要具备 Employee 的全部成员，也要有 dept，缺一个都不合法。它和接口继承看着像，区别在于交叉可以作用于任意类型（包括 interface、type、字面量、泛型参数），而且不需要改动原始类型定义，适合给已有类型临时拼装新形状、做 mixin 混入。最需要警惕的是同名属性冲突：如果两边同名字段类型不同，结果不是报错，而是该属性类型静默变成 never，整个类型随之不可用，排查时极难发现。所以做交叉前先确认两边没有同名异型属性。另外，交叉与联合的优先级里 & 高于 |，写 A | B & C 时先算 B & C，需要改变顺序必须加括号。",
+          "level": 1
+        },
+        {
+          "id": "w13d4-p3",
+          "topic": "字面量类型",
+          "desc": "字面量类型就是把具体值当成类型用，`'success'`、`42`、`true` 本身都是类型，只接受这唯一一个值。它最常见的搭档是联合类型，`type Status = 'idle' | 'loading' | 'success' | 'error'` 比用 string 强得多，写错一个字就编译报错，在 switch 里还能被穷尽性检查抓到漏分支。三个必须掌握的点：第一，`let s = 'ok'` 推断成 string，`const s = 'ok'` 推断成字面量 'ok'，想给 let 或对象属性也保留字面量要加 `as const`；第二，`as const` 会连带把对象和数组变成 readonly，数组还会变只读元组；第三，函数参数想要字面量联合时，直接写联合即可，不要期待从 string 自动收窄，string 不能赋给字面量类型。工程上这套最典型用途是接口字段的状态枚举、事件名映射、路由表 key，用字面量联合替代 enum，包体积更小、类型更准。",
+          "level": 2
+        },
+        {
+          "id": "w13d4-p4",
+          "topic": "typeof 与 keyof 运算符",
+          "desc": "typeof 用在类型位置，取的是一个变量或属性在编译期的类型，比如 const n = 1 时 typeof n 是 1 这个字面量类型，let m = 1 时是 number。它只能用于有值的标识符，不能用于类型名本身。keyof 用在类型位置，取的是一个类型所有键名组成的联合类型，比如 keyof Person 结果是 'name' | 'age'。两者经常组合：K extends keyof T 加 T[K] 就是最常用的安全取值签名；typeof obj 再 keyof，可以从一个已存在的常量对象反推出它的键集合，实现常量的自动补全与校验。",
+          "level": 2
+        },
+        {
+          "id": "w13d4-p5",
+          "topic": "类型收窄的常用手段",
+          "desc": "类型收窄的常用手段有五种：typeof 判基础类型，instanceof 判类实例，in 判某个属性是否存在，字面量相等（如 if (status === 'ok')）判可辨识联合的判别字段，以及自定义类型守卫函数。前四种由编译器内置识别；第五种靠谓词 x is T 让编译器信任你的判断。收窄只在分支内有效，出了分支就回到原类型。常见坑有两个：一是对可选属性做收窄前忘了先判 undefined，导致分支里依然报错；二是把收窄结果赋给新变量后再用旧变量，旧变量的类型不会跟着变，因为收窄靠的是控制流分析而非值的追踪。",
+          "level": 3
+        },
+        {
+          "id": "w13d4-p6",
+          "topic": "类型守卫函数",
+          "desc": "类型守卫函数是一个返回布尔值的函数，返回值签名写成 value is T（谓词），编译器会把判断为 true 的分支里该变量的类型收窄成 T。写法要点：函数入参用 unknown 或宽联合类型，函数体里做真实的运行时校验（typeof、属性存在性、构造器判断），最后 return 布尔。它与断言（as T）本质不同：断言是编译期强行改口、不做任何运行时检查，守卫是真实检查后让编译器采信，所以守卫安全、断言有可能把错误藏起来。注意判据必须真的能证明类型，否则就是在骗编译器。",
+          "level": 3
+        }
+      ]
+    },
+    "w13d5": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w13d5-p1",
+          "topic": "模块的导入导出语法",
+          "desc": "模块的导入导出是 TypeScript 里最容易和 JavaScript 混淆的一块，因为 TS 同时支持两套写法。第一套是 ES 模块，用 `export` 导出、`import` 导入，编译目标设为 ES2015 以上时保持原样，这是现在的标准做法。第二套是 CommonJS，用 `module.exports` 和 `require`，只在目标为 CommonJS 时由 TS 转换生成。写代码时统一用 ES 模块的 import/export，不要手写 require，否则类型推断会断掉、`esModuleInterop` 一开还会报错。四种导出形态要分清：具名导出 `export const a`、默认导出 `export default`、聚合导出 `export * from './x'`、类型专用导出 `export type`。最后一条最有用，`export type` 导出的东西编译后被整个删除，不会被当成值引用，能避免循环依赖打包时出现的运行时 undefined。",
+          "level": 1
+        },
+        {
+          "id": "w13d5-p2",
+          "topic": "export default 与具名导出",
+          "desc": "`export default` 和具名导出有三个实质区别。第一，默认导出每个文件只能有一个，具名导出可以有任意多个。第二，导入时的名字可以随便起，`import anything from './x'` 都行，而具名导出必须写对名字，否则报错。第三，也是最重要的：默认导出在类型层面不便于重命名检查和自动补全，重构时 IDE 改名会漏掉，具名导出能可靠地批量重命名。所以工程上倾向于优先用具名导出，只在「这个文件就导出一样东西」时用默认导出（比如 React 组件文件）。还有一个坑：`export default` 后面接一个匿名函数或对象字面量时，TS 的类型推断会略微退化，最好先声明再默认导出。另外注意 `import x from` 拿到的默认导出，在某些配置下需要 `esModuleInterop: true` 才能和 CommonJS 包正确互操作。",
+          "level": 1
+        },
+        {
+          "id": "w13d5-p3",
+          "topic": "声明文件 .d.ts 的作用",
+          "desc": "声明文件 `.d.ts` 是给「没有类型信息的 JavaScript」补上类型描述的文件。它里面只有类型，没有任何实现代码：不写函数体、不写变量值，只写形状。编译时 TS 读取它做检查，产出 JS 时它被整体丢弃，所以放多少都不影响包体积。它的存在意义有两个：一是给你自己的全局变量或非 TS 引入的模块提供类型；二是第三方库发布时用它向使用者描述 API。命名规则上，`xxx.d.ts` 描述的是同名模块 `xxx`。存放位置有两种：与被描述的 JS 同目录同名，或者放在 `types` 目录里并通过 `typeRoots`/`paths` 告诉编译器。要记住 d.ts 里最常见的关键字是 `declare`：`declare var`、`declare function`、`declare module`、`declare global`，全部表示「这个东西在运行时已经存在，我只是告诉你它的类型」。",
+          "level": 2
+        },
+        {
+          "id": "w13d5-p4",
+          "topic": "内置类型库与 @types 安装",
+          "desc": "内置类型库是 TS 自带的一套环境声明，按 `lib` 配置项选择性加载。`lib: [\"ES2020\", \"DOM\"]` 表示同时拥有 ES2020 的标准对象类型和浏览器的 DOM 类型；写 Node 项目时应该去掉 DOM、加上 `@types/node`。常见配置误区：`target` 改了但 `lib` 没同步改，结果用了 `Array.prototype.at` 却报不存在，就是因为 lib 还停在更早的版本。第三方库的类型有两种分发方式：一是包内自带 `types` 字段指向自己的 d.ts（如 vue、axios）；二是单独发布成 `@types/xxx` 包，用 `npm i -D @types/xxx` 安装并自动被编译器发现。判断某个库有没有类型，先看包的 package.json 有没有 `types`/`typings` 字段，再看 `@types` 目录下有没有同名包。两个都没有，就得自己写声明或者装 `@types/xxx` 之外的社区方案。",
+          "level": 2
+        },
+        {
+          "id": "w13d5-p5",
+          "topic": "全局声明与模块声明",
+          "desc": "声明分两大作用域：全局声明和模块声明。判断依据是文件里有没有顶层的 `import` 或 `export`——有就是模块，没有就是全局脚本。全局声明写在 `.d.ts` 顶层，`declare const APP_VERSION: string` 这样一写，整个项目任何文件都能直接使用，不需要 import，典型用于 window 上挂的 SDK、构建时注入的常量。要在模块文件里扩全局，必须用 `declare global { }` 包一层，而且这个文件本身必须是模块。模块声明是描述「一个文件/包」的形状，写法是 `declare module 'foo' { export function bar(): void }`，把 foo 视为一个虚拟模块。还有个高频场景是扩展现有模块的类型，比如给 `express` 的 Request 加字段，用 `declare module 'express' { interface Request { user?: User } }` 配合接口合并即可，不要重新定义接口。",
+          "level": 3
+        },
+        {
+          "id": "w13d5-p6",
+          "topic": "声明文件编写常见坑",
+          "desc": "写声明文件有五个高频坑。第一，忘了加 `declare`，直接写 `const a = 1`，TS 会当成真实实现并要求有初值，编译出错。第二，把 `.d.ts` 当普通 ts 文件写实现逻辑，`function f() { return 1 }` 在 d.ts 里是语法不允许的，必须写成没有函数体的签名。第三，默认导出的声明写法容易错，`declare module 'x'` 里面要写 `export default function f(): void`，不能在外面单独 `export default`。第四，`export =` 与 `export default` 混用，前者是 CommonJS 单导出语法，同时用会导致 `can only be default-exported` 类错误，且使用方必须配 `esModuleInterop`。第五，声明文件放错位置不被识别——放在 src 以外的目录又没配 `include`，编译器根本不读。排查手段固定：`tsc --traceResolution` 看解析路径，或者 `tsc --noEmit` 单独跑一遍只查类型不产文件。",
+          "level": 3
+        }
+      ]
+    },
+    "w13d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w13d6-p1",
+          "topic": "JS 到 TS 的迁移步骤",
+          "desc": "JS 项目迁移到 TS 的正确步骤是「装依赖、建配置、改后缀、逐个文件过类型」四步，而不是一次性全改。第一步装 typescript 与需要的 @types，跑 npx tsc --init 生成 tsconfig.json，把 strict 先设成 false；第二步配置 include/exclude，把 node_modules、dist、build 全部排除，只圈住 src；第三步把 jsconfig 或原有构建链里的入口后缀从 .js 改成 .ts，但允许 .js 与 .ts 混存；第四步每次只挑一个模块迁移，改完立刻 `tsc --noEmit` 过一遍类型。绝对不要一上来就开 strict，因为 strict 会把整个老项目的隐式 any 全部报出来，几千条错误会直接劝退。",
+          "level": 1
+        },
+        {
+          "id": "w13d6-p2",
+          "topic": "渐进式改造：allowJs 与 checkJs",
+          "desc": "渐进式改造靠两个编译器开关：allowJs 和 checkJs。allowJs 让 tsc 把 .js 文件也纳入编译与推断，能和 .ts 混存；checkJs 让 tsc 对 .js 文件也做类型检查。差别是关键——只开 allowJs 不开 checkJs，JS 文件的基本类型能从用法推出来但不会被报错，用来给导出符号提供类型；两个都开，JS 文件本身也会被挑错。所以标准渐进路径是：先 allowJs + noEmit，再单独对某几个目录开 checkJs，最后才改后缀成 .ts。",
+          "level": 1
+        },
+        {
+          "id": "w13d6-p3",
+          "topic": "隐式 any 的处理",
+          "desc": "隐式 any 是迁移路上最大的拦路虎，处理顺序影响体感。先在 tsconfig 里设 noImplicitAny: false 让项目能编译通过，然后逐文件打开并修。修法有三类：一是给函数参数补类型注解；二是给变量补类型或让它从明确初始化值推断；三是给对象字面量补 interface。第三个利器是 `// @ts-expect-error` 而不是 `// @ts-ignore`，前者在错误消失后会自己报错提醒你清理，后者会一直躺着变成技术债。",
+          "level": 2
+        },
+        {
+          "id": "w13d6-p4",
+          "topic": "第三方库无类型时的兜底",
+          "desc": "第三方库没有类型时有三条兜底路径，按优先级从高到低走。第一，先查有没有 @types/包名 或者包本身自带 types 字段，npm view 包名 types 就能看出来；第二，如果只在少数地方用到，写一个最小的本地声明文件，比如 `declare module 'foo' { const x: any; export default x; }`，先让它编过去；第三，如果这个库是核心依赖、调用点多，就装 community 版本的类型或者自己写完整 .d.ts，同时把 tsconfig 的 typeRoots 指到自建目录。不要一律 any 了事，那等于丢掉这一层的类型保护。",
+          "level": 2
+        },
+        {
+          "id": "w13d6-p5",
+          "topic": "迁移顺序：从叶子到核心",
+          "desc": "迁移顺序应该「从叶子到核心」而不是从入口往下。叶子指不依赖任何内部模块的纯工具函数、常量表、类型定义，它们入度为零，改成 TS 之后只往外提供类型，出问题的面最小；接着是数据层与 API 封装，这一层能靠后端接口定义把类型一次锁定；再往后是业务逻辑与组件；最后才是入口与全局状态。反过来从入口改，等于把整棵依赖树一起拖进类型报错，诊断成本会爆炸。",
+          "level": 3
+        },
+        {
+          "id": "w13d6-p6",
+          "topic": "改造后的回归验证",
+          "desc": "改造后必须做回归验证，四件事缺一不可。第一，跑 `tsc --noEmit` 确认零错误，注意是零错误不是零输出；第二，跑原有单元测试与集成测试，类型改了不等于逻辑没改，尤其是把 any 收窄成具体类型时对象拷贝和可选链行为可能变；第三，跑一次生产构建，检查产物体积与 tree-shaking 是否异常，声明文件与 type-only 导入如果写错会误留下运行时引用；第四，在 CI 里把 `tsc --noEmit` 加为必需检查，防止后续提交把类型重新打穿。",
+          "level": 3
+        }
+      ]
+    },
+    "w13d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w13d7-p1",
+          "topic": "内置工具类型总表",
+          "desc": "TypeScript 内置工具类型一共十来个，必须记熟的十张是：Partial、Required、Readonly、Pick、Omit、Record、Exclude、Extract、NonNullable、ReturnType。它们全部靠映射类型和条件类型实现，不是编译器魔法：Partial<T> 就是把每个属性加上可选修饰，Readonly<T> 就是把每个属性加上 readonly 修饰，Pick 是映射时只保留指定 key，Record 是先约束 key 的类型再批量造属性。默写的时候能写出 `{ [K in keyof T]?: T[K] }` 这行就说明真懂了，而不是背名字。",
+          "level": 1
+        },
+        {
+          "id": "w13d7-p2",
+          "topic": "Partial 与 Required",
+          "desc": "Partial 和 Required 是一对反向操作。Partial<T> 把 T 的所有一层属性变成可选，常见用途是补丁对象——更新接口只需传要改的字段，直接 `update(id, patch: Partial<User>)`；Required<T> 反过来把所有可选属性变成必选，用来校验「配置最终必须齐备」。两个关键限制：它们只作用于第一层，嵌套对象不会递归展开，要递归就必须自己写递归映射类型或者用 deep-partial 这类库；它们也不影响属性的值类型，只是加减可选修饰符，也不处理 readonly。",
+          "level": 1
+        },
+        {
+          "id": "w13d7-p3",
+          "topic": "Pick 与 Omit",
+          "desc": "Pick 和 Omit 是两把筛子，方向相反。Pick<T, K> 从 T 里只留下 K 指定的几个键，比如 `Pick<User, 'id' | 'name'>`；Omit<T, K> 是排除 K 指定的键，剩下全部保留，比如 `Omit<User, 'password'>` 做对外返回类型。选择的判据是：要留的字段少就用 Pick，要删的字段少就用 Omit。两个参数里的 K 必须受 `keyof T` 约束，写错键名 TS 会直接报错，这正是它们比手写 interface 安全的地方——字段改名的时候类型会自动跟上。",
+          "level": 2
+        },
+        {
+          "id": "w13d7-p4",
+          "topic": "Record 与 Exclude",
+          "desc": "Record 和 Exclude 常用在字典与枚举过滤场景。Record<K, V> 造一个键为 K、值为 V 的对象类型，`Record<string, number>` 就是任意字符串键映射到数字，`Record<'a' | 'b', User>` 则要求这两个键必须都在且值都是 User；配合 keyof 能实现 `Record<keyof T, boolean>` 这种全字段开关表。Exclude<T, U> 从联合类型 T 里去掉能赋给 U 的成员，比如 `Exclude<'a' | 'b' | 'c', 'a'>` 得 `'b' | 'c'`，常用来从事件名联合里剔除已废弃的项，也常和 keyof 组合做「除某几个键之外」的类型。",
+          "level": 2
+        },
+        {
+          "id": "w13d7-p5",
+          "topic": "交叉与联合的再组合",
+          "desc": "工具类型可以再组合，这是它们真正的威力所在。交叉类型 & 把多个对象类型合成一个要求全部满足的类型，联合类型 | 则是「或」；可以写出 `Partial<Pick<User, 'name' | 'age'>>` 这种嵌套两层拿子集的补丁类型，也可以 `Omit<A & B, 'id'>` 先把两个接口合并再剔除冲突字段。组合时两个原则必须守住：一是尽量给组合结果起个别名（`type UserPatch = ...`），不然错误提示会打出一长串嵌套类型没法看；二是别写超过三层的嵌套，超过三层说明原始类型设计有问题，应该拆成具名中间类型。",
+          "level": 3
+        },
+        {
+          "id": "w13d7-p6",
+          "topic": "类型复习的卡片化方法",
+          "desc": "类型知识的复习必须卡片化，否则看一遍就忘。做法是把每个工具类型做成一张卡，正面只写题目（例如「写出 Partial<T> 的实现」），背面写三样东西：一行源码实现、一个真实业务用例、一个常见错误写法。卡片按三类分组——工具类型、泛型语法（约束/默认值/推断）、类型推断规则（as const、typeof、keyof）。每周固定抹卡一轮，只把没过的一次归入下轮，连续两轮通过就拿掉。判断自己真会的标准不是能说出名字，而是能在不看文档的情况下写出实现并解释它为什么这么写。",
+          "level": 3
+        }
+      ]
+    },
+    "w14d1": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w14d1-p1",
+          "topic": "泛型函数的定义与调用",
+          "desc": "泛型函数是把「类型」也当成参数传进去的函数。写法是函数名后加 `<T>`，然后在参数和返回值里用 T 描述关系。它的价值在于把输入与输出之间的类型关联保留下来：`function first<T>(arr: T[]): T` 让调用方拿到的是数组元素的真实类型，而不是 any。调用时泛型实参一般不用手写，TS 会从实参反推；只有在推不出来或想强制收窄时才显式写 `first<number>(list)`。",
+          "level": 1
+        },
+        {
+          "id": "w14d1-p2",
+          "topic": "泛型约束与 keyof",
+          "desc": "同一个泛型函数可以被约束成「只接受带某属性的对象」，这就是泛型约束的入门用法。`function pluck<T, K extends keyof T>(obj: T, key: K): T[K]` 是必须背下来的一行：K 被约束成 T 的键，返回值用索引访问类型 T[K] 精确对上。这样传错键名编译期就报错，返回值也自带准确类型。写成 `key: string` 就没有任何保护，写成 `key: keyof T` 则返回值只能退化成联合类型。",
+          "level": 1
+        },
+        {
+          "id": "w14d1-p3",
+          "topic": "写 5 个泛型函数的训练法",
+          "desc": "写 5 个泛型函数是训练泛型直觉的标准练习，建议固定这五道：第一，`identity<T>(x: T): T`，理解类型传递；第二，`first<T>(arr: T[]): T | undefined`，理解数组元素提取；第三，`pluck<T, K extends keyof T>`，理解约束加索引访问；第四，`groupBy<T, K extends string>(arr: T[], fn: (x: T) => K): Record<K, T[]>`，理解约束加 Record 组合；第五，`mapObj<T, U>(obj: T, fn: (v: T[keyof T]) => U): Record<keyof T, U>`，理解在同构结构上做映射。五个写完基本就跨过泛型门槛了。",
+          "level": 2
+        },
+        {
+          "id": "w14d1-p4",
+          "topic": "多参数泛型与默认值",
+          "desc": "泛型可以有多个参数，也可以有默认值。多参数写法 `<T, U>`，默认值写法 `<T, U = string>`，规则和函数默认参数一致：带默认值的必须排在无默认值的后面。多参数时最容易犯的错是参数之间没约束关系，比如 `<T, U>(a: T, b: U): T` 里 U 完全自由，那不如直接写 `any`。真正有意义的多参数是带关系的，例如 `<T, K extends keyof T>` 或 `<T, U extends T>`，后者表示 U 必须是 T 的子类型。",
+          "level": 2
+        },
+        {
+          "id": "w14d1-p5",
+          "topic": "泛型在类接口类型别名上的应用",
+          "desc": "泛型在类、接口、类型别名上同样适用，但语义各有侧重。类上写 `class Box<T>`，T 在实例化时确定，实例内部所有方法和属性共享同一个 T；接口上写 `interface Repo<T>`，常用来约束仓储层的读写签名；类型别名上写 `type Pair<A, B> = [A, B]`，最常用于组合而不是约束。一个关键差异：类的泛型参数可以被静态成员以外的一切成员使用，而静态成员不能引用类的类型参数，因为静态成员属于类本身而不是实例。",
+          "level": 3
+        },
+        {
+          "id": "w14d1-p6",
+          "topic": "泛型常见四个坑",
+          "desc": "泛型最常见的四个坑。第一，到处写 `<T>` 却没有任何参数用到 T，这叫「装饰性泛型」，等于 any；第二，在函数体内把 T 当具体类型用，比如 `new T()` 或 `T.name`，T 是类型不是值，做不到，需要构造签名 `<T>(cls: new () => T)`；第三，把具体类型写死又标上泛型，`function f<T>(x: T): string` 里的 T 完全是废的；第四，以为泛型会在运行时存在，其实所有泛型信息在编译后全被擦除，运行时无法判断 T 是什么，这一点和 Java 的类型擦除一样。",
+          "level": 3
+        }
+      ]
+    },
+    "w14d2": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w14d2-p1",
+          "topic": "映射类型的语法",
+          "desc": "映射类型的语法是 `{ [K in keyof T]: ... }`，意思是「把 T 的每个键 K 取出来，按规则造一个新属性」。它比手写 interface 强在能批量处理任意对象类型，字段增删时自动跟上。三个修饰符是核心：`?` 加可选，`-?` 去掉可选，`readonly` 加只读，`-readonly` 去掉只读。用 as 子句可以对键重命名，写成 `{ [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K] }` 就能自动生成一整套 getter 类型。",
+          "level": 1
+        },
+        {
+          "id": "w14d2-p2",
+          "topic": "自己实现 Partial",
+          "desc": "自己实现 Partial 只要三行：`type MyPartial<T> = { [K in keyof T]?: T[K] }`。拆开看：`keyof T` 拿到 T 的全部键的联合，`[K in ...]` 是遍历这些键，`?:` 给每个属性加上可选修饰，`T[K]` 是索引访问类型，把这个键在 T 里的原始类型取回来。官方实现里多了一层 `[K in keyof T]` 加 `?` 加可选的 `-readonly` 处理，以及 `T extends unknown ? ... : never` 的分布包装，目的是让它在遇到联合类型时保持分布行为。",
+          "level": 1
+        },
+        {
+          "id": "w14d2-p3",
+          "topic": "自己实现 Pick 与 Omit",
+          "desc": "Pick 的实现是 `type MyPick<T, K extends keyof T> = { [P in K]: T[P] }`，关键在于映射变量从 `keyof T` 换成了泛型参数 K，且 K 被约束成 `keyof T`。Omit 官方实现是 `type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>`，思路是用 Exclude 先把 K 从键集合里剔掉，再用 Pick 取出剩下的。注意 Omit 的 K 约束是 `keyof any` 而不是 `keyof T`，这能让你剔除联合类型里任意键，代价是拼错键名不报错，所以常被吐槽。",
+          "level": 2
+        },
+        {
+          "id": "w14d2-p4",
+          "topic": "条件类型的语法",
+          "desc": "条件类型的语法是 `T extends U ? X : Y`，读作「如果 T 能赋给 U，得到 X，否则得到 Y」。它和三元表达式的区别在于判断的是类型可赋值性而不是真值。两个关键行为：一是分布（distributive），当 T 是裸的联合类型时，条件类型会拆成每个成员分别判断再合并，`('a' | 'b') extends 'a' ? 1 : 2` 得 `1 | 2`；二是需要阻止分布时用 `[T] extends [U]` 把 T 包进元组，让判断整体进行。",
+          "level": 2
+        },
+        {
+          "id": "w14d2-p5",
+          "topic": "infer 提取类型",
+          "desc": "infer 是条件类型里的「模式提取器」，写在 extends 右侧用来声明一个待推断的类型变量。经典例子是拿函数返回值：`type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never`，其中 infer R 占住返回位置。同样能提取参数元组 `infer P`、Promise 内部值 `infer V`、数组元素 `infer E`。限制是 infer 只能出现在 extends 后的类型表达式里，不能在外面单独声明，也不能用同一个名字 infer 两次并期望合并。",
+          "level": 3
+        },
+        {
+          "id": "w14d2-p6",
+          "topic": "分布行为与阻止分布",
+          "desc": "分布行为有坑也有用。坑在于当 T 是联合时，`T extends string ? never : T` 会把每个成员单独判断，导致本该整体落空的情况变成部分保留；再比如做 `Exclude` 时如果写错包法，never 的合并规则会让结果莫名其妙。用法上，正是靠分布才能实现 Exclude 和 Extract——`type Exclude<T, U> = T extends U ? never : T` 里 never 在联合中自动消失，正好完成剔除。需要阻止分布时用元组包裹，这是排查条件类型问题的第一个动作。",
+          "level": 3
+        }
+      ]
+    },
+    "w14d3": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w14d3-p1",
+          "topic": "装饰器是什么",
+          "desc": "装饰器是一种在类、方法、属性、参数声明上运行的函数，写法是 @expression。编译期它被转成一个高阶调用：`@deco class A {}` 变成 `A = deco(A)`，`@deco method(){}` 变成在类定义时用 deco 包住方法描述符。它本质上是元编程——不改方法体，而是在类定义阶段改写类的结构。TS 支持两套语义：旧版 experimentalDecorators，和 TS 5.0 起的标准装饰器（无需开关）。",
+          "level": 1
+        },
+        {
+          "id": "w14d3-p2",
+          "topic": "四类装饰器的签名",
+          "desc": "旧版装饰器的四个位置各有不同签名。类装饰器收构造函数，可以返回一个新类替换它；方法装饰器收 (target, propertyKey, descriptor)，可以改 descriptor.value 或加 getter/setter；属性装饰器只收 (target, propertyKey)，拿不到 descriptor，所以不能改属性行为；参数装饰器收 (target, propertyKey, parameterIndex)，只能标记不能直接动作。注意旧版属性装饰器的局限——要真正生效必须配合 defineProperty 在类定义时手动改写。",
+          "level": 1
+        },
+        {
+          "id": "w14d3-p3",
+          "topic": "元数据与 reflect-metadata",
+          "desc": "元数据靠 reflect-metadata 这个库实现。它给 Reflect 对象加三个方法：`Reflect.defineMetadata(key, value, target, propertyKey?)` 写元数据，`Reflect.getMetadata(key, target)` 读，`Reflect.getOwnMetadata` 只看自身不看原型链。装饰器是写元数据的天然位置，运行时框架再靠 Reflect.getMetadata 把标记读回来做分发。用之前必须 import 'reflect-metadata' 一次，并在 tsconfig 开 experimentalDecorators 与 emitDecoratorMetadata 两个开关。",
+          "level": 2
+        },
+        {
+          "id": "w14d3-p4",
+          "topic": "emitDecoratorMetadata 的作用",
+          "desc": "emitDecoratorMetadata 这个开关值得单独说。开了之后编译器会给被装饰的类自动写入三种设计类型元数据：design:type（属性或参数的类型）、design:paramtypes（构造函数或方法的参数类型数组）、design:returntype（返回值类型）。NestJS、TypeORM 这类依赖注入框架就靠它实现「看参数类型就知道该注什么」。注意它只能记录运行时存在的类型，interface 与类型别名会被记成 Object，所以 DI 场景常要求用类而不是接口。",
+          "level": 2
+        },
+        {
+          "id": "w14d3-p5",
+          "topic": "装饰器的真实用途",
+          "desc": "装饰器的真实用途集中在四类场景：一，依赖注入——用 @Injectable() 标记可注入类，构造参数上加 @Inject() 指定 token；二，ORM 映射——@Entity 标表、@Column 标字段，元数据交给框架建表；三，路由与参数绑定——@Get('/x') 挂路由，@Body() 取请求体；四，切面——@Log、@Cache、@Transactional 包住方法前后做统一处理。共同点是「标记加读取」这个模式：装饰器负责写，框架在启动时统一读。",
+          "level": 3
+        },
+        {
+          "id": "w14d3-p6",
+          "topic": "装饰器的五个限制",
+          "desc": "装饰器有五个必须知道的限制。第一，必须在类或类成员上，不能装饰普通函数，因为函数声明提升时目标还不存在；第二，执行时机是类定义时而不是调用时，所以不能靠它做请求级逻辑；第三，多个装饰器叠加时执行顺序是自下而上（靠近声明的先执行），但工厂形式求值顺序是自上而下，这组顺序最容易记反；第四，不影响类型系统，装饰器改了运行时行为但编译器不知道，所以类型标注要自己同步；第五，标准装饰器与旧版不兼容，混用会编译报错，团队必须统一。",
+          "level": 3
+        }
+      ]
+    },
+    "w14d4": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w14d4-p1",
+          "topic": "给第三方库写声明的路径",
+          "desc": "给第三方库写声明文件的正规路径是先看它有没有已发布的类型。顺序是：一，看包目录下有无 index.d.ts 以及 package.json 里的 types/typings 字段；二，试试安装 @types/包名；三，如果前两条都没有，就自己写。自建声明有两个落点：项目内建一个 src/types/包名.d.ts，并确保它被 tsconfig 的 include 圈住；或者写一个完整的 @types 风格包放本地目录，用 typeRoots 指过去。优先选前者，改动面最小。",
+          "level": 1
+        },
+        {
+          "id": "w14d4-p2",
+          "topic": "最小声明文件的写法",
+          "desc": "最小的声明文件就三行：`declare module 'foo' { export function bar(x: number): string; }`。要点是模块内所有导出都要用 declare 或 export 前缀，函数体一律不写，只写签名。如果要声明整个模块为任意类型，可以写 `declare module 'foo';` 简写（称为隐式 any 模块），但那只适合调试阶段。写完必须验证，用 `tsc --noEmit` 看有没有报错，再在业务代码里 import 一次看能不能拿到补全，两个都过才算成。",
+          "level": 1
+        },
+        {
+          "id": "w14d4-p3",
+          "topic": "声明文件的导出形状",
+          "desc": "声明文件里最重要的判断是「导出形状」。CommonJS 导出的库写成 `export = Foo`，配 esModuleInterop 时可以用 `import Foo from 'foo'`；ESM 默认导出写成 `export default Foo`；命名导出就逐个 `export function`。常见错误是把 CommonJS 库写成 `export default`，运行时因为抓不到 default 而变成 undefined。另一种坑是 `export =` 和 `export default` 同时写，编译器直接报错，两种体系不能混。",
+          "level": 2
+        },
+        {
+          "id": "w14d4-p4",
+          "topic": "用声明合并扩展已有模块",
+          "desc": "给已有模块扩展类型靠声明合并。如果库已经有类型但某个属性缺了，可以在自己的 .d.ts 里写 `declare module 'express' { interface Request { user?: User } }`，接口同名会自动合并，不需要重新定义整个 Request。注意两个前提：扩展文件本身必须是一个模块（文件内有顶层 import 或 export），并且 tsconfig 的 paths 与 types 配置不能把这个文件排除掉。接口合并是最安全的扩展方式，比 any 强转安全得多。",
+          "level": 2
+        },
+        {
+          "id": "w14d4-p5",
+          "topic": "声明文件的验证方法",
+          "desc": "声明文件的验证方法要成套路，不能只靠「能编过」。第一步 `tsc --noEmit` 查静态错误；第二步在 .ts 文件里写一个真实调用，看返回值有没有类型、传错参数会不会报错，不报错说明声明没生效；第三步故意写一个错的调用确认会报错，这叫反向验证，是判断声明是否真生效的唯一可靠手段；第四步对声明文件本身也开检查，tsconfig 里声明文件同样受 noImplicitAny 约束。",
+          "level": 3
+        },
+        {
+          "id": "w14d4-p6",
+          "topic": "声明文件的精度底线",
+          "desc": "写声明文件有一条底线：声明必须比实现窄，不能比实现宽。意思是签名要尽量精确，不要为了过编译把参数全写成 any 或者可选。宁缺毋滥——不确定的签名宁可先不写，也不要写一个错的，因为错误的声明会骗过编译器并埋下运行时崩溃。另一个惯例是把声明文件的注释写成 JSDoc 格式，这样编辑器悬停时能直接看到说明，等于用一次十秒钟的劳动换整个团队长期的补全体验。",
+          "level": 3
+        }
+      ]
+    },
+    "w14d5": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w14d5-p1",
+          "topic": "strict 是七个开关的合集",
+          "desc": "strict 不是一个开关，而是七个开关的合集。它是 strictNullChecks、strictFunctionTypes、strictBindCallApply、strictPropertyInitialization、noImplicitAny、noImplicitThis、alwaysStrict 的总开关。写 `strict: true` 等于把七个全开。实战中不要一次全开，正确做法是先用 `strict: false` 让项目能跑，再逐个单独打开、每开一个修一轮，这样每次报错量可控。真正最能捉 bug 的是 strictNullChecks，它单独就能消掉大量 undefined 崩溃。",
+          "level": 1
+        },
+        {
+          "id": "w14d5-p2",
+          "topic": "strictNullChecks 的收益",
+          "desc": "strictNullChecks 是所有严格开关里收益最高的一个。它把 null 和 undefined 从所有类型里剔出去，变成只能自己声明才能取到的值，于是 `function f(x: string)` 再也不能传 null，必须写 `string | null`。开启后立刻会出现大量报错，修法三招：一是给参数加联合类型并在入口处判空；二是用可选链 `a?.b` 与空值合并 `a ?? b` 替代手写判空；三是用类型守卫函数把收窄逻辑抽出来复用。不要用非空断言 `!` 当万能药，它会把这个开关的价值清零。",
+          "level": 1
+        },
+        {
+          "id": "w14d5-p3",
+          "topic": "noImplicitAny 与属性初始化",
+          "desc": "noImplicitAny 和 strictPropertyInitialization 是两个「体感最痛」的开关。前者禁止隐式 any，所有推不出类型的参数必须手写注解；后者要求类的所有非可选属性必须在声明处或构造函数里初始化，否则报错。后者常用的三个解法：加 `!` 表示稍后赋值（配合框架注入）、给默认值、把类型加上 undefined。两者都应尽早开——拖到项目后期再开，改造成本会高出一个数量级。",
+          "level": 2
+        },
+        {
+          "id": "w14d5-p4",
+          "topic": "严格模式的迁移顺序",
+          "desc": "严格模式的迁移应该按「新代码先严、老代码后严」的顺序。具体做法有三种：一是用目录分离，新建目录用一份严格 tsconfig，老目录继承宽松配置，靠 project references 或两个 tsc 命令分开跑；二是用文件级注释 `// @ts-nocheck` 暂时豁免个别文件，并把这些文件记一张清单逐月清零；三是用 `tsc --strict` 单独跑一遍只看报错数不看退出码，把报错数当仪表盘观察，每周记录下降曲线。切忌长期挂着一堆 nocheck，那等于没有迁移。",
+          "level": 2
+        },
+        {
+          "id": "w14d5-p5",
+          "topic": "常见 strict 报错的套路处理",
+          "desc": "开启 strict 后最常见的一批报错有确定的套路处理。`Object is possibly 'undefined'` 用可选链或提前 return 收窄；`Type 'X' is not assignable to type 'Y | undefined'` 说明你要么改类型声明要么补默认值；`Property has no initializer` 用默认值或构造赋值；`this implicitly has type any` 给函数参数加 `this: void` 或者改成箭头函数；`Binding element implicitly has any type` 给解构来源加类型。这五类能盖住迁移初期八成报错，建议写成团队速查表。",
+          "level": 3
+        },
+        {
+          "id": "w14d5-p6",
+          "topic": "严格模式落地的工程习惯",
+          "desc": "严格模式真正落地靠三条工程习惯。第一，CI 把 `tsc --noEmit` 设为必需检查，任何提交把类型打穿就红；第二，每修完一个文件的报错就在清单上划掉一个，并统计周进展，让迁移有可见进度；第三，把新增代码的类型覆盖率作为更软的指标看——新文件不允许出现 any，老文件逐步收敛。判断迁移成功的标准不是报错归零，而是「半年后新加一个功能不需要再写 any」，那才说明类型系统已在团队里长根。",
+          "level": 3
+        }
+      ]
+    },
+    "w14d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w14d6-p1",
+          "topic": "类型体操十题分档",
+          "desc": "类型体操十道题按难度分三档，刷法必须从简到难。入门三题：实现 MyPick、MyPartial、MyReadonly，目的是把映射类型写熟。中档四题：实现 MyExclude、MyReturnType、MyParameters、MyAwaited，目的是把条件类型、infer、分布行为写熟。高档三题：实现深递归的 DeepReadonly、实现元组转联合、实现字符串模板类型里的 CamelCase 转换。十题刷完能读懂官方 lib.es5.d.ts 里绝大部分工具类型。",
+          "level": 1
+        },
+        {
+          "id": "w14d6-p2",
+          "topic": "每道题解的写法",
+          "desc": "每道题解必须写清三件事，否则刷了也白刷。第一，写出实现代码，一行不能少；第二，写出至少两个边界用例并用 `type Assert<T extends true>` 或 `Expect<Equal<A, B>>` 断言，证明你的实现真的对；第三，写一句人话解释为什么这么写，比如「这里用 [T] extends [U] 是为了阻止分布」。只写代码不写断言，等于考完试不查答案，是刷题的最低效做法。",
+          "level": 1
+        },
+        {
+          "id": "w14d6-p3",
+          "topic": "五个常见体操套路",
+          "desc": "类型体操里最常考的套路有五个，背熟就能覆盖大部分题。一，映射类型配合 `-?` 与 `-readonly` 去掉修饰；二，条件类型配合 infer 做提取；三，元组上用 infer 加 `[infer H, ...infer R]` 做递归头尾拆分；四，用 `T extends any[] ? ... : ...` 判断是否数组；五，用模板字面量类型 `\\`${infer A}${infer B}\\`` 拆字符串。五套路加递归就是整套类型体操的全部底层构件。",
+          "level": 2
+        },
+        {
+          "id": "w14d6-p4",
+          "topic": "递归型体操的限制",
+          "desc": "递归型体操必须知道三个限制。第一，递归深度有上限，TS 大约在 50 层左右会报「类型实例化过深」，所以写深度递归（如 DeepReadonly）必须先判终止条件，写成 `T extends object ? { ...递归... } : T`；第二，递归在联合类型上会展开，容易指数爆炸，必要时用元组包住防止分布；第三，数组也有长度限制，递归构造超长元组会报错。所以递归题的真正考点不是递归本身，而是「能不能正确写出终止条件」。",
+          "level": 2
+        },
+        {
+          "id": "w14d6-p5",
+          "topic": "刷题的正确姿势",
+          "desc": "刷类型体操的正确姿势是「先默写再看答案」。每题给自己 5 分钟，默写不出才看解析，看完立刻关掉解析重写一遍。错过的题标记一次，两天后再刷，连续两次默写正确才归为掌握。判断掌握的标准是能不查任何资料写出实现并在 30 秒内说清思路，而不是「看着眼熟」。另外建议把每题的实现和断言都存在一个本地 .ts 文件里，让编译器时时替你验证，这比任何笔记都可靠。",
+          "level": 3
+        },
+        {
+          "id": "w14d6-p6",
+          "topic": "类型体操的实际价值",
+          "desc": "类型体操对业务开发的实际价值要说清楚，不然容易刷偏。它训练的是三件事：一是读懂库里的类型报错，很多「难以理解的红色波浪线」其实就是体操语言；二是读得懂第三方库的类型声明，知道它们怎么把类型算出来；三是能给自己的工具库写出精确的泛型签名。但它不是必须技能——业务开发用到的高阶技巧其实很少，重点是映射类型与条件类型的识别能力。刷到能看懂即可，不要为了炫技写出别人看不懂的类型。",
+          "level": 3
+        }
+      ]
+    },
+    "w14d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w14d7-p1",
+          "topic": "闭卷写泛型的验收法",
+          "desc": "闭卷写泛型是检验本周成果的唯一硬指标。具体做法是盖住资料，白纸上写出四样东西：一，泛型函数的标准签名（含约束与索引访问）；二，泛型约束、默认值、多参数的写法各一个；三，映射类型 `{ [K in keyof T]?: T[K] }` 完整写出来；四，条件类型加 infer 提取返回值的一行。四样全写对才算本周过关，任何一样卡住都要回看对应考点。写的时候不能开编辑器补全，开了就等于验证失败。",
+          "level": 1
+        },
+        {
+          "id": "w14d7-p2",
+          "topic": "本周导图的四条主干",
+          "desc": "本周知识要用导图串成一张网，而不是一堆散点。中心节点写「TypeScript 类型系统」，四条主干分别延伸：类型基础（字面量、联合、交叉、索引访问）、泛型（参数、约束、默认值、在函数/类/接口上的应用）、类型运算（映射类型、条件类型、infer、分布行为）、工程实践（装饰器元数据、声明文件、严格模式、类型体操）。每条主干下挂本周对应的具体考点编号，一格一格填满，哪里空缺一目了然。",
+          "level": 1
+        },
+        {
+          "id": "w14d7-p3",
+          "topic": "导图的反向索引",
+          "desc": "导图上线后必须做一次「反向索引」，这是它唯一起作用的地方。具体做法是从本周 42 个考点编号逐个倒推，每一个都要能在导图上找到唯一安放它的节点，找不到就说明导图缺一条分支，要补上再索引一遍。另一步是把导图往上周追溯，形成纵向链路，例如本周的「映射类型」要能指回上周的「接口定义对象结构」，「条件类型」要能指回「联合类型」。只有纵向链路建起来，知识点才不是孤立记忆。建议每周日花 20 分钟做这一轮，导图版本按月存档，三个月后回看能直接看到自己的知识密度变化。",
+          "level": 2
+        },
+        {
+          "id": "w14d7-p4",
+          "topic": "错题回看机制",
+          "desc": "周复习必须配一套错题回看机制，否则本周错的下周还会错。把本周所有做错或卡住的点记成三列：第一列写题目或考点编号，第二列标错误类型（概念不清、写法不熟、边界没想到三类之一），第三列写修正动作。三列里最重要的是第三列修正动作，必须具体到可执行，例如「重读考点原文并默写三遍」而不是「再看看」。按错误类型分派动作：概念不清的重读原文，写法不熟的靠默写，边界没想到的补进自己的边界用例清单并在下轮复习时优先回看。没有具体动作的错题记录等于没记。",
+          "level": 2
+        },
+        {
+          "id": "w14d7-p5",
+          "topic": "W14 的两条边界",
+          "desc": "W14 的真正考点不是记住多少名词，而是能否分清两条边界。第一条边界是「泛型约束」与「条件类型」的区别：前者在声明时限制入参范围，后者在类型计算时做分支判断，两者常被混淆。第二条边界是「声明文件」与「实现代码」的区别：声明只有类型没有运行时逻辑，写错也不会报错但会影响使用方的全链类型。这两条边界说清，本周就算抓到了主脉。",
+          "level": 3
+        },
+        {
+          "id": "w14d7-p6",
+          "topic": "对外输出式复习",
+          "desc": "复习的最后一步是做一次「对外输出」。用自己的话把本周最具价值的三个点讲给一个只会 JS 的人听，每点不超过 100 字，讲不通就说明没懂。三个推荐选题：为什么泛型不是可有可无的语法糖、strictNullChecks 为什么能消掉大量线上崩溃、类型体操到底要不要学。能讲清这三个，本周的 TypeScript 进阶就算真正落地，下周进入工程化环节也不会掉队。",
+          "level": 3
+        }
+      ]
+    },
+    "w15d1": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w15d1-p1",
+          "topic": "Vite 的工作原理",
+          "desc": "Vite 的核心思路是「开发不打包，构建才打包」。开发阶段它只启动一个原生 ESM 服务器，浏览器请求哪个文件就现编译哪个，冷启动通常在几百毫秒到一两秒；生产构建才交给 Rollup 做完整打包。两个特点必须记住：一是依赖预构建（pre-bundle），启动时把 CommonJS 依赖或内部文件多的包（如 lodash）用 esbuild 打包成单个 ESM 文件，避免浏览器发几百个请求；二是 HMR 基于 ESM 的模块边界做局部替换，改一个文件只重载那个模块，快的原因在这里。",
+          "level": 1
+        },
+        {
+          "id": "w15d1-p2",
+          "topic": "npm 依赖管理",
+          "desc": "npm 的依赖管理必记四件事。一，`dependencies` 与 `devDependencies` 的分界是「运行时是否需要」——构建工具、lint、测试框架都是 dev；二，版本号语义 `^1.2.3` 允许次版本更新、`~1.2.3` 只允许补丁、`1.2.3` 锁死，团队项目必须提交 package-lock.json 才能保证全队装出同一棵树；三，`npm ci` 严格按 lock 文件安装且不修改它，CI 必须用它而不是 npm install；四，`npm ls 包名` 看版本树，`npm outdated` 看可升级项。",
+          "level": 1
+        },
+        {
+          "id": "w15d1-p3",
+          "topic": "发布自己的包",
+          "desc": "发布一个自己的包流程是五步：一，`npm login` 登录；二，`package.json` 里必须有 name、version、main 或 exports、以及 files 白名单（只发布必要文件，不然后话 node_modules 会被带上）；三，包名若与现存的冲突，要么换名要么用 scope（@用户名/包名）；四，`npm publish` 时如果不想公开就在 publish 后加 --access public 或发布私有包；五，改版后必须 `npm version patch|minor|major` 抬版本号，否则 publish 会被拒。本地调试包用 `npm link` 或 `npm pack` 生成 tgz 后安装，后者更接近真实安装行为。",
+          "level": 2
+        },
+        {
+          "id": "w15d1-p4",
+          "topic": "ESLint 与 Prettier 分工",
+          "desc": "ESLint 与 Prettier 职责不同，不能互替。ESLint 管代码质量与正确性（未使用变量、错误的 hooks 依赖、潜在 bug），Prettier 只管格式（缩进、引号、换行）。标准配置是 Prettier 负责格式，ESLint 继承 eslint-config-prettier 关掉所有与格式冲突的规则，避免两边打架。接入顺序：先装 prettier 并跑一次全项目格式化（会产生很大一个 commit），再装 eslint 并逐步修规则，然后再加 lint-staged 把检查挂到 pre-commit 上。",
+          "level": 2
+        },
+        {
+          "id": "w15d1-p5",
+          "topic": "环境变量体系",
+          "desc": "环境变量有两套体系，分清是关键。Vite 用 `import.meta.env`，只有 VITE_ 前缀的变量会暴露给客户端代码，其余的只在构建时可用，这是防误泄露 Key 的安全线。Node 侧用 process.env，两者不互通。实践上准备三份文件：.env.development 放本地接口地址，.env.production 放线上地址，.env.local 放个人密钥且必须写进 .gitignore。构建时用 `vite build --mode production` 切换，注意客户端能看到的变量等同于公开，任何密钥都不能放里面。",
+          "level": 3
+        },
+        {
+          "id": "w15d1-p6",
+          "topic": "生产构建产物检查",
+          "desc": "生产打包的产物要看四样东西：dist 目录结构、index.html 里引用的 hash 文件名、资源分块是否合理、以及开启 sourcemap 的策略。`vite build` 后要检查三件事：一，静态资源是否被正确带 hash（防止浏览器缓存旧文件）；二，大依赖是否被分到单独 chunk，避免首屏主包过大；三，`--sourcemap` 在测试环境开、生产环境关，关之前先把 sourcemap 上传到错误监控平台，否则线上报错堆栈全是压缩后的代码。",
+          "level": 3
+        }
+      ]
+    },
+    "w15d2": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w15d2-p1",
+          "topic": "包管理器做了三件事",
+          "desc": "包管理器干三件事：从注册表拉包、解析出满足所有依赖约束的版本组合、把结果写进 lock 文件并平铺到 node_modules。理解这点就能解释大部分怪现象：为什么删 node_modules 重装能修好一半问题（重新解析依赖树）、为什么两个人装出不同版本（lock 不一致或没提交）、为什么明明删了依赖报错还在（幽灵依赖，被别的包间接装进来，平铺后被代码直接引用，一旦上游不再依赖就崩）。",
+          "level": 1
+        },
+        {
+          "id": "w15d2-p2",
+          "topic": "语义化版本号与范围符号",
+          "desc": "语义化版本号三段是 主.次.补丁。主版本改动=不兼容变更，次版本=向下兼容的新功能，补丁=向下兼容的 bug 修复。范围符号的重点三个：`^` 锁主版本、`~` 锁主次版本、无符号锁死。还有两个组合写法要知道：`>=1.2.0 <2.0.0` 等价于 `^1.2.0`；`*` 表示任意版本，生产环境禁用。发布自己的包时把不兼容变更只抬主版本号，这是对其他人的契约，不遵守会造成 npm 生态里最典型的依赖地狱。",
+          "level": 1
+        },
+        {
+          "id": "w15d2-p3",
+          "topic": "lock 文件的三条铁律",
+          "desc": "lock 文件是团队协作的生命线。它记录了整棵依赖树的精确版本、下载地址与完整性哈希，作用是把「约束」变成「确定」。三条铁律：一，必须提交到 git，且不能写进 .gitignore；二，不要手改，改版本走 `npm install 包@版本` 让工具自己更新；三，多人并行改依赖时冲突不要手工合并，正确做法是先还原自己的 lock、重拉主干、再重新执行一次安装命令让工具重生 lock。CI 中必须用 `npm ci`，它装出的树和 lock 完全一致。",
+          "level": 2
+        },
+        {
+          "id": "w15d2-p4",
+          "topic": "package.json 的入口字段",
+          "desc": "发布自己的包时 package.json 有几个字段直接决定别人能不能用。`main` 指向 CommonJS 入口，`module` 指向 ESM 入口，`types` 指向声明文件，`exports` 是新式的条件导出表（能同时声明 import/require/browser/types 四套路径，优先级高于 main）。`files` 是白名单，不写会把源码、测试、配置文件全部发上去。`sideEffects: false` 告诉打包器可以摇树，写错了会导致副作用代码被误删，发布前必须验证。",
+          "level": 2
+        },
+        {
+          "id": "w15d2-p5",
+          "topic": "本地调试自己包的三种方式",
+          "desc": "本地调试自己写的包有三种方式，按推荐度排：一，`npm pack` 生成 tgz 再在业务项目里 `npm install ./xxx.tgz`，最接近真实安装行为，能验证 files 白名单与 exports 配置；二，`npm link` 建全局软链，改代码立刻生效但会绕开 files 与 exports 的限制，容易在本地能跑发布后崩；三，用 workspace 或 pnpm 的 file: 协议指向本地目录。验证发布的包是否正常，一定要用第一种，因为另外两种都绕过了真实的安装路径。",
+          "level": 3
+        },
+        {
+          "id": "w15d2-p6",
+          "topic": "依赖升级与安全扫描策略",
+          "desc": "升级依赖的策略要分三类。安全补丁与次版本可以批量升，用 `npm outdated` 列出后逐个在测试环境验证；主版本升级必须单独开分支，先读 CHANGELOG 里的不兼容变更清单，再改代码；长期不升的依赖会积累成技术债，建议每季度固定一天做依赖维护日。安全扫描用 `npm audit` 看漏洞，但不要盲目 `npm audit fix --force`，它会把主版本也升掉，可能直接造成构建失败，正确做法是先看漏洞是否影响实际运行路径，再决定升不升。",
+          "level": 3
+        }
+      ]
+    },
+    "w15d3": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w15d3-p1",
+          "topic": "ESLint 扁平配置结构",
+          "desc": "ESLint 的配置文件在 v9 之后走扁平配置 eslint.config.js，不再用 .eslintrc。核心是导出一个数组，每个元素是一个配置对象，包含 files（作用哪些文件）、languageOptions（语法版本与全局变量）、rules（具体规则与严度）。规则严度三档：off 关、warn 提醒但退出码为 0、error 阻断。新手最容易搞错的是把规则全开成 error 然后被几百条报错劝退，正确做法是先开 recommended 基线，再逐个补项目需要的规则。",
+          "level": 1
+        },
+        {
+          "id": "w15d3-p2",
+          "topic": "四类常用规则",
+          "desc": "ESLint 常用的四类规则必须能看懂。一，正确性类，如 no-unused-vars、no-undef，这类建议一律开 error；二，风格类，如 indent、quotes，已经全部交给 Prettier，在 ESLint 里关掉；三，危险模式类，如 no-eval、no-new-func，生产代码应设为 error；四，框架专用类，如 react-hooks/exhaustive-deps，它能揪出漏写依赖导致的闭包 bug，强烈建议保持 error 而不是警告，因为警告在团队里等于没写。",
+          "level": 1
+        },
+        {
+          "id": "w15d3-p3",
+          "topic": "Prettier 的四个吵架项",
+          "desc": "Prettier 的配置项很少，真正会打架的只有四个：printWidth（每行宽度，默认 80）、singleQuote（单引号）、semi（分号）、trailingComma（尾逗号）。团队里最容易吵的就是这四个，解决办法不是讨论而是定一次就冻结，写进 .prettierrc 并提交。不要手写格式化，一定要配编辑器保存时自动格式化，并在 CI 里跑 `prettier --check`，否则半年后代码库里会混进几十种格式。",
+          "level": 2
+        },
+        {
+          "id": "w15d3-p4",
+          "topic": "husky 与 lint-staged",
+          "desc": "lint-staged 与 husky 是一对，作用是把检查前置到提交前。husky 负责装 git hook，lint-staged 负责只对暂存区文件跑检查，避免每次提交都 lint 全项目。标准配置是 pre-commit 挂 `lint-staged`，在 package.json 里配 `*.{ts,tsx,js,jsx}: eslint --fix` 与 `*.{ts,tsx,js,jsx,json,md}: prettier --write`。两个坑：一是新克隆的仓库要跑一次 husky install 才能生效；二是紧急提交不要滥用 --no-verify，滥用一次就会变成习惯。",
+          "level": 2
+        },
+        {
+          "id": "w15d3-p5",
+          "topic": "全项目 lint 修复顺序",
+          "desc": "修复全项目 lint 的正确顺序决定了改动量是否可控。第一步先只跑 Prettier 格式化，因为它纯改格式不改语义，产生的 diff 虽大但极安全；第二步再跑 `eslint --fix` 自动修能修的部分；第三步把剩下不能自动修的错误分类，按规则批量修而不是按文件修，一个规则一次提交。全部修完后在 CI 里把 lint 设为强制，从此不允许新增违规。注意一个前置坑：先停掉预提交钩子再批量修，否则每次提交都会卡住。",
+          "level": 3
+        },
+        {
+          "id": "w15d3-p6",
+          "topic": "新老项目接入 lint 策略",
+          "desc": "新老项目接入 lint 的策略不一样。新项目一开始就把基线建好：ESLint recommended 加 Prettier 加 lint-staged，代价最小。老项目忌一次性全量修复，因为大 diff 会淹没 code review 且容易引入回归。推荐做法是三步走：一，在 CI 里只对改动文件做检查（增量 lint），新代码必顶必须干净；二，建一份存量违规清单，按月清理；三，设置一个告警阈值，违规总数不得上升，只允许下降。这套机制能让存量债慢慢消失而不影响业务迭代。",
+          "level": 3
+        }
+      ]
+    },
+    "w15d4": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w15d4-p1",
+          "topic": "环境变量是构建期替换",
+          "desc": "环境变量的本质是「构建期替换的字符串」。Vite 在构建时把代码里的 `import.meta.env.VITE_API_URL` 直接替换成字面量，所以它必须是常量，不能是动态拼接的名字。这就解释了两个常见困惑：为什么 `import.meta.env[key]` 拿不到值（动态访问不参与替换）、为什么改了 .env 必须重启开发服务器（替换只在启动与构建时发生，运行时不会重读文件）。",
+          "level": 1
+        },
+        {
+          "id": "w15d4-p2",
+          "topic": "多环境 mode 与优先级",
+          "desc": "多环境配置靠 mode 区分。Vite 默认有 development（dev 命令）与 production（build 命令），也支持自定义 mode，比如 `vite build --mode staging` 会加载 .env.staging。优先级从低到高是：.env < .env.[mode] < .env.[mode].local < 命令行环境变量。所以本地个人的覆盖值应写在 .env.local 里，它默认被 gitignore 排除。切换环境时不要改代码，只改 mode，这是让配置与代码解耦的关键。",
+          "level": 1
+        },
+        {
+          "id": "w15d4-p3",
+          "topic": "密钥不能进前端",
+          "desc": "环境变量最大的风险是误把密钥带进前端。前端代码与构建产物对任何人公开，浏览器里能看到所有字节，所以里面绝不能出现数据库密码、第三方支付密钥、后台管理员 token。安全的划分是：公开配置（接口域名、地图公开 key、统计站点 id）放前端 env；真密钥放服务端，前端通过自己的后端接口代理调用。如果必须在某些场景下用受限密钥，必须配域名白名单与配额限制，否则等于把自己的钥匙贴在门上。",
+          "level": 2
+        },
+        {
+          "id": "w15d4-p4",
+          "topic": "四个常调的构建配置",
+          "desc": "构建配置里最常调的四个地方是 base、build.outDir、build.rollupOptions 和 define。base 管资源公共路径，部署到子目录（如 /admin/）时必须改，否则静态资源 404；outDir 管产物目录；rollupOptions.output.manualChunks 管分包，通常把大依赖（图表库、编辑器）单独拆出去；define 用来注入编译期常量，注意它的值是代码字符串而不是值本身，写 `true` 不能写成 `'true'`。",
+          "level": 2
+        },
+        {
+          "id": "w15d4-p5",
+          "topic": "发布前六项检查",
+          "desc": "生产包发布前要过一遍六项检查。一，跑 `npm run build` 看是否有警告与体积提示；二，本地用 `npm run preview` 预览构建产物，不要直接开 dist 里的 html（会因为相对路径与路由模式出错）；三，检查 index.html 里引用的资源路径与 base 配置匹配；四，确认 sourcemap 已关或已上传监控平台；五，确认 console 里的调试输出已清理；六，确认路由模式（history 或 hash）与服务器重写规则匹配。六项里最容易出事的是第三项与第六项。",
+          "level": 3
+        },
+        {
+          "id": "w15d4-p6",
+          "topic": "构建优化三个必做项",
+          "desc": "构建优化有三个必做项。一，分包：把不常变的大依赖单独成 chunk，更新业务代码时用户不用重下这些包，配合 content hash 能显著提高缓存命中率；二，按需加载：路由级懒加载 `() => import('./Page')`，首屏只加载必要代码；三，检查是否误把整包引入，比如 `import _ from 'lodash'` 会带上全量，改成按方法导入或用 ESM 版本。判断优化是否有效只看两个数：首屏主包 gzip 后大小、以及产物总 chunk 数是否合理。",
+          "level": 3
+        }
+      ]
+    },
+    "w15d5": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w15d5-p1",
+          "topic": "Vitest 是什么",
+          "desc": "Vitest 是 Vite 生态的测试框架，最大优势是直接复用 vite.config，不需要另写一套转译配置，TS 与路径别名开箱即用。核心 API 四个：`describe` 分组、`it` 或 `test` 单例、`expect` 断言、`beforeEach` 前置。判断一个测试好不好只看一条：它能否在别人改坏实现时真的变红。只断言「函数被调用了」而不校验结果的测试，价值极低。",
+          "level": 1
+        },
+        {
+          "id": "w15d5-p2",
+          "topic": "十个测试的层次分配",
+          "desc": "写 10 个测试的正确分配方式是先按层次分再按数量分。推荐四个层次各写两三个：一，纯函数逻辑（格式化、计算、校验）；二，边界条件（空数组、null、溢出、超长字符串）；三，异常路径（应当报错的情况，用 `expect(fn).toThrow()`）；四，异步逻辑（用 async/await 配 `await expect(p).resolves`）。十个测试里如果全是正常路径，覆盖率数字再高也是一张废纸，因为 bug 永远长在边界上。",
+          "level": 1
+        },
+        {
+          "id": "w15d5-p3",
+          "topic": "值断言与行为断言",
+          "desc": "断言有两类必须分清：值断言与行为断言。值断言看输出（toBe 用于原始值、toEqual 用于对象深比较、toContain 用于包含），行为断言看交互（toHaveBeenCalledWith 校验传参）。最容易踩的坑是拿 toBe 比对象——它比的是引用，两个内容相同的对象也会失败，应改用 toEqual。另一个坑是异步断言忘了 await，测试会假通过，这是最危险的一类假绿。",
+          "level": 2
+        },
+        {
+          "id": "w15d5-p4",
+          "topic": "隔离时间网络与随机",
+          "desc": "测试里要隔离三样东西：时间、网络、随机。时间用 `vi.useFakeTimers()` 冻结并用 `vi.advanceTimersByTime()` 推进；网络用 `vi.mock` 或 MSW 拦截，绝不让单测真的发请求，否则 CI 会因为外部服务波动随机变红；随机用 `vi.spyOn(Math, 'random').mockReturnValue(0.5)` 固定。三者不隔离，测试就会时而绿时而红，团队会很快失去对它的信任并开始忽略红灯。",
+          "level": 2
+        },
+        {
+          "id": "w15d5-p5",
+          "topic": "测试文件组织与环境",
+          "desc": "测试文件组织有一条公认约定：测试与被测代码同目录，命名 `xxx.test.ts`，这样改代码时一眼能看到有没有对应测试。跑测试用 `vitest`（默认 watch）、`vitest run`（单次跑完，CI 用）、`vitest --coverage`（出覆盖率）。配置里要设环境：纯逻辑用 node，需要 DOM 的用 jsdom 或 happy-dom。一个项目里两种都要时，用文件头注释 `// @vitest-environment jsdom` 按文件指定，不要全局统一。",
+          "level": 3
+        },
+        {
+          "id": "w15d5-p6",
+          "topic": "好测试的四个信号",
+          "desc": "测试写得好不好，看四个信号。一，改实现不改行为时测试不应变红，如果每次重构都要改一堆测试，说明测得太贴实现；二，单个测试只验证一件事，一个 it 里塞十个 expect 时很难定位失败点；三，测试名能当文档读，用「当 X 时应该 Y」句式；四，失败信息足以定位问题，必要时在断言第三参数写清上下文。四信号都满足的测试才有长期价值，否则三个月后就会被人删掉或标注跳过。",
+          "level": 3
+        }
+      ]
+    },
+    "w15d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w15d6-p1",
+          "topic": "模板目录结构",
+          "desc": "做自己的项目模板，要先把目录结构定下来，别以后边写边改。推荐的分层是：src/api 放接口封装、src/assets 放静态资源、src/components 放通用组件、src/composables 或 hooks 放组合逻辑、src/layouts 放布局壳、src/router 放路由、src/stores 放状态、src/styles 放全局样式、src/types 放全局类型、src/utils 放纯函数、src/views 放页面。每个目录职责单一，新人在里面乱放东西时一眼就能看出来。",
+          "level": 1
+        },
+        {
+          "id": "w15d6-p2",
+          "topic": "四个基础文件",
+          "desc": "模板的第一步不是写业务，而是把四个基础文件搭好：main.ts 入口（挂应用、装路由、装状态、全局错误处理器）、App.vue 或根组件、router 索引、以及一个全局的 http 封装。这四件决定了后续所有代码的边界。入口文件里不要把业务逻辑写进去，只做装配；http 封装里统一处理基础地址、超时、token 注入、错误提示，业务层不许出现重复的 fetch 配置。",
+          "level": 1
+        },
+        {
+          "id": "w15d6-p3",
+          "topic": "五个配置文件",
+          "desc": "模板的配置层要包含五个文件才能算完整：tsconfig（含路径别名与严格模式）、vite.config（含别名同步、代理、构建分包）、eslint.config、prettier 配置、.editorconfig。路径别名是最容易出错的一处——vite 里配了 `@` 指向 src，tsconfig 的 paths 也必须同步配，两边不一致时编辑器能跳转而编译器报错，或反过来，这是新手最常见的一小时难题。",
+          "level": 2
+        },
+        {
+          "id": "w15d6-p4",
+          "topic": "README 与约定文件",
+          "desc": "一个能叫模板的项目必须有 README 与几个约定文件。README 写四段：项目是什么、怎么装依赖、怎么起开发、怎么构建部署。约定文件推荐三个：.env.example 列出所有需要的环境变量（不写真值）、src/types 里的全局类型声明、以及一份 代码规范.md 说明分层职责与命名规则。没 README 的项目三个月后连作者自己都要从头排查怎么跑起来。",
+          "level": 2
+        },
+        {
+          "id": "w15d6-p5",
+          "topic": "占位而非写死",
+          "desc": "把模板变成模板仓库的关键是「占位而不是写死」。三件事必须做：一，项目名、作者、接口地址全部用占位符而不是硬编码，创建时手动替换；二，删掉所有业务代码，只留一个示例页面演示路由跳转与接口调用；三，写一个创建脚本或者直接用 GitHub 的 Template 功能，让新项目能一条命令拉下来。模板的价值在于「重复的项目不用重复踩坑」，任何需要人工回忆的步骤都是设计缺陷。",
+          "level": 3
+        },
+        {
+          "id": "w15d6-p6",
+          "topic": "模板维护策略",
+          "desc": "模板的维护策略不能忽略。建议把模板单独建库并标记为 Template，业务项目不直接继承，而是拉一份副本开始改，因为模板本身会演进而老项目不应被拖着升级。模板升级的判定标准：如果某个坑在三个以上项目里重复出现，就把它固化进模板；如果某个配置只在个别项目用，就不要放进模板，否则模板会越来越重。每季度花半小时评审一次模板内容，删掉过时项。",
+          "level": 3
+        }
+      ]
+    },
+    "w15d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w15d7-p1",
+          "topic": "默写工程配置",
+          "desc": "默写工程配置是本周的硬验收。给白纸盖住笔记，手写出四样：一，tsconfig 里 paths 与 baseUrl 的对应写法；二，vite.config 里别名、代理、构建分包的三段配置；三，.env 文件的加载优先级顺序；四，package.json 里 exports 字段的多条件写法。四样全写对才算过关，写错任何一样都说明平时靠复制粘贴而不是真的理解，后续换个项目就会卡住。",
+          "level": 1
+        },
+        {
+          "id": "w15d7-p2",
+          "topic": "工程化卡片粒度",
+          "desc": "工程化知识做卡片最适合的粒度是「一个配置项一张卡」。正面写配置项名字与它解决的问题，背面写最小可用示例与一个常见错误。建议本周至少做二十张，覆盖：别名双配置、代理 rewrite、manualChunks、import.meta.env 前缀规则、lock 文件作用、npm ci 与 install 区别、eslint 扁平配置结构、lint-staged 通配写法、Vitest 环境切换、sourcemap 策略。卡片不求多而求精，一张卡能让你在面试或同事问答时不卡壳就够。",
+          "level": 1
+        },
+        {
+          "id": "w15d7-p3",
+          "topic": "配置之间的三组关系",
+          "desc": "本周必须把「配置之间的关系」搞清，而不是孤立记命令。三组关系最关键：一，vite 别名与 tsconfig paths 必须同步，否则一处能跳一处报错；二，eslint 与 prettier 必须用 eslint-config-prettier 断开关联，否则格式规则互相覆盖；三，构建产物路径与部署路径（base）必须一致，否则上线后白屏。三组关系本质上是同一个道理：工程化里每个配置都不是孤立的，改一处要想清楚谁在依赖它。",
+          "level": 2
+        },
+        {
+          "id": "w15d7-p4",
+          "topic": "从零起项目流程演练",
+          "desc": "周复习要做一次「从零起项目」的流程演练，这是检验工程化能力最直接的方法。给自己计时一小时，不看笔记完成：新建项目、装依赖、配别名、配代理、配 lint 与格式化、加一个测试、跑通构建、本地预览。任何一个环节卡住超过五分钟就记录下来，这一条就是本周真正的缺口。演练不需要写得漂亮，只需要跑通，因为工程化的目标是「可重复」而不是「优雅」。",
+          "level": 2
+        },
+        {
+          "id": "w15d7-p5",
+          "topic": "四个高频故障排查",
+          "desc": "本周要识别四个高频故障的排查路径。一，白屏：先看控制台 404 还是语法错误，404 查 base 与资源路径，语法错误查浏览器目标版本与构建产物是否 ES5 兼容；二，模块找不到：查别名双配置与文件扩展名解析；三，环境变量拿不到：查前缀、重启开发服务器、确认不是动态访问；四，构建体积异常：跑构建分析看谁最大。四条路径背下来，以后遇到工程问题至少知道从哪下手。",
+          "level": 3
+        },
+        {
+          "id": "w15d7-p6",
+          "topic": "W15 的验收三条",
+          "desc": "W15 的成果应该是一个能反复使用的模板仓库，而不是一堆笔记。验收标准是三条：一，新项目能在一分钟内拉起来并跑通开发服务器；二，拉起来之后不用再改任何配置就能写业务；三，README 能让另一个没参与的人独立跑起来。三条都满足，才说明这周不是「看完了教程」，而是「真的把工程能力握在手里」。不满足就回炉，不要带着缺口进入下周的框架学习。",
+          "level": 3
+        }
+      ]
+    },
+    "w16d1": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w16d1-p1",
+          "topic": "组件与 SFC 结构",
+          "desc": "Vue 组件的本质是「数据驱动视图」：你只声明状态与状态的用法，视图怎么变交给框架算。一个单文件组件三块：template 写结构（只能有一个根节点，Vue 3 允许多根但要谨慎）、script 写逻辑、style 写样式。推荐一律用 script setup 语法，它更短且类型推断更好；选项式 API 在维护老项目时要能读，但新项目不建议写。",
+          "level": 1
+        },
+        {
+          "id": "w16d1-p2",
+          "topic": "模板语法四类",
+          "desc": "模板语法就四类，掌握这四类就足够了。一，插值 `{{ }}`，里面只能写表达式不能写语句（不能写 if 语句，但能写三元）；二，绑定 `:属性名`，冒号是 v-bind 的缩写，布尔属性与对象展开都靠它；三，事件 `@事件名`，是 v-on 的缩写；四，流程控制 v-if 与 v-for。四类之外的东西都是它们的组合，不要把时间花在记指令清单上。",
+          "level": 1
+        },
+        {
+          "id": "w16d1-p3",
+          "topic": "插值与属性绑定",
+          "desc": "插值与绑定的区别是本周第一个必须弄清的点。`{{ x }}` 输出文本，会被转义，适合展示用户数据；`v-html` 输出原始 HTML，能渲染富文本但有 XSS 风险，只对可信内容用。`{{ }}` 不能用在属性上，属性必须用 `:title=\"x\"`，这是新手最常见的语法错误。另一个高频错误是把 `:disabled=\"true\"` 写成 `disabled=\"true\"`，后者传的是字符串，在布尔属性上等价于永远为真。",
+          "level": 2
+        },
+        {
+          "id": "w16d1-p4",
+          "topic": "v-if 与 v-show 选择",
+          "desc": "v-if 与 v-show 的选择有硬标准：v-if 不渲染节点，切换时销毁并重建，适合「很少切换」的场景；v-show 只是改 display 属性，节点始终在 DOM 里，适合「频繁切换」的场景。两个坑要注意：一，v-if 与 v-for 不要写在同一元素上，v-if 优先级评估在 Vue 3 已经高于 v-for，会导致拿不到循环变量，正确做法是外面套一层 template；二，v-if 频繁切换时列表内组件状态会丢失，需要保留就用 v-show。",
+          "level": 2
+        },
+        {
+          "id": "w16d1-p5",
+          "topic": "v-for 与 key",
+          "desc": "v-for 必须带 key，这不是建议而是硬要求。key 的作用是给每个节点一个稳定身份，让 diff 算法能正确复用与移动节点；用下标当 key 在列表增删排序时会导致状态错乱（复选框串位、输入框内容错位），这是面试高频题也是真实事故源。key 应该用数据的唯一 id 而不是 index，不要用随机数（每次渲染都变会导致全量重建）。",
+          "level": 3
+        },
+        {
+          "id": "w16d1-p6",
+          "topic": "可复用组件的自检三步",
+          "desc": "本周的组件产出标准是「一个能接收数据、能响应用户操作的独立单元」。最小可用的组件至少有：一个 props 声明、一个内部状态、一个事件触发、一个模板里的条件渲染。写完要做三步自检：一，把它删掉后页面是否还能编译（确认没有隐性依赖外部状态）；二，传入不同的 props 是否表现不同；三，用户操作后是否能从外部观察到变化。三步都过，这个组件才算真正可复用。",
+          "level": 3
+        }
+      ]
+    },
+    "w16d2": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w16d2-p1",
+          "topic": "ref 与 reactive 怎么选",
+          "desc": "响应式有两种创建方式，选错会导致后续大量奇怪 bug。`ref` 包任意值，读写要加 `.value`（模板里自动解包，所以模板里写 ref 名字不加 value）；`reactive` 只能包对象，不需要 .value，但有两个硬伤：解构会丢失响应式、整体替换会断链。实务规则很简单：默认用 ref，需要一组相关状态且只在内部使用时才用 reactive，需要解构就给 ref 或配 toRefs。",
+          "level": 1
+        },
+        {
+          "id": "w16d2-p2",
+          "topic": "响应式的 Proxy 原理",
+          "desc": "响应式的底层靠 Proxy。Vue 3 用 Proxy 拦截对象的读写，所以能做到属性级追踪：只有真正被读取的属性才会被记录为依赖，只有依赖变化才触发重渲染。这解释了三个现象：一，新增属性会自动响应（Vue 2 的 Vue.set 问题在 3 里不存在）；二，深层对象的每一层被访问时才追踪，不是一开始就递归；三，把一个响应式对象整体替换成普通对象，链条就断了，必须用 ref 包住再改 .value。",
+          "level": 1
+        },
+        {
+          "id": "w16d2-p3",
+          "topic": "props 三条硬规则",
+          "desc": "Props 是父传子的唯一通道，必须是单向的。声明用 defineProps，带类型与默认值时推荐用类型声明加 withDefaults。三条硬规则：一，子组件绝不能直接修改 props，改了就报警告且容易数据流混乱；二，props 变化是单向流，子组件需要派生值时用 computed 而不是在 props 上再 watch 然后改本地副本（后者是双份数据源）；三，对象或数组类型的 props 默认值必须用工厂函数，直接写对象会让所有实例共享同一份。",
+          "level": 2
+        },
+        {
+          "id": "w16d2-p4",
+          "topic": "emit 三步与三个细节",
+          "desc": "子传父靠 emit，三步：子组件 `const emit = defineEmits(['change'])` 声明、调用 `emit('change', payload)` 触发、父组件 `@change=\"handler\"` 接收。三个细节必须记住：一，声明是必须的，不声明在 TS 下会报错，且声明后才能拿到类型提示；二，事件名在模板里用小写或连字符（emit 里写驼峰也可以在模板用连字符接收，但不要混用）；三，emit 是同步的，但父组件里的处理可能是异步的，不要依赖返回。",
+          "level": 2
+        },
+        {
+          "id": "w16d2-p5",
+          "topic": "事件与 props 的分界",
+          "desc": "事件与 props 的选择有一条清晰分界：数据向下传用 props，通知向上用 emit，跨层不要用 emit 一层一层往上冒（那是漏抽象）。如果子组件需要双向绑定，用 `defineModel` 或 v-model 规范，而不是 props 加 emit 手写一套再取不同名字。另一个易错点是事件命名与原生事件冲突，比如自己 emit 一个名为 click 的事件，会覆盖原生点击，改用 update 或自定义前缀。",
+          "level": 3
+        },
+        {
+          "id": "w16d2-p6",
+          "topic": "响应式丢失的排查",
+          "desc": "本周要区分清楚三个概念：响应式数据、响应式引用、响应式丢失。响应式数据是状态本身；响应式引用是指你拿到的是 Proxy 包裹的对象，一旦把 `.then(obj => obj)` 或者函数返回的对象直接赋值，可能变成普通对象；响应式丢失最常见的两种情形是解构与整体替换。排查办法只有一条：在可疑代码后 `console.log(isRef(x), x)`，看它是不是还是响应式的，比任何猜测都快。",
+          "level": 3
+        }
+      ]
+    },
+    "w16d3": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w16d3-p1",
+          "topic": "v-model 是语法糖",
+          "desc": "表单绑定的核心指令是 v-model，它其实是「值绑定 + 输入事件」的语法糖。写成 `v-model=\"x\"` 等价于 `:value=\"x\" @input=\"x = $event.target.value\"`。理解这层等价关系后，自定义组件的 v-model 就不再神秘：组件内部宣布一个 modelValue prop 并 emit update:modelValue 即可。Vue 3 支持多个 v-model，用 `v-model:title` 这种带参数的写法。",
+          "level": 1
+        },
+        {
+          "id": "w16d3-p2",
+          "topic": "不同表单元素的绑定值",
+          "desc": "v-model 在不同表单元素上的绑定值不一样。文本框绑字符串；单个复选框绑布尔；多个复选框绑数组；单选框绑选中的那个值；下拉单选绑值、多选绑数组。三个必须知道的修饰符：`.lazy` 改成 change 时同步（默认是 input 每次输入都同步）、`.number` 转数字、`.trim` 去首尾空格。中文输入法下不加 .lazy 会导致拼音阶段就触发更新，这是国内项目最容易踩的坑。",
+          "level": 1
+        },
+        {
+          "id": "w16d3-p3",
+          "topic": "条件渲染三兄弟与 template",
+          "desc": "条件渲染三兄弟要分清。v-if 真正渲染或不渲染节点，切换成本高；v-else-if 与 v-else 必须紧跟在 v-if 相邻元素上，中间插入其他节点会断开；v-show 只改 display，首屏开销大但切换便宜。还有一个常被忽略的 template 标签：`<template v-if>` 可以包多个元素而自身不产出 DOM 节点，是处理「多个兄弟元素同时条件渲染」的标准写法，也是 v-if 与 v-for 同用时的正确绕法。",
+          "level": 2
+        },
+        {
+          "id": "w16d3-p4",
+          "topic": "列表渲染四个实际问题",
+          "desc": "列表渲染除了 v-for 与 key，还要会处理四个实际问题。一，过滤与排序用 computed 而不是在模板里调方法（模板里调方法每次渲染都重算）；二，循环里不要用 v-if 过滤条目，先用 computed 过滤好再循环；三，嵌套循环时内层要用不同的变量名，且 key 必须在各自循环的元素上；四，v-for 也能遍历对象与数字，遍历对象时 `(value, key, index)` 三个参数顺序不能记反。",
+          "level": 2
+        },
+        {
+          "id": "w16d3-p5",
+          "topic": "表单校验与错误展示",
+          "desc": "表单页最容易漏的是校验与错误展示的一致性。标准做法是维护一个 errors 对象，字段名对应错误信息，提交前统一校验一次，输入时按需校验。三条硬规则：一，错误信息展示位置必须紧贴对应字段，不要全部堆在顶部；二，提交按钮在提交中要禁用，防止重复提交；三，必填与格式错误分开提示，不要一句「输入有误」。这三条不达标，页面看起来能用但实际上用户会反复试错。",
+          "level": 3
+        },
+        {
+          "id": "w16d3-p6",
+          "topic": "CRUD 表单页五条标准",
+          "desc": "本周要能独立完成一个「增删改查表单页」，判定标准有五个。一，列表能渲染且每一条都带稳定的唯一 id 作 key；二，新增能提交、成功后在列表中出现并清空表单；三，编辑能回填原数据、提交后列表同步更新；四，删除有二次确认且成功后从列表移除；五，校验失败时有字段级错误提示而不是一句笼统的提示。五条全过才算达标。如果只能渲染不能增删改，说明还停在「会写模板」阶段，没进入「会做页面」阶段。",
+          "level": 3
+        }
+      ]
+    },
+    "w16d4": {
+      "form": "B",
+      "points": [
+        {
+          "id": "w16d4-p1",
+          "topic": "四个常用生命周期钩子",
+          "desc": "组件生命周期就是四个阶段：创建、挂载、更新、卸载，每个阶段前后各一个钩子。最常用的四个是 onMounted（DOM 已就绪，可以操作 DOM、发初始请求）、onUpdated（数据变化后 DOM 已更新，极易滥用导致死循环）、onUnmounted（清理定时器、监听器、websocket）、onBeforeUnmount（还能访问 DOM，适合做收尾测量）。新手只需先把 mounted 与 unmounted 用熟就够。",
+          "level": 1
+        },
+        {
+          "id": "w16d4-p2",
+          "topic": "组合式 API 下的钩子替换",
+          "desc": "组合式 API 下没有 created 钩子，setup 执行本身就相当于 created 阶段。这个替换关系要记住：beforeCreate 与 created 合并成 setup 的同步部分；beforeMount 变成 onBeforeMount；mounted 变成 onMounted；其余以此类推。两个实际影响：一，setup 里不能访问 DOM（还没挂载），必须放 onMounted；二，setup 里同步执行的请求会在挂载前发出，但赋值不会触发页闪烁问题，因为渲染还没开始。",
+          "level": 1
+        },
+        {
+          "id": "w16d4-p3",
+          "topic": "父子钩子执行顺序",
+          "desc": "父子组件的钩子执行顺序必须记准：父 beforeCreate → 父 created → 父 beforeMount → 子 beforeCreate → 子 created → 子 beforeMount → 子 mounted → 父 mounted。结论是子组件 mounted 早于父组件 mounted。卸载时反过来，父 beforeUnmount → 子 beforeUnmount → 子 unmounted → 父 unmounted。记住这个顺序能解释一个经典问题：父组件 mounted 里拿不到子组件暴露的某些数据，因为父 mounted 时子已经就绪但数据更新可能异步。",
+          "level": 2
+        },
+        {
+          "id": "w16d4-p4",
+          "topic": "computed 与 watch 的分工",
+          "desc": "watch 与 computed 的选择是本周最关键的判断。computed 用于「派生状态」——从已有数据算出新数据，有缓存，只在依赖变化时重算；watch 用于「副作用」——数据变化后要做事情（发请求、存缓存、操作 DOM、打点）。把派生逻辑写进 watch 再手动赋值，是最常见的双份状态源错误；把发请求写进 computed 更是严重错误，因为 computed 应该是纯函数，不能有副作用。",
+          "level": 2
+        },
+        {
+          "id": "w16d4-p5",
+          "topic": "watch 的五个参数",
+          "desc": "watch 有五个必须掌握的参数。第三个参数 `{ immediate: true }` 让它在初始化时先跑一次（常用于监听路由参数后立即拉数据）；`{ deep: true }` 深度监听对象内部变化，性能开销大且监听不到新增属性在部分场景的行为，能不用就不用；多个源用数组写法 `watch([a, b], ...)`；回调签名是 `(newVal, oldVal)`；`{ flush: 'post' }` 让回调在 DOM 更新后执行，需要在 watch 里操作 DOM 时必须加。",
+          "level": 3
+        },
+        {
+          "id": "w16d4-p6",
+          "topic": "异步竞态与 onCleanup",
+          "desc": "异步与竞态是侦听器里最容易翻车的场景。典型问题：搜索框监听关键词变化发请求，输入很快时先发的请求可能后返回，把后发的覆盖掉。三种解法：一，请求带上序号，回来时比对是否是最新一次；二，用 AbortController 取消上一次请求；三，加防抖。watch 的回调里可以直接拿到 `onCleanup` 函数用于清理副作用，`watchEffect` 甚至会自动注册。不用这三种办法，这个 bug 在弱网下 100% 复现。",
+          "level": 3
+        }
+      ]
+    },
+    "w16d5": {
+      "form": "A",
+      "points": [
+        {
+          "id": "w16d5-p1",
+          "topic": "组合式 API 的核心思想",
+          "desc": "组合式 API 的核心思想是「按逻辑组织代码」而不是「按选项类型堆代码」。选项式 API 里同一个功能的响应式数据在 data、方法在 methods、监听在 watch、钩子在 mounted，四处分散；组合式 API 把这一整套逻辑打包成一个函数，哪里用到哪里调用。衡量一个 composable 好不好只有一个标准：把它抽出来之后，组件里的代码是不是变得更短且更容易读。",
+          "level": 1
+        },
+        {
+          "id": "w16d5-p2",
+          "topic": "composable 的四段结构",
+          "desc": "一个合格的 composable 有固定的四段结构：开头声明输入（参数），中间创建响应式状态，然后写操作方法与副作用，最后 return 一个对象。命名约定统一用 use 前缀，文件名同名（useCounter.ts）。三条硬规则：一，内部创建的 ref 与函数必须 return 出去，否则外部拿不到；二，内部创建的定时器与监听必须在 onUnmounted 里清理，composable 里可以直接调生命周期钩子；三，不要在 composable 里直接操作 全局 store，把它当参数传进来。",
+          "level": 1
+        },
+        {
+          "id": "w16d5-p3",
+          "topic": "组件重构的抽取顺序",
+          "desc": "重构组件到组合式的顺序很重要，否则会重构出更乱的代码。正确顺序：一，先把组件内按功能分组（一块数据加它的方法加它的监听算一组）；二，把最大的一组完整剪切到一个 useXxx 函数里，保持原有逻辑不变只改位置；三，跑一遍验证行为完全一致；四，再抽第二组。绝不能一边抽一边改逻辑，那样出现 bug 时分不清是抽错了还是改错了。重构的验收标准是行为零变化。",
+          "level": 2
+        },
+        {
+          "id": "w16d5-p4",
+          "topic": "选项式与组合式对照表",
+          "desc": "组合式 API 与选项式 API 的对照关系要能一一对应：data 对应 ref 与 reactive；computed 对应 computed；methods 对应普通函数；watch 对应 watch 与 watchEffect；mounted 对应 onMounted；props 对应 defineProps；emit 对应 defineEmits；父组件调用子组件方法在 Vue 3 变为 defineExpose 暴露。这张对照表背下来，看到任何老代码都能直接翻译，不需要重学一遍。",
+          "level": 2
+        },
+        {
+          "id": "w16d5-p5",
+          "topic": "写 composable 的四个错误",
+          "desc": "写 composable 有四个高频错误。一，把组件的业务逻辑全部抽进一个 useXxx，结果变成一个巨型函数，这不算抽取只算搬家，正确粒度是一个可复用能力一个 composable；二，在 composable 里调用了生命周期钩子但没在 setup 同步调用范围内（比如放到异步回调里），钩子会失效并报警告；三，ref 解构后丢失响应式；四，多个 composable 各自维护一份同名状态，导致数据不同步，需要共享时应提升到 store。",
+          "level": 3
+        },
+        {
+          "id": "w16d5-p6",
+          "topic": "三个必写的 composable",
+          "desc": "本周的产出标准是抽出三个真实可复用的 composable，建议固定这三个：useFetch（封装加载中、错误、数据、重试四个状态）、useForm（封装表单值、校验、提交流程）、useTable（封装分页、排序、筛选、刷新的参数与请求）。三个都写出来的话，就掌握了组合式 API 的核心价值：把「重复的交互模式」变成可测试、可复用的函数，而不是在每个页面里粘贴一遍。",
+          "level": 3
+        }
+      ]
+    },
+    "w16d6": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w16d6-p1",
+          "topic": "五个可复用组件选题",
+          "desc": "做 5 个可复用组件要选对题目，不要选业务组件。推荐这五个：Button（练 props 类型、尺寸变体、禁用态、插槽）、Modal（练 v-model 控制显隐、Teleport 到 body、遮罩点击、Esc 关闭）、Input（练 v-model 双向、前后缀插槽、错误态）、Table（练列定义配置化、作用域插槽自定义单元格、空数据态）、Empty（练最小组件的状态设计）。五个覆盖了大部分通用组件的设计套路。",
+          "level": 1
+        },
+        {
+          "id": "w16d6-p2",
+          "topic": "组件 API 设计三原则",
+          "desc": "组件的 API 设计比实现更重要。三条原则：一，props 用枚举而不是布尔堆叠，`type: 'primary' | 'danger'` 比 `primary` 加 `danger` 两个布尔值好，因为后者能同时传 true 导致样式冲突；二，留插槽而不是加配置项，需要自定义的内容一律开插槽，不要用一堆 render 配置项堆进 props；三，暴露事件而不是暴露方法，能用事件表达的不要用 defineExpose 强行调用内部方法。",
+          "level": 1
+        },
+        {
+          "id": "w16d6-p3",
+          "topic": "弹窗组件的三个细节",
+          "desc": "弹窗类组件（Modal / Drawer / Toast）有三个必须处理的细节。一，挂载位置：用 Teleport 送到 body，否则会被父元素的 overflow 剪掉或 z-index 层级搞乱；二，滚动锁骨：打开时给 body 加 overflow hidden 并在关闭时移除，否则背景能滚动，手机上手感极差；三，无障碍与键盘：按 Esc 关闭、焦点不能跑出弹窗、关闭后焦点回到触发元素。三条不做，组件在真实项目里迟早会出问题。",
+          "level": 2
+        },
+        {
+          "id": "w16d6-p4",
+          "topic": "事件命名与属性透传",
+          "desc": "为了让组件在不同调用处都能拿到事件，组件内部要统一事件名规范。Vue 3 的 v-model 约定是 modelValue 加 update:modelValue；自定义事件统一用小写连字符（如 row-click）而不是驼峰；带参数的 v-model 用 update:title。另一个常被忽略的是组件透传（attrs）：根元素会自动接收未声明的 class 与 style，但如果你在组件里包了多层，需要 `v-bind=\"$attrs\"` 手动透传，否则调用方传的 class 会失效。",
+          "level": 2
+        },
+        {
+          "id": "w16d6-p5",
+          "topic": "组件库统一入口",
+          "desc": "组件库雏形要有一个统一入口。做法是在 components 目录下建 index.ts，逐个体 export，外部只从 `@/components` 引入，不直接引具体文件。好处是将来组件改名或拆分时只需改一处。配合自动注册（用 unplugin-vue-components）还能做到模板里直接用组件名而不写 import。初型库里不建议做全局注册，除非组件数量超过三十个，否则会拖慢启动且不利于摇树。",
+          "level": 3
+        },
+        {
+          "id": "w16d6-p6",
+          "topic": "可复用组件的四条验收",
+          "desc": "雏形组件库的验收标准是四条。一，每个组件能独立在空白页面使用，不依赖任何业务 store；二，每个组件的 props 都有默认值与类型，传错类型能报错；三，组件外部传入的 class 能生效（透传正常）；四，组件里没有硬编码的颜色与尺寸，全部走 CSS 变量或统一的设计 token。四条不达标就说明还是「项目内组件」而不是「可复用组件」，后者才能在下个项目直接抓过来用。",
+          "level": 3
+        }
+      ]
+    },
+    "w16d7": {
+      "form": "C",
+      "points": [
+        {
+          "id": "w16d7-p1",
+          "topic": "默写组件结构",
+          "desc": "默写组件结构是本周的硬验收。盖住资料，手写一个完整单文件组件的骨架，必须包含：script setup 的 lang 与类型导入、defineProps 带类型与默认值、defineEmits 声明、一个 ref 状态、一个 computed、一个 onMounted、一个 template 里的 v-for 带 key、一个 style 带 scoped。七项全写对才算过关。少一项说明平时靠复制模板而不是真正掌握，换行也写不出来。",
+          "level": 1
+        },
+        {
+          "id": "w16d7-p2",
+          "topic": "组件卡片的对比组织",
+          "desc": "本周组件知识做卡片要按「概念对比」组织，而不是按知识点罗列。至少做十张对比卡：ref vs reactive、v-if vs v-show、computed vs watch、props vs emit、watch vs watchEffect、onMounted vs onUpdated、script setup vs 选项式、defineExpose vs emit、v-model 的单向 vs 双向、Teleport vs 普通嵌套。对比卡的价值在于它直接对应选择题与面试题的考法。",
+          "level": 1
+        },
+        {
+          "id": "w16d7-p3",
+          "topic": "以数据流为主线的导图",
+          "desc": "本周的组件导图建议用数据流作主线，而不是按 API 名词分支。中心写「组件」，四条箭头向外：父到子是 props（单向、不可改、默认值需工厂函数）、子到父是 emit（声明后触发，父用 @ 监听）、跨层是 provide/inject 或 store、自身是响应式状态与 computed 派生。四条箭头背后是同一个原则：数据流向必须单一且可追踪，哪条箭头反向或者双向，哪里就会长 bug。",
+          "level": 2
+        },
+        {
+          "id": "w16d7-p4",
+          "topic": "组件故障四类定位",
+          "desc": "组件基础阶段的常见故障要能快速定位。一，数据不更新：查是不是解构了 ref、是不是整体替换了 reactive、是不是异步赋值到了非响应式对象；二，props 改动报警告：查是不是子在改父数据，改用 emit；三，事件不触发：查 emit 名与 @ 监听名是否拼写或大小写不一致；四，组件不渲染：查 import 路径、自动注册配置、以及是否 v-if 条件为假。四类能盖住本周九成问题。",
+          "level": 2
+        },
+        {
+          "id": "w16d7-p5",
+          "topic": "什么时候该拆组件",
+          "desc": "本周必须把「什么时候该拆组件」这个判断搞清。该拆的三个信号：一，模板超过一百行且出现明显区块；二，同一块 UI 在两个以上地方出现；三，某块逻辑有独立的状态与副作用。不该拆的三个信号：一，只用了 次且不到二十行；二，拆出去需要传十几个 props；三，拆完父子要互相调方法。判断依据是拆完以后的接口复杂度，如果 props 比原代码还长，就不该拆。",
+          "level": 3
+        },
+        {
+          "id": "w16d7-p6",
+          "topic": "W16 的验收三条",
+          "desc": "W16 的成果是一个能复用的组件库雏形加三个 composable，而不是看完视频。验收三条：一，组件库里的组件能在新页面直接引用并正常表现；二，composable 在三个不同页面里复用过且没有改代码；三，你能不看文档给另一个人讲清 props 与 emit 的单向数据流。三条都过再进入下周的组件通信与状态管理，否则下周会觉得每步都很吃力。不达标就回炉，别带着窟窿往前走。",
+          "level": 3
+        }
+      ]
+    }
+  }
+}
