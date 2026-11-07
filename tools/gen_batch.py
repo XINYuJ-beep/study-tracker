@@ -135,9 +135,16 @@ def validate_week(week, rows, module_data, existing_mcq, anchor=True):
                 errs.append('%s item_id %r 不属于 W%d' % (tag, iid, week))
         if anchor and iid and iid in items:
             pm = items[iid]['points']
-            idx = by_item[iid]
-            if idx < len(pm):
-                hit = anchor_hit(q, pm[idx])
+            # 按 point_id 精确配对（行序可能被 shuffle 打乱，不能用计数器索引）
+            pid = r.get('point_id')
+            byid = {x.get('id'): (j, x) for j, x in enumerate(pm)}
+            if pid in byid:
+                idx, pt = byid[pid]
+            else:
+                idx = by_item[iid]
+                pt = pm[idx] if idx < len(pm) else None
+            if pt is not None:
+                hit = anchor_hit(q, pt)
                 if len(hit) < ANCHOR_MIN:
                     errs.append('%s 锚点不足(命中%d< %d) p%d: %s' % (tag, len(hit), ANCHOR_MIN, idx + 1, q[:26]))
         if not isinstance(opts, list) or len(opts) != 4:

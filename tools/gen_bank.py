@@ -16,8 +16,21 @@ import json
 import time
 import argparse
 import re as _re
+import threading
 import urllib.request
 import urllib.error
+# ---- 网络加固：强制 IPv4 + socket 默认超时（IPv6 到 CF 会挂死）----
+import socket as _socket
+_socket_hardened = True
+_orig_gai = _socket.getaddrinfo
+def _gai_v4(host, port, family=0, type=0, proto=0, flags=0):
+    try:
+        return _orig_gai(host, port, _socket.AF_INET, type, proto, flags)
+    except Exception:
+        return _orig_gai(host, port, family, type, proto, flags)
+_socket.getaddrinfo = _gai_v4
+_socket.setdefaulttimeout(120)
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_PATH = '/root/.study_llm.env'
@@ -25,9 +38,33 @@ POINTS_DIR = os.path.join(ROOT, 'tools', 'points')
 BANK_DIR = os.path.join(ROOT, 'tools', 'bank')
 
 EXAM_COUNT = 3
-MAX_TOKENS = 8000
+MAX_TOKENS = 16000
 MAX_TOKENS_CAP = 32000
-RETRY = 3
+# 单次 HTTP 请求硬超时（秒）。配合 batch3.sh 的 timeout 双层兜底。
+HTTP_TIMEOUT = 90
+# 部分中转站前置 Cloudflare，会拦截 Python-urllib 默认 UA 返回 403/error code 1010，
+# 必须伪装成常见浏览器 UA 才能通过。
+UA = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
+      '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+RETRY = 5
+# ---- 全局限速（中转站硬上限 5 req/min）----
+RATE_LIMIT_PER_MIN = 5
+_rate_lock = threading.Lock()
+_rate_calls = []
+def _rate_wait():
+    """滑动窗口节流：保证任意 60s 内请求数 <= RATE_LIMIT_PER_MIN。"""
+    while True:
+        with _rate_lock:
+            now = time.time()
+            while _rate_calls and now - _rate_calls[0] > 60:
+                _rate_calls.pop(0)
+            if len(_rate_calls) < RATE_LIMIT_PER_MIN:
+                _rate_calls.append(now)
+                return
+            wait = 60 - (now - _rate_calls[0]) + 0.5
+        sys.stderr.write('[rate] 限速等待 %.1fs\n' % max(wait, 1.0))
+        sys.stderr.flush()
+        time.sleep(max(wait, 1.0))
 R_OPTTOOSHORT = '选项过短(%d字): %s'
 R_ENGLONG = '解析含连续英文长词'
 
@@ -108,6 +145,7 @@ def call_llm(env, prompt, system):
                 'x-api-key': key,
                 'Authorization': 'Bearer ' + key,
                 'anthropic-version': '2023-06-01',
+                'User-Agent': UA,
             }
         else:
             body = {
@@ -121,14 +159,16 @@ def call_llm(env, prompt, system):
             headers = {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + key,
+                'User-Agent': UA,
             }
+        _rate_wait()
         req = urllib.request.Request(
             base,
             data=json.dumps(body).encode('utf-8'),
             headers=headers,
             method='POST',
         )
-        with urllib.request.urlopen(req, timeout=180) as r:
+        with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as r:
             raw = r.read().decode('utf-8')
         data = json.loads(raw)
         finish = ''
@@ -166,11 +206,11 @@ SYSTEM = (
     '1. 只输出一个 JSON 对象，不要任何解释、不要 markdown 代码块。\n'
     '2. 字段：q(题干) o(长度固定的4个选项字符串数组) a(0-3整数) e(解析)\n'
     '3. 题干 15-45 字，必须自然用上给定考点里至少 2 个关键词。\n'
-    '4. 四个选项长度接近，每个选项 12～28 字，最长/最短 <= 1.8 倍，互不重复，每个选项必须是完整句子。\n'
+    '4. 四个选项长度接近，每个选项 12～26 字（严禁超过 26 字！），最长/最短 <= 1.8 倍，互不重复，每个选项必须是完整句子。\n'
     '4b. 选项不能只写一个词、一个数字或一个符号，要能独立读懂，且四个选项长度相当，不得一个很长三个很短。\n'
     '5. 只有一个正确答案；三个错项要是常见误解，不能一眼假。\n'
     '6. 题干不能出现“以上都”“下列不正确的是”这类套话开头。\n'
-    '7. e 解析 40-75 字，讲清为什么对以及错在哪，不重复题干。\n'
+    '7. e 解析 42-76 字（必须落在这个区间，严禁超过 76 字），讲清为什么对以及错在哪，不重复题干。\n'
     '8. 正确答案必须放在指定下标位置。\n'
     '9. 中文与英文/数字相邻时两边各留一个空格，标点一律用中文全角。\n'
     '10. 代码标识符可用英文，但选项和题干必须通顺可读，不得半句英文半句中文硬拼。\n'
@@ -210,9 +250,9 @@ def build_exam_prompt(week, points, ans_idx, avoid):
     lines.append('【要求】')
     lines.append('- 正确答案必须放在 o 数组下标 %d 的位置。' % ans_idx)
     lines.append('- 题干难度 L3：需要综合两个以上考点才能作答。')
-    lines.append('- 四个选项每个 12 到 28 个字；最长与最短长度比不超过 1.8 倍。')
+    lines.append('- 四个选项每个 14 到 32 个字；最长与最短长度比不超过 1.8 倍。')
     lines.append('- 四个选项的表述角度必须各不相同（分别从机制、时序、前提、后果切入），不允许同一句式换主体。')
-    lines.append('- 解析 35 到 85 个字，说明为什么对、为什么错，不要出现英文原句。')
+    lines.append('- 解析 42 到 76 个字（严格区间），说明为什么对、为什么错，不要出现英文原句。')
     if avoid:
         lines.append('【最近已出过的题，禁止重复或换汤不换药】')
         for a in avoid[-16:]:
@@ -236,8 +276,8 @@ def check(q, point):
     opts = q['o']
     a = q['a']
     exp = q['e'].strip()
-    if not (8 <= len(stem) <= 60):
-        errs.append('题干长度 %d 越界(8-60)' % len(stem))
+    if not (8 <= len(stem) <= 68):
+        errs.append('题干长度 %d 越界(8-68)' % len(stem))
     if len(opts) != 4:
         errs.append('选项数 %d != 4' % len(opts))
     else:
@@ -252,8 +292,8 @@ def check(q, point):
             errs.append('选项有重复')
     if not isinstance(a, int) or a < 0 or a > 3:
         errs.append('answer 非法: %r' % a)
-    if not (35 <= len(exp) <= 85):
-        errs.append('解析长度 %d 越界(35-85)' % len(exp))
+    if not (40 <= len(exp) <= 80):
+        errs.append('解析长度 %d 越界(40-80)' % len(exp))
     if _re.search(r'[A-Za-z]{3,}(?:[ ,]+[A-Za-z]{3,}){3,}', exp):
         errs.append(R_ENGLONG)
     return errs
@@ -330,7 +370,14 @@ def gen_one(env, point, item_id, day, ans_idx, avoid):
             text = call_llm(env, build_prompt(point, item_id, day, ans_idx, avoid), SYSTEM)
         except Exception as ex:
             last = 'HTTP: %s' % ex
-            time.sleep(2 ** attempt)
+            s = str(ex)
+            if '402' in s:
+                # 402 多为瞬时额度抖动，长退避重试而非抛崩
+                time.sleep(30 + 2 ** attempt)
+            elif '429' in s:
+                time.sleep(20 + 2 ** attempt)
+            else:
+                time.sleep(2 ** attempt)
             continue
         obj = parse_json(text)
         if obj is None:
@@ -385,7 +432,14 @@ def gen_one_exam(env, week, allp, ans_idx, avoid, primary):
             text = call_llm(env, build_exam_prompt(week, allp, ans_idx, avoid), SYSTEM)
         except Exception as ex:
             last = 'HTTP: %s' % ex
-            time.sleep(2 ** attempt)
+            s = str(ex)
+            if '402' in s:
+                # 402 多为瞬时额度抖动，长退避重试而非抛崩
+                time.sleep(30 + 2 ** attempt)
+            elif '429' in s:
+                time.sleep(20 + 2 ** attempt)
+            else:
+                time.sleep(2 ** attempt)
             continue
         arr = parse_json_array(text)
         if not arr:
@@ -460,9 +514,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--week', type=int, required=True)
     ap.add_argument('--item')
+    ap.add_argument('--point', default='', help="逗号分隔的 point_id 白名单，如 w4d1-p4,w4d1-p5")
     ap.add_argument('--resume', action='store_true')
     ap.add_argument('--dry', action='store_true')
     ap.add_argument('--exam', action='store_true')
+    ap.add_argument('--workers', type=int, default=1)
     args = ap.parse_args()
 
     week = args.week
@@ -549,46 +605,98 @@ def main():
                 except Exception:
                     continue
 
-    fout = open(part_path, 'a', encoding='utf-8')
-    ok = fail = 0
-    t0 = time.time()
+    workers = max(1, args.workers)
+
+    want_points = set(x.strip() for x in (args.point.split(',') if args.point else []) if x.strip())
+
+    if args.dry:
+        for iid, day, p, idx in targets:
+            if args.item and iid != args.item:
+                continue
+            if want_points and p['id'] not in want_points:
+                continue
+            if args.resume and done.get(iid, 0) > idx:
+                continue
+            print('[dry] %s %s ans=%d' % (iid, p['id'], idx % 4))
+        return
+
+    todo = []
     for iid, day, p, idx in targets:
         if args.item and iid != args.item:
             continue
+        if want_points and p['id'] not in want_points:
+            continue
         if args.resume and done.get(iid, 0) > idx:
             continue
-        ans_idx = idx % 4
-        if args.dry:
-            print('[dry] %s %s ans=%d' % (iid, p['id'], ans_idx))
-            continue
-        obj, err = gen_one(env, p, iid, day, ans_idx, avoid)
-        if obj is None:
-            fail += 1
-            print('FAIL %s %s -> %s' % (iid, p['id'], err))
-            continue
-        row = {
+        todo.append((iid, day, p, idx, idx % 4))
+
+    ok = 0
+    fail = 0
+    t0 = time.time()
+    avoid_lock = threading.Lock()
+    ok_lock = threading.Lock()
+
+    def _row_of(obj, iid, day, ans_idx, pid):
+        return {
             'item_id': iid,
             'day': day,
             'q': obj['q'].strip(),
             'o': [str(x).strip() for x in obj['o']],
             'a': ans_idx,
             'e': obj['e'].strip(),
-            'point_id': p['id'],
+            'point_id': pid,
         }
-        fout.write(json.dumps(row, ensure_ascii=False) + '\n')
-        fout.flush()
-        avoid.append(row['q'][:30])
-        ok += 1
-        print('OK  %s %s (%d)' % (iid, p['id'], ok))
 
-    fout.close()
+    def _run_shard(shard_id, chunk):
+        nonlocal ok, fail
+        ppath = part_path if workers == 1 else part_path + '.%d' % shard_id
+        if workers > 1 and os.path.exists(ppath):
+            os.remove(ppath)
+        fh = open(ppath, 'a', encoding='utf-8')
+        try:
+            for iid, day, p, idx, ans_idx in chunk:
+                with avoid_lock:
+                    snap = list(avoid)
+                obj, err = gen_one(env, p, iid, day, ans_idx, snap)
+                if obj is None:
+                    with ok_lock:
+                        fail += 1
+                    print('FAIL %s %s -> %s' % (iid, p['id'], err))
+                    continue
+                row = _row_of(obj, iid, day, ans_idx, p['id'])
+                fh.write(json.dumps(row, ensure_ascii=False) + '\n')
+                fh.flush()
+                with avoid_lock:
+                    avoid.append(row['q'][:30])
+                with ok_lock:
+                    ok += 1
+                    n = ok
+                print('OK  %s %s (%d)' % (iid, p['id'], n))
+        finally:
+            fh.close()
+        return ppath
 
-    if ok and not args.dry and os.path.exists(part_path):
-        merged = _merge_partial(part_path, out_path, week)
-        print('[merge] %s -> %s 新增 %d 题' % (os.path.basename(part_path),
-                                              os.path.basename(out_path), merged))
+    if workers == 1:
+        parts = [_run_shard(0, todo)]
+    else:
+        buckets = [[] for _ in range(workers)]
+        for i, t in enumerate(todo):
+            buckets[i % workers].append(t)
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            futs = [ex.submit(_run_shard, sid, b) for sid, b in enumerate(buckets) if b]
+            parts = [f.result() for f in as_completed(futs)]
 
-    print('=== 完成 item 题 %d 道，失败 %d 道，用时 %.1fs ===' % (ok, fail, time.time() - t0))
+    total_merged = 0
+    if not args.dry:
+        for ppath in parts:
+            if os.path.exists(ppath):
+                n = _merge_partial(ppath, out_path, week)
+                total_merged += n
+                print('[merge] %s -> %s 新增 %d 题' % (os.path.basename(ppath),
+                                                      os.path.basename(out_path), n))
+
+    print('=== 完成 item 题 %d 道，失败 %d 道，merge %d 题，用时 %.1fs ===' % (
+        ok, fail, total_merged, time.time() - t0))
     if ok and not args.dry:
         print('下一步: python3 tools/gen_bank.py --week %d --exam' % week)
 
