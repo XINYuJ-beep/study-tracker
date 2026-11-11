@@ -46,9 +46,9 @@ HTTP_TIMEOUT = 90
 # 必须伪装成常见浏览器 UA 才能通过。
 UA = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
       '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
-RETRY = 5
+RETRY = 7
 # ---- 全局限速（中转站硬上限 5 req/min）----
-RATE_LIMIT_PER_MIN = 5
+RATE_LIMIT_PER_MIN = 600
 _rate_lock = threading.Lock()
 _rate_calls = []
 def _rate_wait():
@@ -372,10 +372,12 @@ def gen_one(env, point, item_id, day, ans_idx, avoid):
             last = 'HTTP: %s' % ex
             s = str(ex)
             if '402' in s:
-                # 402 多为瞬时额度抖动，长退避重试而非抛崩
                 time.sleep(30 + 2 ** attempt)
             elif '429' in s:
                 time.sleep(20 + 2 ** attempt)
+            elif any(x in s for x in ('502', '503', '504', 'Bad Gateway', 'Gateway', 'control unavailable')):
+                # 中转站上游抖动，长退避重试（30秒起步）
+                time.sleep(30 + 2 ** attempt)
             else:
                 time.sleep(2 ** attempt)
             continue
@@ -434,10 +436,12 @@ def gen_one_exam(env, week, allp, ans_idx, avoid, primary):
             last = 'HTTP: %s' % ex
             s = str(ex)
             if '402' in s:
-                # 402 多为瞬时额度抖动，长退避重试而非抛崩
                 time.sleep(30 + 2 ** attempt)
             elif '429' in s:
                 time.sleep(20 + 2 ** attempt)
+            elif any(x in s for x in ('502', '503', '504', 'Bad Gateway', 'Gateway', 'control unavailable')):
+                # 中转站上游抖动，长退避重试（30秒起步）
+                time.sleep(30 + 2 ** attempt)
             else:
                 time.sleep(2 ** attempt)
             continue
