@@ -15,7 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants.dart';
 import '../../core/providers.dart';
-import '../../data/db/tables.dart';
+import '../../core/theme.dart';
+import '../../data/repo/question_repo.dart';
 import '../widgets/concept_popup.dart';
 import '../widgets/qa_widgets.dart';
 
