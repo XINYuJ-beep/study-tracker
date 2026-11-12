@@ -25,6 +25,12 @@ class _StatsPageState extends ConsumerState<StatsPage> {
   List<HeatCell> _heat = const <HeatCell>[];
   List<ModuleProgress> _modules = const <ModuleProgress>[];
   MasteryBuckets _mastery = const MasteryBuckets(red: 0, yellow: 0, green: 0);
+  FailReasonBucket _failReasons = const FailReasonBucket(
+    cannotParse: 0,
+    forgot: 0,
+    mixedUp: 0,
+    wrongReasoning: 0,
+  );
 
   @override
   void initState() {
@@ -46,6 +52,7 @@ class _StatsPageState extends ConsumerState<StatsPage> {
       final heat = await statsRepo.heatmap(weeks: 12);
       final modules = await statsRepo.moduleProgress();
       final mastery = await statsRepo.masteryBuckets();
+      final failReasons = await statsRepo.failReasonBuckets();
       if (!mounted) return;
       setState(() {
         _streak = streak;
@@ -53,6 +60,7 @@ class _StatsPageState extends ConsumerState<StatsPage> {
         _heat = heat;
         _modules = modules;
         _mastery = mastery;
+        _failReasons = failReasons;
         _loading = false;
       });
     } catch (e) {
@@ -128,6 +136,8 @@ class _StatsPageState extends ConsumerState<StatsPage> {
             _ModuleCard(list: _modules),
             const SizedBox(height: AppSizes.gap2),
             _MasteryCard(buckets: _mastery),
+            const SizedBox(height: AppSizes.gap2),
+            _FailReasonCard(buckets: _failReasons),
           ],
         ),
       ),
@@ -558,6 +568,133 @@ class _MasteryCard extends StatelessWidget {
 }
 
 /// 饼图单块数据。
+/// 薄弱类型分布（缺口③）：五类错因的占比条。
+///
+/// 只展示，不参与排程。看到自己 70% 错在「记混了」，就知道该调学习方式，
+/// 而不是指望算法帮你把题推到明天。
+class _FailReasonCard extends StatelessWidget {
+  const _FailReasonCard({required this.buckets});
+
+  final FailReasonBucket buckets;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final bool empty = buckets.total == 0;
+
+    return _StatCard(
+      title: '薄弱类型',
+      child: empty
+          ? Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                '还没有错因记录。答错时选一下「错在哪」，这里就会告诉你反复死在哪儿。',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  height: 1.6,
+                ),
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _ReasonBar(
+                  label: '看不懂题',
+                  count: buckets.cannotParse,
+                  total: buckets.total,
+                  color: const Color(0xFF8E8E93),
+                ),
+                const SizedBox(height: 10),
+                _ReasonBar(
+                  label: '知识点没记住',
+                  count: buckets.forgot,
+                  total: buckets.total,
+                  color: const Color(0xFF4D6BFE),
+                ),
+                const SizedBox(height: 10),
+                _ReasonBar(
+                  label: '记混了',
+                  count: buckets.mixedUp,
+                  total: buckets.total,
+                  color: const Color(0xFFFF9500),
+                ),
+                const SizedBox(height: 10),
+                _ReasonBar(
+                  label: '想陷了',
+                  count: buckets.wrongReasoning,
+                  total: buckets.total,
+                  color: const Color(0xFFFF3B30),
+                ),
+                const SizedBox(height: 14),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.06),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '共 ${buckets.total} 道题标了错因，最多的是「${buckets.dominant}」。',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+}
+
+class _ReasonBar extends StatelessWidget {
+  const _ReasonBar({
+    required this.label,
+    required this.count,
+    required this.total,
+    required this.color,
+  });
+
+  final String label;
+  final int count;
+  final int total;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final double ratio = total == 0 ? 0 : count / total;
+    final int pct = (ratio * 100).round();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(label, style: theme.textTheme.bodyMedium),
+            const Spacer(),
+            Text(
+              '$count 题  $pct%',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: ratio,
+            minHeight: 6,
+            backgroundColor: theme.colorScheme.surfaceContainerHighest,
+            valueColor: AlwaysStoppedAnimation<Color>(color),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _Slice {
   const _Slice(this.label, this.value, this.color);
   final String label;

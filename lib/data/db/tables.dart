@@ -151,6 +151,13 @@ const List<String> kMigrateV4ToV5 = <String>[
   "ALTER TABLE mcqs ADD COLUMN self_score INTEGER NOT NULL DEFAULT 0",
 ];
 
+/// v5 -> v6: add fail_reason for wrong-answer attribution (gap 3).
+/// 0 = not marked, 1 = cannot parse the question, 2 = forgot the point,
+/// 3 = mixed two points up, 4 = reasoned down the wrong path.
+const List<String> kMigrateV5ToV6 = <String>[
+  "ALTER TABLE mcqs ADD COLUMN fail_reason INTEGER NOT NULL DEFAULT 0",
+];
+
 /// 性能索引（SPEC 第 16 节：checkins(item_id)、checkins(date) 建索引）
 const List<String> kCreateIndexes = <String>[
   'CREATE INDEX IF NOT EXISTS idx_checkins_item ON checkins (item_id)',
@@ -212,7 +219,8 @@ CREATE TABLE IF NOT EXISTS mcqs (
   stage         INTEGER NOT NULL DEFAULT 0,
   due_date      INTEGER,
   ease          REAL NOT NULL DEFAULT 2.5,
-  self_score    INTEGER NOT NULL DEFAULT 0
+  self_score    INTEGER NOT NULL DEFAULT 0,
+  fail_reason   INTEGER NOT NULL DEFAULT 0
 )''';
 
 /// ====================================

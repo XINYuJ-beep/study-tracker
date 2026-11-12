@@ -48,6 +48,51 @@ class MasteryBuckets {
   int get total => red + yellow + green;
 }
 
+/// 错因归因分桶（缺口③）：五类错因各自的题数。
+///
+/// reason 取值与 mcqs.fail_reason 一致：
+///   1 看不懂题 / 2 知识点没记住 / 3 记混了 / 4 想陷了。
+/// 0 = 未标记，不计入任何一桶。
+class FailReasonBucket {
+  const FailReasonBucket({
+    required this.cannotParse,
+    required this.forgot,
+    required this.mixedUp,
+    required this.wrongReasoning,
+  });
+
+  /// 看不懂题
+  final int cannotParse;
+
+  /// 知识点没记住
+  final int forgot;
+
+  /// 记混了
+  final int mixedUp;
+
+  /// 想陷了
+  final int wrongReasoning;
+
+  int get total => cannotParse + forgot + mixedUp + wrongReasoning;
+
+  /// 最大桶的题数，用于画比例条。
+  int get maxCount {
+    final List<int> v = <int>[cannotParse, forgot, mixedUp, wrongReasoning];
+    v.sort();
+    return v.last;
+  }
+
+  /// 最多的那一类叫什么；全 0 时返回 null。
+  String? get dominant {
+    if (total == 0) return null;
+    final int m = maxCount;
+    if (cannotParse == m) return '看不懂题';
+    if (forgot == m) return '知识点没记住';
+    if (mixedUp == m) return '记混了';
+    return '想陷了';
+  }
+}
+
 /// 统计页数据源（SPEC 4.4）。
 ///
 /// 本类只读，不改任何表；所有方法都从 Checkins / Items / Concepts / Modules
@@ -206,6 +251,44 @@ class StatsRepo {
       }
     }
     return MasteryBuckets(red: red, yellow: yellow, green: green);
+  }
+
+  /// 错因归因分布（缺口③）。只统计答错过的题，按 fail_reason 分桶。
+  Future<FailReasonBucket> failReasonBuckets() async {
+    final rows = await db.query(
+      T.mcqs,
+      columns: <String>['fail_reason'],
+      where: 'fail_reason > ?',
+      whereArgs: <Object?>[0],
+    );
+    var p1 = 0;
+    var p2 = 0;
+    var p3 = 0;
+    var p4 = 0;
+    for (final r in rows) {
+      switch (r['fail_reason'] as int? ?? 0) {
+        case 1:
+          p1++;
+          break;
+        case 2:
+          p2++;
+          break;
+        case 3:
+          p3++;
+          break;
+        case 4:
+          p4++;
+          break;
+        default:
+          break;
+      }
+    }
+    return FailReasonBucket(
+      cannotParse: p1,
+      forgot: p2,
+      mixedUp: p3,
+      wrongReasoning: p4,
+    );
   }
 
   // ---------- 内部 ----------

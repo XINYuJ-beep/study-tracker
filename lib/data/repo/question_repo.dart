@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' show Random;
 
 import '../../core/constants.dart';
 import '../../core/date_utils.dart';
@@ -327,6 +328,29 @@ class QuestionRepo {
     );
   }
 
+  /// 限时模考抽题（缺口④）：从已学范围（week <= maxWeek）随机取 [limit] 道。
+  ///
+  /// 两条硬约束：
+  ///   - 范围严格限在已学周，不出现还没学的题；
+  ///   - 随机洗牌在 Dart 侧做，不依赖 SQLite 的 random()（不同平台实现不一致）。
+  /// 模考不写 SM-2，故本方法只读，不改任何表。
+  Future<List<McqQuestion>> randomWithinWeeks(
+    int maxWeek, {
+    int limit = 30,
+    int? seed,
+  }) async {
+    if (maxWeek <= 0) return const <McqQuestion>[];
+    final rows = await db.query(
+      T.mcqs,
+      where: 'week IS NOT NULL AND week <= ?',
+      whereArgs: <Object?>[maxWeek],
+    );
+    if (rows.isEmpty) return const <McqQuestion>[];
+    final list = rows.map(_toMcq).toList();
+    list.shuffle(seed == null ? null : _SeededRandom(seed));
+    return list.take(limit).toList();
+  }
+
   // ---------- 错题 ----------
 
   /// 错题本：错过的且还没被「连续答对 N 次」清出的题。
@@ -361,7 +385,12 @@ class QuestionRepo {
   ///                的中间值，等于升幅减半（升了，但下一次复习提前拉近）；
   ///   1 讲不出来 = 判「忘了」：走答错路径（stage 归 0、ease -0.2、明天再来）。
   /// 只有答对才会传非 0 自评；答错时自评一律按忘了处理，不重复扣分。
-  Future<void> recordAnswer(String mcqId, bool correct, {int? selfScore}) async {
+  Future<void> recordAnswer(
+    String mcqId,
+    bool correct, {
+    int? selfScore,
+    int? failReason,
+  }) async {
     final rows = await db.query(
       T.mcqs,
       where: 'id = ?',
@@ -386,6 +415,13 @@ class QuestionRepo {
     final Map<String, Object?> selfPatch = score == 0
         ? const <String, Object?>{}
         : <String, Object?>{'self_score': score};
+
+    // 错因归因（缺口③）：0 = 未标记；1 看不懂题 / 2 知识点没记住 / 3 记混了 / 4 想陷了。
+    // 只记录，不参与 SM-2 排程（方案 A）——它是诊断数据，不是排程因子。
+    final int reason = (failReason ?? 0).clamp(0, 4);
+    final Map<String, Object?> reasonPatch = reason == 0
+        ? const <String, Object?>{}
+        : <String, Object?>{'fail_reason': reason};
 
     if (effectiveCorrect) {
       final int nextStreak = rightStreak + 1;
@@ -447,6 +483,7 @@ class QuestionRepo {
           'ease': nextEase,
           'due_date': dueMs,
           ...selfPatch,
+          ...reasonPatch,
         },
         where: 'id = ?',
         whereArgs: <Object?>[mcqId],
@@ -574,3 +611,20 @@ class QuestionRepo {
 
 DateTime? _msToDt(int? ms) =>
     ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
+
+/// 极简可复现随机源：只为了模考抽题能固定种子（测试/复现用）。
+/// 不传种子时走 list.shuffle(null)，用的是 Random 默认实现。
+class _SeededRandom implements Random {
+  _SeededRandom(int seed) : _r = Random(seed);
+
+  final Random _r;
+
+  @override
+  bool nextBool() => _r.nextBool();
+
+  @override
+  double nextDouble() => _r.nextDouble();
+
+  @override
+  int nextInt(int max) => _r.nextInt(max);
+}

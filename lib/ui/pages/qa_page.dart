@@ -27,6 +27,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants.dart';
 import '../../data/repo/question_repo.dart';
 import '../../core/providers.dart';
+import 'mock_exam_page.dart';
 import 'qa_extra_page.dart';
 import '../widgets/concept_popup.dart';
 import '../widgets/qa_widgets.dart';
@@ -74,6 +75,12 @@ class _QaPageState extends ConsumerState<QaPage> {
   /// 当前题的自评结果：0=未评，1=讲不出来，2=卡壳，3=讲清了。
   int _mcqSelfScore = 0;
   final TextEditingController _mcqSelfCtrl = TextEditingController();
+
+  // ---------- 缺口③错因归因 ----------
+  /// 当前题选中的错因：0=未选，1 看不懂题 / 2 知识点没记住 / 3 记混了 / 4 想陷了。
+  int _mcqFailReason = 0;
+  /// 答错时是否已经记过账（避免重复 recordAnswer）。
+  bool _mcqWrongLogged = false;
 
   @override
   void initState() {
@@ -248,15 +255,48 @@ class _QaPageState extends ConsumerState<QaPage> {
       // 答对 -> 停下来等他自评「用自己的话讲一遍」；答错 -> 直接过，不需自评。
       _mcqSelfRated = !correct;
       _mcqSelfScore = 0;
+      _mcqFailReason = 0;
+      _mcqWrongLogged = false;
       _mcqSelfCtrl.clear();
       if (correct) _mcqRight++;
     });
     if (!correct) {
-      try {
-        await ref.read(questionRepoProvider).recordAnswer(q.id, false);
-      } catch (_) {
-        // 记账失败不阻断。
-      }
+      // 答错：等用户选错因（可选）后再记账。选择直接在 _pickFailReason / _skipFailReason 里发。
+      return;
+    }
+  }
+
+  /// 答错后选错因：记账时带上 fail_reason，然后放行。
+  Future<void> _pickFailReason(int reason) async {
+    if (_mcqWrongLogged) return;
+    final q = _mcqList[_mcqIndex];
+    setState(() {
+      _mcqFailReason = reason;
+      _mcqWrongLogged = true;
+      _mcqSelfRated = true;
+    });
+    try {
+      await ref
+          .read(questionRepoProvider)
+          .recordAnswer(q.id, false, failReason: reason);
+    } catch (_) {
+      // 记账失败不阻断。
+    }
+  }
+
+  /// 答错后点「跳过」：按未标记错因记账，直接放行。
+  Future<void> _skipFailReason() async {
+    if (_mcqWrongLogged) return;
+    final q = _mcqList[_mcqIndex];
+    setState(() {
+      _mcqFailReason = 0;
+      _mcqWrongLogged = true;
+      _mcqSelfRated = true;
+    });
+    try {
+      await ref.read(questionRepoProvider).recordAnswer(q.id, false);
+    } catch (_) {
+      // 记账失败不阻断。
     }
   }
 
@@ -289,6 +329,8 @@ class _QaPageState extends ConsumerState<QaPage> {
         _mcqAnswered = false;
         _mcqSelfRated = true;
         _mcqSelfScore = 0;
+        _mcqFailReason = 0;
+        _mcqWrongLogged = false;
         _mcqSelfCtrl.clear();
       }
     });
@@ -303,6 +345,13 @@ class _QaPageState extends ConsumerState<QaPage> {
     if (tab == _QaTab.review && !_reviewLoaded) {
       Future<void>.microtask(_loadReview);
     }
+  }
+
+  /// 能否进入下一题：答对必须自评完；答错必须记账完（选错因或跳过）。
+  bool get _mcqCanAdvance {
+    if (!_mcqAnswered) return false;
+    final bool isRight = _mcqPicked == _mcqList[_mcqIndex].answer;
+    return isRight ? _mcqSelfRated : _mcqWrongLogged;
   }
 
   String _selfScoreLabel(int score) {
@@ -332,6 +381,18 @@ class _QaPageState extends ConsumerState<QaPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('问答'),
+        actions: <Widget>[
+          TextButton.icon(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (BuildContext _) => const MockExamPage(),
+              ),
+            ),
+            icon: const Icon(Icons.timer_outlined, size: 18),
+            label: const Text('模考'),
+          ),
+          const SizedBox(width: 8),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
           child: Padding(
@@ -720,8 +781,20 @@ class _QaPageState extends ConsumerState<QaPage> {
               ),
             ),
           ],
+          // 缺口③：答错后问一句「错在哪」，四个标签，可跳过。不调 AI。
+          if (_mcqAnswered &&
+              _mcqSelfScore == 0 &&
+              !_mcqWrongLogged &&
+              _mcqPicked != _mcqList[_mcqIndex].answer) ...[
+            const SizedBox(height: 18),
+            _FailReasonCard(
+              onPick: _pickFailReason,
+              onSkip: _skipFailReason,
+            ),
+          ],
           // 缺口²：答对后的「用自己的话讲一遍」自评卡。不进 AI，全靠你自己判断。
-          if (_mcqAnswered && !_mcqSelfRated) ...[
+          if (_mcqAnswered && !_mcqSelfRated &&
+              _mcqPicked == _mcqList[_mcqIndex].answer) ...[
             const SizedBox(height: 18),
             _SelfRatingCard(
               controller: _mcqSelfCtrl,
@@ -757,7 +830,7 @@ class _QaPageState extends ConsumerState<QaPage> {
                 child: const Text('提交'),
               ),
             )
-          else if (_mcqSelfRated)
+          else if (_mcqCanAdvance)
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -772,7 +845,11 @@ class _QaPageState extends ConsumerState<QaPage> {
               width: double.infinity,
               child: FilledButton(
                 onPressed: null,
-                child: const Text('先完成自评'),
+                child: Text(
+                  _mcqPicked == _mcqList[_mcqIndex].answer
+                      ? '先完成自评'
+                      : '先选一个错因（或跳过）',
+                ),
               ),
             ),
         ],
@@ -782,6 +859,125 @@ class _QaPageState extends ConsumerState<QaPage> {
 }
 
 // ================= 组件 =================
+
+/// 缺口③：答错后的错因归因卡。四个标签 + 跳过。
+///
+/// 设计口径（方案 A）：错因只记录，不参与 SM-2 排程。
+/// 它的价值在统计页——告诉你薄弱的是理解、记忆还是推理，
+/// 然后你自己去调学习方法，而不是让算法替你猜。
+class _FailReasonCard extends StatelessWidget {
+  const _FailReasonCard({required this.onPick, required this.onSkip});
+
+  final Future<void> Function(int reason) onPick;
+  final Future<void> Function() onSkip;
+
+  static const List<MapEntry<int, String>> _reasons = <MapEntry<int, String>>[
+    MapEntry<int, String>(1, '看不懂题'),
+    MapEntry<int, String>(2, '知识点没记住'),
+    MapEntry<int, String>(3, '记混了'),
+    MapEntry<int, String>(4, '想陷了'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.error.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: theme.colorScheme.error.withValues(alpha: 0.22),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 18,
+                color: theme.colorScheme.error,
+              ),
+              const SizedBox(width: 6),
+              Text('错在哪？', style: theme.textTheme.titleSmall),
+              const Spacer(),
+              TextButton(
+                onPressed: () => onSkip(),
+                style: TextButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                ),
+                child: Text(
+                  '跳过',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '选一个最接近的。选了会记下来，统计页会告诉你反复死在哪儿。',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final MapEntry<int, String> r in _reasons)
+                _ReasonChip(
+                  label: r.value,
+                  onTap: () => onPick(r.key),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReasonChip extends StatelessWidget {
+  const _ReasonChip({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surface,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant,
+            ),
+          ),
+          child: Text(
+            label,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 /// 缺口²：答对后的「用自己的话讲一遍」自评卡。
 ///
