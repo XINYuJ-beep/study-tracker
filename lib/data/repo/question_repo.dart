@@ -354,7 +354,14 @@ class QuestionRepo {
   ///
   /// 首次作答（stage=0 且 due_date 为空）同样走这条路径，
   /// 于是新题答对第一次就会排到明天，进入复习闭环。
-  Future<void> recordAnswer(String mcqId, bool correct) async {
+  /// [selfScore] 缺口²「用自己的话讲一遍」自评（方案 A：影响 SM-2）：
+  ///   0 / null = 本次没有自评（老调用点、以及走查/复习页不强制自评），行为与改动前完全一致；
+  ///   3 讲清了   = 正常升档（同答对既有路径）；
+  ///   2 卡壳     = 判「模糊」：档位照常 +1，但 due 间隔取「上一档间隔」与「目标档间隔」
+  ///                的中间值，等于升幅减半（升了，但下一次复习提前拉近）；
+  ///   1 讲不出来 = 判「忘了」：走答错路径（stage 归 0、ease -0.2、明天再来）。
+  /// 只有答对才会传非 0 自评；答错时自评一律按忘了处理，不重复扣分。
+  Future<void> recordAnswer(String mcqId, bool correct, {int? selfScore}) async {
     final rows = await db.query(
       T.mcqs,
       where: 'id = ?',
@@ -370,7 +377,17 @@ class QuestionRepo {
     final double ease = (row['ease'] as num?)?.toDouble() ??
         AppConstants.initialEase;
 
-    if (correct) {
+    // 自评档位：0/空 = 未自评；1 讲不出来；2 卡壳；3 讲清了。
+    final int score = (selfScore ?? 0).clamp(0, 3);
+    // 实际判定用的「对错」：答对但自评讲不出来 -> 视为忘了。
+    final bool effectiveCorrect = correct && score != 1;
+    // 卡壳：答对但只讲了半截 -> 判模糊，升幅减半。
+    final bool fuzzy = correct && score == 2;
+    final Map<String, Object?> selfPatch = score == 0
+        ? const <String, Object?>{}
+        : <String, Object?>{'self_score': score};
+
+    if (effectiveCorrect) {
       final int nextStreak = rightStreak + 1;
       final int nextStage = stage + 1;
       if (nextStage >= AppConstants.reviewGraduatedStage) {
@@ -381,14 +398,23 @@ class QuestionRepo {
             'right_streak': nextStreak,
             'stage': AppConstants.reviewGraduatedStage,
             'due_date': null,
+            ...selfPatch,
           },
           where: 'id = ?',
           whereArgs: <Object?>[mcqId],
         );
       } else {
         // 档位越界保护：reviewIntervals 长度 = reviewGraduatedStage
+        // 卡壳（fuzzy）：档位只 +1（不减半跳级），间隔取上一档与目标档的中间值，
+        // 等价于「升幅减半」：升了，但把下一次复习提前拉近。
         final int idx = nextStage - 1;
-        final int days = AppConstants.reviewIntervals[idx];
+        final int full = AppConstants.reviewIntervals[idx];
+        final int prev = stage <= 0
+            ? 1
+            : AppConstants.reviewIntervals[(stage - 1).clamp(
+                0,
+                AppConstants.reviewIntervals.length - 1)];
+        final int days = fuzzy ? ((prev + full) ~/ 2).clamp(1, full) : full;
         final int dueMs = startOfDay(
           effectiveToday(),
         ).add(Duration(days: days)).millisecondsSinceEpoch;
@@ -398,6 +424,7 @@ class QuestionRepo {
             'right_streak': nextStreak,
             'stage': nextStage,
             'due_date': dueMs,
+            ...selfPatch,
           },
           where: 'id = ?',
           whereArgs: <Object?>[mcqId],
@@ -419,6 +446,7 @@ class QuestionRepo {
           'stage': 0,
           'ease': nextEase,
           'due_date': dueMs,
+          ...selfPatch,
         },
         where: 'id = ?',
         whereArgs: <Object?>[mcqId],

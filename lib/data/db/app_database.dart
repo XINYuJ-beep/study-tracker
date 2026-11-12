@@ -34,7 +34,7 @@ class AppDatabase {
   /// v3：cards / mcqs 补 source_ref
   /// v4：mcqs 补 item_id / day / question_type / stage / due_date / ease
   ///     （按天投放 + SM-2 复习所需）
-  static const int schemaVersion = 4;
+  static const int schemaVersion = 5;
 
   /// 打开（或复用）底层连接。所有 repo 都通过它拿 Database。
   Future<Database> get database async {
@@ -99,6 +99,13 @@ class AppDatabase {
         // 让选择题支持「按天投放 + SM-2 复习」；老题回填 single + stage 0 + ease 2.5。
         if (from < 4) {
           for (final String sql in kMigrateV3ToV4) {
+            await db.execute(sql);
+          }
+        }
+        // v4 -> v5：mcqs 补 self_score（缺口²「用自己的话讲一遍」三档自评）。
+        // 老题回填 0 = 未自评，既有序程一律不变。
+        if (from < 5) {
+          for (final String sql in kMigrateV4ToV5) {
             await db.execute(sql);
           }
         }

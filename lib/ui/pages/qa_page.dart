@@ -68,6 +68,13 @@ class _QaPageState extends ConsumerState<QaPage> {
   bool _mcqFinished = false;
   bool _mcqLoaded = false;
 
+  // ---------- 缺口²「用自己的话讲一遍」（自评磍点）----------
+  /// 当前题是否已经做完自评。答对后必须自评才能继续，答错直接过。
+  bool _mcqSelfRated = true;
+  /// 当前题的自评结果：0=未评，1=讲不出来，2=卡壳，3=讲清了。
+  int _mcqSelfScore = 0;
+  final TextEditingController _mcqSelfCtrl = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -238,10 +245,35 @@ class _QaPageState extends ConsumerState<QaPage> {
     final correct = _mcqPicked == q.answer;
     setState(() {
       _mcqAnswered = true;
+      // 答对 -> 停下来等他自评「用自己的话讲一遍」；答错 -> 直接过，不需自评。
+      _mcqSelfRated = !correct;
+      _mcqSelfScore = 0;
+      _mcqSelfCtrl.clear();
       if (correct) _mcqRight++;
     });
+    if (!correct) {
+      try {
+        await ref.read(questionRepoProvider).recordAnswer(q.id, false);
+      } catch (_) {
+        // 记账失败不阻断。
+      }
+    }
+  }
+
+  /// 自评提交：三档接 SM-2。
+  ///   3 讲清了   -> 正常升档
+  ///   2 卡壳     -> 升档但间隔取中间值（升幅减半）
+  ///   1 讲不出来 -> 判忘了，降档；同时把答错计数 +1（因为实际是没真懂）
+  Future<void> _submitSelfRating(int score) async {
+    if (_mcqSelfRated) return;
+    final q = _mcqList[_mcqIndex];
+    setState(() {
+      _mcqSelfScore = score;
+      _mcqSelfRated = true;
+    });
     try {
-      await ref.read(questionRepoProvider).recordAnswer(q.id, correct);
+      await ref.read(questionRepoProvider)
+          .recordAnswer(q.id, true, selfScore: score);
     } catch (_) {
       // 记账失败不阻断。
     }
@@ -255,6 +287,9 @@ class _QaPageState extends ConsumerState<QaPage> {
         _mcqIndex++;
         _mcqPicked = null;
         _mcqAnswered = false;
+        _mcqSelfRated = true;
+        _mcqSelfScore = 0;
+        _mcqSelfCtrl.clear();
       }
     });
   }
@@ -268,6 +303,25 @@ class _QaPageState extends ConsumerState<QaPage> {
     if (tab == _QaTab.review && !_reviewLoaded) {
       Future<void>.microtask(_loadReview);
     }
+  }
+
+  String _selfScoreLabel(int score) {
+    switch (score) {
+      case 3:
+        return '讲清了';
+      case 2:
+        return '讲了但卡壳';
+      case 1:
+        return '讲不出来';
+      default:
+        return '-';
+    }
+  }
+
+  @override
+  void dispose() {
+    _mcqSelfCtrl.dispose();
+    super.dispose();
   }
 
   // ================= UI =================
@@ -666,6 +720,34 @@ class _QaPageState extends ConsumerState<QaPage> {
               ),
             ),
           ],
+          // 缺口²：答对后的「用自己的话讲一遍」自评卡。不进 AI，全靠你自己判断。
+          if (_mcqAnswered && !_mcqSelfRated) ...[
+            const SizedBox(height: 18),
+            _SelfRatingCard(
+              controller: _mcqSelfCtrl,
+              onRate: _submitSelfRating,
+            ),
+          ],
+          // 自评完成后回显刚选的结果（只读）。
+          if (_mcqAnswered && _mcqSelfScore > 0) ...[
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(
+                  Icons.check_circle_outline,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  '已自评：${_selfScoreLabel(_mcqSelfScore)}',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 20),
           if (!_mcqAnswered)
             SizedBox(
@@ -675,7 +757,7 @@ class _QaPageState extends ConsumerState<QaPage> {
                 child: const Text('提交'),
               ),
             )
-          else
+          else if (_mcqSelfRated)
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -683,6 +765,14 @@ class _QaPageState extends ConsumerState<QaPage> {
                 child: Text(
                   _mcqIndex + 1 >= _mcqList.length ? '交卷' : '下一题',
                 ),
+              ),
+            )
+          else
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: null,
+                child: const Text('先完成自评'),
               ),
             ),
         ],
@@ -692,6 +782,165 @@ class _QaPageState extends ConsumerState<QaPage> {
 }
 
 // ================= 组件 =================
+
+/// 缺口²：答对后的「用自己的话讲一遍」自评卡。
+///
+/// 设计口径（方案 A）：
+///   - 不自评就不放行，逼你真的讲一遍；
+///   - 三档结果直接接 SM-2，不调任何 AI；
+///   - 输入框内容不作判定，只当作你自己讲一遍的载体（不入库）。
+class _SelfRatingCard extends StatelessWidget {
+  const _SelfRatingCard({required this.controller, required this.onRate});
+
+  final TextEditingController controller;
+  final Future<void> Function(int score) onRate;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.25),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.record_voice_over_outlined,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 6),
+              Text('用自己的话讲一遍', style: theme.textTheme.titleSmall),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '选对了不等于真懂了。用自己的话把这道题的道理讲出来，再给自己定罪。',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: controller,
+            maxLines: 4,
+            minLines: 3,
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+            decoration: InputDecoration(
+              hintText: '例如：这题考的是 …，因为 …，所以选 …',
+              hintStyle: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              filled: true,
+              fillColor: theme.colorScheme.surface,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.all(12),
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            '讲得怎么样？',
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: _RateButton(
+                  label: '讲清了',
+                  sub: '正常推进',
+                  color: const Color(0xFF34C759),
+                  onTap: () => onRate(3),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _RateButton(
+                  label: '卡壳',
+                  sub: '升幅减半',
+                  color: const Color(0xFFFF9500),
+                  onTap: () => onRate(2),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _RateButton(
+                  label: '讲不出来',
+                  sub: '降档重来',
+                  color: const Color(0xFFFF3B30),
+                  onTap: () => onRate(1),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RateButton extends StatelessWidget {
+  const _RateButton({
+    required this.label,
+    required this.sub,
+    required this.color,
+    required this.onTap,
+  });
+
+  final String label;
+  final String sub;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: color.withValues(alpha: 0.10),
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+          child: Column(
+            children: [
+              Text(
+                label,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                sub,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: color.withValues(alpha: 0.75),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 class _TabChip extends StatelessWidget {
   const _TabChip({

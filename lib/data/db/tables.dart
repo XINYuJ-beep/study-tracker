@@ -145,6 +145,12 @@ const List<String> kMigrateV3ToV4 = <String>[
   "UPDATE mcqs SET question_type = 'single' WHERE question_type = ''",
 ];
 
+/// v4 -> v5: add self_score for speak-back self rating.
+/// 0 = not rated (old rows), 1 = cannot explain, 2 = faltered, 3 = explained clearly.
+const List<String> kMigrateV4ToV5 = <String>[
+  "ALTER TABLE mcqs ADD COLUMN self_score INTEGER NOT NULL DEFAULT 0",
+];
+
 /// 性能索引（SPEC 第 16 节：checkins(item_id)、checkins(date) 建索引）
 const List<String> kCreateIndexes = <String>[
   'CREATE INDEX IF NOT EXISTS idx_checkins_item ON checkins (item_id)',
@@ -205,7 +211,8 @@ CREATE TABLE IF NOT EXISTS mcqs (
   question_type TEXT NOT NULL DEFAULT 'single',
   stage         INTEGER NOT NULL DEFAULT 0,
   due_date      INTEGER,
-  ease          REAL NOT NULL DEFAULT 2.5
+  ease          REAL NOT NULL DEFAULT 2.5,
+  self_score    INTEGER NOT NULL DEFAULT 0
 )''';
 
 /// ====================================
