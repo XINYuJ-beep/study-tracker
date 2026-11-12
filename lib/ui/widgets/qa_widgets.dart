@@ -308,21 +308,55 @@ class ExplainBox extends StatelessWidget {
 }
 
 /// ----
-/// 题目出处展示：把 `type:locator` 形式的 source_ref 翻译成人话标签。
+/// 题目出处展示：把 source_ref 翻译成人话标签。
 ///
-/// 取值口径（施工计划 source_ref 一节）：
-///   - `builtin:questions` -> 内置题库
-///   - `outline:<file>`    -> 大纲 · <file>
-///   - `dagang:<file>`     -> 大纲 · <file>
-///   - `manual`            -> 手动录入
-///   - 空串 / null         -> 内置题库（兜底）
+/// 题库实际取值分布（2026-11-12 实测 4293 条）：
+///   - `wNdM`（如 `w3d2`）      644 种 / 3496 条  -> 第 3 周 第 2 天
+///   - `wNexam`（如 `w3exam`）  92 种 / 276 条   -> 第 3 周 周考
+///   - `builtin:questions`                      -> 内置题库
+///   - `outline:<file>` / `dagang:<file>`       -> 大纲 · <file>
+///   - `manual`                                 -> 手动录入
+///   - 空串 / null                              -> 内置题库（兜底）
+///
+/// 背景：`wNdM` 是 item_id 直灌进 source_ref 的结果（gen_batch 的
+/// `source_ref: iid` 行为），不带冒号，旧实现走 default 分支会原样
+/// 吐回 `w3d2` 这种编码，用户看不懂。本版接管该分支。
 /// ----
+/// 匹配 `w<周>d<天>`，天固定 1-7。
+final RegExp _kItemRefPattern = RegExp(r'^w(\d{1,2})d([1-7])$');
+/// 匹配 `w<周>exam` 周考卷。
+final RegExp _kExamRefPattern = RegExp(r'^w(\d{1,2})exam$');
+
+/// 把 item_id 形态的 source_ref 翻成「第 N 周 第 M 天」。
+String? _itemRefLabel(String raw) {
+  final RegExpMatch? itemMatch = _kItemRefPattern.firstMatch(raw);
+  if (itemMatch != null) {
+    final int week = int.tryParse(itemMatch.group(1) ?? '') ?? 0;
+    final int day = int.tryParse(itemMatch.group(2) ?? '') ?? 0;
+    if (week >= 1 && day >= 1) {
+      return '第 $week 周 第 $day 天';
+    }
+    return null;
+  }
+  final RegExpMatch? examMatch = _kExamRefPattern.firstMatch(raw);
+  if (examMatch != null) {
+    final int week = int.tryParse(examMatch.group(1) ?? '') ?? 0;
+    if (week >= 1) {
+      return '第 $week 周 周考';
+    }
+  }
+  return null;
+}
+
 String sourceRefLabel(String? ref) {
   final String raw = (ref ?? '').trim();
   if (raw.isEmpty) return '内置题库';
   final int sep = raw.indexOf(':');
   if (sep < 0) {
-    return raw == 'manual' ? '手动录入' : raw;
+    if (raw == 'manual') return '手动录入';
+    final String? itemLabel = _itemRefLabel(raw);
+    if (itemLabel != null) return itemLabel;
+    return raw;
   }
   final String type = raw.substring(0, sep);
   final String locator = raw.substring(sep + 1);

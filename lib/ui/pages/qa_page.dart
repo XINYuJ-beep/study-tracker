@@ -611,10 +611,8 @@ class _QaPageState extends ConsumerState<QaPage> {
                 style: theme.textTheme.bodySmall,
               ),
               const Spacer(),
+              // source_ref 标签已含「第 N 周 第 M 天」，此处不再重复显示周数。
               SourceTag.ref(q.sourceRef),
-              const SizedBox(width: 8),
-              if (q.week != null)
-                Text('第 ${q.week} 周', style: theme.textTheme.bodySmall),
             ],
           ),
           const SizedBox(height: 8),
