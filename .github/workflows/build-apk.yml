@@ -207,18 +207,18 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: study-tracker-apk
+          name: study-tracker-apk-${{ github.sha }}
           path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
 
       - uses: actions/upload-artifact@v4
         with:
-          name: study-tracker-apk-profile
+          name: study-tracker-apk-profile-${{ github.sha }}
           path: /tmp/app-profile.apk
           retention-days: 30
 
       - uses: actions/upload-artifact@v4
         with:
-          name: study-tracker-apk-debug
+          name: study-tracker-apk-debug-${{ github.sha }}
           path: /tmp/app-debug.apk
           retention-days: 30
