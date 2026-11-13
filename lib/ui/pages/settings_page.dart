@@ -18,7 +18,7 @@ import '../../core/notify/reminder_service.dart';
 
 /// 设置页。
 ///
-/// 六项功能：每日目标（读写 app_settings.daily_goal）、数据版本、
+/// 六项功能：每日题量说明、数据版本、
 /// 数据现状（八表计数对照内置期望）、重新导入、清空重导、关于。
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -34,7 +34,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   bool _busy = false;
   String _busyText = '处理中…';
 
-  int _dailyGoal = AppConstants.dailyGoalDefault;
   int? _installedVersion;
   SeedResult? _counts;
   bool _reminderEnabled = true;
@@ -63,15 +62,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       final rows = await db.query(
         T.appSettings,
         where: 'key = ? OR key = ?',
-        whereArgs: ['daily_goal', AppConstants.keyDataVersion],
+        whereArgs: [AppConstants.keyDataVersion],
       );
 
-      String? goalRaw;
       String? versionRaw;
       for (final r in rows) {
         final k = r['key'] as String?;
         final v = r['value'] as String?;
-        if (k == 'daily_goal') goalRaw = v;
         if (k == AppConstants.keyDataVersion) versionRaw = v;
       }
 
@@ -88,7 +85,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
       if (!mounted) return;
       setState(() {
-        _dailyGoal = _parseGoal(goalRaw);
         _installedVersion = _parseVersion(versionRaw);
         _counts = counts;
         _reminderEnabled = rEnabled;
@@ -106,12 +102,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
-  int _parseGoal(String? raw) {
-    if (raw == null) return AppConstants.dailyGoalDefault;
-    final n = int.tryParse(raw.trim());
-    if (n == null || n <= 0) return AppConstants.dailyGoalDefault;
-    return n;
-  }
 
   String _hhmm(int h, int m) {
     return h.toString().padLeft(2, '0') + ':' + m.toString().padLeft(2, '0');

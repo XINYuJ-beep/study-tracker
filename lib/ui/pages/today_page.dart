@@ -48,7 +48,6 @@ class _TodayPageState extends ConsumerState<TodayPage> {
   int _doneCount = 0;
 
   /// 今日目标条数（settings 覆盖，默认 3）
-  int _dailyGoal = AppConstants.dailyGoalDefault;
 
   /// 今日累计用时（分钟）
   int _todayMinutes = 0;
@@ -111,7 +110,6 @@ class _TodayPageState extends ConsumerState<TodayPage> {
       final int due = await questionRepo.dueReviewCount();
       final int dueConcept = await conceptRepo.dueConceptCount();
       final int dueMcq = await questionRepo.dueMcqCount();
-      final int goal = await _readDailyGoal();
       final String module = await _moduleNameOf(items);
 
       if (!mounted) return;
@@ -124,7 +122,6 @@ class _TodayPageState extends ConsumerState<TodayPage> {
         _dueReview = due;
         _dueConcept = dueConcept;
         _dueMcq = dueMcq;
-        _dailyGoal = goal;
         _currentModule = module;
         _loading = false;
       });
@@ -133,26 +130,6 @@ class _TodayPageState extends ConsumerState<TodayPage> {
       if (!mounted) return;
       setState(() => _loading = false);
       _toast('数据加载失败：$e');
-    }
-  }
-
-  /// 读每日目标条数。settings 里没有就用默认 3。
-  Future<int> _readDailyGoal() async {
-    try {
-      final db = ref.read(databaseProvider);
-      final rows = await db.query(
-        'app_settings',
-        columns: <String>['value'],
-        where: 'key = ?',
-        whereArgs: <Object?>['daily_goal'],
-        limit: 1,
-      );
-      if (rows.isEmpty) return AppConstants.dailyGoalDefault;
-      final int? v = int.tryParse((rows.first['value'] as String?) ?? '');
-      if (v == null || v <= 0) return AppConstants.dailyGoalDefault;
-      return v;
-    } catch (_) {
-      return AppConstants.dailyGoalDefault;
     }
   }
 
@@ -372,7 +349,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
 
     final Widget ring = _ProgressRing(
       done: _doneCount,
-      goal: _dailyGoal,
+      goal: _items.isEmpty ? 1 : _items.length,
       minutes: _todayMinutes,
     );
 
@@ -390,7 +367,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
               const SizedBox(width: 32),
               Expanded(child: _TodaySummary(
                 done: _doneCount,
-                goal: _dailyGoal,
+                goal: _items.isEmpty ? 1 : _items.length,
                 minutes: _todayMinutes,
                 streak: _streak,
               )),
@@ -401,7 +378,7 @@ class _TodayPageState extends ConsumerState<TodayPage> {
           const SizedBox(height: 24),
           _TodaySummary(
             done: _doneCount,
-            goal: _dailyGoal,
+            goal: _items.isEmpty ? 1 : _items.length,
             minutes: _todayMinutes,
             streak: _streak,
           ),
