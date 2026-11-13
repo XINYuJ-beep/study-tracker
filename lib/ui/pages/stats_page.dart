@@ -96,8 +96,10 @@ class _StatsPageState extends ConsumerState<StatsPage> {
       });
     } catch (e) {
       if (!mounted) return;
+      // 不要吞掉原始异常：把 SQLite 的具体报错一起带出来，
+      // 否则用户只看到「读取失败」四个字，无法定位是哪张表/哪一列的问题。
       setState(() {
-        _error = '统计数据读取失败';
+        _error = '统计数据读取失败：$e';
         _loading = false;
       });
     }
