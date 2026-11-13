@@ -194,8 +194,11 @@ const String kTableMockExams = 'mock_exams';
 /// 4293 道题按「每周题数 ÷ 该周天数」顺序均分到每天，
 /// 已核实每周只属一个模块、且题目顺序与课程顺序一致。
 /// day 为 NULL = 未分配（历史遗留数据），这些题不进日考核，只进 SM-2 复习。
+///
+/// 注意：day 列在 kMigrateV3ToV4 里已经加过一次。SQLite 不支持
+/// ADD COLUMN IF NOT EXISTS，这里不能再写一次，否则 v3 老库升到 v8
+/// 会直接撞 duplicate column name: day。此处只补索引。
 const List<String> kMigrateV7ToV8 = <String>[
-  "ALTER TABLE mcqs ADD COLUMN day INTEGER",
   "CREATE INDEX IF NOT EXISTS idx_mcqs_week_day ON mcqs(week, day)",
 ];
 
@@ -262,8 +265,7 @@ CREATE TABLE IF NOT EXISTS mcqs (
   ease          REAL NOT NULL DEFAULT 2.5,
   self_score    INTEGER NOT NULL DEFAULT 0,
   fail_reason   INTEGER NOT NULL DEFAULT 0,
-  self_verified INTEGER NOT NULL DEFAULT -1,
-  day           INTEGER
+  self_verified INTEGER NOT NULL DEFAULT -1
 )''';
 
 /// ====================================
@@ -865,6 +867,30 @@ void verifyMcqsMigrationChain() {
       if (!create.contains(col)) {
         throw StateError('mcqs 迁移链与建表语句不一致：ALTER 加了 "$col"，'
             '但 sqlCreateMcqs 里没有。新装用户会缺这一列。');
+      }
+    }
+    // 反向检查：同一个列名在迁移链里被 ALTER 了两次。
+    // SQLite 不支持 ADD COLUMN IF NOT EXISTS，重复 ALTER 会让老库升级直接报
+    // duplicate column name，新装用户感觉不到、升级用户一升就崩。
+    final Set<String> seen = <String>{};
+    for (final String col in alterCols) {
+      if (!seen.add(col)) {
+        throw StateError('mcqs 迁移链重复添加列 "$col"：ALTER 链里出现了两次。'
+            'SQLite 不支持 ADD COLUMN IF NOT EXISTS，老库升级会报 '
+            'duplicate column name。请只在最早引入该列的版本里 ALTER 一次。');
+      }
+    }
+    // 建表语句自身不允许出现重名列（例如手抖粘两行）。
+    final Map<String, int> createCols = <String, int>{};
+    for (final RegExpMatch m
+        in RegExp(r'^\s{2}(\w+)\s+\w', multiLine: true).allMatches(create)) {
+      final String name = m.group(1)!;
+      createCols[name] = (createCols[name] ?? 0) + 1;
+    }
+    for (final MapEntry<String, int> e in createCols.entries) {
+      if (e.value > 1) {
+        throw StateError('sqlCreateMcqs 里列 "${e.key}" 重复定义了 ${e.value} 次，'
+            '建表会直接失败：duplicate column name: ${e.key}。');
       }
     }
     for (final String col in baseCols) {
