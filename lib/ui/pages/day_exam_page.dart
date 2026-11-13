@@ -16,6 +16,7 @@ import '../../core/providers.dart';
 import '../../core/theme.dart';
 import '../../data/repo/question_repo.dart';
 import '../widgets/qa_widgets.dart';
+import '../widgets/review_widgets.dart';
 
 /// 单天的考核入口参数。
 class DayExamArgs {
@@ -74,6 +75,12 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
   /// 每道题是否已经记账（避免重复）
   List<bool> _logged = const <bool>[];
 
+  /// 错因：0 = 未标记；1 看不懂题 / 2 知识点没记住 / 3 记混了 / 4 想陷了
+  int _failReason = 0;
+
+  /// 答错路径是否已完成记账（选错因或跳过都算完成）
+  bool _wrongLogged = false;
+
   @override
   void initState() {
     super.initState();
@@ -117,14 +124,53 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
     });
 
     // 答对 → 不立即记账，等自评（与主答题页一致）。
-    // 答错 → 立即记账（错因可选），保证出错也进展。
-    if (!ok) {
-      try {
-        await ref.read(questionRepoProvider).recordAnswer(q.id, false);
-        _logged[_index] = true;
-      } catch (_) {
-        // 记账失败不阻断
-      }
+    // 答错 → 不立即记账，等选完错因（选或跳过）再记，保证错因能落库。
+  }
+
+  /// 答错后选错因：带上 failReason 记账
+  Future<void> _pickReason(int reason) async {
+    if (_wrongLogged) return;
+    final q = _questions[_index];
+    setState(() {
+      _failReason = reason;
+      _wrongLogged = true;
+    });
+    try {
+      await ref
+          .read(questionRepoProvider)
+          .recordAnswer(q.id, false, failReason: reason);
+      _logged[_index] = true;
+    } catch (_) {
+      // 记账失败不阻断
+    }
+  }
+
+  /// 答错后跳过错因：按 failReason=0 记账
+  Future<void> _skipReason() async {
+    if (_wrongLogged) return;
+    final q = _questions[_index];
+    setState(() => _wrongLogged = true);
+    try {
+      await ref.read(questionRepoProvider).recordAnswer(q.id, false);
+      _logged[_index] = true;
+    } catch (_) {
+      // 记账失败不阻断
+    }
+  }
+
+  /// 错因档位文案，与 FailReasonCard 的 _reasons 表保持一致
+  String _reasonLabel(int reason) {
+    switch (reason) {
+      case 1:
+        return '看不懂题';
+      case 2:
+        return '知识点没记住';
+      case 3:
+        return '记混了';
+      case 4:
+        return '想陷了';
+      default:
+        return '未标记';
     }
   }
 
@@ -149,6 +195,8 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
         _index++;
         _picks[_index] = -1;
         _answered = false;
+        _failReason = 0;
+        _wrongLogged = false;
       }
     });
   }
@@ -332,6 +380,23 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
                   const SizedBox(height: 10),
                   ExplainBox(text: q.explain!),
                 ],
+                // 错因卡（答错且未标记）
+                if (_answered && !ok && !_wrongLogged) ...[
+                  const SizedBox(height: 16),
+                  FailReasonCard(onPick: _pickReason, onSkip: _skipReason),
+                ],
+                // 错因已标记：回显这次记下的原因，确认采集生效
+                if (_answered && !ok && _wrongLogged) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    _failReason == 0
+                        ? '错因：已跳过'
+                        : '错因：${_reasonLabel(_failReason)}',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
                 if (_answered && ok) ...[
                   const SizedBox(height: 14),
                   _QuickRate(onRate: _rate),
@@ -349,7 +414,11 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
               child: FilledButton(
                 onPressed: !_answered
                     ? (picked < 0 ? null : _submit)
-                    : (_index + 1 >= _total ? () => setState(() => _phase = _Phase.result) : _next),
+                    : (!ok && !_wrongLogged
+                        ? null
+                        : (_index + 1 >= _total
+                            ? () => setState(() => _phase = _Phase.result)
+                            : _next)),
                 child: Text(
                   !_answered
                       ? '提交'
@@ -412,6 +481,8 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
               final int nxt = _picks.indexWhere((int p) => p < 0);
               _index = nxt < 0 ? 0 : nxt;
               _answered = _picks[_index] >= 0;
+              _failReason = 0;
+              _wrongLogged = false;
               _phase = _Phase.exam;
             }),
             child: const Text('继续未答的题'),
