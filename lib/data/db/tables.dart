@@ -212,6 +212,10 @@ const List<String> kCreateIndexes = <String>[
   'CREATE INDEX IF NOT EXISTS idx_mcqs_item ON mcqs (item_id)',
   // SM-2 每日取到期题：WHERE stage < 7 AND due_date <= ?
   'CREATE INDEX IF NOT EXISTS idx_mcqs_due ON mcqs (due_date)',
+  // 按周-天投放：WHERE week = ? AND day = ?（日考核取当天题）
+  'CREATE INDEX IF NOT EXISTS idx_mcqs_week_day ON mcqs(week, day)',
+  // 错因历史：WHERE answered_at >= ?
+  'CREATE INDEX IF NOT EXISTS idx_fail_events_at ON fail_events(answered_at)',
 ];
 
 /// ====================================
@@ -315,6 +319,44 @@ CREATE TABLE IF NOT EXISTS app_settings (
 )''';
 
 /// ====================================
+/// 表 11: fail_events（错因事件流水，缺口③）
+///
+/// 与 mcqs.fail_reason 的区别：mcqs 里存的是「这一题最新一次标了什么」，
+/// 本表存的是「每一次标错因都留一条」，能看出改善趋势。
+///
+/// 注意：本表最早写在 kMigrateV6ToV7 里只给老库补建，导致全新安装
+/// （onCreate 只跑 kCreateTableSql）根本没有这张表，统计页查它会报
+/// no such table。这里补成建表常量的唯一来源，迁移链引用同一个常量。
+const String sqlCreateFailEvents = '''
+CREATE TABLE IF NOT EXISTS fail_events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  mcq_id TEXT NOT NULL,
+  reason INTEGER NOT NULL,
+  week INTEGER,
+  module TEXT,
+  answered_at INTEGER NOT NULL
+)''';
+
+/// fail_events 按时间查的索引（错因历史默认查最近 30 天）。
+const String sqlCreateFailEventsIndex =
+    'CREATE INDEX IF NOT EXISTS idx_fail_events_at '
+    'ON fail_events(answered_at)';
+
+/// ====================================
+/// 表 12: mock_exams（模考成绩留档，缺口④）
+///
+/// 同上：原先只在迁移链里建表，全新安装会缺表。
+const String sqlCreateMockExams = '''
+CREATE TABLE IF NOT EXISTS mock_exams (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  finished_at INTEGER NOT NULL,
+  total INTEGER NOT NULL,
+  right_count INTEGER NOT NULL,
+  elapsed_seconds INTEGER NOT NULL,
+  timed_out INTEGER NOT NULL DEFAULT 0
+)''';
+
+/// ====================================
 /// 全部建表语句，按 kCreateTableOrder 一一对应
 const List<String> kCreateTableSql = <String>[
   sqlCreateModules,
@@ -327,6 +369,9 @@ const List<String> kCreateTableSql = <String>[
   sqlCreateStages,
   sqlCreateStreams,
   sqlCreateAppSettings,
+  // v7/v8 引入的两张表，原先只在迁移链里建，全新安装会缺表
+  sqlCreateFailEvents,
+  sqlCreateMockExams,
 ];
 
 /// ====================================
