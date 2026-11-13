@@ -31,6 +31,27 @@ class _StatsPageState extends ConsumerState<StatsPage> {
     mixedUp: 0,
     wrongReasoning: 0,
   );
+  FailReasonBucket _failHistory = const FailReasonBucket(
+    cannotParse: 0,
+    forgot: 0,
+    mixedUp: 0,
+    wrongReasoning: 0,
+  );
+  MasteryForecast _forecast = const MasteryForecast(
+    pendingCount: 0,
+    graduatedCount: 0,
+    daysToFinish: 0,
+    reviewsLeft: 0,
+  );
+  ReviewQuota _quota = const ReviewQuota(
+    dueCount: 0,
+    doToday: 0,
+    deferred: 0,
+  );
+  List<MockExamRecord> _mockTrend = const <MockExamRecord>[];
+  List<TimeSink> _timeSinks = const <TimeSink>[];
+  /// 错因卡视图：false = 当前，true = 趋势。
+  bool _reasonTrendView = false;
 
   @override
   void initState() {
@@ -53,6 +74,11 @@ class _StatsPageState extends ConsumerState<StatsPage> {
       final modules = await statsRepo.moduleProgress();
       final mastery = await statsRepo.masteryBuckets();
       final failReasons = await statsRepo.failReasonBuckets();
+      final failHistory = await statsRepo.failReasonHistory();
+      final forecast = await statsRepo.masteryForecast();
+      final quota = await statsRepo.todayQuota();
+      final mockTrend = await statsRepo.mockTrend();
+      final timeSinks = await statsRepo.timeSinks();
       if (!mounted) return;
       setState(() {
         _streak = streak;
@@ -61,6 +87,11 @@ class _StatsPageState extends ConsumerState<StatsPage> {
         _modules = modules;
         _mastery = mastery;
         _failReasons = failReasons;
+        _failHistory = failHistory;
+        _forecast = forecast;
+        _quota = quota;
+        _mockTrend = mockTrend;
+        _timeSinks = timeSinks;
         _loading = false;
       });
     } catch (e) {
@@ -137,7 +168,24 @@ class _StatsPageState extends ConsumerState<StatsPage> {
             const SizedBox(height: AppSizes.gap2),
             _MasteryCard(buckets: _mastery),
             const SizedBox(height: AppSizes.gap2),
-            _FailReasonCard(buckets: _failReasons),
+            _ForecastCard(forecast: _forecast),
+            const SizedBox(height: AppSizes.gap2),
+            _QuotaCard(quota: _quota),
+            const SizedBox(height: AppSizes.gap2),
+            _FailReasonCard(
+              current: _failReasons,
+              history: _failHistory,
+              trendView: _reasonTrendView,
+              onToggle: (bool v) => setState(() => _reasonTrendView = v),
+            ),
+            if (_mockTrend.isNotEmpty) ...<Widget>[
+              const SizedBox(height: AppSizes.gap2),
+              _MockTrendCard(records: _mockTrend),
+            ],
+            if (_timeSinks.isNotEmpty) ...<Widget>[
+              const SizedBox(height: AppSizes.gap2),
+              _TimeSinkCard(items: _timeSinks),
+            ],
           ],
         ),
       ),
@@ -147,10 +195,15 @@ class _StatsPageState extends ConsumerState<StatsPage> {
 
 /// 统一卡片外壳：白底、圆角 20、唯一阴影。
 class _StatCard extends StatelessWidget {
-  const _StatCard({required this.title, required this.child});
+  const _StatCard({
+    required this.title,
+    required this.child,
+    this.trailing,
+  });
 
   final String title;
   final Widget child;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -165,13 +218,20 @@ class _StatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: AppSizes.h3,
-              fontWeight: FontWeight.w600,
-              color: AppColors.text,
-            ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: AppSizes.h3,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.text,
+                  ),
+                ),
+              ),
+              if (trailing != null) trailing!,
+            ],
           ),
           const SizedBox(height: AppSizes.gap2),
           child,
@@ -568,27 +628,51 @@ class _MasteryCard extends StatelessWidget {
 }
 
 /// 饼图单块数据。
-/// 薄弱类型分布（缺口③）：五类错因的占比条。
+/// 薄弱类型分布（缺口③）：当前快照 + 30 天趋势双视图。
 ///
-/// 只展示，不参与排程。看到自己 70% 错在「记混了」，就知道该调学习方式，
-/// 而不是指望算法帮你把题推到明天。
+/// 「当前」看每题最新标的是什么——现在弱在哪。
+/// 「趋势」看最近 30 天标了多少次——学习方法改了没有。
+/// 两个问题只能用两份数据回答，所以分两个视图。
 class _FailReasonCard extends StatelessWidget {
-  const _FailReasonCard({required this.buckets});
+  const _FailReasonCard({
+    required this.current,
+    required this.history,
+    required this.trendView,
+    required this.onToggle,
+  });
 
-  final FailReasonBucket buckets;
+  final FailReasonBucket current;
+  final FailReasonBucket history;
+  final bool trendView;
+  final ValueChanged<bool> onToggle;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final bool empty = buckets.total == 0;
+    final FailReasonBucket b = trendView ? history : current;
+    final bool empty = b.total == 0;
 
     return _StatCard(
       title: '薄弱类型',
+      trailing: SegmentedButton<bool>(
+        style: SegmentedButton.styleFrom(
+          visualDensity: VisualDensity.compact,
+          textStyle: theme.textTheme.labelSmall,
+        ),
+        segments: const <ButtonSegment<bool>>[
+          ButtonSegment<bool>(value: false, label: Text('当前')),
+          ButtonSegment<bool>(value: true, label: Text('30天')),
+        ],
+        selected: <bool>{trendView},
+        onSelectionChanged: (Set<bool> v) => onToggle(v.first),
+      ),
       child: empty
           ? Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                '还没有错因记录。答错时选一下「错在哪」，这里就会告诉你反复死在哪儿。',
+                trendView
+                    ? '最近 30 天没有错因记录。'
+                    : '还没有错因记录。答错时选一下「错在哪」，这里就会告诉你反复死在哪儿。',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                   height: 1.6,
@@ -600,29 +684,29 @@ class _FailReasonCard extends StatelessWidget {
               children: <Widget>[
                 _ReasonBar(
                   label: '看不懂题',
-                  count: buckets.cannotParse,
-                  total: buckets.total,
+                  count: b.cannotParse,
+                  total: b.total,
                   color: const Color(0xFF8E8E93),
                 ),
                 const SizedBox(height: 10),
                 _ReasonBar(
                   label: '知识点没记住',
-                  count: buckets.forgot,
-                  total: buckets.total,
+                  count: b.forgot,
+                  total: b.total,
                   color: const Color(0xFF4D6BFE),
                 ),
                 const SizedBox(height: 10),
                 _ReasonBar(
                   label: '记混了',
-                  count: buckets.mixedUp,
-                  total: buckets.total,
+                  count: b.mixedUp,
+                  total: b.total,
                   color: const Color(0xFFFF9500),
                 ),
                 const SizedBox(height: 10),
                 _ReasonBar(
                   label: '想陷了',
-                  count: buckets.wrongReasoning,
-                  total: buckets.total,
+                  count: b.wrongReasoning,
+                  total: b.total,
                   color: const Color(0xFFFF3B30),
                 ),
                 const SizedBox(height: 14),
@@ -633,7 +717,9 @@ class _FailReasonCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    '共 ${buckets.total} 道题标了错因，最多的是「${buckets.dominant}」。',
+                    trendView
+                        ? '最近 30 天共标了 ${b.total} 次错因，最多的是「${b.dominant}」。'
+                        : '共 ${b.total} 道题标了错因，最多的是「${b.dominant}」。',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.primary,
                       height: 1.5,
@@ -691,6 +777,299 @@ class _ReasonBar extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// 掌握度预测（第 6 项）：还要多久才能全部变绿。
+///
+/// 按 SM-2 现有参数往后推，假设之后全对、每天复习量不超过配额。
+/// 这是乐观下限，页面上必须标清楚，不然会给人假希望。
+class _ForecastCard extends StatelessWidget {
+  const _ForecastCard({required this.forecast});
+
+  final MasteryForecast forecast;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final int pct = (forecast.progress * 100).round();
+
+    return _StatCard(
+      title: '还要多久',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Text(
+                '${forecast.daysToFinish}',
+                style: theme.textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  '天',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(
+                  '还剩 ${forecast.reviewsLeft} 次复习',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: forecast.progress,
+              minHeight: 6,
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                AppColors.primary,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '已毕业 ${forecast.graduatedCount} / ${forecast.totalCount} 题（$pct%）· 按全对推算，实际会更久',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 今日复习配额（第 7 项）：把断更回来的积压炸弹拆开。
+class _QuotaCard extends StatelessWidget {
+  const _QuotaCard({required this.quota});
+
+  final ReviewQuota quota;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bool overwhelming = quota.deferred > 0 && quota.deferred > quota.doToday;
+
+    return _StatCard(
+      title: '今日复习',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                '${quota.doToday}',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  '/ ${quota.dueCount} 题到期',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            quota.deferred == 0
+                ? '今天到期全部在配额内，一次做完。'
+                : (overwhelming
+                    ? '积压较多（${quota.deferred} 题顺延）。别慌，一天做完的意义就是把断掉的链接上；顺延的明天排在最前面。'
+                    : '还有 ${quota.deferred} 题顺延到明天，明天会优先排。'),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 模考成绩趋势（第 5 项）：一条折线看进步。
+class _MockTrendCard extends StatelessWidget {
+  const _MockTrendCard({required this.records});
+
+  final List<MockExamRecord> records;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final MockExamRecord last = records.last;
+    final MockExamRecord? prev = records.length >= 2 ? records[records.length - 2] : null;
+    final int delta = prev == null ? 0 : last.percent - prev.percent;
+
+    return _StatCard(
+      title: '模考成绩',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Text(
+                '${last.percent}%',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  prev == null
+                      ? '首次模考'
+                      : (delta > 0
+                          ? '↑ $delta%'
+                          : (delta < 0 ? '↓ ${-delta}%' : '持平')),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: delta > 0
+                        ? AppColors.success
+                        : (delta < 0 ? AppColors.warning : theme.colorScheme.onSurfaceVariant),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text(
+                  '共 ${records.length} 次',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 70,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                for (final r in records)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Container(
+                            height: (r.ratio * 60).clamp(2, 60),
+                            decoration: BoxDecoration(
+                              color: r.ratio >= 0.8
+                                  ? AppColors.success
+                                  : (r.ratio >= 0.6
+                                      ? const Color(0xFFFF9500)
+                                      : AppColors.warning),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '柱高 = 正确率，绿柱 = 过线（80%）。最近一次：${last.rightCount}/${last.total}',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 时间黑洞（第 8 项）：花时间最多、但该周选择题正确率还没上来的点。
+class _TimeSinkCard extends StatelessWidget {
+  const _TimeSinkCard({required this.items});
+
+  final List<TimeSink> items;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return _StatCard(
+      title: '时间黑洞',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            '这几处花的时间最多，但对应周次的正确率还没到 80%。这是你真正卡住的地方。',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.6,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < items.length; i++) ...<Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: items[i].level == 0
+                        ? AppColors.warning
+                        : const Color(0xFFFF9500),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    items[i].label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
+                Text(
+                  '${items[i].minutes}分 · 正确率${(items[i].accuracy * 100).round()}%',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            if (i != items.length - 1) const SizedBox(height: 8),
+          ],
+        ],
+      ),
     );
   }
 }

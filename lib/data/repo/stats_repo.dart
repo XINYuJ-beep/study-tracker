@@ -93,6 +93,92 @@ class FailReasonBucket {
   }
 }
 
+/// 一次模考成绩（缺口④留档）。
+class MockExamRecord {
+  const MockExamRecord({
+    required this.finishedAt,
+    required this.total,
+    required this.rightCount,
+    required this.elapsedSeconds,
+    required this.timedOut,
+  });
+
+  final DateTime finishedAt;
+  final int total;
+  final int rightCount;
+  final int elapsedSeconds;
+  final bool timedOut;
+
+  double get ratio => total == 0 ? 0 : rightCount / total;
+  int get percent => (ratio * 100).round();
+}
+
+/// 掌握度预测：按 SM-2 现有参数往后推，算出还要多久。
+class MasteryForecast {
+  const MasteryForecast({
+    required this.pendingCount,
+    required this.graduatedCount,
+    required this.daysToFinish,
+    required this.reviewsLeft,
+  });
+
+  /// 还没毕业的题数
+  final int pendingCount;
+
+  /// 已毕业的题数
+  final int graduatedCount;
+
+  /// 按每天 [dailyQuota] 题、且之后全对，估算还需多少天
+  final int daysToFinish;
+
+  /// 还需要多少次日复习
+  final int reviewsLeft;
+
+  int get totalCount => pendingCount + graduatedCount;
+
+  double get progress =>
+      totalCount == 0 ? 0 : graduatedCount / totalCount;
+}
+
+/// 时间黑洞：花时间多但掌握度没上来的知识点（item 级）。
+class TimeSink {
+  const TimeSink({
+    required this.itemId,
+    required this.minutes,
+    required this.level,
+    required this.label,
+    required this.accuracy,
+  });
+
+  final String itemId;
+  final int minutes;
+
+  /// 代理掌握度：0 红（正确率 <60%）/ 1 黄（60~80%）
+  final int level;
+
+  /// 展示用的名字（打卡项标题，取不到时是「第 N 周」）
+  final String label;
+
+  /// 该 item 所属周的选择题正确率 0~1
+  final double accuracy;
+}
+
+/// 今日复习配额（缺口⑦）。
+///
+/// 断更回来那天，队列会堆出几百道题，人看到直接关 App。
+/// 配额把炸弹拆开：今天做 [doToday] 道，剩下顺延，不永久沉底。
+class ReviewQuota {
+  const ReviewQuota({
+    required this.dueCount,
+    required this.doToday,
+    required this.deferred,
+  });
+
+  final int dueCount;
+  final int doToday;
+  final int deferred;
+}
+
 /// 统计页数据源（SPEC 4.4）。
 ///
 /// 本类只读，不改任何表；所有方法都从 Checkins / Items / Concepts / Modules
@@ -289,6 +375,206 @@ class StatsRepo {
       mixedUp: p3,
       wrongReasoning: p4,
     );
+  }
+
+  // ---------- 缺口③/④ 新增：趋势与预测 ----------
+
+  /// 模考成绩趋势（缺口④留档），按时间正序给最近 [limit] 条。
+  Future<List<MockExamRecord>> mockTrend({int limit = 20}) async {
+    final rows = await db.query(
+      kTableMockExams,
+      orderBy: 'finished_at DESC',
+      limit: limit,
+    );
+    final out = <MockExamRecord>[];
+    for (final r in rows) {
+      out.add(MockExamRecord(
+        finishedAt: DateTime.fromMillisecondsSinceEpoch(
+          (r['finished_at'] as int?) ?? 0,
+        ),
+        total: (r['total'] as int?) ?? 0,
+        rightCount: (r['right_count'] as int?) ?? 0,
+        elapsedSeconds: (r['elapsed_seconds'] as int?) ?? 0,
+        timedOut: ((r['timed_out'] as int?) ?? 0) == 1,
+      ));
+    }
+    return out.reversed.toList();
+  }
+
+  /// 错因历史分布（缺口③）：最近 [days] 天的 fail_events 分桶。
+  ///
+  /// 与 failReasonBuckets() 的区别：那个看「现在每题最新标的是什么」，
+  /// 这个看「这段时间一共标了多少次」，能看出改善趋势。
+  Future<FailReasonBucket> failReasonHistory({int days = 30}) async {
+    final since = _clock()
+        .subtract(Duration(days: days))
+        .millisecondsSinceEpoch;
+    final rows = await db.query(
+      kTableFailEvents,
+      columns: <String>['reason'],
+      where: 'answered_at >= ?',
+      whereArgs: <Object?>[since],
+    );
+    var p1 = 0;
+    var p2 = 0;
+    var p3 = 0;
+    var p4 = 0;
+    for (final r in rows) {
+      switch (r['reason'] as int? ?? 0) {
+        case 1:
+          p1++;
+          break;
+        case 2:
+          p2++;
+          break;
+        case 3:
+          p3++;
+          break;
+        case 4:
+          p4++;
+          break;
+        default:
+          break;
+      }
+    }
+    return FailReasonBucket(
+      cannotParse: p1,
+      forgot: p2,
+      mixedUp: p3,
+      wrongReasoning: p4,
+    );
+  }
+
+  /// 掌握度预测（缺口⑥）：按 SM-2 现有参数往后推。
+  ///
+  /// 口径：假设之后每次复习都答对、且每天复习量不超过 [dailyQuota] 题。
+  /// 这是**乐观下限**——真实会更久。页面上要标注「按全对推算」。
+  Future<MasteryForecast> masteryForecast({int dailyQuota = 30}) async {
+    final rows = await db.query(
+      T.mcqs,
+      columns: <String>['stage'],
+    );
+    if (rows.isEmpty) {
+      return const MasteryForecast(
+        pendingCount: 0,
+        graduatedCount: 0,
+        daysToFinish: 0,
+        reviewsLeft: 0,
+      );
+    }
+    final int grad = AppConstants.reviewGraduatedStage;
+    var pending = 0;
+    var graduated = 0;
+    var reviewsLeft = 0;
+    for (final r in rows) {
+      final int stage = (r['stage'] as int?) ?? 0;
+      if (stage >= grad) {
+        graduated++;
+      } else {
+        pending++;
+        // 从当前档走到毕业档还差几次复习
+        reviewsLeft += (grad - stage).clamp(1, grad);
+      }
+    }
+    final int days = dailyQuota <= 0
+        ? 0
+        : (reviewsLeft / dailyQuota).ceil();
+    return MasteryForecast(
+      pendingCount: pending,
+      graduatedCount: graduated,
+      daysToFinish: days,
+      reviewsLeft: reviewsLeft,
+    );
+  }
+
+  /// 今日复习配额（缺口⑦）：今日到期的题，加上从昨天及更早顺延下来的。
+  ///
+  /// 返回 (今天该做多少, 顺延到明天多少)。顺延的题下一轮优先。
+  Future<ReviewQuota> todayQuota({int limit = 30}) async {
+    final today = startOfDay(_effectiveToday());
+    final endMs = today.add(const Duration(days: 1)).millisecondsSinceEpoch;
+    final rows = await db.query(
+      T.mcqs,
+      columns: <String>['id'],
+      where: 'due_date IS NOT NULL AND due_date < ?',
+      whereArgs: <Object?>[endMs],
+    );
+    final int due = rows.length;
+    final int doToday = due > limit ? limit : due;
+    final int deferred = due > limit ? due - limit : 0;
+    return ReviewQuota(dueCount: due, doToday: doToday, deferred: deferred);
+  }
+
+  /// 时间黑洞（第 8 项）：花时间最多、但该周选择题正确率还没上来的 item。
+  ///
+  /// 口径说明：items 表里只有周/日/时长，没有「掌握度」字段；
+  /// concepts 表也没有 item_id，两表实际关联不上。
+  /// 所以这里用「该 item 所属周的选择题正确率」作为掌握度代理：
+  ///   - 该周没做过选择题 -> 视为未验证，排除（没有数据就不下结论）；
+  ///   - 正确率 < 80% -> 算没掌握，进入榜单。
+  Future<List<TimeSink>> timeSinks({int limit = 5}) async {
+    final checkins = await db.query(
+      T.checkins,
+      where: 'done = ?',
+      whereArgs: <Object?>[1],
+    );
+    if (checkins.isEmpty) return const <TimeSink>[];
+
+    final items = await db.query(T.items);
+    final minutesOf = <String, int>{
+      for (final it in items) it['id'] as String: it['minutes'] as int? ?? 0,
+    };
+    final weekOf = <String, int>{
+      for (final it in items) it['id'] as String: it['week'] as int? ?? 0,
+    };
+    final practiceOf = <String, String>{
+      for (final it in items)
+        it['id'] as String: (it['practice'] as String? ?? ''),
+    };
+
+    // 按周累计选择题正确率
+    final mcqs = await db.query(T.mcqs);
+    final rightByWeek = <int, int>{};
+    final totalByWeek = <int, int>{};
+    for (final m in mcqs) {
+      final int? w = m['week'] as int?;
+      if (w == null) continue;
+      final int wrong = (m['wrong_count'] as int?) ?? 0;
+      final int stage = (m['stage'] as int?) ?? 0;
+      totalByWeek[w] = (totalByWeek[w] ?? 0) + 1;
+      // stage 达到毕业档或至少推过一档，宽松算作对过
+      if (wrong == 0 || stage > 0) {
+        rightByWeek[w] = (rightByWeek[w] ?? 0) + 1;
+      }
+    }
+
+    final accum = <String, int>{};
+    for (final c in checkins) {
+      final String iid = c['item_id'] as String;
+      accum[iid] = (accum[iid] ?? 0) + (minutesOf[iid] ?? 0);
+    }
+
+    final out = <TimeSink>[];
+    accum.forEach((String iid, int min) {
+      if (min <= 0) return;
+      final int w = weekOf[iid] ?? 0;
+      final int tot = totalByWeek[w] ?? 0;
+      if (tot == 0) return; // 这周没题，不下结论
+      final int right = rightByWeek[w] ?? 0;
+      final double rate = right / tot;
+      if (rate >= 0.8) return; // 已经拿到 80%，不算黑洞
+      out.add(TimeSink(
+        itemId: iid,
+        minutes: min,
+        level: rate < 0.6 ? 0 : 1,
+        label: (practiceOf[iid] ?? '').isNotEmpty
+            ? practiceOf[iid]!
+            : '第 $w 周',
+        accuracy: rate,
+      ));
+    });
+    out.sort((a, b) => b.minutes.compareTo(a.minutes));
+    return out.take(limit).toList();
   }
 
   // ---------- 内部 ----------

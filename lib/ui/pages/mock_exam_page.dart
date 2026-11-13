@@ -56,6 +56,9 @@ class _MockExamPageState extends ConsumerState<MockExamPage> {
   int _elapsed = 0;
   Timer? _timer;
 
+  /// 交卷后的错题诊断结果。
+  List<MockDiagItem> _diag = const <MockDiagItem>[];
+
   @override
   void initState() {
     super.initState();
@@ -125,6 +128,71 @@ class _MockExamPageState extends ConsumerState<MockExamPage> {
     return n;
   }
 
+  /// 错题三分：初学未稳 / 反复出错 / 临场失误。
+  ///
+  /// 判定顺序（互斥，先命中先归类）：
+  ///   1. wrong_count >= 2 -> 反复出错（最硬的信号）
+  ///   2. 同一周次内本题错、其他题对 -> 临场失误
+  ///   3. 剩下全部 -> 初学未稳
+  Future<void> _computeDiag() async {
+    final repo = ref.read(questionRepoProvider);
+    final wrongIds = <String>[];
+    for (var i = 0; i < _items.length; i++) {
+      if (_picks[i] != _items[i].answer) wrongIds.add(_items[i].id);
+    }
+    if (wrongIds.isEmpty) {
+      if (mounted) setState(() => _diag = const <MockDiagItem>[]);
+      return;
+    }
+
+    Map<String, int> history = const <String, int>{};
+    try {
+      history = await repo.wrongCountsFor(wrongIds);
+    } catch (_) {
+      history = const <String, int>{};
+    }
+
+    // 每周次的答对题数，用于判断「临场失误」。
+    final Map<int, int> rightByWeek = <int, int>{};
+    for (var i = 0; i < _items.length; i++) {
+      if (_picks[i] == _items[i].answer && _items[i].week != null) {
+        rightByWeek[_items[i].week!] =
+            (rightByWeek[_items[i].week!] ?? 0) + 1;
+      }
+    }
+
+    final out = <MockDiagItem>[];
+    for (var i = 0; i < _items.length; i++) {
+      final q = _items[i];
+      if (_picks[i] == q.answer) continue;
+      final int hist = history[q.id] ?? 0;
+      late final MockDiagKind kind;
+      if (hist >= 2) {
+        kind = MockDiagKind.repeated;
+      } else if (q.week != null && (rightByWeek[q.week!] ?? 0) > 0) {
+        kind = MockDiagKind.slip;
+      } else {
+        kind = MockDiagKind.shakyFresh;
+      }
+      out.add(MockDiagItem(
+        index: i,
+        mcq: q,
+        picked: _picks[i],
+        kind: kind,
+      ));
+    }
+
+    // 排序：反复出错 -> 初学未稳 -> 临场失误（越前面越该管）。
+    int rank(MockDiagKind k) => switch (k) {
+          MockDiagKind.repeated => 0,
+          MockDiagKind.shakyFresh => 1,
+          MockDiagKind.slip => 2,
+        };
+    out.sort((a, b) => rank(a.kind).compareTo(rank(b.kind)));
+
+    if (mounted) setState(() => _diag = out);
+  }
+
   void _submit({bool auto = false}) async {
     if (_phase != _Phase.running) return;
     _timer?.cancel();
@@ -165,6 +233,19 @@ class _MockExamPageState extends ConsumerState<MockExamPage> {
         });
         return;
       }
+    }
+    if (!mounted) return;
+    await _computeDiag();
+    // 缺口④留档：交卷时落一条成绩，供统计页画趋势。
+    try {
+      await ref.read(questionRepoProvider).saveMockExam(
+            total: _items.length,
+            rightCount: _rightCount,
+            elapsedSeconds: _elapsed,
+            timedOut: _remainSeconds <= 0,
+          );
+    } catch (_) {
+      // 落库失败不阻断，成绩照常展示。
     }
     if (!mounted) return;
     setState(() => _phase = _Phase.finished);
@@ -409,6 +490,10 @@ class _MockExamPageState extends ConsumerState<MockExamPage> {
             ],
           ),
         ),
+        if (_diag.isNotEmpty) ...<Widget>[
+          const SizedBox(height: 20),
+          _DiagCard(items: _diag),
+        ],
         const SizedBox(height: 20),
         Text('逐题回顾', style: theme.textTheme.titleSmall),
         const SizedBox(height: 10),
@@ -436,6 +521,111 @@ class _MockExamPageState extends ConsumerState<MockExamPage> {
           child: const Text('结束'),
         ),
       ],
+    );
+  }
+}
+
+/// 交卷后的错题诊断卡：把「错了 8 题」拆成三个可执行的结论。
+///
+/// 这是模考真正有用的部分——分数只是分数，诊断才告诉你接下来干什么。
+class _DiagCard extends StatelessWidget {
+  const _DiagCard({required this.items});
+
+  final List<MockDiagItem> items;
+
+  Color _tone(MockDiagKind k) {
+    switch (k) {
+      case MockDiagKind.repeated:
+        return const Color(0xFFFF3B30);
+      case MockDiagKind.shakyFresh:
+        return const Color(0xFFFF9500);
+      case MockDiagKind.slip:
+        return const Color(0xFF8E8E93);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    // 按类归组
+    final Map<MockDiagKind, List<MockDiagItem>> grouped =
+        <MockDiagKind, List<MockDiagItem>>{};
+    for (final it in items) {
+      grouped.putIfAbsent(it.kind, () => <MockDiagItem>[]).add(it);
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Icon(
+                Icons.medical_information_outlined,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 6),
+              Text('错在哪：${items.length} 题诊断', style: theme.textTheme.titleSmall),
+            ],
+          ),
+          const SizedBox(height: 12),
+          for (final kind in <MockDiagKind>[
+            MockDiagKind.repeated,
+            MockDiagKind.shakyFresh,
+            MockDiagKind.slip,
+          ])
+            if ((grouped[kind] ?? const <MockDiagItem>[]).isNotEmpty) ...<Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _tone(kind),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${grouped[kind]!.first.label} · ${grouped[kind]!.length} 题',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: _tone(kind),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, bottom: 8),
+                child: Text(
+                  grouped[kind]!.first.conclusion,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    height: 1.5,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, bottom: 14),
+                child: Text(
+                  '第 ${grouped[kind]!.map((e) => e.index + 1).join('、')} 题',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+                  ),
+                ),
+              ),
+            ],
+        ],
+      ),
     );
   }
 }
@@ -509,5 +699,54 @@ class _ReviewTile extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// 错题诊断类别（缺口④交卷后给结论，不只给分）。
+enum MockDiagKind {
+  /// 初学未稳：本周次答对率低。
+  shakyFresh,
+
+  /// 反复出错：历史错过两次以上。
+  repeated,
+
+  /// 临场失误：同周其他题对过，就这题错。
+  slip,
+}
+
+/// 一道错题的诊断结果。
+class MockDiagItem {
+  const MockDiagItem({
+    required this.index,
+    required this.mcq,
+    required this.picked,
+    required this.kind,
+  });
+
+  final int index;
+  final McqQuestion mcq;
+  final int picked;
+  final MockDiagKind kind;
+
+  String get conclusion {
+    switch (kind) {
+      case MockDiagKind.shakyFresh:
+        return '刚学完还没成型，回去重看原文，别硬刷题';
+      case MockDiagKind.repeated:
+        return '已经反复栽过，错题本记着，明天会优先排给你';
+      case MockDiagKind.slip:
+        return '同周其他题都对了，这道是手滑或看错，不用重学';
+    }
+  }
+
+  String get label {
+    switch (kind) {
+      case MockDiagKind.shakyFresh:
+        return '初学未稳';
+      case MockDiagKind.repeated:
+        return '反复出错';
+      case MockDiagKind.slip:
+        return '临场失误';
+    }
   }
 }

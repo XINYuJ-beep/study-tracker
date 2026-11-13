@@ -351,6 +351,59 @@ class QuestionRepo {
     return list.take(limit).toList();
   }
 
+  /// 缺口②第二道关卡：给自评抽一道「同周不同题」的验证题。
+  ///
+  /// 返回 null 表示没得验（同周只剩这一道），此时调用方按「未验证」处理，
+  /// 自评结果照常生效，不做降级。
+  Future<McqQuestion?> pickVerifyMcq(String excludeId, {int? week}) async {
+    final rows = await db.query(
+      T.mcqs,
+      where: week == null
+          ? 'id != ?'
+          : 'id != ? AND week = ?',
+      whereArgs: <Object?>[excludeId, if (week != null) week],
+      limit: 60,
+    );
+    if (rows.isEmpty) return null;
+    final list = rows.map(_toMcq).toList()..shuffle();
+    return list.first;
+  }
+
+  /// 缺口④：模考交卷后落一条成绩。只存结果，不存答题明细。
+  Future<void> saveMockExam({
+    required int total,
+    required int rightCount,
+    required int elapsedSeconds,
+    required bool timedOut,
+  }) async {
+    await db.insert(kTableMockExams, <String, Object?>{
+      'finished_at': DateTime.now().millisecondsSinceEpoch,
+      'total': total,
+      'right_count': rightCount,
+      'elapsed_seconds': elapsedSeconds,
+      'timed_out': timedOut ? 1 : 0,
+    });
+  }
+
+  /// 批量取这些题的累计错题次数（缺口④模考诊断用）。
+  ///
+  /// 返回 id -> wrong_count，没记录到的 id 不在 map 里。
+  Future<Map<String, int>> wrongCountsFor(List<String> ids) async {
+    if (ids.isEmpty) return const <String, int>{};
+    final placeholders = List<String>.filled(ids.length, '?').join(',');
+    final rows = await db.query(
+      T.mcqs,
+      columns: <String>['id', 'wrong_count'],
+      where: 'id IN ($placeholders)',
+      whereArgs: ids,
+    );
+    final out = <String, int>{};
+    for (final r in rows) {
+      out[r['id'] as String] = (r['wrong_count'] as int?) ?? 0;
+    }
+    return out;
+  }
+
   // ---------- 错题 ----------
 
   /// 错题本：错过的且还没被「连续答对 N 次」清出的题。
@@ -385,11 +438,16 @@ class QuestionRepo {
   ///                的中间值，等于升幅减半（升了，但下一次复习提前拉近）；
   ///   1 讲不出来 = 判「忘了」：走答错路径（stage 归 0、ease -0.2、明天再来）。
   /// 只有答对才会传非 0 自评；答错时自评一律按忘了处理，不重复扣分。
+  /// [verified] 缺口②第二道关卡：自评结果是否被验证题确认。
+  ///   true  = 验证题答对，自评可信，按正常间隔走；
+  ///   false = 验证题答错，自评偏乐观，自评档位降一级；
+  ///   null  = 没跑验证（同周次题目不足或老调用点）。
   Future<void> recordAnswer(
     String mcqId,
     bool correct, {
     int? selfScore,
     int? failReason,
+    bool? verified,
   }) async {
     final rows = await db.query(
       T.mcqs,
@@ -406,15 +464,30 @@ class QuestionRepo {
     final double ease = (row['ease'] as num?)?.toDouble() ??
         AppConstants.initialEase;
 
-    // 自评档位：0/空 = 未自评；1 讲不出来；2 卡壳；3 讲清了。
-    final int score = (selfScore ?? 0).clamp(0, 3);
+    // 自评档位（v7 四档）：0/空 = 未自评；1 讲不出来；2 关键点绕过；
+    // 3 讲了但要停一下；4 讲清了。旧值 3（原「讲清了」）语义向后兼容。
+    final int score = (selfScore ?? 0).clamp(0, 4);
     // 实际判定用的「对错」：答对但自评讲不出来 -> 视为忘了。
-    final bool effectiveCorrect = correct && score != 1;
-    // 卡壳：答对但只讲了半截 -> 判模糊，升幅减半。
-    final bool fuzzy = correct && score == 2;
+    final bool effectiveCorrect = correct && effScore != 1;
+    // 验证题降级：自评说「讲清了」但验证题答错 -> 降到「要停一下」。
+    // 验证题答对不升级（不因为一次碰对就当成完全掌握）。
+    int rawScore = score;
+    if (verified == false && rawScore >= 3) rawScore = rawScore - 1;
+    final int effScore = rawScore;
+
+    // 模糊：答对但自评 2（关键点绕过）或 3（要停一下）-> 升幅打折。
+    // 2 = 打五折（间隔取上一档与目标档的中值）；3 = 打八折。
+    final bool fuzzy = correct && (effScore == 2 || effScore == 3);
+    // 模糊折扣系数：2 -> 0.5，3 -> 0.8，其余 1.0。
+    final double fuzzyFactor = effScore == 2
+        ? 0.5
+        : (effScore == 3 ? 0.8 : 1.0);
     final Map<String, Object?> selfPatch = score == 0
         ? const <String, Object?>{}
-        : <String, Object?>{'self_score': score};
+        : <String, Object?>{
+            'self_score': effScore,
+            if (verified != null) 'self_verified': verified ? 1 : 0,
+          };
 
     // 错因归因（缺口③）：0 = 未标记；1 看不懂题 / 2 知识点没记住 / 3 记混了 / 4 想陷了。
     // 只记录，不参与 SM-2 排程（方案 A）——它是诊断数据，不是排程因子。
@@ -422,6 +495,18 @@ class QuestionRepo {
     final Map<String, Object?> reasonPatch = reason == 0
         ? const <String, Object?>{}
         : <String, Object?>{'fail_reason': reason};
+
+    // 缺口③历史累积：每次选了错因就追加一条事件，不覆盖旧记录。
+    // mcqs.fail_reason 保留作「最新一次」快查，两者各司其职。
+    if (!effectiveCorrect && reason > 0) {
+      await db.insert(kTableFailEvents, <String, Object?>{
+        'mcq_id': mcqId,
+        'reason': reason,
+        'week': row['week'],
+        'module': row['module'],
+        'answered_at': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
 
     if (effectiveCorrect) {
       final int nextStreak = rightStreak + 1;
@@ -450,7 +535,11 @@ class QuestionRepo {
             : AppConstants.reviewIntervals[(stage - 1).clamp(
                 0,
                 AppConstants.reviewIntervals.length - 1)];
-        final int days = fuzzy ? ((prev + full) ~/ 2).clamp(1, full) : full;
+        // 模糊折扣：按 fuzzyFactor 在「上一档间隔 → 目标档间隔」之间插值，
+        // 2 → 取中点，3 → 取 80% 处，不模糊 → 取满值。
+        final int days = fuzzy
+            ? (prev + ((full - prev) * fuzzyFactor).round()).clamp(1, full)
+            : full;
         final int dueMs = startOfDay(
           effectiveToday(),
         ).add(Duration(days: days)).millisecondsSinceEpoch;

@@ -69,6 +69,13 @@ class AppConstants {
   // ---------- 错题与记忆 ----------
   /// 答对多少次移出错题本
   static const int rightStreakToClear = 2;
+
+  /// 每日复习配额（缺口⑦）。
+  ///
+  /// 断更回来那天到期队列可能堆出几百道，人一看就关 App。
+  /// 截断到 30 道，剩下的按 due_date 升序顺延到明天，
+  /// 因为旧的因 due_date 更早天然排前面，不会永久沉底。
+  static const int dailyReviewQuota = 30;
   /// 连续答错多少次进强化
   static const int wrongCountToFocus = 2;
 

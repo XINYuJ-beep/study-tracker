@@ -227,6 +227,9 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
         _index++;
         _picked = -1;
         _answered = false;
+        _extraSelfRated = true;
+        _extraSelfScore = 0;
+        _extraSelfCtrl.clear();
       }
     });
   }
@@ -442,6 +445,15 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
     });
   }
 
+  // ---------- 抽查页自评门槛（与主答题页同一口径）----------
+  /// 自评结果：0=未评（或快速通过），1~4 同主答题页。
+  int _extraSelfScore = 0;
+  /// 是否已完成自评（或走快速通过）。
+  bool _extraSelfRated = true;
+  /// 快速通过开关：开了就跳过自评，但这道题不写 SM-2、不计掌握度。
+  bool _extraQuickPass = false;
+  final TextEditingController _extraSelfCtrl = TextEditingController();
+
   Future<void> _submit() async {
     if (_answered || _picked < 0) return;
     final q = _items[_index];
@@ -449,11 +461,49 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
     setState(() {
       _answered = true;
       if (ok) _right++;
+      // 答对且未开快速通过：等自评；答错：直接记账放行。
+      _extraSelfRated = !ok || _extraQuickPass;
+      _extraSelfScore = 0;
+      _extraSelfCtrl.clear();
+    });
+    if (!ok || _extraQuickPass) {
+      try {
+        await ref.read(questionRepoProvider).recordAnswer(q.id, ok);
+      } catch (_) {
+        // 记账失败不阻断流程。
+      }
+    }
+  }
+
+  String _extraScoreLabel(int score) {
+    switch (score) {
+      case 4:
+        return '讲清了';
+      case 3:
+        return '讲了但要停一下';
+      case 2:
+        return '关键点绕过去了';
+      case 1:
+        return '讲不出来';
+      default:
+        return '-';
+    }
+  }
+
+  /// 抽查页自评提交：带 selfScore 记账，走 SM-2。
+  Future<void> _submitExtraRating(int score) async {
+    if (_extraSelfRated) return;
+    final q = _items[_index];
+    setState(() {
+      _extraSelfScore = score;
+      _extraSelfRated = true;
     });
     try {
-      await ref.read(questionRepoProvider).recordAnswer(q.id, ok);
+      await ref
+          .read(questionRepoProvider)
+          .recordAnswer(q.id, true, selfScore: score);
     } catch (_) {
-      // 记账失败不阻断流程。
+      // 记账失败不阻断。
     }
   }
 
@@ -560,18 +610,41 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
             const SizedBox(height: 8),
             ExplainBox(text: q.explain!),
           ],
+          // 抽查页自评卡：与主答题页同一口径，答对必须自评。
+          if (_answered && !_extraSelfRated) ...<Widget>[
+            const SizedBox(height: 16),
+            _ExtraSelfCard(
+              controller: _extraSelfCtrl,
+              onRate: _submitExtraRating,
+            ),
+          ],
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
             child: FilledButton(
-              onPressed: _answered ? _next : (_picked < 0 ? null : _submit),
+              onPressed: !_answered
+                  ? (_picked < 0 ? null : _submit)
+                  : (_extraSelfRated ? _next : null),
               child: Text(
                 !_answered
                     ? '提交'
-                    : (_index + 1 >= _items.length ? '交卷' : '下一题'),
+                    : (_extraSelfRated
+                        ? (_index + 1 >= _items.length ? '交卷' : '下一题')
+                        : '先完成自评'),
               ),
             ),
           ),
+          if (_answered && _extraSelfScore > 0) ...<Widget>[
+            const SizedBox(height: 8),
+            Center(
+              child: Text(
+                '已自评：$_extraScoreLabel(_extraSelfScore)',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -1222,6 +1295,139 @@ class _SheetField extends StatelessWidget {
             style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// 抽查页自评卡（与主答题页 _SelfRatingCard 同口径，四档）。
+///
+/// 刻意重复实现而不抽公共组件：主答题页那个绑定验证题流程，
+/// 抽查页是快速过题场景，不跑验证。两者行为不同，不能合成一个。
+class _ExtraSelfCard extends StatelessWidget {
+  const _ExtraSelfCard({required this.controller, required this.onRate});
+
+  final TextEditingController controller;
+  final Future<void> Function(int score) onRate;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.25),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Icon(
+                Icons.record_voice_over_outlined,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 6),
+              Text('用自己的话讲一遍', style: theme.textTheme.titleSmall),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '抽查也要过这一道。讲不出来就是没掌握，跟能不能选对选项无关。',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: controller,
+            maxLines: 3,
+            minLines: 2,
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+            decoration: InputDecoration(
+              hintText: '这题考的是 …，因为 …，所以选 …',
+              hintStyle: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              filled: true,
+              fillColor: theme.colorScheme.surface,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.all(12),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: <Widget>[
+              _ExtraRateChip(
+                label: '讲清了',
+                color: const Color(0xFF34C759),
+                onTap: () => onRate(4),
+              ),
+              _ExtraRateChip(
+                label: '要停一下',
+                color: const Color(0xFF4D6BFE),
+                onTap: () => onRate(3),
+              ),
+              _ExtraRateChip(
+                label: '绕过去了',
+                color: const Color(0xFFFF9500),
+                onTap: () => onRate(2),
+              ),
+              _ExtraRateChip(
+                label: '讲不出来',
+                color: const Color(0xFFFF3B30),
+                onTap: () => onRate(1),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ExtraRateChip extends StatelessWidget {
+  const _ExtraRateChip({
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: color.withValues(alpha: 0.12),
+          border: Border.all(color: color.withValues(alpha: 0.4)),
+        ),
+        child: Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: color,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }

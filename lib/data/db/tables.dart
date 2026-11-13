@@ -158,6 +158,36 @@ const List<String> kMigrateV5ToV6 = <String>[
   "ALTER TABLE mcqs ADD COLUMN fail_reason INTEGER NOT NULL DEFAULT 0",
 ];
 
+/// v6 -> v7：缺口②自评拆为四档，并新增错因事件表与模考成绩表。
+///
+/// self_score 取值口径升级（旧值兼容）：
+///   0 未评 / 1 讲不出来 / 2 讲了但关键点绕过 / 3 讲了但要停一下 / 4 讲清了
+///   旧库里的 3（讲清了）保持不变；旧 2（卡壳）语义与新的 2 一致，不迁移。
+const List<String> kMigrateV6ToV7 = <String>[
+  "CREATE TABLE IF NOT EXISTS fail_events ("
+      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+      "mcq_id TEXT NOT NULL, "
+      "reason INTEGER NOT NULL, "
+      "week INTEGER, "
+      "module TEXT, "
+      "answered_at INTEGER NOT NULL)",
+  "ALTER TABLE mcqs ADD COLUMN self_verified INTEGER NOT NULL DEFAULT -1",
+  "CREATE INDEX IF NOT EXISTS idx_fail_events_at ON fail_events(answered_at)",
+  "CREATE TABLE IF NOT EXISTS mock_exams ("
+      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+      "finished_at INTEGER NOT NULL, "
+      "total INTEGER NOT NULL, "
+      "right_count INTEGER NOT NULL, "
+      "elapsed_seconds INTEGER NOT NULL, "
+      "timed_out INTEGER NOT NULL DEFAULT 0)",
+];
+
+/// fail_events 表名（不在 T 常量类里，单独给一个）。
+const String kTableFailEvents = 'fail_events';
+
+/// mock_exams 表名。
+const String kTableMockExams = 'mock_exams';
+
 /// 性能索引（SPEC 第 16 节：checkins(item_id)、checkins(date) 建索引）
 const List<String> kCreateIndexes = <String>[
   'CREATE INDEX IF NOT EXISTS idx_checkins_item ON checkins (item_id)',
@@ -220,7 +250,8 @@ CREATE TABLE IF NOT EXISTS mcqs (
   due_date      INTEGER,
   ease          REAL NOT NULL DEFAULT 2.5,
   self_score    INTEGER NOT NULL DEFAULT 0,
-  fail_reason   INTEGER NOT NULL DEFAULT 0
+  fail_reason   INTEGER NOT NULL DEFAULT 0,
+  self_verified INTEGER NOT NULL DEFAULT -1
 )''';
 
 /// ====================================
@@ -781,4 +812,53 @@ class AppSettingRows {
         'key': key,
         'value': value,
       };
+}
+
+/// 迁移链一致性自检（第 10 项）。
+///
+/// 验证「建表语句里的列」= 「基础列 + 历次 ALTER 加进来的列」。
+/// 不一致意味着：新装用户（走建表）和老用户（走迁移）的表结构不同，
+/// 会导致只有在老库上才出现的 bug。
+///
+/// 这个函数在 debug 启动时跑一次，不一致直接抛断言。
+/// 生产 release 不调它，零成本。
+void verifyMcqsMigrationChain() {
+  assert(() {
+    final String create = sqlCreateMcqs;
+    final List<String> alters = <String>[
+      ...kMigrateV2ToV3,
+      ...kMigrateV3ToV4,
+      ...kMigrateV4ToV5,
+      ...kMigrateV5ToV6,
+      ...kMigrateV6ToV7,
+    ];
+    final List<String> alterCols = alters
+        .where((String sql) => sql.contains('ALTER TABLE mcqs'))
+        .map((String sql) {
+          final RegExpMatch? m =
+              RegExp(r'ADD COLUMN (\w+)').firstMatch(sql);
+          return m?.group(1) ?? '';
+        })
+        .where((String c) => c.isNotEmpty)
+        .toList();
+
+    // 基础列（建表语句自带，不来自 ALTER）
+    final List<String> baseCols = <String>[
+      'id', 'week', 'module', 'question', 'options', 'answer', 'explain',
+      'wrong_count', 'right_streak',
+    ];
+
+    for (final String col in alterCols) {
+      if (!create.contains(col)) {
+        throw StateError('mcqs 迁移链与建表语句不一致：ALTER 加了 "$col"，'
+            '但 sqlCreateMcqs 里没有。新装用户会缺这一列。');
+      }
+    }
+    for (final String col in baseCols) {
+      if (!create.contains(col)) {
+        throw StateError('mcqs 建表语句缺基础列 "$col"。');
+      }
+    }
+    return true;
+  }());
 }

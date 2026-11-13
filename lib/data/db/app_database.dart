@@ -34,7 +34,7 @@ class AppDatabase {
   /// v3：cards / mcqs 补 source_ref
   /// v4：mcqs 补 item_id / day / question_type / stage / due_date / ease
   ///     （按天投放 + SM-2 复习所需）
-  static const int schemaVersion = 6;
+  static const int schemaVersion = 7;
 
   /// 打开（或复用）底层连接。所有 repo 都通过它拿 Database。
   Future<Database> get database async {
@@ -72,6 +72,9 @@ class AppDatabase {
         await db.execute('PRAGMA foreign_keys = ON');
       },
       onCreate: (Database db, int version) async {
+        // debug 下先自检迁移链：建表列必须能覆盖所有 ALTER 加过的列，
+        // 否则新装用户和老用户表结构会不一致。
+        verifyMcqsMigrationChain();
         final Batch b = db.batch();
         for (final String sql in kCreateTableSql) {
           b.execute(sql);
@@ -82,6 +85,8 @@ class AppDatabase {
         await b.commit(noResult: true);
       },
       onUpgrade: (Database db, int from, int to) async {
+        // debug 下自检迁移链，避免「加了 ALTER 但忘了改建表语句」。
+        verifyMcqsMigrationChain();
         // v1 -> v2：checkins 补 minutes / note，并补建索引。
         // 逐版本链式升级，新增版本时在末尾追加分支。
         if (from < 2) {
@@ -113,6 +118,12 @@ class AppDatabase {
         // 老题回填 0 = 未标记，不影响任何既有逻辑。
         if (from < 6) {
           for (final String sql in kMigrateV5ToV6) {
+            await db.execute(sql);
+          }
+        }
+        // v6 -> v7：自评四档 + 错因事件表 + 模考成绩表。
+        if (from < 7) {
+          for (final String sql in kMigrateV6ToV7) {
             await db.execute(sql);
           }
         }

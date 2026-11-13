@@ -132,7 +132,10 @@ class _QaPageState extends ConsumerState<QaPage> {
     // 第 1 条腿：SM-2 到期队列，按 due_date 升序原样保留。
     final due = <McqQuestion>[];
     try {
-      due.addAll(await qRepo.dueMcqs());
+      // 缺口⑦今日配额：到期的题最多排 30 道，剩下的顺延到明天。
+      // dueMcqs 内部按 due_date 升序，顺延下来的旧题天然排在最前，
+      // 所以截断不会让老题永久沉底。
+      due.addAll(await qRepo.dueMcqs(limit: AppConstants.dailyReviewQuota));
     } catch (_) {
       // 到期队列读失败不阻断，走补位。
     }
@@ -257,6 +260,9 @@ class _QaPageState extends ConsumerState<QaPage> {
       _mcqSelfScore = 0;
       _mcqFailReason = 0;
       _mcqWrongLogged = false;
+      _pendingVerifyScore = 0;
+      _verifyMcq = null;
+      _verifyPicked = -1;
       _mcqSelfCtrl.clear();
       if (correct) _mcqRight++;
     });
@@ -304,16 +310,70 @@ class _QaPageState extends ConsumerState<QaPage> {
   ///   3 讲清了   -> 正常升档
   ///   2 卡壳     -> 升档但间隔取中间值（升幅减半）
   ///   1 讲不出来 -> 判忘了，降档；同时把答错计数 +1（因为实际是没真懂）
+  /// 提交自评。
+  ///
+  /// 进验证题的条件：自评 3 或 4（自认讲得清），且能抽到同周另一道题。
+  /// 自评 1（讲不出来）直接走答错路径，自评 2（关键点绕过）本来就该打五折，
+  /// 两者都不需要验证——因为它们已经足够严格，验证反而多此一举。
   Future<void> _submitSelfRating(int score) async {
     if (_mcqSelfRated) return;
     final q = _mcqList[_mcqIndex];
+
+    final bool needVerify = score >= 3;
+    if (needVerify) {
+      McqQuestion? verify;
+      try {
+        verify = await ref
+            .read(questionRepoProvider)
+            .pickVerifyMcq(q.id, week: q.week);
+      } catch (_) {
+        verify = null;
+      }
+      if (verify != null) {
+        setState(() {
+          _mcqSelfScore = score;
+          _pendingVerifyScore = score;
+          _verifyMcq = verify;
+          _verifyPicked = -1;
+        });
+        return;
+      }
+    }
+
+    await _commitSelfRating(score, null);
+  }
+
+  /// 验证题答完：带 verified 结果记账。
+  Future<void> _submitVerify() async {
+    final int score = _pendingVerifyScore;
+    final McqQuestion? vq = _verifyMcq;
+    if (score == 0 || vq == null || _verifyPicked < 0) return;
+    final bool ok = _verifyPicked == vq.answer;
     setState(() {
-      _mcqSelfScore = score;
+      _verifyMcq = null;
+      _pendingVerifyScore = 0;
+      _verifyPicked = -1;
+    });
+    await _commitSelfRating(score, ok);
+  }
+
+  /// 真正落库。verified = null 表示没跑验证。
+  Future<void> _commitSelfRating(int score, bool? verified) async {
+    final q = _mcqList[_mcqIndex];
+    // 落到库里的档位要和 UI 一致：验证失败降一级。
+    int shown = score;
+    if (verified == false && shown >= 3) shown = shown - 1;
+    setState(() {
+      _mcqSelfScore = shown;
       _mcqSelfRated = true;
     });
     try {
-      await ref.read(questionRepoProvider)
-          .recordAnswer(q.id, true, selfScore: score);
+      await ref.read(questionRepoProvider).recordAnswer(
+            q.id,
+            true,
+            selfScore: score,
+            verified: verified,
+          );
     } catch (_) {
       // 记账失败不阻断。
     }
@@ -331,6 +391,9 @@ class _QaPageState extends ConsumerState<QaPage> {
         _mcqSelfScore = 0;
         _mcqFailReason = 0;
         _mcqWrongLogged = false;
+        _pendingVerifyScore = 0;
+        _verifyMcq = null;
+        _verifyPicked = -1;
         _mcqSelfCtrl.clear();
       }
     });
@@ -350,16 +413,19 @@ class _QaPageState extends ConsumerState<QaPage> {
   /// 能否进入下一题：答对必须自评完；答错必须记账完（选错因或跳过）。
   bool get _mcqCanAdvance {
     if (!_mcqAnswered) return false;
+    if (_verifyMcq != null) return false;
     final bool isRight = _mcqPicked == _mcqList[_mcqIndex].answer;
     return isRight ? _mcqSelfRated : _mcqWrongLogged;
   }
 
   String _selfScoreLabel(int score) {
     switch (score) {
-      case 3:
+      case 4:
         return '讲清了';
+      case 3:
+        return '讲了但要停一下';
       case 2:
-        return '讲了但卡壳';
+        return '关键点绕过去了';
       case 1:
         return '讲不出来';
       default:
@@ -792,8 +858,20 @@ class _QaPageState extends ConsumerState<QaPage> {
               onSkip: _skipFailReason,
             ),
           ],
+          // 验证题：自评说完后抽一道同周题验一验。
+          if (_verifyMcq != null && _pendingVerifyScore > 0) ...[
+            const SizedBox(height: 18),
+            _VerifyCard(
+              mcq: _verifyMcq!,
+              picked: _verifyPicked,
+              onPick: (int i) => setState(() => _verifyPicked = i),
+              onSubmit: _verifyPicked < 0 ? null : _submitVerify,
+            ),
+          ],
           // 缺口²：答对后的「用自己的话讲一遍」自评卡。不进 AI，全靠你自己判断。
-          if (_mcqAnswered && !_mcqSelfRated &&
+          if (_mcqAnswered &&
+              !_mcqSelfRated &&
+              _verifyMcq == null &&
               _mcqPicked == _mcqList[_mcqIndex].answer) ...[
             const SizedBox(height: 18),
             _SelfRatingCard(
@@ -985,6 +1063,142 @@ class _ReasonChip extends StatelessWidget {
 ///   - 不自评就不放行，逼你真的讲一遍；
 ///   - 三档结果直接接 SM-2，不调任何 AI；
 ///   - 输入框内容不作判定，只当作你自己讲一遍的载体（不入库）。
+/// 验证题：自评说「讲得清」之后抽一道同周题验一验。
+///
+/// 只用来修正上一题的自评档位，不进错题本、不写自己的复习排程。
+/// 题不够（同周只有这一道）时不会出现，直接按未验证处理。
+class _VerifyCard extends StatelessWidget {
+  const _VerifyCard({
+    required this.mcq,
+    required this.picked,
+    required this.onPick,
+    required this.onSubmit,
+  });
+
+  final McqQuestion mcq;
+  final int picked;
+  final void Function(int index) onPick;
+  final Future<void> Function()? onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.22),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Icon(
+                Icons.verified_outlined,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 6),
+              Text('验一下：同周的题', style: theme.textTheme.titleSmall),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '你说你讲清了。那同类题应该也能做对。做不对就把刚才的档位降一级——这不是惩罚，是校准。',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            mcq.question,
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+          ),
+          const SizedBox(height: 10),
+          for (var i = 0; i < mcq.options.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _VerifyOption(
+                label: String.fromCharCode(65 + i),
+                text: mcq.options[i],
+                selected: picked == i,
+                onTap: () => onPick(i),
+              ),
+            ),
+          const SizedBox(height: 6),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: onSubmit == null ? null : () => onSubmit!(),
+              child: const Text('提交验证'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VerifyOption extends StatelessWidget {
+  const _VerifyOption({
+    required this.label,
+    required this.text,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final String text;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: selected
+              ? theme.colorScheme.primary.withValues(alpha: 0.12)
+              : theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: selected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outlineVariant,
+          ),
+        ),
+        child: Row(
+          children: <Widget>[
+            Text(
+              '$label.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: selected ? theme.colorScheme.primary : null,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                text,
+                style: theme.textTheme.bodyMedium?.copyWith(height: 1.4),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _SelfRatingCard extends StatelessWidget {
   const _SelfRatingCard({required this.controller, required this.onRate});
 
@@ -1058,16 +1272,29 @@ class _SelfRatingCard extends StatelessWidget {
               Expanded(
                 child: _RateButton(
                   label: '讲清了',
-                  sub: '正常推进',
+                  sub: '一步不卡 · 验证后推进',
                   color: const Color(0xFF34C759),
-                  onTap: () => onRate(3),
+                  onTap: () => onRate(4),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: _RateButton(
-                  label: '卡壳',
-                  sub: '升幅减半',
+                  label: '要停一下',
+                  sub: '中间断了 · 升幅八折',
+                  color: const Color(0xFF4D6BFE),
+                  onTap: () => onRate(3),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: _RateButton(
+                  label: '绕过去了',
+                  sub: '关键点没说 · 升幅五折',
                   color: const Color(0xFFFF9500),
                   onTap: () => onRate(2),
                 ),
@@ -1082,6 +1309,15 @@ class _SelfRatingCard extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+
+          const SizedBox(height: 10),
+          Text(
+            '选「讲清了」或「要停一下」会抽一道同周题验证，验的是你对自己判断准不准。',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.4,
+            ),
           ),
         ],
       ),
