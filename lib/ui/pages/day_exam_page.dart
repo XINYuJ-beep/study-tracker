@@ -81,6 +81,9 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
   /// 答错路径是否已完成记账（选错因或跳过都算完成）
   bool _wrongLogged = false;
 
+  /// 答对后是否已完成自评（未自评不放行，避免自评数据漏采）
+  bool _selfRated = false;
+
   @override
   void initState() {
     super.initState();
@@ -177,6 +180,7 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
   /// 自评提交，带 selfScore 记账
   Future<void> _rate(int score) async {
     final q = _questions[_index];
+    setState(() => _selfRated = true);
     try {
       await ref
           .read(questionRepoProvider)
@@ -197,6 +201,7 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
         _answered = false;
         _failReason = 0;
         _wrongLogged = false;
+        _selfRated = false;
       }
     });
   }
@@ -414,7 +419,7 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
               child: FilledButton(
                 onPressed: !_answered
                     ? (picked < 0 ? null : _submit)
-                    : (!ok && !_wrongLogged
+                    : ((ok ? !_selfRated : !_wrongLogged)
                         ? null
                         : (_index + 1 >= _total
                             ? () => setState(() => _phase = _Phase.result)
@@ -422,7 +427,11 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
                 child: Text(
                   !_answered
                       ? '提交'
-                      : (_index + 1 >= _total ? '查看结果' : '下一题'),
+                      : (ok && !_selfRated
+                          ? '先做个自评'
+                          : (!ok && !_wrongLogged
+                              ? '先选个错因'
+                              : (_index + 1 >= _total ? '查看结果' : '下一题'))),
                 ),
               ),
             ),
@@ -483,6 +492,7 @@ class _DayExamPageState extends ConsumerState<DayExamPage> {
               _answered = _picks[_index] >= 0;
               _failReason = 0;
               _wrongLogged = false;
+              _selfRated = false;
               _phase = _Phase.exam;
             }),
             child: const Text('继续未答的题'),
