@@ -12,6 +12,7 @@ import '../../data/repo/plan_repo.dart';
 import '../../data/repo/checkin_repo.dart';
 import '../../data/repo/question_repo.dart';
 import '../../data/repo/concept_repo.dart';
+import 'day_exam_page.dart';
 import '../widgets/checkin_sheet.dart';
 import '../widgets/concept_popup.dart';
 
@@ -185,9 +186,48 @@ class _TodayPageState extends ConsumerState<TodayPage> {
     }
   }
 
-  /// 点开一条推荐：弹打卡面板，可改用时、写备注。
+  /// 点开一条：先进「今日考核」，考完才允许打卡。
+  ///
+  /// 这就是学习闭环的入口——打卡不是自己点是，而是听完课做完题才算。
+  /// 如果这一天没有配题（题库缺失），退回原来的手动打卡面板，不让流程卡死。
   Future<void> _onTapItem(Item item) async {
     if (_submitting.contains(item.id)) return;
+
+    // 先查这一天有几道题
+    int qCount = 0;
+    try {
+      final list = await ref
+          .read(questionRepoProvider)
+          .todayExam(item.week, item.day);
+      qCount = list.length;
+    } catch (_) {
+      qCount = 0;
+    }
+    if (!mounted) return;
+
+    if (qCount > 0) {
+      final bool? checked = await Navigator.of(context).push<bool>(
+        MaterialPageRoute<bool>(
+          builder: (BuildContext _) => DayExamPage(
+            args: DayExamArgs(
+              week: item.week,
+              day: item.day,
+              itemId: item.id,
+              watch: item.watch,
+              practice: item.practice,
+              output: item.output,
+              minutes: item.minutes,
+            ),
+          ),
+        ),
+      );
+      if (checked == true) {
+        await _load();
+      }
+      return;
+    }
+
+    // 没配题：走原手动打卡
     final CheckinInput? input = await showModalBottomSheet<CheckinInput>(
       context: context,
       isScrollControlled: true,

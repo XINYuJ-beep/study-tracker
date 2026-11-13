@@ -34,7 +34,7 @@ class AppDatabase {
   /// v3：cards / mcqs 补 source_ref
   /// v4：mcqs 补 item_id / day / question_type / stage / due_date / ease
   ///     （按天投放 + SM-2 复习所需）
-  static const int schemaVersion = 7;
+  static const int schemaVersion = 8;
 
   /// 打开（或复用）底层连接。所有 repo 都通过它拿 Database。
   Future<Database> get database async {
@@ -124,6 +124,12 @@ class AppDatabase {
         // v6 -> v7：自评四档 + 错因事件表 + 模考成绩表。
         if (from < 7) {
           for (final String sql in kMigrateV6ToV7) {
+            await db.execute(sql);
+          }
+        }
+        // v7 -> v8：mcqs 补 day，把题库挂到「周-天」。
+        if (from < 8) {
+          for (final String sql in kMigrateV7ToV8) {
             await db.execute(sql);
           }
         }

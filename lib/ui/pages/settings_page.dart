@@ -187,26 +187,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     return int.tryParse(raw.trim());
   }
 
-  Future<void> _saveGoal(int v) async {
-    final int goal = v.clamp(1, 20).toInt();
-    final prev = _dailyGoal;
-    setState(() => _dailyGoal = goal);
-    try {
-      final db = ref.read(databaseProvider);
-      await db.insert(
-        T.appSettings,
-        {'key': 'daily_goal', 'value': goal.toString()},
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      if (!mounted) return;
-      _toast('每日目标已保存：' + goal.toString() + ' 题');
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => _dailyGoal = prev);
-      _toast('保存失败：' + e.toString());
-    }
-  }
-
   Future<void> _reseed() async {
     final yes = await _confirm(
       title: '重新导入数据',
@@ -526,93 +506,35 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   Widget _goalCard() {
     return _Panel(
-      title: '每日目标',
+      title: '每日题量',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _dailyGoal.toString(),
+            '按计划自动投放',
             style: const TextStyle(
-              fontSize: AppSizes.numberMid,
-              fontWeight: FontWeight.w700,
+              fontSize: AppSizes.h3,
+              fontWeight: FontWeight.w600,
               color: AppColors.ink,
-              height: 1.1,
+              height: 1.2,
             ),
-          ),
-          Text(
-            '题 / 天',
-            style: const TextStyle(
-              fontSize: AppSizes.caption,
-              color: AppColors.textMinor,
-            ),
-          ),
-          const SizedBox(height: AppSizes.gap2),
-          Row(
-            children: [
-              _StepButton(
-                icon: Icons.remove,
-                onTap: _dailyGoal <= 1 ? null : () => _saveGoal(_dailyGoal - 1),
-              ),
-              const SizedBox(width: AppSizes.gap),
-              _StepButton(
-                icon: Icons.add,
-                onTap: _dailyGoal >= 20 ? null : () => _saveGoal(_dailyGoal + 1),
-              ),
-              const Spacer(),
-              TextButton(
-                onPressed: _onCustomGoal,
-                child: const Text('自定义'),
-              ),
-            ],
           ),
           const SizedBox(height: AppSizes.gap),
           Text(
-            '默认 ' +
-                AppConstants.dailyGoalDefault.toString() +
-                ' 题。修改后今日页的完成度立即按新目标计算。',
+            '你的课程是 92 周、每周 7 天、每天有固定内容，'
+            '所以题目不用你设目标——后台已把题库按「周-天」切好，'
+            '点哪一天就考那一天的题（平均 6~7 道）。',
+            style: _tsMinor,
+          ),
+          const SizedBox(height: AppSizes.gap),
+          Text(
+            '另外每天还会有到期复习题（SM-2 排程，最多 30 道），'
+            '那是你之前做过的题按 1/2/4/7/15/30/60 天回来。',
             style: _tsMinor,
           ),
         ],
       ),
     );
-  }
-
-  Future<void> _onCustomGoal() async {
-    final ctrl = TextEditingController(text: _dailyGoal.toString());
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('自定义每日目标'),
-        content: TextField(
-          controller: ctrl,
-          autofocus: true,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            labelText: '每天目标题数（1 ~ 20）',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('取消'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('保存'),
-          ),
-        ],
-      ),
-    );
-    final raw = ctrl.text.trim();
-    ctrl.dispose();
-    if (ok != true) return;
-    final n = int.tryParse(raw);
-    if (n == null || n < 1 || n > 20) {
-      _toast('请输入 1 ~ 20 之间的整数');
-      return;
-    }
-    await _saveGoal(n);
   }
 
   Widget _versionCard() {

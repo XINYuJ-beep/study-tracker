@@ -404,6 +404,48 @@ class QuestionRepo {
     return out;
   }
 
+  /// 今日考核（按「周-天」投放）：取第 [week] 周第 [day] 天的全部题目。
+  ///
+  /// 这是「打卡前置考核」的数据源：
+  ///   用户听完当天视频 → 打开 App → 点当天 → 做题 → 做完才算打卡。
+  /// 返回列表顺序按 id 升序，不洗牌（同一题池重复进入顺序稳定）。
+  Future<List<McqQuestion>> todayExam(int week, int day) async {
+    if (week <= 0 || day <= 0) return const <McqQuestion>[];
+    final rows = await db.query(
+      T.mcqs,
+      where: 'week = ? AND day = ?',
+      whereArgs: <Object?>[week, day],
+      orderBy: 'id ASC',
+    );
+    return rows.map(_toMcq).toList();
+  }
+
+  /// 今日考核的完成度：返回 (总题数, 已答对题数, 已答题数)。
+  ///
+  /// 「已答」口径：self_score > 0（自评过）或 wrong_count > 0（错过）。
+  /// 因为打卡要求做完，所以只要每道题都碰过就算完成，不要求全对。
+  Future<DayExamProgress> dayExamProgress(int week, int day) async {
+    final rows = await db.query(
+      T.mcqs,
+      columns: <String>['id', 'self_score', 'wrong_count', 'stage'],
+      where: 'week = ? AND day = ?',
+      whereArgs: <Object?>[week, day],
+    );
+    var total = 0;
+    var touched = 0;
+    var right = 0;
+    for (final r in rows) {
+      total++;
+      final int ss = (r['self_score'] as int?) ?? 0;
+      final int wc = (r['wrong_count'] as int?) ?? 0;
+      final int st = (r['stage'] as int?) ?? 0;
+      if (ss > 0 || wc > 0) touched++;
+      // 从没错过且已经推过至少一档 = 答对过
+      if (wc == 0 && st > 0) right++;
+    }
+    return DayExamProgress(total: total, touched: touched, right: right);
+  }
+
   // ---------- 错题 ----------
 
   /// 错题本：错过的且还没被「连续答对 N 次」清出的题。
@@ -716,4 +758,25 @@ class _SeededRandom implements Random {
 
   @override
   int nextInt(int max) => _r.nextInt(max);
+}
+
+/// 某一天考核的完成度。
+class DayExamProgress {
+  const DayExamProgress({
+    required this.total,
+    required this.touched,
+    required this.right,
+  });
+
+  /// 这一天共有多少题
+  final int total;
+
+  /// 已经碰过的题数（自评过或错过）
+  final int touched;
+
+  /// 答对过的题数（没错过且至少推过一档）
+  final int right;
+
+  bool get done => total > 0 && touched >= total;
+  int get percent => total == 0 ? 0 : (touched / total * 100).round();
 }

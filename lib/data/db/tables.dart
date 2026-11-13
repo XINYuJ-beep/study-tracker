@@ -188,6 +188,17 @@ const String kTableFailEvents = 'fail_events';
 /// mock_exams 表名。
 const String kTableMockExams = 'mock_exams';
 
+/// v7 -> v8：mcqs 补 day（第几天），把题库挂到「周-天」上。
+///
+/// 意义：打卡不再是自己点勾，而是「做完当天考核才算打卡」。
+/// 4293 道题按「每周题数 ÷ 该周天数」顺序均分到每天，
+/// 已核实每周只属一个模块、且题目顺序与课程顺序一致。
+/// day 为 NULL = 未分配（历史遗留数据），这些题不进日考核，只进 SM-2 复习。
+const List<String> kMigrateV7ToV8 = <String>[
+  "ALTER TABLE mcqs ADD COLUMN day INTEGER",
+  "CREATE INDEX IF NOT EXISTS idx_mcqs_week_day ON mcqs(week, day)",
+];
+
 /// 性能索引（SPEC 第 16 节：checkins(item_id)、checkins(date) 建索引）
 const List<String> kCreateIndexes = <String>[
   'CREATE INDEX IF NOT EXISTS idx_checkins_item ON checkins (item_id)',
@@ -251,7 +262,8 @@ CREATE TABLE IF NOT EXISTS mcqs (
   ease          REAL NOT NULL DEFAULT 2.5,
   self_score    INTEGER NOT NULL DEFAULT 0,
   fail_reason   INTEGER NOT NULL DEFAULT 0,
-  self_verified INTEGER NOT NULL DEFAULT -1
+  self_verified INTEGER NOT NULL DEFAULT -1,
+  day           INTEGER
 )''';
 
 /// ====================================
@@ -831,6 +843,7 @@ void verifyMcqsMigrationChain() {
       ...kMigrateV4ToV5,
       ...kMigrateV5ToV6,
       ...kMigrateV6ToV7,
+      ...kMigrateV7ToV8,
     ];
     final List<String> alterCols = alters
         .where((String sql) => sql.contains('ALTER TABLE mcqs'))

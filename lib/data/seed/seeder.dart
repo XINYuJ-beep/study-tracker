@@ -268,7 +268,50 @@ class Seeder {
       final mcqRows = <Map<String, Object?>>[];
       final mcq = ((questions['mcq'] as List<dynamic>?) ?? const [])
           .cast<Map<String, dynamic>>();
-      for (final q in mcq) {
+
+      // ---------- 按「周-天」分配题目（v8）----------
+      //
+      // 依据：
+      //   1. 已核实每周只属一个模块（92 周 0 例外）；
+      //   2. 已核实题目顺序与课程顺序一致（w1d1 计算机组成、w1d3
+      //      Linux 命令、w1d6 Git，逐日对得上）。
+      // 算法：每周把题目按文件顺序均分成 N 份，N = 该周天数。
+      // 第 i 天取 [round(i*n/d), round((i+1)*n/d))，保证不丢题不重题。
+      final Map<int, int> daysOfWeek = <int, int>{};
+      for (final dynamic mm in (plan['modules'] as List<dynamic>? ?? const [])) {
+        final Map<String, dynamic> mod = mm as Map<String, dynamic>;
+        for (final dynamic ww in (mod['weeks'] as List<dynamic>? ?? const [])) {
+          final Map<String, dynamic> wk = ww as Map<String, dynamic>;
+          final int? wnum = wk['week'] as int?;
+          final int dcount = (wk['items'] as List<dynamic>? ?? const []).length;
+          if (wnum != null && dcount > 0) daysOfWeek[wnum] = dcount;
+        }
+      }
+
+      // week -> 该周题目在整体列表中的有序下标
+      final Map<int, List<int>> idxByWeek = <int, List<int>>{};
+      for (var i = 0; i < mcq.length; i++) {
+        final int? w = mcq[i]['week'] as int?;
+        if (w == null) continue;
+        idxByWeek.putIfAbsent(w, () => <int>[]).add(i);
+      }
+
+      // 题下标 -> 第几天（1-based）
+      final Map<int, int> dayOfIdx = <int, int>{};
+      idxByWeek.forEach((int week, List<int> idxs) {
+        final int d = daysOfWeek[week] ?? 0;
+        if (d <= 0) return;
+        final int n = idxs.length;
+        for (var i = 0; i < n; i++) {
+          // 该题属于第几份
+          int day = ((i * d) ~/ n) + 1;
+          if (day > d) day = d;
+          dayOfIdx[idxs[i]] = day;
+        }
+      });
+
+      for (var qi = 0; qi < mcq.length; qi++) {
+        final q = mcq[qi];
         final id = q['id'] as String;
         final options = (q['options'] as List<dynamic>?)?.cast<String>() ??
             const <String>[];
@@ -292,7 +335,8 @@ class Seeder {
           'source_ref': (q['source_ref'] as String?) ?? 'builtin:questions',
           // v4 按天投放：item_id 空串 = 周综合卷；day 0 = 无天归属
           'item_id': (q['item_id'] as String?) ?? '',
-          'day': (q['day'] as int?) ?? 0,
+          // v8：按「周-天」均分得到的天序号；分不到就是 null（只进复习队列）
+          'day': (q['day'] as int?) ?? dayOfIdx[qi],
         });
       }
       final conceptRows = <Map<String, Object?>>[];
