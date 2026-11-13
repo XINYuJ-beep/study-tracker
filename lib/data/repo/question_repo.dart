@@ -468,13 +468,13 @@ class QuestionRepo {
     // 3 讲了但要停一下；4 讲清了。旧值 3（原「讲清了」）语义向后兼容。
     final int score = (selfScore ?? 0).clamp(0, 4);
     // 实际判定用的「对错」：答对但自评讲不出来 -> 视为忘了。
-    final bool effectiveCorrect = correct && effScore != 1;
     // 验证题降级：自评说「讲清了」但验证题答错 -> 降到「要停一下」。
     // 验证题答对不升级（不因为一次碰对就当成完全掌握）。
     int rawScore = score;
     if (verified == false && rawScore >= 3) rawScore = rawScore - 1;
     final int effScore = rawScore;
 
+    final bool effectiveCorrect = correct && effScore != 1;
     // 模糊：答对但自评 2（关键点绕过）或 3（要停一下）-> 升幅打折。
     // 2 = 打五折（间隔取上一档与目标档的中值）；3 = 打八折。
     final bool fuzzy = correct && (effScore == 2 || effScore == 3);

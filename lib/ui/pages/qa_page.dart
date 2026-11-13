@@ -76,6 +76,14 @@ class _QaPageState extends ConsumerState<QaPage> {
   int _mcqSelfScore = 0;
   final TextEditingController _mcqSelfCtrl = TextEditingController();
 
+  // ---------- 验证题（自评后的第二道关卡）----------
+  /// 待验证的自评结果；0 = 没有待验证项。
+  int _pendingVerifyScore = 0;
+  /// 验证题（自评后抽出的同周另一道）。
+  McqQuestion? _verifyMcq;
+  /// 验证题用户选择，-1 = 未选。
+  int _verifyPicked = -1;
+
   // ---------- 缺口③错因归因 ----------
   /// 当前题选中的错因：0=未选，1 看不懂题 / 2 知识点没记住 / 3 记混了 / 4 想陷了。
   int _mcqFailReason = 0;

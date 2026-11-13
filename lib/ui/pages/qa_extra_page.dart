@@ -227,9 +227,6 @@ class _ConceptQuizViewState extends ConsumerState<_ConceptQuizView> {
         _index++;
         _picked = -1;
         _answered = false;
-        _extraSelfRated = true;
-        _extraSelfScore = 0;
-        _extraSelfCtrl.clear();
       }
     });
   }
@@ -362,6 +359,15 @@ class _SpotCheckView extends ConsumerStatefulWidget {
 }
 
 class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
+  // ---------- 抽查页自评门槛（与主答题页同一口径）----------
+  /// 自评结果：0=未评（或快速通过），1~4 同主答题页。
+  int _extraSelfScore = 0;
+  /// 是否已完成自评（或走快速通过）。
+  bool _extraSelfRated = true;
+  /// 快速通过开关：开了就跳过自评，但这道题不写 SM-2、不计掌握度。
+  bool _extraQuickPass = false;
+  final TextEditingController _extraSelfCtrl = TextEditingController();
+
   _Phase _phase = _Phase.idle;
   bool _loading = false;
   String? _error;
@@ -445,14 +451,6 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
     });
   }
 
-  // ---------- 抽查页自评门槛（与主答题页同一口径）----------
-  /// 自评结果：0=未评（或快速通过），1~4 同主答题页。
-  int _extraSelfScore = 0;
-  /// 是否已完成自评（或走快速通过）。
-  bool _extraSelfRated = true;
-  /// 快速通过开关：开了就跳过自评，但这道题不写 SM-2、不计掌握度。
-  bool _extraQuickPass = false;
-  final TextEditingController _extraSelfCtrl = TextEditingController();
 
   Future<void> _submit() async {
     if (_answered || _picked < 0) return;
@@ -616,6 +614,15 @@ class _SpotCheckViewState extends ConsumerState<_SpotCheckView> {
             _ExtraSelfCard(
               controller: _extraSelfCtrl,
               onRate: _submitExtraRating,
+            ),
+          ],
+          // 快速通过开关：开了就跳过自评，但这道题不写 SM-2。
+          // 给你留一个出口，同时不让绕过的题污染排程数据。
+          if (!_answered) ...<Widget>[
+            const SizedBox(height: 12),
+            _QuickPassToggle(
+              value: _extraQuickPass,
+              onChanged: (bool v) => setState(() => _extraQuickPass = v),
             ),
           ],
           const SizedBox(height: 20),
@@ -1427,6 +1434,64 @@ class _ExtraRateChip extends StatelessWidget {
             color: color,
             fontWeight: FontWeight.w600,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 快速通过开关：抽查页专用。
+///
+/// 开了之后答对不再要求自评，但这道题的作答**不写入 SM-2 排程**，
+/// 也就不会影响掌握度和复习计划。绕过可以，但不让数据变脏。
+class _QuickPassToggle extends StatelessWidget {
+  const _QuickPassToggle({required this.value, required this.onChanged});
+
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: () => onChanged(!value),
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: value
+              ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.6)
+              : Colors.transparent,
+          border: Border.all(color: theme.colorScheme.outlineVariant),
+        ),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              value ? Icons.check_box_outlined : Icons.check_box_outline_blank,
+              size: 18,
+              color: value
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('快速通过', style: theme.textTheme.bodySmall),
+                  const SizedBox(height: 2),
+                  Text(
+                    '跳过自评。代价：这道题不计入复习排程。',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

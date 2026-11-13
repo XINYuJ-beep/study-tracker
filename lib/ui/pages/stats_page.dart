@@ -807,7 +807,7 @@ class _ForecastCard extends StatelessWidget {
                 '${forecast.daysToFinish}',
                 style: theme.textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+                  color: AppColors.ink,
                 ),
               ),
               const SizedBox(width: 4),
@@ -816,7 +816,7 @@ class _ForecastCard extends StatelessWidget {
                 child: Text(
                   '天',
                   style: theme.textTheme.titleMedium?.copyWith(
-                    color: AppColors.primary,
+                    color: AppColors.ink,
                   ),
                 ),
               ),
@@ -840,7 +840,7 @@ class _ForecastCard extends StatelessWidget {
               minHeight: 6,
               backgroundColor: theme.colorScheme.surfaceContainerHighest,
               valueColor: const AlwaysStoppedAnimation<Color>(
-                AppColors.primary,
+                AppColors.ink,
               ),
             ),
           ),
@@ -880,7 +880,7 @@ class _QuotaCard extends StatelessWidget {
                 '${quota.doToday}',
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+                  color: AppColors.ink,
                 ),
               ),
               const SizedBox(width: 6),
@@ -938,7 +938,7 @@ class _MockTrendCard extends StatelessWidget {
                 '${last.percent}%',
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+                  color: AppColors.ink,
                 ),
               ),
               const SizedBox(width: 8),
