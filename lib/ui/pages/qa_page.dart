@@ -94,6 +94,46 @@ class _QaPageState extends ConsumerState<QaPage> {
     super.dispose();
   }
 
+  Future<void> _gradeCard(int score) async {
+    if (_grading) return;
+    final entry = _reviewQueue[_reviewIndex];
+    setState(() {
+      _grading = true;
+      if (score >= 4) _reviewRemembered++;
+    });
+    try {
+      await ref.read(questionRepoProvider).gradeReview(entry, score);
+    } catch (_) {
+      // 记账失败不阻断推进。
+    }
+    if (!mounted) return;
+    setState(() {
+      _grading = false;
+      if (_reviewIndex + 1 >= _reviewQueue.length) {
+        _reviewDone = true;
+      } else {
+        _reviewIndex++;
+        _cardPhase = _CardPhase.front;
+      }
+    });
+  }
+
+  void _flipCard() {
+    setState(() {
+      _cardPhase = _cardPhase == _CardPhase.front
+          ? _CardPhase.back
+          : _CardPhase.front;
+    });
+  }
+
+  void _switchTab(_QaTab tab) {
+    if (_tab == tab) return;
+    setState(() => _tab = tab);
+    if (tab == _QaTab.review && !_reviewLoaded) {
+      Future<void>.microtask(_loadReview);
+    }
+  }
+
   // ================= UI =================
 
   @override

@@ -260,8 +260,7 @@ class _McqReviewPageState extends ConsumerState<McqReviewPage> {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            '今天没有到期的选择题。
-去把今天该学的学了。',
+            '今天没有到期的选择题。\n去把今天该学的学了。',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
